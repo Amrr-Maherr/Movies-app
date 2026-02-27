@@ -1,15 +1,13 @@
 import type { ReactNode } from "react";
 import { useRef } from "react";
+import * as React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { SwiperOptions } from "swiper/types";
 import { Pagination, Autoplay, Navigation, EffectFade } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // Import Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "swiper/css/effect-fade";
+import "swiper/css/bundle";
 
 interface SliderProps {
   children: ReactNode;
