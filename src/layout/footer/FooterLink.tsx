@@ -1,7 +1,11 @@
-import { FooterLinks } from "@/data/footer";
+import type { FooterLink as FooterLinkType } from "@/types/footer";
 import { Link } from "react-router-dom";
 
-export default function FooterLink({ link }: { link: typeof FooterLinks[0] }) {
+interface FooterLinkProps {
+  link: FooterLinkType;
+}
+
+export default function FooterLink({ link }: FooterLinkProps) {
   return (
     <Link
       to={link.href}
