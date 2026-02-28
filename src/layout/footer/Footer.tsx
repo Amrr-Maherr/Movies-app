@@ -1,6 +1,5 @@
 import FooterLink from "./FooterLink";
 import { FooterLinks } from "@/data/footer";
-import Logo from "@/components/shared/logo/Logo";
 import { Globe } from "lucide-react";
 
 export default function Footer() {
