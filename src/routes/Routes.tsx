@@ -8,9 +8,10 @@ import NewPopular from "@/pages/NewPopular";
 import MyList from "@/pages/MyList";
 import NotFound from "@/pages/NotFound";
 import { Routes, Route } from "react-router-dom";
-
+import { AnimatePresence } from "framer-motion";
 export default function AppRoutes() {
   return (
+    <AnimatePresence mode="wait">
     <Routes>
       <Route path="/home" element={<Home />} />
       <Route path="/tv-shows" element={<TVShow />} />
@@ -21,6 +22,7 @@ export default function AppRoutes() {
       <Route path="/actor" element={<Actor />} />
       <Route path="/session" element={<Session />} />
       <Route path="*" element={<NotFound />} />
-    </Routes>
+      </Routes>
+      </AnimatePresence>
   );
 }
