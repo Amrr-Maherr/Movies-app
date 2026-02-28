@@ -117,7 +117,7 @@
   --netflix-red-dark: #b20710;
   
   /* Backgrounds - Dark mode uses Netflix's signature dark theme */
-  --background-primary: #141414;
+  --background-primary: black;
   --background-secondary: #181818;
   --background-tertiary: #1f1f1f;
   
