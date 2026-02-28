@@ -3,38 +3,93 @@
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
+
+/* ============================================
+   NETFLIX COLOR SYSTEM
+   ============================================
+   A complete dark/light mode color system
+   inspired by Netflix's UI design
+   ============================================ */
+
+/* ============================================
+   LIGHT MODE (Default)
+   ============================================ */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Primary Colors */
+  /* Netflix signature red - used for branding, CTAs, and accents */
+  --netflix-red: #e50914;
+  --netflix-red-hover: #f40612;
+  --netflix-red-dark: #b20710;
+  
+  /* Backgrounds - Light mode uses white/light gray */
+  --background-primary: #ffffff;
+  --background-secondary: #f5f5f5;
+  --background-tertiary: #e5e5e5;
+  
+  /* Text Colors */
+  --text-primary: #141414;
+  --text-secondary: #4d4d4d;
+  --text-muted: #808080;
+  --text-inverse: #ffffff;
+  
+  /* UI Elements */
+  --card-background: #ffffff;
+  --card-border: #e5e5e5;
+  --separator: #e5e5e5;
+  
+  /* Interactive States */
+  --hover-overlay: rgba(0, 0, 0, 0.05);
+  --active-overlay: rgba(0, 0, 0, 0.1);
+  --focus-ring: rgba(229, 9, 20, 0.4);
+  
+  /* Buttons */
+  --button-primary-bg: #e50914;
+  --button-primary-text: #ffffff;
+  --button-primary-hover: #f40612;
+  --button-secondary-bg: rgba(255, 255, 255, 0.7);
+  --button-secondary-text: #141414;
+  --button-secondary-hover: rgba(255, 255, 255, 0.9);
+  
+  /* Header/Navigation */
+  --header-bg: transparent;
+  --header-bg-scrolled: #141414;
+  --header-text: #141414;
+  
+  /* Content Cards */
+  --content-card-bg: #ffffff;
+  --content-card-shadow: rgba(0, 0, 0, 0.1);
+  
+  /* Input Fields */
+  --input-bg: #ffffff;
+  --input-border: #8c8c8c;
+  --input-focus-border: #141414;
+  
+  /* Status Colors */
+  --success: #46d369;
+  --warning: #f5c518;
+  --error: #e50914;
+  --info: #0071eb;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* shadcn compatibility */
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: oklch(0.97 0 0);
+  --foreground: oklch(0.2 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: oklch(0.5 0.25 25);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(0.95 0 0);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.5 0 0);
+  --accent: oklch(0.5 0.25 25);
+  --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.9 0 0);
+  --ring: oklch(0.5 0.25 25);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -42,66 +97,106 @@
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: oklch(0.5 0.25 25);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-ring: oklch(0.5 0.25 25);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+/* ============================================
+   DARK MODE (Netflix Default Style)
+   Applied via .dark class on <html> element
+   ============================================ */
+.dark {
+  /* Primary Colors */
+  /* Netflix signature red - same across modes for brand consistency */
+  --netflix-red: #e50914;
+  --netflix-red-hover: #f40612;
+  --netflix-red-dark: #b20710;
+  
+  /* Backgrounds - Dark mode uses Netflix's signature dark theme */
+  --background-primary: #141414;
+  --background-secondary: #181818;
+  --background-tertiary: #1f1f1f;
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #808080;
+  --text-inverse: #141414;
+  
+  /* UI Elements */
+  --card-background: #181818;
+  --card-border: #404040;
+  --separator: #404040;
+  
+  /* Interactive States */
+  --hover-overlay: rgba(255, 255, 255, 0.1);
+  --active-overlay: rgba(255, 255, 255, 0.15);
+  --focus-ring: rgba(229, 9, 20, 0.6);
+  
+  /* Buttons */
+  --button-primary-bg: #e50914;
+  --button-primary-text: #ffffff;
+  --button-primary-hover: #f40612;
+  --button-secondary-bg: rgba(255, 255, 255, 0.2);
+  --button-secondary-text: #ffffff;
+  --button-secondary-hover: rgba(255, 255, 255, 0.3);
+  
+  /* Header/Navigation */
+  --header-bg: transparent;
+  --header-bg-scrolled: #141414;
+  --header-text: #ffffff;
+  
+  /* Content Cards */
+  --content-card-bg: #181818;
+  --content-card-shadow: rgba(0, 0, 0, 0.5);
+  
+  /* Input Fields */
+  --input-bg: #1f1f1f;
+  --input-border: #404040;
+  --input-focus-border: #ffffff;
+  
+  /* Status Colors */
+  --success: #46d369;
+  --warning: #f5c518;
+  --error: #e50914;
+  --info: #0071eb;
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  /* shadcn compatibility */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.5 0.25 25);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.5 0.25 25);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.5 0.25 25);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.5 0.25 25);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.5 0.25 25);
 }
 
 @theme inline {
@@ -145,45 +240,191 @@ button:focus-visible {
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  
+  /* Body with smooth color transitions */
   body {
     @apply bg-background text-foreground;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ============================================
+   EXAMPLE COMPONENT STYLES
+   Using Netflix color variables
+   ============================================ */
+
+/* Card Component */
+.card {
+  background-color: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px var(--content-card-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px var(--content-card-shadow);
+}
+
+/* Primary Button (Netflix Red CTA) */
+.button-primary {
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.button-primary:hover {
+  background-color: var(--button-primary-hover);
+}
+
+.button-primary:active {
+  transform: scale(0.98);
+}
+
+/* Secondary Button (Ghost/Outline Style) */
+.button-secondary {
+  background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.button-secondary:hover {
+  background-color: var(--button-secondary-hover);
+}
+
+/* Header/Navigation */
+.header {
+  background: linear-gradient(
+    to bottom,
+    var(--header-bg-scrolled) 0%,
+    var(--header-bg) 100%
+  );
+  transition: background-color 0.3s ease;
+}
+
+.header.scrolled {
+  background-color: var(--header-bg-scrolled);
+}
+
+/* Input Field */
+.input {
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+/* Text Utilities */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* Separator/Divider */
+.separator {
+  height: 1px;
+  background-color: var(--separator);
+  border: none;
+}
+
+/* Hover Overlay (for content cards) */
+.hover-overlay {
+  transition: background-color 0.2s ease;
+}
+
+.hover-overlay:hover {
+  background-color: var(--hover-overlay);
+}
+
+/* Focus Ring Utility */
+.focus-visible:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+
+/* ============================================
+   NETFLIX-SPECIFIC UTILITIES
+   ============================================ */
+
+/* Netflix Red Accent */
+.netflix-red {
+  color: var(--netflix-red);
+}
+
+.bg-netflix-red {
+  background-color: var(--netflix-red);
+}
+
+/* Gradient Background (Netflix Hero Style) */
+.hero-gradient {
+  background: linear-gradient(
+    to top,
+    var(--background-primary) 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+}
+
+/* Content Fade Transition */
+.fade-transition {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ============================================
+   CONTAINER (from previous implementation)
+   ============================================ */
+.container {
+  margin: 0 auto;
+  max-width: 1850px;
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (min-width: 1980px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }
