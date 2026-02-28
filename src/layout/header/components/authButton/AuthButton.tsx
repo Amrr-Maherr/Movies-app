@@ -17,7 +17,7 @@ export default function AuthButton({
   return (
     <Button
       className={cn(
-        "dark:bg-[var(--primary)] dark:text-[var(--text-primary)] dark:hover:bg-[var(--hover-bg)] rounded px-5 py-2 text-sm font-semibold transition-colors duration-200",
+        "dark:bg-[var(--primary)] dark:text-[var(--text-primary)] dark:hover:bg-[var(--hover-bg)] rounded px-5 py-2 text-sm font-semibold transition-colors duration-200 cursor-pointer",
         className,
       )}
       onClick={onClick}

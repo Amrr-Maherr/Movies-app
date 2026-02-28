@@ -6,11 +6,11 @@ import { AuthButton } from './components/authButton';
 export default function Header() {
   return (
     <header
-      className="container fixed top-0 left-0 right-0 z-999 transition-all duration-300 flex items-center justify-between md:justify-start gap-5 p-2
+      className="container fixed top-0 left-0 right-0 z-999 transition-all duration-300 flex items-center justify-between gap-5 p-2
       "
     >
-      <Logo className="w-35 h-10" />
       <nav className="flex items-center justify-between md:justify-start gap-5 p-2">
+        <Logo className="w-35 h-10" />
         {HeaderLinks.map((link, index) => (
           <NavLinks key={index} link={link} />
         ))}
