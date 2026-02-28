@@ -5,8 +5,8 @@ import { Globe } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="container bg-[var(--background-primary)] text-[var(--text-primary)] py-16 mt-20">
-      <div className="max-w-[1000px] mx-auto">
+    <footer className=" bg-[var(--background-primary)] text-[var(--text-primary)] py-16">
+      <div className="container">
         {/* Social Links */}
         <div className="flex gap-4 mb-8">
           <a
