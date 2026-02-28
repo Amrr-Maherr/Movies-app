@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronLeft, Tv, Smartphone, Tablet, Laptop, Gamepad2 } from "lucide-react";
+import { Tv, Smartphone, Tablet, Laptop, Gamepad2 } from "lucide-react";
 
 export default function WaysToWatch() {
   const devices = [
@@ -40,14 +40,6 @@ export default function WaysToWatch() {
       transition={{ duration: 0.5 }}
     >
       <div className="container py-12">
-        <Link
-          to="/home"
-          className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300 mb-8"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          Back to Home
-        </Link>
-
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Ways to Watch
         </h1>

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronLeft, Mail, Phone, MessageSquare, HelpCircle } from "lucide-react";
+import { Mail, Phone, MessageSquare, HelpCircle } from "lucide-react";
 
 export default function ContactUs() {
   const contactMethods = [
@@ -44,14 +44,6 @@ export default function ContactUs() {
       transition={{ duration: 0.5 }}
     >
       <div className="container py-12">
-        <Link
-          to="/home"
-          className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300 mb-8"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          Back to Home
-        </Link>
-
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Contact Us
         </h1>

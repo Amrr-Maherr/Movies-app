@@ -31,7 +31,7 @@ export default function AppRoutes() {
   return (
     <AnimatePresence mode="wait">
     <Routes>
-      <Route path="/home" element={<Home />} />
+      <Route path="/" element={<Home />} />
       <Route path="/tv-shows" element={<TVShow />} />
       <Route path="/movies" element={<Movie />} />
       <Route path="/kids" element={<Kids />} />

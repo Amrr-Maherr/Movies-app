@@ -1,7 +1,7 @@
 import type { HeaderLink } from "@/types/header";
 
 export const HeaderLinks: HeaderLink[] = [
-    { title: "Home",link:"home" },
+    { title: "Home",link:"/" },
     { title: "TV Shows", link:"tv-shows" },
     { title: "Movies", link: "movies" },
     { title: "Kids", link: "kids" },

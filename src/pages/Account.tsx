@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronLeft, User, CreditCard, Tv, Bell } from "lucide-react";
+import { User, CreditCard, Tv, Bell } from "lucide-react";
 
 export default function Account() {
   const accountSections = [
@@ -39,14 +39,6 @@ export default function Account() {
       transition={{ duration: 0.5 }}
     >
       <div className="container py-12">
-        <Link
-          to="/home"
-          className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300 mb-8"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          Back to Home
-        </Link>
-
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Account Settings
         </h1>

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ChevronLeft, Cookie, Settings, BarChart3 } from "lucide-react";
+import { Cookie, Settings, BarChart3 } from "lucide-react";
 
 export default function CookiePreferences() {
   const cookieCategories = [
@@ -39,14 +39,6 @@ export default function CookiePreferences() {
       transition={{ duration: 0.5 }}
     >
       <div className="container py-12">
-        <Link
-          to="/home"
-          className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300 mb-8"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          Back to Home
-        </Link>
-
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Cookie Preferences
         </h1>

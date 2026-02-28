@@ -1,6 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { ChevronLeft } from "lucide-react";
 
 export default function FAQ() {
   const faqs = [
@@ -40,14 +38,6 @@ export default function FAQ() {
     >
       {/* Header */}
       <div className="container py-12">
-        <Link
-          to="/home"
-          className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-300 mb-8"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          Back to Home
-        </Link>
-        
         <h1 className="text-4xl md:text-5xl font-bold mb-12 text-center">
           Frequently Asked Questions
         </h1>
