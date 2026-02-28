@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { TrendingUp, DollarSign, Users, FileText } from "lucide-react";
 
 export default function InvestorRelations() {

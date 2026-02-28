@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Tv, Smartphone, Tablet, Laptop, Gamepad2 } from "lucide-react";
 
 export default function WaysToWatch() {

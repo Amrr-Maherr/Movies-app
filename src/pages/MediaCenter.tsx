@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Film, Tv, Newspaper, Video } from "lucide-react";
+import { Film, Tv, Newspaper, Video, ChevronLeft } from "lucide-react";
 
 export default function MediaCenter() {
   const news = [

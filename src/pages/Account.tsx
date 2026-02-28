@@ -1,6 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { User, CreditCard, Tv, Bell } from "lucide-react";
 
 export default function Account() {
   const accountSections = [

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Mail, Phone, MessageSquare, HelpCircle } from "lucide-react";
+import { Mail, Phone, MessageSquare, HelpCircle, ChevronLeft } from "lucide-react";
 
 export default function ContactUs() {
   const contactMethods = [

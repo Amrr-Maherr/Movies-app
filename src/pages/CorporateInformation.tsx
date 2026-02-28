@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { Building2, Users, Award, Globe } from "lucide-react";
 
 export default function CorporateInformation() {
