@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/shared/heroSection/HeroSection";
+import MediaSection from "@/components/shared/MediaSection";
 import useNowPlayingMovies from "@/queries/FetchNowPlayingMovies";
+import usePopularMovies from "@/queries/FetchPopularMovies";
 import type { Movie } from "@/types";
 
 export default function NewPopular() {
-  const { data: movies, isLoading, error, refetch } = useNowPlayingMovies(1);
+  const { data: nowPlayingMovies, isLoading: nowPlayingLoading, error: nowPlayingError, refetch: nowPlayingRefetch } = useNowPlayingMovies(1);
+  const { data: popularMovies, isLoading: popularLoading, error: popularError, refetch: popularRefetch } = usePopularMovies();
 
   return (
     <motion.div
@@ -15,10 +18,24 @@ export default function NewPopular() {
       transition={{ duration: 0.5 }}
     >
       <HeroSection
-        data={movies as Movie[] | undefined}
-        isLoading={isLoading}
-        error={error}
-        onRetry={refetch}
+        data={nowPlayingMovies as Movie[] | undefined}
+        isLoading={nowPlayingLoading}
+        error={nowPlayingError}
+        onRetry={nowPlayingRefetch}
+      />
+      <MediaSection
+        title="Now Playing in Theaters"
+        data={nowPlayingMovies}
+        isLoading={nowPlayingLoading}
+        error={nowPlayingError}
+        onRetry={nowPlayingRefetch}
+      />
+      <MediaSection
+        title="Popular Movies"
+        data={popularMovies}
+        isLoading={popularLoading}
+        error={popularError}
+        onRetry={popularRefetch}
       />
     </motion.div>
   );

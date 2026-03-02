@@ -1,10 +1,14 @@
 import { HeroSection } from "@/components/shared/heroSection";
-import MovieCardsSection from "@/components/shared/MovieCardsSection";
+import MediaSection from "@/components/shared/MediaSection";
 import usePopularMovies from "@/queries/FetchPopularMovies";
+import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
+import useNowPlayingMovies from "@/queries/FetchNowPlayingMovies";
 import { motion } from "framer-motion";
 
 const Home = () => {
-  const { data: movies, isLoading, error, refetch } = usePopularMovies();
+  const { data: popularMovies, isLoading: popularLoading, error: popularError, refetch: popularRefetch } = usePopularMovies();
+  const { data: topRatedMovies, isLoading: topRatedLoading, error: topRatedError, refetch: topRatedRefetch } = useTopRatedMovies();
+  const { data: nowPlayingMovies, isLoading: nowPlayingLoading, error: nowPlayingError, refetch: nowPlayingRefetch } = useNowPlayingMovies();
 
   return (
     <motion.div
@@ -15,17 +19,31 @@ const Home = () => {
       transition={{ duration: 0.5 }}
     >
       <HeroSection
-        data={movies}
-        isLoading={isLoading}
-        error={error}
-        onRetry={refetch}
+        data={popularMovies}
+        isLoading={popularLoading}
+        error={popularError}
+        onRetry={popularRefetch}
       />
-      <MovieCardsSection
+      <MediaSection
         title="Popular Movies"
-        data={movies}
-        isLoading={isLoading}
-        error={error}
-        onRetry={refetch}
+        data={popularMovies}
+        isLoading={popularLoading}
+        error={popularError}
+        onRetry={popularRefetch}
+      />
+      <MediaSection
+        title="Top Rated Movies"
+        data={topRatedMovies}
+        isLoading={topRatedLoading}
+        error={topRatedError}
+        onRetry={topRatedRefetch}
+      />
+      <MediaSection
+        title="Now Playing in Theaters"
+        data={nowPlayingMovies}
+        isLoading={nowPlayingLoading}
+        error={nowPlayingError}
+        onRetry={nowPlayingRefetch}
       />
     </motion.div>
   );

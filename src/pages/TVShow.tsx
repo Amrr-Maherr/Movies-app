@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import HeroSection from "@/components/shared/heroSection/HeroSection";
+import MediaSection from "@/components/shared/MediaSection";
 import usePopularTvShows from "@/queries/FetchPopularTvShows";
 import type { TvShow } from "@/types";
 
@@ -15,6 +16,13 @@ export default function TVShow() {
       transition={{ duration: 0.5 }}
     >
       <HeroSection
+        data={tvShows as TvShow[] | undefined}
+        isLoading={isLoading}
+        error={error}
+        onRetry={refetch}
+      />
+      <MediaSection
+        title="Popular TV Shows"
         data={tvShows as TvShow[] | undefined}
         isLoading={isLoading}
         error={error}

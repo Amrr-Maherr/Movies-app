@@ -1,11 +1,19 @@
 import { motion } from "framer-motion";
 import { Play, Info } from "lucide-react";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
-import type { Movie } from "@/types";
+import type { HeroMedia } from "@/types";
 
 interface MovieCardProps {
-  movie: Movie;
+  movie: HeroMedia;
 }
+
+const getTitle = (media: HeroMedia) => {
+  return "title" in media ? media.title : media.name;
+};
+
+const getReleaseDate = (media: HeroMedia) => {
+  return "release_date" in media ? media.release_date : media.first_air_date;
+};
 
 export default function MovieCard({ movie }: MovieCardProps) {
   const posterUrl = movie.poster_path
@@ -13,8 +21,9 @@ export default function MovieCard({ movie }: MovieCardProps) {
     : "https://via.placeholder.com/500x750?text=No+Image";
 
   const matchScore = getMatchScore(movie.vote_average);
-  const year = getYear(movie.release_date);
+  const year = getYear(getReleaseDate(movie));
   const ageRating = getAgeRating(movie.vote_average);
+  const title = getTitle(movie);
 
   return (
     <motion.div
@@ -27,7 +36,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
       <div className="relative aspect-[2/3] w-full overflow-hidden">
         <img
           src={posterUrl}
-          alt={movie.title}
+          alt={title}
           className="w-full h-full object-cover transition-transform duration-300"
           loading="lazy"
         />
@@ -41,7 +50,7 @@ export default function MovieCard({ movie }: MovieCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
           {/* Title */}
           <h3 className="text-white text-sm font-bold mb-3 line-clamp-2 drop-shadow-lg">
-            {movie.title}
+            {title}
           </h3>
 
           {/* Action Buttons */}
