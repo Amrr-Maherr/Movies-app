@@ -9,10 +9,18 @@ const SLIDE_INTERVAL = 8000;
 const ZOOM_SCALE = 1.05;
 
 // ============================================
+// HELPER FUNCTIONS
+// ============================================
+const getTitle = (media: HeroBackgroundProps["movie"]) => {
+  return "title" in media ? media.title : media.name;
+};
+
+// ============================================
 // COMPONENT
 // ============================================
 export default function HeroBackground({ movie }: HeroBackgroundProps) {
   const imageUrl = getBackdropUrl(movie.backdrop_path);
+  const title = getTitle(movie);
 
   if (!imageUrl) {
     return (
@@ -26,7 +34,7 @@ export default function HeroBackground({ movie }: HeroBackgroundProps) {
       <div className="absolute inset-0 overflow-hidden">
         <motion.img
           src={imageUrl}
-          alt={movie.title}
+          alt={title}
           className="w-full h-full object-cover"
           initial={{ scale: 1 }}
           animate={{ scale: ZOOM_SCALE }}

@@ -4,12 +4,27 @@ import ActionButtons from "./ActionButtons";
 import type { HeroContentProps } from "@/types";
 
 // ============================================
+// HELPER FUNCTIONS
+// ============================================
+const getTitle = (media: HeroContentProps["movie"]) => {
+  return "title" in media ? media.title : media.name;
+};
+
+const getReleaseYear = (media: HeroContentProps["movie"]) => {
+  if ("release_date" in media) {
+    return getYear(media.release_date);
+  }
+  return "first_air_date" in media ? getYear(media.first_air_date) : undefined;
+};
+
+// ============================================
 // COMPONENT
 // ============================================
 export default function HeroContent({ movie }: HeroContentProps) {
   const matchScore = getMatchScore(movie.vote_average);
-  const year = getYear(movie.release_date);
+  const year = getReleaseYear(movie);
   const ageRating = getAgeRating(movie.vote_average);
+  const title = getTitle(movie);
 
   return (
     <div className="absolute inset-0 z-10 flex items-center">
@@ -24,7 +39,7 @@ export default function HeroContent({ movie }: HeroContentProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.7 }}
           >
-            {movie.title}
+            {title}
           </motion.h1>
 
           {/* Metadata Row - Responsive spacing and font sizes */}

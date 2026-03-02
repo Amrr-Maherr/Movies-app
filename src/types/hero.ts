@@ -3,34 +3,40 @@
  * Used for Hero component props and configuration
  */
 
-import type { Movie } from "./movies";
+import type { Movie, TvShow } from "./movies";
+
+/**
+ * Union type for media that can be displayed in hero
+ */
+export type HeroMedia = Movie | TvShow;
 
 /**
  * Props for HeroBackground component
  */
 export interface HeroBackgroundProps {
-  movie: Movie;
+  movie: HeroMedia;
 }
 
 /**
  * Props for HeroContent component
  */
 export interface HeroContentProps {
-  movie: Movie;
+  movie: HeroMedia;
 }
 
 /**
  * Props for HeroSlide component
  */
 export interface HeroSlideProps {
-  movie: Movie;
+  movie: HeroMedia;
 }
 
 /**
  * Props for HeroSection main component
  */
 export interface HeroSectionProps {
-  // Currently no props needed, but reserved for future customization
-  // Example: autoPlayInterval?: number;
-  // Example: showMuteButton?: boolean;
+  data?: HeroMedia[];
+  isLoading: boolean;
+  error: unknown;
+  onRetry: () => void;
 }

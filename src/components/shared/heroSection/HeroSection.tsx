@@ -1,8 +1,7 @@
-import usePopularMovies from "@/queries/FetchPopularMovies";
 import Slider from "@/components/shared/Slider/slider";
 import HeroSlide from "./HeroSlide";
 import { Autoplay } from "swiper/modules";
-import type { Movie } from "@/types";
+import type { HeroMedia } from "@/types";
 import { Error, Loader } from "@/components/ui";
 
 // ============================================
@@ -13,22 +12,30 @@ const SLIDE_INTERVAL = 8000;
 const TRANSITION_SPEED = 1500;
 
 // ============================================
+// INTERFACE
+// ============================================
+export interface HeroSectionProps {
+  data?: HeroMedia[];
+  isLoading: boolean;
+  error: unknown;
+  onRetry: () => void;
+}
+
+// ============================================
 // MAIN COMPONENT
 // ============================================
-export default function HeroSection() {
-  const { data: movies, isLoading,error,refetch } = usePopularMovies();
-
-  // Get featured movies
-  const featuredMovies = movies || [];
+export default function HeroSection({ data, isLoading, error, onRetry }: HeroSectionProps) {
+  // Get featured media
+  const featuredMedia = data || [];
 
   // Loading state - Theme-aware background
-  if (isLoading || featuredMovies.length === 0) {
+  if (isLoading || featuredMedia.length === 0) {
     return (
       <Loader/>
     );
   }
-  if (error || featuredMovies.length == 0) {
-    return <Error retryButtonText="Try Again" onRetry={refetch} />;
+  if (error || featuredMedia.length == 0) {
+    return <Error retryButtonText="Try Again" onRetry={onRetry} />;
   }
 
   return (
@@ -55,8 +62,8 @@ export default function HeroSection() {
         modules={[Autoplay]}
         className="hero-swiper"
       >
-        {featuredMovies.map((movie: Movie) => (
-          <HeroSlide key={movie.id} movie={movie} />
+        {featuredMedia.map((media: HeroMedia) => (
+          <HeroSlide key={media.id} movie={media} />
         ))}
       </Slider>
 

@@ -1,7 +1,10 @@
 import { HeroSection } from "@/components/shared/heroSection";
+import usePopularMovies from "@/queries/FetchPopularMovies";
 import { motion } from "framer-motion";
 
 const Home = () => {
+  const { data: movies, isLoading, error, refetch } = usePopularMovies();
+
   return (
     <motion.div
       className="min-h-screen flex items-center justify-center bg-[var(--background-primary)] text-[var(--text-primary)]"
@@ -10,7 +13,12 @@ const Home = () => {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
-      <HeroSection />
+      <HeroSection
+        data={movies}
+        isLoading={isLoading}
+        error={error}
+        onRetry={refetch}
+      />
     </motion.div>
   );
 };

@@ -9,6 +9,8 @@ export type {
   PopularMoviesResponse,
   MovieMetaDataProps,
   MovieActionButtonsProps,
+  TvShow,
+  PopularTvShowsResponse,
 } from "./movies";
 
 // Hero types
@@ -17,4 +19,5 @@ export type {
   HeroContentProps,
   HeroSlideProps,
   HeroSectionProps,
+  HeroMedia,
 } from "./hero";
