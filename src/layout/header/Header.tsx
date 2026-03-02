@@ -105,8 +105,8 @@ export default function Header() {
         onOpenChange={setIsMobileMenuOpen}
       />
 
-      {/* Spacer to prevent content from hiding behind fixed header */}
-      <div className="h-16 md:h-20" />
+      {/* Spacer to prevent content from hiding behind fixed header
+      // <div className="h-16 md:h-20" /> */}
     </>
   );
 }

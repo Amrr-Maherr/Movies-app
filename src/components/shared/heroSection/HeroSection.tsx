@@ -7,7 +7,7 @@ import type { Movie } from "@/types";
 // ============================================
 // CONSTANTS
 // ============================================
-const HERO_MOVIES_COUNT = 5;
+// const HERO_MOVIES_COUNT = 5;
 const SLIDE_INTERVAL = 8000;
 const TRANSITION_SPEED = 1500;
 
@@ -18,7 +18,7 @@ export default function HeroSection() {
   const { data: movies, isLoading } = usePopularMovies();
 
   // Get featured movies
-  const featuredMovies = movies?.slice(0, HERO_MOVIES_COUNT) || [];
+  const featuredMovies = movies || [];
 
   // Loading state - Theme-aware background
   if (isLoading || featuredMovies.length === 0) {
