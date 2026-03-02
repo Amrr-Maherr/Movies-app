@@ -1,15 +1,23 @@
-import type { HeaderLink } from "@/types/header";
+import { HeaderLink } from "@/types/header";
 import { NavLink } from "react-router-dom";
-// import {NavLink} from "react-router-dom"
+import { cn } from "@/lib/utils";
 
-export default function NavLinks({ link }: { link: HeaderLink}) {
+interface NavLinksProps {
+  link: HeaderLink;
+  onClick?: () => void;
+}
+
+export default function NavLinks({ link, onClick }: NavLinksProps) {
   return (
     <NavLink
       to={link.link}
+      onClick={onClick}
       className={({ isActive }) =>
-        `text-sm font-medium transition-colors duration-300 ease-in-out no-underline ${
-          isActive ? "font-semibold text-[var(--netflix-red)]" : "text-[var(--header-text)]"
-        }`
+        cn(
+          "text-sm font-medium transition-colors duration-300 ease-in-out no-underline",
+          "hover:text-[var(--text-secondary)]",
+          isActive ? "font-semibold text-[var(--text-primary)]" : "text-[var(--text-secondary)]"
+        )
       }
     >
       {link.title}

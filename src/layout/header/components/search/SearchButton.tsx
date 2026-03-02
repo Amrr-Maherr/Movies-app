@@ -1,12 +1,22 @@
-import { SearchIcon } from "lucide-react";
+import { Search } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export default function SearchButton() {
+interface SearchButtonProps {
+  className?: string;
+}
+
+export default function SearchButton({ className }: SearchButtonProps) {
   return (
     <button
-      className="cursor-pointer flex items-center justify-center w-10 h-10 rounded-full text-white hover:bg-white/10 transition-colors duration-200"
+      className={cn(
+        "cursor-pointer flex items-center justify-center w-9 h-9 rounded-full",
+        "text-[var(--text-primary)] hover:bg-[var(--hover-overlay)]",
+        "transition-all duration-200",
+        className
+      )}
       aria-label="Search"
     >
-      <SearchIcon className="w-5 h-5" />
+      <Search className="w-5 h-5" />
     </button>
   );
 }
