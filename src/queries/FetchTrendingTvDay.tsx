@@ -1,0 +1,14 @@
+import { GetTrendingTvDay } from "@/api/TrendingTvDay";
+import type { TvShow } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+
+export default function useTrendingTvDay(page: number = 1) {
+  const { data, error, refetch, isLoading } = useQuery<TvShow[]>({
+    queryKey: ["trendingTvDay", page],
+    queryFn: () => GetTrendingTvDay(page) as Promise<TvShow[]>,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    retry: 2,
+  });
+
+  return { data, error, refetch, isLoading };
+}

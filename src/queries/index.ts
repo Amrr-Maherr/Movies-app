@@ -1,0 +1,13 @@
+// Export all query hooks for easier imports
+export { default as usePopularMovies } from "./FetchPopularMovies";
+export { default as useTopRatedMovies } from "./FetchTopRatedMovies";
+export { default as useNowPlayingMovies } from "./FetchNowPlayingMovies";
+export { default as useTrendingMoviesWeek } from "./FetchTrendingMoviesWeek";
+export { default as useTrendingMoviesDay } from "./FetchTrendingMoviesDay";
+export { default as useUpcomingMovies } from "./FetchUpcomingMovies";
+export { default as usePopularTvShows } from "./FetchPopularTvShows";
+export { default as useTrendingTvWeek } from "./FetchTrendingTvWeek";
+export { default as useTrendingTvDay } from "./FetchTrendingTvDay";
+export { default as useTopRatedTvShows } from "./FetchTopRatedTvShows";
+export { default as useAiringTodayTv } from "./FetchAiringTodayTv";
+export { default as useOnTheAirTv } from "./FetchOnTheAirTv";
