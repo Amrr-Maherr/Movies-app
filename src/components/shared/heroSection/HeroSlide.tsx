@@ -7,7 +7,7 @@ import type { HeroSlideProps } from "@/types";
 // ============================================
 export default function HeroSlide({ movie }: HeroSlideProps) {
   return (
-    <div className="relative w-full h-[70vh] sm:h-[80vh] md:h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden">
       {/* Background */}
       <HeroBackground movie={movie} />
 

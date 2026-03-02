@@ -3,6 +3,7 @@ import Slider from "@/components/shared/Slider/slider";
 import HeroSlide from "./HeroSlide";
 import { Autoplay } from "swiper/modules";
 import type { Movie } from "@/types";
+import { Error, Loader } from "@/components/ui";
 
 // ============================================
 // CONSTANTS
@@ -15,7 +16,7 @@ const TRANSITION_SPEED = 1500;
 // MAIN COMPONENT
 // ============================================
 export default function HeroSection() {
-  const { data: movies, isLoading } = usePopularMovies();
+  const { data: movies, isLoading,error,refetch } = usePopularMovies();
 
   // Get featured movies
   const featuredMovies = movies || [];
@@ -23,8 +24,11 @@ export default function HeroSection() {
   // Loading state - Theme-aware background
   if (isLoading || featuredMovies.length === 0) {
     return (
-      <div className="relative w-full h-[70vh] sm:h-[80vh] bg-[var(--background-secondary)] animate-pulse" />
+      <Loader/>
     );
+  }
+  if (error || featuredMovies.length == 0) {
+    return <Error retryButtonText="Try Again" onRetry={refetch} />;
   }
 
   return (
