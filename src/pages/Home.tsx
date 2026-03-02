@@ -1,3 +1,4 @@
+import { HeroSection } from "@/components/shared/heroSection";
 import { motion } from "framer-motion";
 
 const Home = () => {
@@ -9,7 +10,7 @@ const Home = () => {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
-      <h1>Home Page</h1>
+      <HeroSection />
     </motion.div>
   );
 };
