@@ -11,11 +11,9 @@ export const GetPopularMovies = async (page: number = 1): Promise<Movie[] | null
       params: {
         api_key: apiKey,
         language: "en-US",
-        page: 1,
-        region: "US",
+        page,
         include_adult: false,
-        include_video: true
-      }
+      },
     });
     return response.data.results;
   } catch (error) {
