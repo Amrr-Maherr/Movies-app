@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Play, Info } from "lucide-react";
+import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
 import type { Movie } from "@/types";
 
 interface MovieCardProps {
@@ -11,14 +12,15 @@ export default function MovieCard({ movie }: MovieCardProps) {
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : "https://via.placeholder.com/500x750?text=No+Image";
 
-  const rating = Math.round(movie.vote_average * 10);
+  const matchScore = getMatchScore(movie.vote_average);
+  const year = getYear(movie.release_date);
+  const ageRating = getAgeRating(movie.vote_average);
 
   return (
     <motion.div
-      className="relative group cursor-pointer rounded-md overflow-hidden bg-[var(--background-secondary)] shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-105"
+      className="relative group cursor-pointer rounded-md overflow-hidden bg-[var(--background-secondary)] shadow-lg transition-all duration-300"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ scale: 1.05, zIndex: 10 }}
       transition={{ duration: 0.3 }}
     >
       {/* Poster Image */}
@@ -26,13 +28,13 @@ export default function MovieCard({ movie }: MovieCardProps) {
         <img
           src={posterUrl}
           alt={movie.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-300"
           loading="lazy"
         />
 
         {/* Rating Badge */}
         <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm px-2 py-1 rounded-md flex items-center gap-1">
-          <span className="text-[var(--success)] text-xs font-bold">{rating}%</span>
+          <span className="text-[var(--success)] text-xs font-bold">{matchScore}%</span>
         </div>
 
         {/* Hover Overlay */}
@@ -67,7 +69,9 @@ export default function MovieCard({ movie }: MovieCardProps) {
 
           {/* Meta Info */}
           <div className="mt-3 flex items-center gap-2 text-[10px] text-gray-300">
-            <span>{movie.release_date?.split("-")[0]}</span>
+            <span>{year}</span>
+            <span>•</span>
+            <span className="border border-gray-500 px-1 rounded">{ageRating}</span>
             <span>•</span>
             <span className="border border-gray-500 px-1 rounded">HD</span>
           </div>

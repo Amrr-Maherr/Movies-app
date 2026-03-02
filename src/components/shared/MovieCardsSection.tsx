@@ -53,12 +53,12 @@ export default function MovieCardsSection({
         {/* Horizontal Carousel */}
         <Slider
           slidesPerView={5}
-          slidesPerViewMobile={2}
+          slidesPerViewMobile={1.5}
           spaceBetween={16}
           hideNavigation={false}
           swiperOptions={{
-            loop: false,
-            autoplay: false,
+            loop: true,
+            autoplay: true,
           }}
         >
           {movies.map((movie: Movie) => (
