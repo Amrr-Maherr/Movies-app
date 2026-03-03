@@ -138,7 +138,6 @@ const Home = () => {
         <TopPicksSection
           movies={trendingMoviesWeek}
           title="Top 10 Movies in Egypt Today"
-          mediaType="movie"
         />
       )}
 
@@ -160,7 +159,6 @@ const Home = () => {
         <NewReleasesSection
           movies={upcomingMovies}
           title="New Releases This Week"
-          mediaType="movie"
         />
       )}
 
@@ -284,7 +282,6 @@ const Home = () => {
         <TopPicksSection
           movies={popularTv}
           title="Top 10 TV Shows in Egypt Today"
-          mediaType="tv"
         />
       )}
 
@@ -352,7 +349,6 @@ const Home = () => {
         <NewReleasesSection
           movies={airingTodayTv}
           title="New Episodes This Week"
-          mediaType="tv"
         />
       )}
 

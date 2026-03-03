@@ -35,7 +35,13 @@ const OnlyOnNetflix = lazy(() => import("@/pages/OnlyOnNetflix"));
 export default function AppRoutes() {
   return (
     <AnimatePresence mode="wait">
-      <Suspense fallback={<Loader/>}>
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
+            <Loader />
+          </div>
+        }
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/tv-shows" element={<TVShow />} />
