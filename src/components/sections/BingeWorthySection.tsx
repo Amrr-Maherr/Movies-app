@@ -1,5 +1,4 @@
 import { Flame, Clock } from "lucide-react";
-import Card from "@/components/shared/Card/Card";
 import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
 

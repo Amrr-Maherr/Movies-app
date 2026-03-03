@@ -1,4 +1,3 @@
-import { ArrowRight } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
 
@@ -7,6 +6,10 @@ interface GenreShowcaseSectionProps {
   genre: string;
   mediaType: "movie" | "tv";
 }
+
+const getTitle = (media: HeroMedia) => {
+  return "title" in media ? media.title : media.name;
+};
 
 export default function GenreShowcaseSection({ movies, genre, mediaType }: GenreShowcaseSectionProps) {
   const showcaseMovie = movies[0];
@@ -40,7 +43,7 @@ export default function GenreShowcaseSection({ movies, genre, mediaType }: Genre
             <div className="relative aspect-video md:aspect-[10/9] overflow-hidden rounded group cursor-pointer">
               <img
                 src={mainImageUrl}
-                alt={showcaseMovie.title || showcaseMovie.name || ""}
+                alt={getTitle(showcaseMovie)}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
@@ -48,7 +51,7 @@ export default function GenreShowcaseSection({ movies, genre, mediaType }: Genre
               {/* Title Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                 <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-white mb-2">
-                  {showcaseMovie.title || showcaseMovie.name}
+                  {getTitle(showcaseMovie)}
                 </h3>
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-1 bg-red-600 text-white text-xs font-bold rounded">
@@ -77,7 +80,7 @@ export default function GenreShowcaseSection({ movies, genre, mediaType }: Genre
                   <div className="relative aspect-[2/3] md:aspect-video overflow-hidden rounded group cursor-pointer">
                     <img
                       src={imageUrl}
-                      alt={movie.title || movie.name || ""}
+                      alt={getTitle(movie)}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>

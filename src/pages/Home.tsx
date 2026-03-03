@@ -13,7 +13,7 @@ import BingeWorthySection from "@/components/sections/BingeWorthySection";
 import WeekendWatchSection from "@/components/sections/WeekendWatchSection";
 import PricingSection from "@/components/sections/PricingSection";
 import AskedQuestions from "@/components/sections/AskedQuestions";
-import { Loader } from "@/components/ui";
+import { Loader, Error as ErrorComponent } from "@/components/ui";
 
 import usePopularMovies from "@/queries/FetchPopularMovies";
 import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
@@ -112,7 +112,7 @@ const Home = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <Error retryButtonText="Try Again" onRetry={handleRetry} />
+        <ErrorComponent retryButtonText="Try Again" onRetry={handleRetry} />
       </div>
     );
   }

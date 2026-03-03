@@ -7,6 +7,10 @@ interface WeekendWatchSectionProps {
   mediaType: "movie" | "tv";
 }
 
+const getTitle = (media: HeroMedia) => {
+  return "title" in media ? media.title : media.name;
+};
+
 export default function WeekendWatchSection({ movies, mediaType }: WeekendWatchSectionProps) {
   const featuredMovie = movies[0];
   const sideMovies = movies.slice(1, 5);
@@ -38,7 +42,7 @@ export default function WeekendWatchSection({ movies, mediaType }: WeekendWatchS
             <div className="relative aspect-video overflow-hidden rounded-lg group cursor-pointer">
               <img
                 src={mainImageUrl}
-                alt={featuredMovie.title || featuredMovie.name || ""}
+                alt={getTitle(featuredMovie)}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
@@ -60,7 +64,7 @@ export default function WeekendWatchSection({ movies, mediaType }: WeekendWatchS
                 </div>
 
                 <h3 className="text-2xl md:text-4xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
-                  {featuredMovie.title || featuredMovie.name}
+                  {getTitle(featuredMovie)}
                 </h3>
 
                 {featuredMovie.overview && (
@@ -88,13 +92,13 @@ export default function WeekendWatchSection({ movies, mediaType }: WeekendWatchS
                     <div className="relative w-20 md:w-24 aspect-[2/3] flex-shrink-0">
                       <img
                         src={imageUrl}
-                        alt={movie.title || movie.name || ""}
+                        alt={getTitle(movie)}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div className="flex-1 py-2 pr-2 flex flex-col justify-center">
                       <h4 className="text-sm md:text-base text-white font-medium line-clamp-2 group-hover:text-yellow-400 transition-colors">
-                        {movie.title || movie.name}
+                        {getTitle(movie)}
                       </h4>
                       {movie.vote_average && movie.vote_average > 0 && (
                         <div className="flex items-center gap-1 mt-1">

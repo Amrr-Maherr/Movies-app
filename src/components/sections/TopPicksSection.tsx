@@ -5,10 +5,9 @@ import type { HeroMedia } from "@/types";
 interface TopPicksSectionProps {
   movies: HeroMedia[];
   title?: string;
-  mediaType: "movie" | "tv";
 }
 
-export default function TopPicksSection({ movies, title = "Top 10 in Egypt Today", mediaType }: TopPicksSectionProps) {
+export default function TopPicksSection({ movies, title = "Top 10 in Egypt Today" }: TopPicksSectionProps) {
   const topMovies = movies.slice(0, 10);
 
   return (

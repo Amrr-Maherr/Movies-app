@@ -5,13 +5,11 @@ import type { HeroMedia } from "@/types";
 interface NewReleasesSectionProps {
   movies: HeroMedia[];
   title?: string;
-  mediaType: "movie" | "tv";
 }
 
 export default function NewReleasesSection({
   movies,
-  title = "New Releases",
-  mediaType
+  title = "New Releases"
 }: NewReleasesSectionProps) {
   const items = movies.slice(0, 8);
 

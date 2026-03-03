@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import { Loader } from "@/components/ui";
 
 // Main pages
 const Home = lazy(() => import("../pages/Home"));
@@ -34,7 +35,7 @@ const OnlyOnNetflix = lazy(() => import("@/pages/OnlyOnNetflix"));
 export default function AppRoutes() {
   return (
     <AnimatePresence mode="wait">
-      <Suspense fallback="loading...">
+      <Suspense fallback={<Loader/>}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/tv-shows" element={<TVShow />} />
