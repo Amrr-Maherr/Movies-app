@@ -14,14 +14,14 @@ export interface CardProps {
   badgeType?: "trending" | "award" | "live" | "onair" | "calendar";
 }
 
-const Card = memo(function Card({
+const Card = memo(({
   movie,
   variant = "standard",
   rank,
   onClick,
   showBadge = false,
   badgeType
-}: CardProps) {
+}: CardProps) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -428,4 +428,6 @@ const Card = memo(function Card({
       <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
-}
+});
+
+export default Card;
