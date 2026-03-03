@@ -1,18 +1,8 @@
-"use client";
 import { Popcorn, Star } from "lucide-react";
-
-interface Movie {
-  id: number;
-  title?: string;
-  name?: string;
-  poster_path?: string;
-  backdrop_path?: string;
-  vote_average?: number;
-  overview?: string;
-}
+import type { HeroMedia } from "@/types";
 
 interface WeekendWatchSectionProps {
-  movies: Movie[];
+  movies: HeroMedia[];
   mediaType: "movie" | "tv";
 }
 
@@ -28,8 +18,8 @@ export default function WeekendWatchSection({ movies, mediaType }: WeekendWatchS
     ? `https://image.tmdb.org/t/p/original${featuredMovie.poster_path}`
     : "/Netflix_Symbol_RGB.png";
 
-  const mainDetailsUrl = mediaType === "movie" 
-    ? `/movie/${featuredMovie.id}` 
+  const mainDetailsUrl = mediaType === "movie"
+    ? `/movie/${featuredMovie.id}`
     : `/tv/${featuredMovie.id}`;
 
   return (
@@ -52,7 +42,7 @@ export default function WeekendWatchSection({ movies, mediaType }: WeekendWatchS
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-              
+
               {/* Content */}
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                 <div className="flex items-center gap-2 mb-2">
@@ -68,11 +58,11 @@ export default function WeekendWatchSection({ movies, mediaType }: WeekendWatchS
                     </div>
                   )}
                 </div>
-                
+
                 <h3 className="text-2xl md:text-4xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
                   {featuredMovie.title || featuredMovie.name}
                 </h3>
-                
+
                 {featuredMovie.overview && (
                   <p className="text-sm md:text-base text-gray-300 line-clamp-2 max-w-2xl">
                     {featuredMovie.overview}
@@ -88,8 +78,8 @@ export default function WeekendWatchSection({ movies, mediaType }: WeekendWatchS
               const imageUrl = movie.poster_path
                 ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                 : "/Netflix_Symbol_RGB.png";
-              const detailsUrl = mediaType === "movie" 
-                ? `/movie/${movie.id}` 
+              const detailsUrl = mediaType === "movie"
+                ? `/movie/${movie.id}`
                 : `/tv/${movie.id}`;
 
               return (

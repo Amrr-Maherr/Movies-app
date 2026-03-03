@@ -1,17 +1,8 @@
-"use client";
 import { Sparkles } from "lucide-react";
-
-interface Movie {
-  id: number;
-  title?: string;
-  name?: string;
-  backdrop_path?: string;
-  poster_path?: string;
-  overview?: string;
-}
+import type { HeroMedia } from "@/types";
 
 interface OnlyOnNetflixSectionProps {
-  movies: Movie[];
+  movies: HeroMedia[];
   mediaType: "movie" | "tv";
 }
 
@@ -27,7 +18,7 @@ export default function OnlyOnNetflixSection({ movies, mediaType }: OnlyOnNetfli
             Only on Netflix
           </h2>
         </div>
-      
+
         <div className="grid grid-cols-1 gap-4 md:gap-6">
           {items.map((movie, index) => {
             const imageUrl = movie.backdrop_path
@@ -35,10 +26,10 @@ export default function OnlyOnNetflixSection({ movies, mediaType }: OnlyOnNetfli
               : movie.poster_path
               ? `https://image.tmdb.org/t/p/w1280${movie.poster_path}`
               : "/Netflix_Symbol_RGB.png";
-            const detailsUrl = mediaType === "movie" 
-              ? `/movie/${movie.id}` 
+            const detailsUrl = mediaType === "movie"
+              ? `/movie/${movie.id}`
               : `/tv/${movie.id}`;
-            const movieTitle = movie.title || movie.name || "";
+            const movieTitle = "title" in movie ? movie.title : movie.name;
 
             return (
               <a href={detailsUrl} key={movie.id}>
@@ -64,11 +55,11 @@ export default function OnlyOnNetflixSection({ movies, mediaType }: OnlyOnNetfli
                           {mediaType === "movie" ? "Film" : "Series"}
                         </span>
                       </div>
-                      
+
                       <h3 className="text-lg md:text-2xl font-bold text-white mb-2 group-hover:text-gray-300 transition-colors">
                         {movieTitle}
                       </h3>
-                      
+
                       {movie.overview && (
                         <p className="text-sm md:text-base text-gray-400 line-clamp-2 md:line-clamp-3">
                           {movie.overview}

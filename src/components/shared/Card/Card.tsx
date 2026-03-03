@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Info, ChevronDown, Tv, Flame, Award, Calendar, Radio } from "lucide-react";
+import { Play, Info, ChevronDown, Tv, Flame, Award, Calendar, Radio, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
 import MovieModal from "@/components/shared/MovieModal";
@@ -8,7 +8,7 @@ import type { HeroMedia } from "@/types";
 
 export interface CardProps {
   movie: HeroMedia;
-  variant?: "standard" | "compact" | "trending" | "award" | "airing" | "onair" | "upcoming" | "top10";
+  variant?: "standard" | "compact" | "trending" | "award" | "airing" | "onair" | "upcoming" | "top10" | "newRelease" | "awardWinner" | "recommendation";
   rank?: number;
   onClick?: () => void;
   showBadge?: boolean;
@@ -167,6 +167,174 @@ export default function Card({
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
           </div>
+        </motion.a>
+        <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      </>
+    );
+  }
+
+  // New Release variant with NEW badge and date
+  if (variant === "newRelease") {
+    const releaseDate = "release_date" in movie ? movie.release_date : movie.first_air_date;
+    return (
+      <>
+        <motion.a
+          href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
+          className="group cursor-pointer block"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavigate();
+          }}
+        >
+          <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
+            <img
+              src={posterUrl}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+            />
+            {/* NEW Badge */}
+            <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
+              NEW
+            </div>
+            {/* Rating Badge */}
+            {movie.vote_average && movie.vote_average > 0 && (
+              <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
+                <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                {movie.vote_average.toFixed(1)}
+              </div>
+            )}
+            {/* Hover Overlay */}
+            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <div className="text-center px-4">
+                <p className="text-white text-sm font-semibold line-clamp-2">{title}</p>
+              </div>
+            </div>
+          </div>
+          <h3 className="text-sm md:text-base text-white font-medium line-clamp-1 group-hover:text-gray-300 transition-colors">
+            {title}
+          </h3>
+          {releaseDate && (
+            <div className="flex items-center gap-1 text-xs text-gray-400 mt-1">
+              <Calendar className="w-3 h-3" />
+              {new Date(releaseDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+            </div>
+          )}
+        </motion.a>
+        <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      </>
+    );
+  }
+
+  // Award Winner variant with gold border and award badge
+  if (variant === "awardWinner") {
+    return (
+      <>
+        <motion.a
+          href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
+          className="group cursor-pointer relative block"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavigate();
+          }}
+        >
+          {/* Award Badge */}
+          <div className="absolute -top-2 -right-2 z-10 bg-yellow-500 rounded-full p-2 shadow-lg">
+            <Award className="w-4 h-4 md:w-5 md:h-5 text-black" />
+          </div>
+          {/* Poster */}
+          <div className="relative aspect-[2/3] overflow-hidden rounded-lg border-2 border-yellow-500/30 group-hover:border-yellow-500 transition-colors duration-300">
+            <img
+              src={posterUrl}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              loading="lazy"
+            />
+            {/* Overlay */}
+            <AnimatePresence>
+              {isHovered && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
+                >
+                  <div className="absolute bottom-2 left-2 right-2">
+                    {movie.vote_average && movie.vote_average > 0 && (
+                      <div className="flex items-center gap-1 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
+                        <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                        <span className="text-xs font-bold text-white">
+                          {movie.vote_average.toFixed(1)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          <h3 className="text-xs md:text-sm text-white font-medium mt-2 line-clamp-2 group-hover:text-yellow-400 transition-colors">
+            {title}
+          </h3>
+        </motion.a>
+        <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      </>
+    );
+  }
+
+  // Recommendation variant (Because You Watched)
+  if (variant === "recommendation") {
+    return (
+      <>
+        <motion.a
+          href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
+          className="group cursor-pointer block"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavigate();
+          }}
+        >
+          <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
+            <img
+              src={posterUrl}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+            />
+            {/* Hover Overlay */}
+            <AnimatePresence>
+              {isHovered && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
+                >
+                  <div className="absolute bottom-2 left-2 right-2">
+                    <div className="flex items-center justify-between">
+                      {movie.vote_average && movie.vote_average > 0 && (
+                        <span className="text-xs font-bold text-green-400">
+                          {Math.round(movie.vote_average * 10)}% Match
+                        </span>
+                      )}
+                      <Info className="w-4 h-4 text-white" />
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          <h3 className="text-xs md:text-sm text-gray-300 group-hover:text-white transition-colors line-clamp-2">
+            {title}
+          </h3>
         </motion.a>
         <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </>

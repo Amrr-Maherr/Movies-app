@@ -1,16 +1,8 @@
-"use client";
 import { ArrowRight } from "lucide-react";
-
-interface Movie {
-  id: number;
-  title?: string;
-  name?: string;
-  poster_path?: string;
-  backdrop_path?: string;
-}
+import type { HeroMedia } from "@/types";
 
 interface GenreShowcaseSectionProps {
-  movies: Movie[];
+  movies: HeroMedia[];
   genre: string;
   mediaType: "movie" | "tv";
 }
@@ -27,8 +19,8 @@ export default function GenreShowcaseSection({ movies, genre, mediaType }: Genre
     ? `https://image.tmdb.org/t/p/original${showcaseMovie.poster_path}`
     : "/Netflix_Symbol_RGB.png";
 
-  const mainDetailsUrl = mediaType === "movie" 
-    ? `/movie/${showcaseMovie.id}` 
+  const mainDetailsUrl = mediaType === "movie"
+    ? `/movie/${showcaseMovie.id}`
     : `/tv/${showcaseMovie.id}`;
 
   return (
@@ -58,7 +50,7 @@ export default function GenreShowcaseSection({ movies, genre, mediaType }: Genre
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-              
+
               {/* Title Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
                 <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-white mb-2">
@@ -82,8 +74,8 @@ export default function GenreShowcaseSection({ movies, genre, mediaType }: Genre
               const imageUrl = movie.poster_path
                 ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
                 : "/Netflix_Symbol_RGB.png";
-              const detailsUrl = mediaType === "movie" 
-                ? `/movie/${movie.id}` 
+              const detailsUrl = mediaType === "movie"
+                ? `/movie/${movie.id}`
                 : `/tv/${movie.id}`;
 
               return (

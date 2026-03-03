@@ -1,24 +1,16 @@
-"use client";
 import { Play } from "lucide-react";
-
-interface Movie {
-  id: number;
-  title?: string;
-  name?: string;
-  backdrop_path?: string;
-  poster_path?: string;
-}
+import type { HeroMedia } from "@/types";
 
 interface ContinueWatchingSectionProps {
-  movies: Movie[];
+  movies: HeroMedia[];
   title?: string;
   mediaType: "movie" | "tv";
 }
 
-export default function ContinueWatchingSection({ 
-  movies, 
-  title = "Continue Watching", 
-  mediaType 
+export default function ContinueWatchingSection({
+  movies,
+  title = "Continue Watching",
+  mediaType
 }: ContinueWatchingSectionProps) {
   const items = movies.slice(0, 6);
 
@@ -35,10 +27,10 @@ export default function ContinueWatchingSection({
               : movie.poster_path
               ? `https://image.tmdb.org/t/p/w780${movie.poster_path}`
               : "/Netflix_Symbol_RGB.png";
-            const detailsUrl = mediaType === "movie" 
-              ? `/movie/${movie.id}` 
+            const detailsUrl = mediaType === "movie"
+              ? `/movie/${movie.id}`
               : `/tv/${movie.id}`;
-            const movieTitle = movie.title || movie.name || "";
+            const movieTitle = "title" in movie ? movie.title : movie.name;
 
             return (
               <a href={detailsUrl} key={movie.id}>
@@ -50,7 +42,7 @@ export default function ContinueWatchingSection({
                       alt={movieTitle}
                       className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    
+
                     {/* Play Icon Overlay */}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-colors duration-300">
                       <div className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -60,8 +52,8 @@ export default function ContinueWatchingSection({
 
                     {/* Progress Bar */}
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-700">
-                      <div 
-                        className="h-full bg-red-600" 
+                      <div
+                        className="h-full bg-red-600"
                         style={{ width: `${Math.random() * 60 + 20}%` }}
                       ></div>
                     </div>
