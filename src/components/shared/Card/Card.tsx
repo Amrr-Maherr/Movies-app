@@ -8,7 +8,7 @@ import type { HeroMedia } from "@/types";
 
 export interface CardProps {
   movie: HeroMedia;
-  variant?: "standard" | "compact" | "trending" | "award" | "airing" | "onair" | "upcoming";
+  variant?: "standard" | "compact" | "trending" | "award" | "airing" | "onair" | "upcoming" | "top10";
   rank?: number;
   onClick?: () => void;
   showBadge?: boolean;
@@ -127,6 +127,47 @@ export default function Card({
             {title}
           </p>
         </motion.div>
+        <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      </>
+    );
+  }
+
+  // Top 10 variant with large gradient number badge
+  if (variant === "top10" && rank) {
+    return (
+      <>
+        <motion.a
+          href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
+          className="relative group cursor-pointer block"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavigate();
+          }}
+        >
+          {/* Large Number Badge */}
+          <div className="absolute -left-2 md:-left-4 -bottom-2 md:-bottom-3 z-10">
+            <div className="relative">
+              <span className="text-6xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-800 to-black" style={{ WebkitTextStroke: "2px #ddd" }}>
+                {rank}
+              </span>
+            </div>
+          </div>
+
+          {/* Image */}
+          <div className="relative aspect-[2/3] overflow-hidden rounded">
+            <img
+              src={posterUrl}
+              alt={title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
+          </div>
+        </motion.a>
         <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </>
     );
