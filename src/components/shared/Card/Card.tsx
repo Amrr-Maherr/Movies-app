@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback, useMemo, memo } from "react";
 import { Play, Info, ChevronDown, Tv, Flame, Award, Calendar, Radio, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
@@ -14,56 +14,80 @@ export interface CardProps {
   badgeType?: "trending" | "award" | "live" | "onair" | "calendar";
 }
 
-const getTitle = (media: HeroMedia) => {
-  return "title" in media ? media.title : media.name;
-};
-
-const getReleaseDate = (media: HeroMedia) => {
-  return "release_date" in media ? media.release_date : media.first_air_date;
-};
-
-export default function Card({ 
-  movie, 
-  variant = "standard", 
+const Card = memo(function Card({
+  movie,
+  variant = "standard",
   rank,
   onClick,
   showBadge = false,
-  badgeType 
+  badgeType
 }: CardProps) {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  const posterUrl = movie.poster_path
-    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-    : "https://via.placeholder.com/500x750?text=No+Image";
+  const getTitle = useCallback((media: HeroMedia) => {
+    return "title" in media ? media.title : media.name;
+  }, []);
 
-  const matchScore = getMatchScore(movie.vote_average);
-  const year = getYear(getReleaseDate(movie));
-  const ageRating = getAgeRating(movie.vote_average);
-  const title = getTitle(movie);
+  const getReleaseDate = useCallback((media: HeroMedia) => {
+    return "release_date" in media ? media.release_date : media.first_air_date;
+  }, []);
+
+  const posterUrl = useMemo(() => {
+    return movie.poster_path
+      ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+      : "https://via.placeholder.com/500x750?text=No+Image";
+  }, [movie.poster_path]);
+
+  const matchScore = useMemo(() => getMatchScore(movie.vote_average), [movie.vote_average]);
+  const year = useMemo(() => getYear(getReleaseDate(movie)), [movie, getReleaseDate]);
+  const ageRating = useMemo(() => getAgeRating(movie.vote_average), [movie.vote_average]);
+  const title = useMemo(() => getTitle(movie), [movie, getTitle]);
+
+  const isTvShow = useMemo(() => "first_air_date" in movie, [movie]);
 
   // Navigate to details page
-  const handleNavigate = () => {
-    const isTvShow = "first_air_date" in movie;
+  const handleNavigate = useCallback(() => {
     if (onClick) {
       onClick();
     } else {
       navigate(`/${isTvShow ? "tv" : "movie"}/${movie.id}`);
     }
-  };
+  }, [onClick, navigate, isTvShow, movie.id]);
 
-  const handleMoreInfoClick = (e: React.MouseEvent) => {
+  const handleMoreInfoClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handlePlayClick = (e: React.MouseEvent) => {
+  const handlePlayClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
     handleNavigate();
-  };
+  }, [handleNavigate]);
+
+  const handleCardMouseEnter = useCallback(() => setIsHovered(true), []);
+  const handleCardMouseLeave = useCallback(() => setIsHovered(false), []);
+
+  const handleLinkClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    handleNavigate();
+  }, [handleNavigate]);
+
+  const formattedReleaseDate = useMemo(() => {
+    const releaseDate = "release_date" in movie ? movie.release_date : movie.first_air_date;
+    return releaseDate ? new Date(releaseDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : null;
+  }, [movie]);
+
+  const ratingValue = useMemo(() => {
+    return movie.vote_average && movie.vote_average > 0 ? movie.vote_average.toFixed(1) : null;
+  }, [movie.vote_average]);
+
+  const matchPercentage = useMemo(() => {
+    return movie.vote_average && movie.vote_average > 0 ? Math.round(movie.vote_average * 10) : null;
+  }, [movie.vote_average]);
 
   // Compact variant for dense grids
   if (variant === "compact") {
@@ -71,8 +95,8 @@ export default function Card({
       <>
         <div
           className="relative group cursor-pointer"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
           onClick={handleNavigate}
         >
           <div className="relative aspect-[2/3] rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]">
@@ -85,29 +109,30 @@ export default function Card({
             <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
               <span className="text-[var(--success)] text-xs font-bold">{matchScore}%</span>
             </div>
-            {isHovered && (
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3">
-                <div className="flex items-center gap-2 mb-2">
-                  <button
-                    className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
-                    onClick={handlePlayClick}
-                  >
-                    <Play className="h-3 w-3 fill-black" />
-                  </button>
-                  <button
-                    className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
-                    onClick={handleMoreInfoClick}
-                  >
-                    <Info className="h-3 w-3" />
-                  </button>
-                </div>
-                <div className="flex items-center gap-2 text-[10px] text-gray-300">
-                  <span className="text-[var(--success)] font-bold">{matchScore}%</span>
-                  <span className="border border-gray-500 px-1 rounded">{ageRating}</span>
-                  <span className="border border-gray-500 px-1 rounded">HD</span>
-                </div>
+            <div 
+              className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
+              style={{ pointerEvents: isHovered ? 'auto' : 'none' }}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <button
+                  className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
+                  onClick={handlePlayClick}
+                >
+                  <Play className="h-3 w-3 fill-black" />
+                </button>
+                <button
+                  className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
+                  onClick={handleMoreInfoClick}
+                >
+                  <Info className="h-3 w-3" />
+                </button>
               </div>
-            )}
+              <div className="flex items-center gap-2 text-[10px] text-gray-300">
+                <span className="text-[var(--success)] font-bold">{matchScore}%</span>
+                <span className="border border-gray-500 px-1 rounded">{ageRating}</span>
+                <span className="border border-gray-500 px-1 rounded">HD</span>
+              </div>
+            </div>
           </div>
           <p className="mt-2 text-xs sm:text-sm text-[var(--text-primary)] font-medium text-center line-clamp-1 group-hover:text-white">
             {title}
@@ -123,14 +148,11 @@ export default function Card({
     return (
       <>
         <a
-          href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
+          href={movie.id ? `/${isTvShow ? "tv" : "movie"}/${movie.id}` : "#"}
           className="relative group cursor-pointer block"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onClick={(e) => {
-            e.preventDefault();
-            handleNavigate();
-          }}
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
+          onClick={handleLinkClick}
         >
           {/* Large Number Badge */}
           <div className="absolute -left-2 md:-left-4 -bottom-2 md:-bottom-3 z-10">
@@ -159,18 +181,14 @@ export default function Card({
 
   // New Release variant with NEW badge and date
   if (variant === "newRelease") {
-    const releaseDate = "release_date" in movie ? movie.release_date : movie.first_air_date;
     return (
       <>
         <a
-          href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
+          href={movie.id ? `/${isTvShow ? "tv" : "movie"}/${movie.id}` : "#"}
           className="group cursor-pointer block"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onClick={(e) => {
-            e.preventDefault();
-            handleNavigate();
-          }}
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
+          onClick={handleLinkClick}
         >
           <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
             <img
@@ -184,10 +202,10 @@ export default function Card({
               NEW
             </div>
             {/* Rating Badge */}
-            {movie.vote_average && movie.vote_average > 0 && (
+            {ratingValue && (
               <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
                 <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                {movie.vote_average.toFixed(1)}
+                {ratingValue}
               </div>
             )}
             {/* Hover Overlay */}
@@ -200,10 +218,10 @@ export default function Card({
           <h3 className="text-sm md:text-base text-white font-medium line-clamp-1 group-hover:text-gray-300 transition-colors">
             {title}
           </h3>
-          {releaseDate && (
+          {formattedReleaseDate && (
             <div className="flex items-center gap-1 text-xs text-gray-400 mt-1">
               <Calendar className="w-3 h-3" />
-              {new Date(releaseDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+              {formattedReleaseDate}
             </div>
           )}
         </a>
@@ -217,14 +235,11 @@ export default function Card({
     return (
       <>
         <a
-          href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
+          href={movie.id ? `/${isTvShow ? "tv" : "movie"}/${movie.id}` : "#"}
           className="group cursor-pointer relative block"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onClick={(e) => {
-            e.preventDefault();
-            handleNavigate();
-          }}
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
+          onClick={handleLinkClick}
         >
           {/* Award Badge */}
           <div className="absolute -top-2 -right-2 z-10 bg-yellow-500 rounded-full p-2 shadow-lg">
@@ -239,20 +254,21 @@ export default function Card({
               loading="lazy"
             />
             {/* Overlay */}
-            {isHovered && (
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent">
-                <div className="absolute bottom-2 left-2 right-2">
-                  {movie.vote_average && movie.vote_average > 0 && (
-                    <div className="flex items-center gap-1 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
-                      <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                      <span className="text-xs font-bold text-white">
-                        {movie.vote_average.toFixed(1)}
-                      </span>
-                    </div>
-                  )}
-                </div>
+            <div 
+              className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-300 ease-in-out"
+              style={{ opacity: isHovered ? 1 : 0 }}
+            >
+              <div className="absolute bottom-2 left-2 right-2">
+                {ratingValue && (
+                  <div className="flex items-center gap-1 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
+                    <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                    <span className="text-xs font-bold text-white">
+                      {ratingValue}
+                    </span>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
           <h3 className="text-xs md:text-sm text-white font-medium mt-2 line-clamp-2 group-hover:text-yellow-400 transition-colors">
             {title}
@@ -268,14 +284,11 @@ export default function Card({
     return (
       <>
         <a
-          href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
+          href={movie.id ? `/${isTvShow ? "tv" : "movie"}/${movie.id}` : "#"}
           className="group cursor-pointer block"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onClick={(e) => {
-            e.preventDefault();
-            handleNavigate();
-          }}
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
+          onClick={handleLinkClick}
         >
           <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
             <img
@@ -285,20 +298,21 @@ export default function Card({
               loading="lazy"
             />
             {/* Hover Overlay */}
-            {isHovered && (
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent">
-                <div className="absolute bottom-2 left-2 right-2">
-                  <div className="flex items-center justify-between">
-                    {movie.vote_average && movie.vote_average > 0 && (
-                      <span className="text-xs font-bold text-green-400">
-                        {Math.round(movie.vote_average * 10)}% Match
-                      </span>
-                    )}
-                    <Info className="w-4 h-4 text-white" />
-                  </div>
+            <div 
+              className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 ease-in-out"
+              style={{ opacity: isHovered ? 1 : 0 }}
+            >
+              <div className="absolute bottom-2 left-2 right-2">
+                <div className="flex items-center justify-between">
+                  {matchPercentage && (
+                    <span className="text-xs font-bold text-green-400">
+                      {matchPercentage}% Match
+                    </span>
+                  )}
+                  <Info className="w-4 h-4 text-white" />
                 </div>
               </div>
-            )}
+            </div>
           </div>
           <h3 className="text-xs md:text-sm text-gray-300 group-hover:text-white transition-colors line-clamp-2">
             {title}
@@ -314,8 +328,8 @@ export default function Card({
     <>
       <div
         className="relative group cursor-pointer rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={handleCardMouseEnter}
+        onMouseLeave={handleCardMouseLeave}
         onClick={handleNavigate}
       >
         <div className="relative aspect-[2/3] w-full overflow-hidden">
@@ -372,42 +386,43 @@ export default function Card({
           </div>
 
           {/* Hover Overlay */}
-          {isHovered && (
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent">
-              <div className="absolute bottom-0 left-0 right-0 p-3">
-                <h3 className="text-white text-sm font-bold mb-3 line-clamp-2 drop-shadow-lg">
-                  {title}
-                </h3>
-                <div className="flex items-center gap-2 mb-3">
-                  <button
-                    className="flex-1 bg-white text-black py-2 px-3 rounded-md font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200 transition-colors"
-                    onClick={handlePlayClick}
-                  >
-                    <Play className="h-3 w-3 fill-black" />
-                    Play
-                  </button>
-                  <button
-                    className="bg-[var(--background-secondary)]/90 backdrop-blur-sm text-white py-2 px-3 rounded-md font-semibold text-xs flex items-center justify-center gap-1 hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
-                    onClick={handleMoreInfoClick}
-                  >
-                    <Info className="h-3 w-3" />
-                    Info
-                  </button>
-                  <button
-                    className="bg-[var(--background-secondary)]/90 backdrop-blur-sm text-white p-2 rounded-md hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
-                  >
-                    <ChevronDown className="h-3 w-3" />
-                  </button>
-                </div>
-                <div className="flex items-center gap-2 text-[10px]">
-                  <span className="text-[var(--success)] font-bold">{matchScore}% Match</span>
-                  <span className="text-gray-300">{year}</span>
-                  <span className="border border-gray-500 px-1 rounded text-gray-300">{ageRating}</span>
-                  <span className="border border-gray-500 px-1 rounded text-gray-300">HD</span>
-                </div>
+          <div 
+            className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent opacity-0 transition-opacity duration-300 ease-in-out"
+            style={{ opacity: isHovered ? 1 : 0, pointerEvents: isHovered ? 'auto' : 'none' }}
+          >
+            <div className="absolute bottom-0 left-0 right-0 p-3">
+              <h3 className="text-white text-sm font-bold mb-3 line-clamp-2 drop-shadow-lg">
+                {title}
+              </h3>
+              <div className="flex items-center gap-2 mb-3">
+                <button
+                  className="flex-1 bg-white text-black py-2 px-3 rounded-md font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200 transition-colors"
+                  onClick={handlePlayClick}
+                >
+                  <Play className="h-3 w-3 fill-black" />
+                  Play
+                </button>
+                <button
+                  className="bg-[var(--background-secondary)]/90 backdrop-blur-sm text-white py-2 px-3 rounded-md font-semibold text-xs flex items-center justify-center gap-1 hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
+                  onClick={handleMoreInfoClick}
+                >
+                  <Info className="h-3 w-3" />
+                  Info
+                </button>
+                <button
+                  className="bg-[var(--background-secondary)]/90 backdrop-blur-sm text-white p-2 rounded-md hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
+                >
+                  <ChevronDown className="h-3 w-3" />
+                </button>
+              </div>
+              <div className="flex items-center gap-2 text-[10px]">
+                <span className="text-[var(--success)] font-bold">{matchScore}% Match</span>
+                <span className="text-gray-300">{year}</span>
+                <span className="border border-gray-500 px-1 rounded text-gray-300">{ageRating}</span>
+                <span className="border border-gray-500 px-1 rounded text-gray-300">HD</span>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
       <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
