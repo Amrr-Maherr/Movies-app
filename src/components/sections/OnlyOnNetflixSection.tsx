@@ -1,4 +1,5 @@
 import { Sparkles } from "lucide-react";
+import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
 
 interface OnlyOnNetflixSectionProps {
@@ -12,12 +13,11 @@ export default function OnlyOnNetflixSection({ movies, mediaType }: OnlyOnNetfli
   return (
     <div className="py-6 md:py-8">
       <div className="container">
-        <div className="flex items-center gap-2 mb-4 md:mb-6">
-          <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-red-600" />
-          <h2 className="text-xl md:text-2xl font-bold text-white">
-            Only on Netflix
-          </h2>
-        </div>
+        <SectionHeader
+          title="Only on Netflix"
+          icon={Sparkles}
+          iconColor="text-red-600"
+        />
 
         <div className="grid grid-cols-1 gap-4 md:gap-6">
           {items.map((movie, index) => {

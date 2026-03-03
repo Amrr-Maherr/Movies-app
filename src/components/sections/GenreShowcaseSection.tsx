@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
 
 interface GenreShowcaseSectionProps {
@@ -26,18 +27,11 @@ export default function GenreShowcaseSection({ movies, genre, mediaType }: Genre
   return (
     <div className="py-6 md:py-8">
       <div className="container">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4 md:mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-white">
-            {genre}
-          </h2>
-          <a href={mediaType === "movie" ? "/movies" : "/tv"}>
-            <button className="flex items-center gap-1 text-sm md:text-base text-gray-300 hover:text-white transition-colors">
-              Explore All
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </a>
-        </div>
+        <SectionHeader
+          title={genre}
+          actionLabel="Explore All"
+          actionHref={mediaType === "movie" ? "/movies" : "/tv"}
+        />
 
         {/* Grid Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">

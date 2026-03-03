@@ -1,4 +1,5 @@
 import { Play } from "lucide-react";
+import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
 
 interface ContinueWatchingSectionProps {
@@ -17,9 +18,7 @@ export default function ContinueWatchingSection({
   return (
     <div className="py-6 md:py-8">
       <div className="container">
-        <h2 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-6">
-          {title}
-        </h2>
+        <SectionHeader title={title} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
           {items.map((movie) => {
             const imageUrl = movie.backdrop_path

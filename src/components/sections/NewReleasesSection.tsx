@@ -1,4 +1,5 @@
 import Card from "@/components/shared/Card/Card";
+import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
 
 interface NewReleasesSectionProps {
@@ -17,15 +18,7 @@ export default function NewReleasesSection({
   return (
     <div className="py-6 md:py-8">
       <div className="container">
-        <div className="flex items-center justify-between mb-4 md:mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-white">
-            {title}
-          </h2>
-          <span className="text-xs md:text-sm text-red-500 font-semibold uppercase tracking-wider">
-            Just Added
-          </span>
-        </div>
-
+        <SectionHeader title={title} badgeText="Just Added" />
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
           {items.map((movie) => (
             <Card

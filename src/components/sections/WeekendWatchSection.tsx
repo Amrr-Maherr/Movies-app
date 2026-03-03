@@ -1,4 +1,5 @@
 import { Popcorn, Star } from "lucide-react";
+import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
 
 interface WeekendWatchSectionProps {
@@ -25,12 +26,11 @@ export default function WeekendWatchSection({ movies, mediaType }: WeekendWatchS
   return (
     <div className="bg-gradient-to-b from-black via-zinc-900 to-black py-6 md:py-8">
       <div className="container">
-        <div className="flex items-center gap-2 mb-4 md:mb-6">
-          <Popcorn className="w-5 h-5 md:w-6 md:h-6 text-yellow-400" />
-          <h2 className="text-xl md:text-2xl font-bold text-white">
-            Perfect for the Weekend
-          </h2>
-        </div>
+        <SectionHeader
+          title="Perfect for the Weekend"
+          icon={Popcorn}
+          iconColor="text-yellow-400"
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Featured Movie */}

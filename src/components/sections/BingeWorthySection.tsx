@@ -1,4 +1,6 @@
 import { Flame, Clock } from "lucide-react";
+import Card from "@/components/shared/Card/Card";
+import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
 
 interface BingeWorthySectionProps {
@@ -12,12 +14,11 @@ export default function BingeWorthySection({ movies, mediaType }: BingeWorthySec
   return (
     <div className="py-6 md:py-8">
       <div className="container">
-        <div className="flex items-center gap-2 mb-4 md:mb-6">
-          <Flame className="w-5 h-5 md:w-6 md:h-6 text-orange-500" />
-          <h2 className="text-xl md:text-2xl font-bold text-white">
-            Binge-Worthy {mediaType === "movie" ? "Movies" : "Series"}
-          </h2>
-        </div>
+        <SectionHeader
+          title={`Binge-Worthy ${mediaType === "movie" ? "Movies" : "Series"}`}
+          icon={Flame}
+          iconColor="text-orange-500"
+        />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-4">
           {items.map((movie) => {
