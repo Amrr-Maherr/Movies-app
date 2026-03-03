@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Play, Info, ChevronDown, Tv, Flame, Award, Calendar, Radio, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
@@ -70,12 +69,10 @@ export default function Card({
   if (variant === "compact") {
     return (
       <>
-        <motion.div
+        <div
           className="relative group cursor-pointer"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          whileHover={{ y: -8, scale: 1.08 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
           onClick={handleNavigate}
         >
           <div className="relative aspect-[2/3] rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]">
@@ -88,45 +85,34 @@ export default function Card({
             <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
               <span className="text-[var(--success)] text-xs font-bold">{matchScore}%</span>
             </div>
-            <AnimatePresence>
-              {isHovered && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3"
-                >
-                  <div className="flex items-center gap-2 mb-2">
-                    <motion.button
-                      className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={handlePlayClick}
-                    >
-                      <Play className="h-3 w-3 fill-black" />
-                    </motion.button>
-                    <motion.button
-                      className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={handleMoreInfoClick}
-                    >
-                      <Info className="h-3 w-3" />
-                    </motion.button>
-                  </div>
-                  <div className="flex items-center gap-2 text-[10px] text-gray-300">
-                    <span className="text-[var(--success)] font-bold">{matchScore}%</span>
-                    <span className="border border-gray-500 px-1 rounded">{ageRating}</span>
-                    <span className="border border-gray-500 px-1 rounded">HD</span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {isHovered && (
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <button
+                    className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
+                    onClick={handlePlayClick}
+                  >
+                    <Play className="h-3 w-3 fill-black" />
+                  </button>
+                  <button
+                    className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
+                    onClick={handleMoreInfoClick}
+                  >
+                    <Info className="h-3 w-3" />
+                  </button>
+                </div>
+                <div className="flex items-center gap-2 text-[10px] text-gray-300">
+                  <span className="text-[var(--success)] font-bold">{matchScore}%</span>
+                  <span className="border border-gray-500 px-1 rounded">{ageRating}</span>
+                  <span className="border border-gray-500 px-1 rounded">HD</span>
+                </div>
+              </div>
+            )}
           </div>
           <p className="mt-2 text-xs sm:text-sm text-[var(--text-primary)] font-medium text-center line-clamp-1 group-hover:text-white">
             {title}
           </p>
-        </motion.div>
+        </div>
         <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </>
     );
@@ -136,13 +122,11 @@ export default function Card({
   if (variant === "top10" && rank) {
     return (
       <>
-        <motion.a
+        <a
           href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
           className="relative group cursor-pointer block"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
           onClick={(e) => {
             e.preventDefault();
             handleNavigate();
@@ -162,12 +146,12 @@ export default function Card({
             <img
               src={posterUrl}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              className="w-full h-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
           </div>
-        </motion.a>
+        </a>
         <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </>
     );
@@ -178,7 +162,7 @@ export default function Card({
     const releaseDate = "release_date" in movie ? movie.release_date : movie.first_air_date;
     return (
       <>
-        <motion.a
+        <a
           href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
           className="group cursor-pointer block"
           onMouseEnter={() => setIsHovered(true)}
@@ -192,7 +176,7 @@ export default function Card({
             <img
               src={posterUrl}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover"
               loading="lazy"
             />
             {/* NEW Badge */}
@@ -222,7 +206,7 @@ export default function Card({
               {new Date(releaseDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
             </div>
           )}
-        </motion.a>
+        </a>
         <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </>
     );
@@ -232,13 +216,11 @@ export default function Card({
   if (variant === "awardWinner") {
     return (
       <>
-        <motion.a
+        <a
           href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
           className="group cursor-pointer relative block"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
           onClick={(e) => {
             e.preventDefault();
             handleNavigate();
@@ -253,36 +235,29 @@ export default function Card({
             <img
               src={posterUrl}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              className="w-full h-full object-cover"
               loading="lazy"
             />
             {/* Overlay */}
-            <AnimatePresence>
-              {isHovered && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"
-                >
-                  <div className="absolute bottom-2 left-2 right-2">
-                    {movie.vote_average && movie.vote_average > 0 && (
-                      <div className="flex items-center gap-1 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
-                        <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-                        <span className="text-xs font-bold text-white">
-                          {movie.vote_average.toFixed(1)}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {isHovered && (
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent">
+                <div className="absolute bottom-2 left-2 right-2">
+                  {movie.vote_average && movie.vote_average > 0 && (
+                    <div className="flex items-center gap-1 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
+                      <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                      <span className="text-xs font-bold text-white">
+                        {movie.vote_average.toFixed(1)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           <h3 className="text-xs md:text-sm text-white font-medium mt-2 line-clamp-2 group-hover:text-yellow-400 transition-colors">
             {title}
           </h3>
-        </motion.a>
+        </a>
         <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </>
     );
@@ -292,7 +267,7 @@ export default function Card({
   if (variant === "recommendation") {
     return (
       <>
-        <motion.a
+        <a
           href={movie.id ? `/${"first_air_date" in movie ? "tv" : "movie"}/${movie.id}` : "#"}
           className="group cursor-pointer block"
           onMouseEnter={() => setIsHovered(true)}
@@ -306,36 +281,29 @@ export default function Card({
             <img
               src={posterUrl}
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover"
               loading="lazy"
             />
             {/* Hover Overlay */}
-            <AnimatePresence>
-              {isHovered && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
-                >
-                  <div className="absolute bottom-2 left-2 right-2">
-                    <div className="flex items-center justify-between">
-                      {movie.vote_average && movie.vote_average > 0 && (
-                        <span className="text-xs font-bold text-green-400">
-                          {Math.round(movie.vote_average * 10)}% Match
-                        </span>
-                      )}
-                      <Info className="w-4 h-4 text-white" />
-                    </div>
+            {isHovered && (
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent">
+                <div className="absolute bottom-2 left-2 right-2">
+                  <div className="flex items-center justify-between">
+                    {movie.vote_average && movie.vote_average > 0 && (
+                      <span className="text-xs font-bold text-green-400">
+                        {Math.round(movie.vote_average * 10)}% Match
+                      </span>
+                    )}
+                    <Info className="w-4 h-4 text-white" />
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                </div>
+              </div>
+            )}
           </div>
           <h3 className="text-xs md:text-sm text-gray-300 group-hover:text-white transition-colors line-clamp-2">
             {title}
           </h3>
-        </motion.a>
+        </a>
         <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </>
     );
@@ -344,14 +312,10 @@ export default function Card({
   // Standard Netflix Card with optional badges
   return (
     <>
-      <motion.div
+      <div
         className="relative group cursor-pointer rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileHover={{ scale: 1.05, zIndex: 20, boxShadow: "0 20px 40px rgba(0,0,0,0.5)" }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
         onClick={handleNavigate}
       >
         <div className="relative aspect-[2/3] w-full overflow-hidden">
@@ -398,8 +362,7 @@ export default function Card({
           <img
             src={posterUrl}
             alt={title}
-            className="w-full h-full object-cover transition-transform duration-500"
-            style={{ transform: isHovered ? "scale(1.1)" : "scale(1)" }}
+            className="w-full h-full object-cover"
             loading="lazy"
           />
 
@@ -409,58 +372,44 @@ export default function Card({
           </div>
 
           {/* Hover Overlay */}
-          <AnimatePresence>
-            {isHovered && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"
-              >
-                <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <h3 className="text-white text-sm font-bold mb-3 line-clamp-2 drop-shadow-lg">
-                    {title}
-                  </h3>
-                  <div className="flex items-center gap-2 mb-3">
-                    <motion.button
-                      className="flex-1 bg-white text-black py-2 px-3 rounded-md font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200 transition-colors"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={handlePlayClick}
-                    >
-                      <Play className="h-3 w-3 fill-black" />
-                      Play
-                    </motion.button>
-                    <motion.button
-                      className="bg-[var(--background-secondary)]/90 backdrop-blur-sm text-white py-2 px-3 rounded-md font-semibold text-xs flex items-center justify-center gap-1 hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={handleMoreInfoClick}
-                    >
-                      <Info className="h-3 w-3" />
-                      Info
-                    </motion.button>
-                    <motion.button
-                      className="bg-[var(--background-secondary)]/90 backdrop-blur-sm text-white p-2 rounded-md hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <ChevronDown className="h-3 w-3" />
-                    </motion.button>
-                  </div>
-                  <div className="flex items-center gap-2 text-[10px]">
-                    <span className="text-[var(--success)] font-bold">{matchScore}% Match</span>
-                    <span className="text-gray-300">{year}</span>
-                    <span className="border border-gray-500 px-1 rounded text-gray-300">{ageRating}</span>
-                    <span className="border border-gray-500 px-1 rounded text-gray-300">HD</span>
-                  </div>
+          {isHovered && (
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent">
+              <div className="absolute bottom-0 left-0 right-0 p-3">
+                <h3 className="text-white text-sm font-bold mb-3 line-clamp-2 drop-shadow-lg">
+                  {title}
+                </h3>
+                <div className="flex items-center gap-2 mb-3">
+                  <button
+                    className="flex-1 bg-white text-black py-2 px-3 rounded-md font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200 transition-colors"
+                    onClick={handlePlayClick}
+                  >
+                    <Play className="h-3 w-3 fill-black" />
+                    Play
+                  </button>
+                  <button
+                    className="bg-[var(--background-secondary)]/90 backdrop-blur-sm text-white py-2 px-3 rounded-md font-semibold text-xs flex items-center justify-center gap-1 hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
+                    onClick={handleMoreInfoClick}
+                  >
+                    <Info className="h-3 w-3" />
+                    Info
+                  </button>
+                  <button
+                    className="bg-[var(--background-secondary)]/90 backdrop-blur-sm text-white p-2 rounded-md hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
+                  >
+                    <ChevronDown className="h-3 w-3" />
+                  </button>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                <div className="flex items-center gap-2 text-[10px]">
+                  <span className="text-[var(--success)] font-bold">{matchScore}% Match</span>
+                  <span className="text-gray-300">{year}</span>
+                  <span className="border border-gray-500 px-1 rounded text-gray-300">{ageRating}</span>
+                  <span className="border border-gray-500 px-1 rounded text-gray-300">HD</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      </motion.div>
+      </div>
       <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </>
   );
