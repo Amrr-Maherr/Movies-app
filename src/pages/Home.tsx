@@ -74,10 +74,45 @@ const Home = () => {
     airingTodayLoading || 
     onTheAirLoading;
 
+  // ===== Global Error State =====
+  const error = 
+    popularError || 
+    trendingWeekError || 
+    trendingDayError || 
+    upcomingError || 
+    nowPlayingError ||
+    popularTvError || 
+    trendingTvWeekError || 
+    trendingTvDayError || 
+    airingTodayError || 
+    onTheAirError;
+
+  // ===== Global Retry Function =====
+  const handleRetry = () => {
+    popularRefetch();
+    trendingWeekRefetch();
+    trendingDayRefetch();
+    upcomingRefetch();
+    nowPlayingRefetch();
+    popularTvRefetch();
+    trendingTvWeekRefetch();
+    trendingTvDayRefetch();
+    airingTodayRefetch();
+    onTheAirRefetch();
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
         <Loader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
+        <Error retryButtonText="Try Again" onRetry={handleRetry} />
       </div>
     );
   }
