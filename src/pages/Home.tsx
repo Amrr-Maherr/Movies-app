@@ -13,6 +13,7 @@ import BingeWorthySection from "@/components/sections/BingeWorthySection";
 import WeekendWatchSection from "@/components/sections/WeekendWatchSection";
 import PricingSection from "@/components/sections/PricingSection";
 import AskedQuestions from "@/components/sections/AskedQuestions";
+import { Loader } from "@/components/ui";
 
 import usePopularMovies from "@/queries/FetchPopularMovies";
 import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
@@ -60,6 +61,27 @@ const Home = () => {
     ...(onTheAirTv || []),
   ];
 
+  // ===== Global Loading State =====
+  const isLoading = 
+    popularLoading || 
+    trendingWeekLoading || 
+    trendingDayLoading || 
+    upcomingLoading || 
+    nowPlayingLoading ||
+    popularTvLoading || 
+    trendingTvWeekLoading || 
+    trendingTvDayLoading || 
+    airingTodayLoading || 
+    onTheAirLoading;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <motion.div
       className="min-h-screen bg-[var(--background-primary)]"
@@ -71,12 +93,9 @@ const Home = () => {
       {/* Hero Section */}
       <HeroSection
         data={AllData}
-        isLoading={popularLoading || trendingWeekLoading}
-        error={popularError || trendingWeekError}
-        onRetry={() => {
-          popularRefetch();
-          trendingWeekRefetch();
-        }}
+        isLoading={false}
+        error={null}
+        onRetry={() => {}}
       />
 
       {/* Top 10 Movies Section */}
@@ -94,9 +113,9 @@ const Home = () => {
           <MediaSection
             title="Trending Now"
             data={trendingMoviesWeek}
-            isLoading={trendingWeekLoading}
-            error={trendingWeekError}
-            onRetry={trendingWeekRefetch}
+            isLoading={false}
+            error={null}
+            onRetry={() => {}}
           />
         </div>
       </div>
@@ -125,9 +144,9 @@ const Home = () => {
           <MediaSection
             title="Trending TV Shows"
             data={trendingTvWeek}
-            isLoading={trendingTvWeekLoading}
-            error={trendingTvWeekError}
-            onRetry={trendingTvWeekRefetch}
+            isLoading={false}
+            error={null}
+            onRetry={() => {}}
           />
         </div>
       </div>
@@ -164,9 +183,9 @@ const Home = () => {
           <MediaSection
             title="Trending Today"
             data={trendingMoviesDay}
-            isLoading={trendingDayLoading}
-            error={trendingDayError}
-            onRetry={trendingDayRefetch}
+            isLoading={false}
+            error={null}
+            onRetry={() => {}}
           />
         </div>
       </div>
@@ -194,16 +213,16 @@ const Home = () => {
           <MediaSection
             title="Hot TV Shows Today"
             data={trendingTvDay}
-            isLoading={trendingTvDayLoading}
-            error={trendingTvDayError}
-            onRetry={trendingTvDayRefetch}
+            isLoading={false}
+            error={null}
+            onRetry={() => {}}
           />
           <MediaSection
             title="Popular Movies"
             data={popularMovies}
-            isLoading={popularLoading}
-            error={popularError}
-            onRetry={popularRefetch}
+            isLoading={false}
+            error={null}
+            onRetry={() => {}}
           />
         </div>
       </div>
@@ -240,16 +259,16 @@ const Home = () => {
           <MediaSection
             title="Popular TV Shows"
             data={popularTv}
-            isLoading={popularTvLoading}
-            error={popularTvError}
-            onRetry={popularTvRefetch}
+            isLoading={false}
+            error={null}
+            onRetry={() => {}}
           />
           <MediaSection
             title="Coming Soon"
             data={upcomingMovies}
-            isLoading={upcomingLoading}
-            error={upcomingError}
-            onRetry={upcomingRefetch}
+            isLoading={false}
+            error={null}
+            onRetry={() => {}}
           />
         </div>
       </div>
@@ -286,9 +305,9 @@ const Home = () => {
           <MediaSection
             title="Airing Today"
             data={airingTodayTv}
-            isLoading={airingTodayLoading}
-            error={airingTodayError}
-            onRetry={airingTodayRefetch}
+            isLoading={false}
+            error={null}
+            onRetry={() => {}}
           />
         </div>
       </div>
@@ -308,9 +327,9 @@ const Home = () => {
           <MediaSection
             title="Now Playing in Theaters"
             data={nowPlayingMovies}
-            isLoading={nowPlayingLoading}
-            error={nowPlayingError}
-            onRetry={nowPlayingRefetch}
+            isLoading={false}
+            error={null}
+            onRetry={() => {}}
           />
         </div>
       </div>
@@ -347,9 +366,9 @@ const Home = () => {
           <MediaSection
             title="Currently Airing"
             data={onTheAirTv}
-            isLoading={onTheAirLoading}
-            error={onTheAirError}
-            onRetry={onTheAirRefetch}
+            isLoading={false}
+            error={null}
+            onRetry={() => {}}
           />
         </div>
       </div>
