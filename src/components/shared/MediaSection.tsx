@@ -1,5 +1,5 @@
 import Slider from "@/components/shared/Slider/slider";
-import MovieCard from "@/components/shared/MovieCard";
+import Card from "@/components/shared/Card/Card";
 import { Error, Loader } from "@/components/ui";
 import type { HeroMedia } from "@/types";
 
@@ -62,7 +62,7 @@ export default function MediaSection({
           }}
         >
           {media.map((item: HeroMedia) => (
-            <MovieCard key={item.id} movie={item} />
+            <Card key={item.id} movie={item} variant="compact" />
           ))}
         </Slider>
       </div>

@@ -1,11 +1,11 @@
 import Slider from "@/components/shared/Slider/slider";
-import MovieCard from "@/components/shared/MovieCard";
+import Card from "@/components/shared/Card/Card";
 import { Error, Loader } from "@/components/ui";
-import type { Movie } from "@/types";
+import type { HeroMedia } from "@/types";
 
 interface MovieCardsSectionProps {
   title?: string;
-  data?: Movie[];
+  data?: HeroMedia[];
   isLoading: boolean;
   error: unknown;
   onRetry: () => void;
@@ -61,8 +61,8 @@ export default function MovieCardsSection({
             autoplay: true,
           }}
         >
-          {movies.map((movie: Movie) => (
-            <MovieCard key={movie.id} movie={movie} />
+          {movies.map((movie: HeroMedia) => (
+            <Card key={movie.id} movie={movie} variant="compact" />
           ))}
         </Slider>
       </div>
