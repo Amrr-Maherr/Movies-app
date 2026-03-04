@@ -1,3 +1,4 @@
+import { memo, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Play, Plus, ThumbsUp } from "lucide-react";
 import { Dialog, DialogContent, DialogOverlay, DialogPortal } from "@/components/ui/dialog";
@@ -10,27 +11,46 @@ interface MovieModalProps {
   onClose: () => void;
 }
 
-const backdropUrl = (backdropPath: string | null) => {
-  return backdropPath
-    ? `https://image.tmdb.org/t/p/original${backdropPath}`
-    : "https://via.placeholder.com/1920x1080?text=No+Image";
-};
+const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieModalProps) {
+  
 
-const posterUrl = (posterPath: string | null) => {
-  return posterPath
-    ? `https://image.tmdb.org/t/p/w500${posterPath}`
-    : "https://via.placeholder.com/500x750?text=No+Image";
-};
+  const matchScore = useMemo(
+    () => getMatchScore(movie.vote_average),
+    [movie.vote_average]
+  );
 
-export default function MovieModal({ movie, isOpen, onClose }: MovieModalProps) {
+  const year = useMemo(
+    () => getYear("release_date" in movie ? movie.release_date : movie.first_air_date),
+    ["release_date" in movie ? movie.release_date : movie.first_air_date]
+  );
+
+  const ageRating = useMemo(
+    () => getAgeRating(movie.vote_average),
+    [movie.vote_average]
+  );
+
+  const title = useMemo(
+    () => ("title" in movie ? movie.title : movie.name),
+    ["title" in movie ? movie.title : movie.name]
+  );
+
+  const genres = useMemo(
+    () => getGenres(movie.genre_ids),
+    [movie.genre_ids]
+  );
+
+  const backdropUrl = useCallback((backdropPath: string | null) => {
+    return backdropPath
+      ? `https://image.tmdb.org/t/p/original${backdropPath}`
+      : "https://via.placeholder.com/1920x1080?text=No+Image";
+  }, []);
+
+  const posterUrl = useCallback((posterPath: string | null) => {
+    return posterPath
+      ? `https://image.tmdb.org/t/p/w500${posterPath}`
+      : "https://via.placeholder.com/500x750?text=No+Image";
+  }, []);
   if (!movie) return null;
-
-  const matchScore = getMatchScore(movie.vote_average);
-  const year = getYear("release_date" in movie ? movie.release_date : movie.first_air_date);
-  const ageRating = getAgeRating(movie.vote_average);
-  const title = "title" in movie ? movie.title : movie.name;
-  const genres = getGenres(movie.genre_ids);
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -168,4 +188,6 @@ export default function MovieModal({ movie, isOpen, onClose }: MovieModalProps) 
       )}
     </AnimatePresence>
   );
-}
+});
+
+export default MovieModal;
