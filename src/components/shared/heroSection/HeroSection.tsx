@@ -3,6 +3,7 @@ import HeroSlide from "./HeroSlide";
 import { Autoplay } from "swiper/modules";
 import type { HeroMedia } from "@/types";
 import { Error, Loader } from "@/components/ui";
+import { useMemo } from "react";
 
 // ============================================
 // CONSTANTS
@@ -25,8 +26,11 @@ export interface HeroSectionProps {
 // MAIN COMPONENT
 // ============================================
 export default function HeroSection({ data, isLoading, error, onRetry }: HeroSectionProps) {
-  // Get featured media
-  const featuredMedia = data || [];
+  // Get featured media with memoization
+  const featuredMedia = useMemo(
+    () => data || [],
+    [data]
+  );
 
   // Loading state - Theme-aware background
   if (isLoading || featuredMedia.length === 0) {

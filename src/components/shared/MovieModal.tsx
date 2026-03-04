@@ -12,7 +12,7 @@ interface MovieModalProps {
 }
 
 const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieModalProps) {
-  
+  if (!movie) return null;
 
   const matchScore = useMemo(
     () => getMatchScore(movie.vote_average),
@@ -50,7 +50,6 @@ const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieMod
       ? `https://image.tmdb.org/t/p/w500${posterPath}`
       : "https://via.placeholder.com/500x750?text=No+Image";
   }, []);
-  if (!movie) return null;
   return (
     <AnimatePresence>
       {isOpen && (
