@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { getBackdropUrl } from "@/utils/tmdb";
 import type { HeroBackgroundProps } from "@/types";
+import { useMemo } from "react";
 
 // ============================================
 // CONSTANTS
@@ -19,8 +20,15 @@ const getTitle = (media: HeroBackgroundProps["movie"]) => {
 // COMPONENT
 // ============================================
 export default function HeroBackground({ movie }: HeroBackgroundProps) {
-  const imageUrl = getBackdropUrl(movie.backdrop_path);
-  const title = getTitle(movie);
+  const imageUrl = useMemo(
+    () => getBackdropUrl(movie.backdrop_path),
+    [movie.backdrop_path]
+  );
+
+  const title = useMemo(
+    () => getTitle(movie),
+    [movie]
+  );
 
   if (!imageUrl) {
     return (
