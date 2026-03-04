@@ -4,7 +4,7 @@ import MovieHero from '@/components/sections/MovieHero';
 import { Loader } from '@/components/ui/loader';
 import { Error } from '@/components/ui/error';
 import type { MovieDetails } from '@/types';
-
+import { motion } from "framer-motion";
 export default function MovieDetails() {
   const { id } = useParams();
   const { isLoading, data, error, refetch } = FetchMovieDetails(Number(id));
@@ -25,9 +25,14 @@ export default function MovieDetails() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[var(--background-primary)]">
-      {/* Netflix-style Hero Section */}
-      <MovieHero movie={data} />
-    </div>
+        <motion.div
+      className="min-h-screen bg-[var(--background-primary)]"
+      initial={{ opacity: 0, x: -50 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 50 }}
+      transition={{ duration: 0.5 }}
+    >
+     <MovieHero movie={data} />
+    </motion.div>
   );
 }
