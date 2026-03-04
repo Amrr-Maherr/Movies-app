@@ -1,11 +1,11 @@
 import axios from "axios";
-import type { Movie} from "@/types";
+import type { MovieDetails } from "@/types";
 
 const apiBaseUrl = "https://api.themoviedb.org/3";
 const apiEndPoint = "/movie/";
 const apiKey = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
 
-export const GetMovieDetails = async (id: number): Promise<Movie[] | null> => {
+export const GetMovieDetails = async (id: number): Promise<MovieDetails | null> => {
     try {
         const response = await axios.get(`${apiBaseUrl}${apiEndPoint}${id}`, {
             params: {

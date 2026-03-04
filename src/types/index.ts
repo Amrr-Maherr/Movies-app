@@ -21,3 +21,15 @@ export type {
   HeroSectionProps,
   HeroMedia,
 } from "./hero";
+
+// Movie Details types
+export type {
+  MovieDetails,
+  Genre,
+  CastMember,
+  Credits,
+  Video,
+  Videos,
+  Keyword,
+  Keywords,
+} from "./movieDetails";
