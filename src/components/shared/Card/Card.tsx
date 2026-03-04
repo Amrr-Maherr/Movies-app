@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, memo } from "react";
 import { Play, Info, ChevronDown, Tv, Flame, Award, Calendar, Radio, Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
 import MovieModal from "@/components/shared/MovieModal";
 import type { HeroMedia } from "@/types";
@@ -147,8 +147,9 @@ const Card = memo(({
   if (variant === "top10" && rank) {
     return (
       <>
-        <a
-          href={movie.id ? `/${isTvShow ? "tv" : "movie"}/${movie.id}` : "#"}
+        <Link
+          to={`/movies/${movie.id}`}
+          // href={movie.id ? `/${isTvShow ? "tv" : "movie"}/${movie.id}` : "#"}
           className="relative group cursor-pointer block"
           onMouseEnter={handleCardMouseEnter}
           onMouseLeave={handleCardMouseLeave}
@@ -157,7 +158,10 @@ const Card = memo(({
           {/* Large Number Badge */}
           <div className="absolute -left-2 md:-left-4 -bottom-2 md:-bottom-3 z-10">
             <div className="relative">
-              <span className="text-6xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-800 to-black" style={{ WebkitTextStroke: "2px #ddd" }}>
+              <span
+                className="text-6xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-800 to-black"
+                style={{ WebkitTextStroke: "2px #ddd" }}
+              >
                 {rank}
               </span>
             </div>
@@ -173,8 +177,12 @@ const Card = memo(({
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
           </div>
-        </a>
-        <MovieModal movie={movie} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        </Link>
+        <MovieModal
+          movie={movie}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </>
     );
   }
