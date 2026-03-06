@@ -2,10 +2,13 @@ import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { Loader } from "@/components/ui";
-import MovieDetails from "@/pages/MovieDetails";
-import TVShowDetailsPage from "@/pages/TVShowDetails";
-import PersonDetailsPage from "@/pages/PersonDetails";
-import EpisodeDetailsPage from "@/pages/EpisodeDetailsPage";
+
+// Lazy-loaded page components
+const MovieDetails = lazy(() => import("@/pages/MovieDetails"));
+const TVShowDetailsPage = lazy(() => import("@/pages/TVShowDetails"));
+const PersonDetailsPage = lazy(() => import("@/pages/PersonDetails"));
+const EpisodeDetailsPage = lazy(() => import("@/pages/EpisodeDetailsPage"));
+const SeasonDetailsPage = lazy(() => import("@/pages/SeasonDetailsPage"));
 
 // Main pages
 const Home = lazy(() => import("../pages/Home"));
@@ -57,6 +60,7 @@ export default function AppRoutes() {
           <Route path="/session" element={<Session />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/tv/:id" element={<TVShowDetailsPage />} />
+          <Route path="/tv/:tvId/season/:seasonNumber" element={<SeasonDetailsPage />} />
           <Route path="/tv/:tvId/season/:seasonNumber/episode/:episodeNumber" element={<EpisodeDetailsPage />} />
           <Route path="/person/:id" element={<PersonDetailsPage />} />
 
