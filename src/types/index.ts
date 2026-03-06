@@ -27,11 +27,14 @@ export type {
   MovieDetails,
   Genre,
   CastMember,
+  CrewMember,
   Credits,
   Video,
   Videos,
   Keyword,
   Keywords,
+  Episode,
+  Season,
 } from "./movieDetails";
 
 // Media Details types (shared for Movies and TV Shows)
@@ -39,4 +42,6 @@ export type {
   TvShowDetails,
   MediaDetails,
   MediaHeroProps,
+  Provider,
+  WatchProvidersSectionProps,
 } from "./mediaDetails";

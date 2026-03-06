@@ -11,3 +11,5 @@ export { default as useTrendingTvDay } from "./FetchTrendingTvDay";
 export { default as useTopRatedTvShows } from "./FetchTopRatedTvShows";
 export { default as useAiringTodayTv } from "./FetchAiringTodayTv";
 export { default as useOnTheAirTv } from "./FetchOnTheAirTv";
+export { default as FetchTvShowDetails } from "./FetchTvShowDetails";
+export { default as FetchTvSeasonDetails } from "./FetchTvSeasonDetails";

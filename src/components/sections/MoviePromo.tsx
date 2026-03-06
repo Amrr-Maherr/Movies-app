@@ -6,8 +6,8 @@ interface MoviePromoProps {
     id: number;
     title?: string;
     name?: string;
-    backdrop_path?: string;
-    poster_path?: string;
+    backdrop_path?: string | null;
+    poster_path?: string | null;
     overview?: string;
     vote_average?: number;
     release_date?: string;

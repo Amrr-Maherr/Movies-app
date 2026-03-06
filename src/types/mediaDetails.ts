@@ -3,7 +3,7 @@
  * Includes credits, videos, keywords, and genres from TMDB API
  */
 
-import type { Genre, CastMember, Credits, Video, Videos, Keyword, Keywords, MovieDetails } from './movieDetails';
+import type { Genre, CastMember, Credits, Video, Videos, Keyword, Keywords, MovieDetails, CrewMember, Season } from './movieDetails';
 
 /**
  * Extended TV Show details with all appended responses from TMDB API
@@ -67,6 +67,7 @@ export interface TvShowDetails {
     name: string;
     english_name: string;
   }[];
+  seasons: Season[];
   credits: Credits;
   videos: Videos;
   keywords: {
@@ -77,10 +78,18 @@ export interface TvShowDetails {
     results: {
       id: number;
       name: string;
+      overview: string;
       poster_path: string | null;
       backdrop_path: string | null;
       vote_average: number;
       first_air_date: string;
+      genre_ids: number[];
+      adult: boolean;
+      original_language: string;
+      original_name: string;
+      popularity: number;
+      origin_country: string[];
+      vote_count: number;
     }[];
     total_pages: number;
     total_results: number;
@@ -91,6 +100,24 @@ export interface TvShowDetails {
     instagram_id: string | null;
     twitter_id: string | null;
     tvdb_id: number | null;
+  };
+  watch_providers?: {
+    US?: {
+      link?: string;
+      flatrate?: { provider_id: number; logo_path: string; provider_name: string }[];
+      rent?: { provider_id: number; logo_path: string; provider_name: string }[];
+      buy?: { provider_id: number; logo_path: string; provider_name: string }[];
+      free?: { provider_id: number; logo_path: string; provider_name: string }[];
+    };
+  };
+  reviews?: {
+    results: {
+      id: string;
+      author: string;
+      content: string;
+      created_at: string;
+      author_details?: { rating?: number | null };
+    }[];
   };
 }
 
@@ -108,5 +135,23 @@ export interface MediaHeroProps {
   onAddToList?: () => void;
 }
 
+/**
+ * Watch Provider types from TMDB API
+ */
+export interface Provider {
+  id: number;
+  name: string;
+  logo_path: string | null;
+  display_priority?: number;
+  provider_type?: "Rent" | "Buy" | "Free" | "Subscription";
+}
+
+/**
+ * Props for WatchProvidersSection component
+ */
+export interface WatchProvidersSectionProps {
+  providers: Provider[];
+}
+
 // Re-export common types for convenience
-export type { Genre, CastMember, Credits, Video, Videos, Keyword, Keywords };
+export type { Genre, CastMember, CrewMember, Credits, Video, Videos, Keyword, Keywords };

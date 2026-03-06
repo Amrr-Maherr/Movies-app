@@ -16,9 +16,17 @@ export interface CastMember {
   order: number;
 }
 
+export interface CrewMember {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
+  profile_path: string | null;
+}
+
 export interface Credits {
   cast: CastMember[];
-  crew: unknown[];
+  crew: CrewMember[];
 }
 
 export interface Video {
@@ -42,6 +50,35 @@ export interface Keyword {
 
 export interface Keywords {
   keywords: Keyword[];
+}
+
+export interface Episode {
+  id: number;
+  name: string;
+  overview: string;
+  air_date: string;
+  episode_number: number;
+  episode_type: string;
+  production_code: string;
+  runtime: number | null;
+  season_number: number;
+  show_id: number;
+  still_path: string | null;
+  vote_average: number;
+  vote_count: number;
+  crew: CrewMember[];
+  guest_stars: CastMember[];
+}
+
+export interface Season {
+  id: number;
+  name: string;
+  overview: string;
+  air_date: string;
+  episode_count: number;
+  poster_path: string | null;
+  season_number: number;
+  episodes?: Episode[];
 }
 
 /**
@@ -92,10 +129,18 @@ export interface MovieDetails {
     results: {
       id: number;
       title: string;
+      overview: string;
       poster_path: string | null;
       backdrop_path: string | null;
       vote_average: number;
       release_date: string;
+      genre_ids: number[];
+      adult: boolean;
+      original_language: string;
+      original_title: string;
+      popularity: number;
+      video: boolean;
+      vote_count: number;
     }[];
     total_pages: number;
     total_results: number;

@@ -104,7 +104,7 @@ const Card = memo(({
               src={posterUrl}
               alt={title}
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
             />
             <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
               <span className="text-[var(--success)] text-xs font-bold">{matchScore}%</span>
@@ -173,7 +173,7 @@ const Card = memo(({
               src={posterUrl}
               alt={title}
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
           </div>
@@ -203,7 +203,7 @@ const Card = memo(({
               src={posterUrl}
               alt={title}
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
             />
             {/* NEW Badge */}
             <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">
@@ -259,7 +259,7 @@ const Card = memo(({
               src={posterUrl}
               alt={title}
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
             />
             {/* Overlay */}
             <div 
@@ -303,7 +303,7 @@ const Card = memo(({
               src={posterUrl}
               alt={title}
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
             />
             {/* Hover Overlay */}
             <div 
@@ -385,7 +385,7 @@ const Card = memo(({
             src={posterUrl}
             alt={title}
             className="w-full h-full object-cover"
-            loading="lazy"
+            loading="eager"
           />
 
           {/* Match Score Badge */}

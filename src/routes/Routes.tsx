@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { Loader } from "@/components/ui";
 import MovieDetails from "@/pages/MovieDetails";
+import TVShowDetailsPage from "@/pages/TVShowDetails";
 
 // Main pages
 const Home = lazy(() => import("../pages/Home"));
@@ -53,6 +54,7 @@ export default function AppRoutes() {
           <Route path="/actor" element={<Actor />} />
           <Route path="/session" element={<Session />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/tv/:id" element={<TVShowDetailsPage />} />
 
           {/* Footer pages */}
           <Route path="/faq" element={<FAQ />} />
