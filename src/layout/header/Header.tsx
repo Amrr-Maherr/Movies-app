@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { Menu } from "lucide-react";
 import { motion } from "framer-motion";
 import Logo from "@/components/shared/logo/Logo";
@@ -9,12 +9,13 @@ import MobileSidebar from "./components/MobileSidebar";
 import { HeaderLinks } from "@/data/header";
 import { cn } from "@/lib/utils";
 
-export default function Header() {
+// Memoized Header component - avoids re-renders when parent updates
+const Header = memo(function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Handle scroll effect
+  // Memoized: Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
@@ -24,7 +25,7 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close profile menu when clicking outside
+  // Memoized: Close profile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -37,6 +38,20 @@ export default function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Memoized: Profile menu toggle handler
+  const handleProfileMenuToggle = useCallback(() => {
+    setIsProfileMenuOpen((prev) => !prev);
+  }, []);
+
+  // Memoized: Mobile menu handlers
+  const handleMobileMenuOpen = useCallback(() => {
+    setIsMobileMenuOpen(true);
+  }, []);
+
+  const handleMobileMenuClose = useCallback((open: boolean) => {
+    setIsMobileMenuOpen(open);
+  }, []);
+
   return (
     <>
       <header
@@ -44,7 +59,7 @@ export default function Header() {
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
           isScrolled
             ? "bg-[var(--header-bg-scrolled)] shadow-lg"
-            : "bg-gradient-to-b from-black/80 to-transparent"
+            : "bg-gradient-to-b from-black/80 to-transparent",
         )}
       >
         <div className="container mx-auto px-4 md:px-12 lg:px-16">
@@ -68,9 +83,12 @@ export default function Header() {
               <SearchButton />
 
               {/* Profile Menu - Desktop */}
-              <div className="relative hidden md:block" data-profile-menu>
+              <div
+                className="relative hidden md:block"
+                data-profile-menu
+              >
                 <button
-                  onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+                  onClick={handleProfileMenuToggle}
                   className="flex items-center gap-2 text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors duration-200"
                   aria-label="User menu"
                 >
@@ -88,7 +106,7 @@ export default function Header() {
               {/* Mobile Menu Button */}
               <motion.button
                 className="md:hidden text-[var(--text-primary)] p-2"
-                onClick={() => setIsMobileMenuOpen(true)}
+                onClick={handleMobileMenuOpen}
                 whileTap={{ scale: 0.95 }}
                 aria-label="Open menu"
               >
@@ -102,11 +120,10 @@ export default function Header() {
       {/* Mobile Sidebar */}
       <MobileSidebar
         open={isMobileMenuOpen}
-        onOpenChange={setIsMobileMenuOpen}
+        onOpenChange={handleMobileMenuClose}
       />
-
-      {/* Spacer to prevent content from hiding behind fixed header
-      // <div className="h-16 md:h-20" /> */}
     </>
   );
-}
+});
+
+export default Header;

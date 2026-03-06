@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { LucideIcon } from "lucide-react";
 
 export interface SectionHeaderProps {
@@ -11,7 +12,8 @@ export interface SectionHeaderProps {
   badgeColor?: string;
 }
 
-export default function SectionHeader({
+// Memoized SectionHeader component - purely presentational, avoids re-renders when parent updates
+const SectionHeader = memo(function SectionHeader({
   title,
   subtitle,
   icon: Icon,
@@ -19,7 +21,7 @@ export default function SectionHeader({
   actionLabel,
   actionHref,
   badgeText,
-  badgeColor = "text-red-500"
+  badgeColor = "text-red-500",
 }: SectionHeaderProps) {
   return (
     <div className="flex items-center justify-between mb-4 md:mb-6">
@@ -40,7 +42,9 @@ export default function SectionHeader({
       </div>
       <div className="flex items-center gap-2">
         {badgeText && (
-          <span className={`text-xs md:text-sm font-semibold uppercase tracking-wider ${badgeColor}`}>
+          <span
+            className={`text-xs md:text-sm font-semibold uppercase tracking-wider ${badgeColor}`}
+          >
             {badgeText}
           </span>
         )}
@@ -54,4 +58,6 @@ export default function SectionHeader({
       </div>
     </div>
   );
-}
+});
+
+export default SectionHeader;

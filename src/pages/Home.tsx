@@ -1,3 +1,4 @@
+import { memo, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { HeroSection } from "@/components/shared/heroSection";
 import MediaSection from "@/components/shared/MediaSection";
@@ -28,67 +29,162 @@ import useTopRatedTvShows from "@/queries/FetchTopRatedTvShows";
 import useAiringTodayTv from "@/queries/FetchAiringTodayTv";
 import useOnTheAirTv from "@/queries/FetchOnTheAirTv";
 
-const Home = () => {
+// Memoized Home component - avoids re-renders when parent updates
+const Home = memo(function Home() {
   // ======== Movies Queries ========
-  const { data: popularMovies, isLoading: popularLoading, error: popularError, refetch: popularRefetch } = usePopularMovies();
+  const {
+    data: popularMovies,
+    isLoading: popularLoading,
+    error: popularError,
+    refetch: popularRefetch,
+  } = usePopularMovies();
   const { data: topRatedMovies } = useTopRatedMovies();
-  const { data: nowPlayingMovies, isLoading: nowPlayingLoading, error: nowPlayingError, refetch: nowPlayingRefetch } = useNowPlayingMovies();
-  const { data: trendingMoviesWeek, isLoading: trendingWeekLoading, error: trendingWeekError, refetch: trendingWeekRefetch } = useTrendingMoviesWeek();
-  const { data: trendingMoviesDay, isLoading: trendingDayLoading, error: trendingDayError, refetch: trendingDayRefetch } = useTrendingMoviesDay();
-  const { data: upcomingMovies, isLoading: upcomingLoading, error: upcomingError, refetch: upcomingRefetch } = useUpcomingMovies();
+  const {
+    data: nowPlayingMovies,
+    isLoading: nowPlayingLoading,
+    error: nowPlayingError,
+    refetch: nowPlayingRefetch,
+  } = useNowPlayingMovies();
+  const {
+    data: trendingMoviesWeek,
+    isLoading: trendingWeekLoading,
+    error: trendingWeekError,
+    refetch: trendingWeekRefetch,
+  } = useTrendingMoviesWeek();
+  const {
+    data: trendingMoviesDay,
+    isLoading: trendingDayLoading,
+    error: trendingDayError,
+    refetch: trendingDayRefetch,
+  } = useTrendingMoviesDay();
+  const {
+    data: upcomingMovies,
+    isLoading: upcomingLoading,
+    error: upcomingError,
+    refetch: upcomingRefetch,
+  } = useUpcomingMovies();
 
   // ======== TV Shows Queries ========
-  const { data: popularTv, isLoading: popularTvLoading, error: popularTvError, refetch: popularTvRefetch } = usePopularTvShows();
-  const { data: trendingTvWeek, isLoading: trendingTvWeekLoading, error: trendingTvWeekError, refetch: trendingTvWeekRefetch } = useTrendingTvWeek();
-  const { data: trendingTvDay, isLoading: trendingTvDayLoading, error: trendingTvDayError, refetch: trendingTvDayRefetch } = useTrendingTvDay();
+  const {
+    data: popularTv,
+    isLoading: popularTvLoading,
+    error: popularTvError,
+    refetch: popularTvRefetch,
+  } = usePopularTvShows();
+  const {
+    data: trendingTvWeek,
+    isLoading: trendingTvWeekLoading,
+    error: trendingTvWeekError,
+    refetch: trendingTvWeekRefetch,
+  } = useTrendingTvWeek();
+  const {
+    data: trendingTvDay,
+    isLoading: trendingTvDayLoading,
+    error: trendingTvDayError,
+    refetch: trendingTvDayRefetch,
+  } = useTrendingTvDay();
   const { data: topRatedTv } = useTopRatedTvShows();
-  const { data: airingTodayTv, isLoading: airingTodayLoading, error: airingTodayError, refetch: airingTodayRefetch } = useAiringTodayTv();
-  const { data: onTheAirTv, isLoading: onTheAirLoading, error: onTheAirError, refetch: onTheAirRefetch } = useOnTheAirTv();
+  const {
+    data: airingTodayTv,
+    isLoading: airingTodayLoading,
+    error: airingTodayError,
+    refetch: airingTodayRefetch,
+  } = useAiringTodayTv();
+  const {
+    data: onTheAirTv,
+    isLoading: onTheAirLoading,
+    error: onTheAirError,
+    refetch: onTheAirRefetch,
+  } = useOnTheAirTv();
 
-  // ===== Combine all data for HeroSection =====
-  const AllData = [
-    ...(trendingMoviesWeek || []),
-    ...(trendingTvWeek || []),
-    ...(trendingMoviesDay || []),
-    ...(trendingTvDay || []),
-    ...(popularMovies || []),
-    ...(popularTv || []),
-    ...(topRatedMovies || []),
-    ...(topRatedTv || []),
-    ...(upcomingMovies || []),
-    ...(airingTodayTv || []),
-    ...(nowPlayingMovies || []),
-    ...(onTheAirTv || []),
-  ];
+  // Memoized: Combine all data for HeroSection - avoids array operations on every render
+  const AllData = useMemo(
+    () => [
+      ...(trendingMoviesWeek || []),
+      ...(trendingTvWeek || []),
+      ...(trendingMoviesDay || []),
+      ...(trendingTvDay || []),
+      ...(popularMovies || []),
+      ...(popularTv || []),
+      ...(topRatedMovies || []),
+      ...(topRatedTv || []),
+      ...(upcomingMovies || []),
+      ...(airingTodayTv || []),
+      ...(nowPlayingMovies || []),
+      ...(onTheAirTv || []),
+    ],
+    [
+      trendingMoviesWeek,
+      trendingTvWeek,
+      trendingMoviesDay,
+      trendingTvDay,
+      popularMovies,
+      popularTv,
+      topRatedMovies,
+      topRatedTv,
+      upcomingMovies,
+      airingTodayTv,
+      nowPlayingMovies,
+      onTheAirTv,
+    ],
+  );
 
-  // ===== Global Loading State =====
-  const isLoading = 
-    popularLoading || 
-    trendingWeekLoading || 
-    trendingDayLoading || 
-    upcomingLoading || 
-    nowPlayingLoading ||
-    popularTvLoading || 
-    trendingTvWeekLoading || 
-    trendingTvDayLoading || 
-    airingTodayLoading || 
-    onTheAirLoading;
+  // Memoized: Global Loading State
+  const isLoading = useMemo(
+    () =>
+      popularLoading ||
+      trendingWeekLoading ||
+      trendingDayLoading ||
+      upcomingLoading ||
+      nowPlayingLoading ||
+      popularTvLoading ||
+      trendingTvWeekLoading ||
+      trendingTvDayLoading ||
+      airingTodayLoading ||
+      onTheAirLoading,
+    [
+      popularLoading,
+      trendingWeekLoading,
+      trendingDayLoading,
+      upcomingLoading,
+      nowPlayingLoading,
+      popularTvLoading,
+      trendingTvWeekLoading,
+      trendingTvDayLoading,
+      airingTodayLoading,
+      onTheAirLoading,
+    ],
+  );
 
-  // ===== Global Error State =====
-  const error = 
-    popularError || 
-    trendingWeekError || 
-    trendingDayError || 
-    upcomingError || 
-    nowPlayingError ||
-    popularTvError || 
-    trendingTvWeekError || 
-    trendingTvDayError || 
-    airingTodayError || 
-    onTheAirError;
+  // Memoized: Global Error State
+  const error = useMemo(
+    () =>
+      popularError ||
+      trendingWeekError ||
+      trendingDayError ||
+      upcomingError ||
+      nowPlayingError ||
+      popularTvError ||
+      trendingTvWeekError ||
+      trendingTvDayError ||
+      airingTodayError ||
+      onTheAirError,
+    [
+      popularError,
+      trendingWeekError,
+      trendingDayError,
+      upcomingError,
+      nowPlayingError,
+      popularTvError,
+      trendingTvWeekError,
+      trendingTvDayError,
+      airingTodayError,
+      onTheAirError,
+    ],
+  );
 
-  // ===== Global Retry Function =====
-  const handleRetry = () => {
+  // Memoized: Global Retry Function
+  const handleRetry = useCallback(() => {
     popularRefetch();
     trendingWeekRefetch();
     trendingDayRefetch();
@@ -99,7 +195,18 @@ const Home = () => {
     trendingTvDayRefetch();
     airingTodayRefetch();
     onTheAirRefetch();
-  };
+  }, [
+    popularRefetch,
+    trendingWeekRefetch,
+    trendingDayRefetch,
+    upcomingRefetch,
+    nowPlayingRefetch,
+    popularTvRefetch,
+    trendingTvWeekRefetch,
+    trendingTvDayRefetch,
+    airingTodayRefetch,
+    onTheAirRefetch,
+  ]);
 
   if (isLoading) {
     return (
@@ -112,7 +219,10 @@ const Home = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <ErrorComponent retryButtonText="Try Again" onRetry={handleRetry} />
+        <ErrorComponent
+          retryButtonText="Try Again"
+          onRetry={handleRetry}
+        />
       </div>
     );
   }
@@ -194,12 +304,7 @@ const Home = () => {
       )}
 
       {/* Only on Netflix Section */}
-      {popularTv && (
-        <OnlyOnNetflixSection
-          movies={popularTv}
-          mediaType="tv"
-        />
-      )}
+      {popularTv && <OnlyOnNetflixSection movies={popularTv} mediaType="tv" />}
 
       {/* Genre Showcase - Action */}
       {trendingMoviesDay && (
@@ -271,10 +376,7 @@ const Home = () => {
 
       {/* Binge-Worthy Section */}
       {onTheAirTv && (
-        <BingeWorthySection
-          movies={onTheAirTv}
-          mediaType="tv"
-        />
+        <BingeWorthySection movies={onTheAirTv} mediaType="tv" />
       )}
 
       {/* Top 10 TV Shows */}
@@ -307,10 +409,7 @@ const Home = () => {
 
       {/* Award Winners Section */}
       {topRatedMovies && (
-        <AwardWinnersSection
-          movies={topRatedMovies}
-          mediaType="movie"
-        />
+        <AwardWinnersSection movies={topRatedMovies} mediaType="movie" />
       )}
 
       {/* Third Promo - Center Aligned */}
@@ -376,10 +475,7 @@ const Home = () => {
 
       {/* Award Winners TV */}
       {topRatedTv && (
-        <AwardWinnersSection
-          movies={topRatedTv}
-          mediaType="tv"
-        />
+        <AwardWinnersSection movies={topRatedTv} mediaType="tv" />
       )}
 
       {/* Because You Watched Section 2 */}
@@ -411,6 +507,6 @@ const Home = () => {
       <AskedQuestions />
     </motion.div>
   );
-};
+});
 
 export default Home;

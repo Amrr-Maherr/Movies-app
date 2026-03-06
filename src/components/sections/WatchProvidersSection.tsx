@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { memo, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import Slider from "@/components/shared/Slider/slider";
 import type { Provider } from "@/types";
@@ -16,10 +17,10 @@ const PROVIDER_TYPE_COLORS: Record<string, string> = {
 
 const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w92";
 
-/**
- * Individual Watch Provider Card with logo and type badge
- */
-function WatchProviderCard({ provider }: WatchProviderCardProps) {
+// Memoized WatchProviderCard component
+const WatchProviderCard = memo(function WatchProviderCard({
+  provider,
+}: WatchProviderCardProps) {
   const providerType = provider.provider_type || "Subscription";
   const hasLogo = !!provider.logo_path;
 
@@ -34,7 +35,7 @@ function WatchProviderCard({ provider }: WatchProviderCardProps) {
         "relative flex flex-col items-center gap-2 p-3 rounded-lg",
         "bg-white/10 backdrop-blur-sm border border-white/10",
         "hover:border-white/30 transition-colors duration-200",
-        "min-w-[100px] md:min-w-[120px]"
+        "min-w-[100px] md:min-w-[120px]",
       )}
     >
       {/* Provider Logo */}
@@ -42,7 +43,7 @@ function WatchProviderCard({ provider }: WatchProviderCardProps) {
         className={cn(
           "relative w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden",
           "bg-white/5 flex items-center justify-center",
-          "border border-white/10"
+          "border border-white/10",
         )}
       >
         {hasLogo ? (
@@ -78,7 +79,7 @@ function WatchProviderCard({ provider }: WatchProviderCardProps) {
       <span
         className={cn(
           "text-xs md:text-sm font-medium text-white/90 text-center",
-          "line-clamp-2 max-w-full"
+          "line-clamp-2 max-w-full",
         )}
         title={provider.name}
       >
@@ -90,14 +91,14 @@ function WatchProviderCard({ provider }: WatchProviderCardProps) {
         className={cn(
           "px-2 py-0.5 text-xs font-semibold rounded-full text-white",
           PROVIDER_TYPE_COLORS[providerType] ||
-            PROVIDER_TYPE_COLORS.Subscription
+            PROVIDER_TYPE_COLORS.Subscription,
         )}
       >
         {providerType}
       </span>
     </motion.div>
   );
-}
+});
 
 export interface WatchProvidersSectionProps {
   providers: Provider[];
@@ -105,26 +106,27 @@ export interface WatchProvidersSectionProps {
   title?: string;
 }
 
-/**
- * Netflix-style Watch Providers Section
- * Displays streaming platforms where the movie/TV show is available
- * Features horizontal slider with provider logos and availability type
- */
-export function WatchProvidersSection({
+// Memoized WatchProvidersSection component - avoids re-renders when parent updates
+const WatchProvidersSection = memo(function WatchProvidersSection({
   providers,
   className,
   title = "Watch Providers",
 }: WatchProvidersSectionProps) {
-  if (!providers || providers.length === 0) {
+  // Memoized: Sort providers by display_priority
+  const sortedProviders = useMemo(() => {
+    if (!providers || providers.length === 0) {
+      return [];
+    }
+    return [...providers].sort((a, b) => {
+      const priorityA = a.display_priority ?? 999;
+      const priorityB = b.display_priority ?? 999;
+      return priorityA - priorityB;
+    });
+  }, [providers]);
+
+  if (sortedProviders.length === 0) {
     return null;
   }
-
-  // Sort providers by display_priority if available
-  const sortedProviders = [...providers].sort((a, b) => {
-    const priorityA = a.display_priority ?? 999;
-    const priorityB = b.display_priority ?? 999;
-    return priorityA - priorityB;
-  });
 
   return (
     <section
@@ -132,7 +134,7 @@ export function WatchProvidersSection({
         "w-full py-8 px-4 md:px-12",
         "bg-gradient-to-b from-black/80 via-neutral-900/80 to-black/80",
         "border-y border-white/5",
-        className
+        className,
       )}
     >
       <div className="max-w-7xl mx-auto">
@@ -141,7 +143,7 @@ export function WatchProvidersSection({
           <h2
             className={cn(
               "text-xl md:text-2xl font-bold text-white mb-6",
-              "tracking-wide"
+              "tracking-wide",
             )}
           >
             {title}
@@ -172,6 +174,6 @@ export function WatchProvidersSection({
       </div>
     </section>
   );
-}
+});
 
 export default WatchProvidersSection;

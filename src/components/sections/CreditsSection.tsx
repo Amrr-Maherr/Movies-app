@@ -1,28 +1,32 @@
-import { useMemo, useState } from "react";
+import { memo, useMemo, useState, useCallback } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import Card from "@/components/shared/Card/Card";
 import type { CastCredit, CrewCredit } from "@/api/PersonCredits";
+
+type FilterType = "all" | "movies" | "tv";
 
 interface CreditsSectionProps {
   cast: CastCredit[];
   crew: CrewCredit[];
 }
 
-type FilterType = "all" | "movies" | "tv";
-
-export default function CreditsSection({ cast, crew }: CreditsSectionProps) {
+// Memoized CreditsSection component - avoids re-renders when parent updates
+const CreditsSection = memo(function CreditsSection({
+  cast,
+  crew,
+}: CreditsSectionProps) {
   const [filter, setFilter] = useState<FilterType>("all");
 
-  // Filter and sort cast credits
+  // Memoized: Filter and sort cast credits
   const filteredCast = useMemo(() => {
     let filtered = cast;
-    
+
     if (filter === "movies") {
       filtered = cast.filter((c) => c.media_type === "movie");
     } else if (filter === "tv") {
       filtered = cast.filter((c) => c.media_type === "tv");
     }
-    
+
     // Sort by order (if available) or by popularity
     return [...filtered].sort((a, b) => {
       if (a.order !== undefined && b.order !== undefined) {
@@ -32,16 +36,16 @@ export default function CreditsSection({ cast, crew }: CreditsSectionProps) {
     });
   }, [cast, filter]);
 
-  // Filter and sort crew credits by department
+  // Memoized: Filter and sort crew credits by department
   const filteredCrew = useMemo(() => {
     let filtered = crew;
-    
+
     if (filter === "movies") {
       filtered = crew.filter((c) => c.media_type === "movie");
     } else if (filter === "tv") {
       filtered = crew.filter((c) => c.media_type === "tv");
     }
-    
+
     // Group by department and sort by popularity
     return [...filtered]
       .sort((a, b) => b.popularity - a.popularity)
@@ -50,6 +54,11 @@ export default function CreditsSection({ cast, crew }: CreditsSectionProps) {
 
   const hasCast = filteredCast.length > 0;
   const hasCrew = filteredCrew.length > 0;
+
+  // Memoized: Filter button click handlers
+  const handleFilterChange = useCallback((newFilter: FilterType) => {
+    setFilter(newFilter);
+  }, []);
 
   if (!hasCast && !hasCrew) {
     return null;
@@ -63,11 +72,11 @@ export default function CreditsSection({ cast, crew }: CreditsSectionProps) {
           <h2 className="text-xl md:text-2xl font-bold text-white">
             Credits
           </h2>
-          
+
           {/* Filter Buttons */}
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setFilter("all")}
+              onClick={() => handleFilterChange("all")}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 filter === "all"
                   ? "bg-white text-black"
@@ -77,7 +86,7 @@ export default function CreditsSection({ cast, crew }: CreditsSectionProps) {
               All
             </button>
             <button
-              onClick={() => setFilter("movies")}
+              onClick={() => handleFilterChange("movies")}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 filter === "movies"
                   ? "bg-white text-black"
@@ -87,7 +96,7 @@ export default function CreditsSection({ cast, crew }: CreditsSectionProps) {
               Movies
             </button>
             <button
-              onClick={() => setFilter("tv")}
+              onClick={() => handleFilterChange("tv")}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 filter === "tv"
                   ? "bg-white text-black"
@@ -193,4 +202,6 @@ export default function CreditsSection({ cast, crew }: CreditsSectionProps) {
       </div>
     </section>
   );
-}
+});
+
+export default CreditsSection;

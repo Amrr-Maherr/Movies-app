@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import Card from "@/components/shared/Card/Card";
 import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
@@ -7,8 +8,13 @@ interface TopPicksSectionProps {
   title?: string;
 }
 
-export default function TopPicksSection({ movies, title = "Top 10 in Egypt Today" }: TopPicksSectionProps) {
-  const topMovies = movies.slice(0, 10);
+// Memoized TopPicksSection component - avoids re-renders when parent updates
+const TopPicksSection = memo(function TopPicksSection({
+  movies,
+  title = "Top 10 in Egypt Today",
+}: TopPicksSectionProps) {
+  // Memoized: Get top 10 movies - avoids array slicing on every render
+  const topMovies = useMemo(() => movies.slice(0, 10), [movies]);
 
   return (
     <div className="py-6 md:py-8">
@@ -27,4 +33,6 @@ export default function TopPicksSection({ movies, title = "Top 10 in Egypt Today
       </div>
     </div>
   );
-}
+});
+
+export default TopPicksSection;

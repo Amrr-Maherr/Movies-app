@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
@@ -14,20 +14,27 @@ interface SearchPopupProps {
   onClose: () => void;
 }
 
-export default function SearchPopup({ isOpen, onClose }: SearchPopupProps) {
+// Memoized SearchPopup component - avoids re-renders when parent updates
+const SearchPopup = memo(function SearchPopup({
+  isOpen,
+  onClose,
+}: SearchPopupProps) {
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, 300);
   const { results, isLoading } = useSearch(debouncedQuery);
   const navigate = useNavigate();
 
-  // Clear query when popup closes
-  useEffect(() => {
-    if (!isOpen) {
+  // Clear query when popup closes (using callback instead of effect)
+  const handleOpenChange = useCallback((open: boolean) => {
+    if (!open) {
       setQuery("");
     }
-  }, [isOpen]);
+    if (!open && onClose) {
+      onClose();
+    }
+  }, [onClose]);
 
-  // Handle ESC key
+  // Memoized: Handle ESC key
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === "Escape" && isOpen) {
@@ -40,18 +47,32 @@ export default function SearchPopup({ isOpen, onClose }: SearchPopupProps) {
     };
   }, [isOpen, onClose]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
+  // Memoized: Handlers
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(e.target.value);
+    },
+    [],
+  );
 
-  const handleSelect = (item: { item: { id: number }; type: string }) => {
-    const route = item.type === "movie" ? `/movie/${item.item.id}` : `/tv/${item.item.id}`;
-    navigate(route);
-    onClose();
-  };
+  const handleSelect = useCallback(
+    (item: { item: { id: number }; type: string }) => {
+      const route =
+        item.type === "movie"
+          ? `/movie/${item.item.id}`
+          : `/tv/${item.item.id}`;
+      navigate(route);
+      onClose();
+    },
+    [navigate, onClose],
+  );
+
+  const handleClear = useCallback(() => {
+    setQuery("");
+  }, []);
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent
         showCloseButton={false}
         className={cn(
@@ -60,7 +81,7 @@ export default function SearchPopup({ isOpen, onClose }: SearchPopupProps) {
           "rounded-lg shadow-2xl",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-          "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
+          "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
         )}
       >
         {/* Search Input */}
@@ -74,7 +95,7 @@ export default function SearchPopup({ isOpen, onClose }: SearchPopupProps) {
               "bg-zinc-900 border border-white/10 rounded-md",
               "text-white placeholder:text-gray-500",
               "focus-visible:ring-2 focus-visible:ring-[var(--netflix-red)] focus-visible:border-transparent",
-              "text-lg"
+              "text-lg",
             )}
             value={query}
             onChange={handleInputChange}
@@ -82,7 +103,7 @@ export default function SearchPopup({ isOpen, onClose }: SearchPopupProps) {
           />
           {query && (
             <button
-              onClick={() => setQuery("")}
+              onClick={handleClear}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
               aria-label="Clear search"
             >
@@ -109,7 +130,8 @@ export default function SearchPopup({ isOpen, onClose }: SearchPopupProps) {
           {!isLoading && results.length > 0 && (
             <>
               <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">
-                {results.length} {results.length === 1 ? "result" : "results"}
+                {results.length}{" "}
+                {results.length === 1 ? "result" : "results"}
               </div>
               {results.map(({ item, type }) => (
                 <SearchResultCard
@@ -133,4 +155,6 @@ export default function SearchPopup({ isOpen, onClose }: SearchPopupProps) {
       </DialogContent>
     </Dialog>
   );
-}
+});
+
+export default SearchPopup;

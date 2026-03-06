@@ -12,31 +12,30 @@ interface MovieModalProps {
 }
 
 const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieModalProps) {
-  if (!movie) return null;
-
+  // Memoized: Pre-calculated values (moved before early return to follow hooks rules)
   const matchScore = useMemo(
-    () => getMatchScore(movie.vote_average),
-    [movie.vote_average]
+    () => (movie ? getMatchScore(movie.vote_average) : 0),
+    [movie]
   );
 
   const year = useMemo(
-    () => getYear("release_date" in movie ? movie.release_date : movie.first_air_date),
-    ["release_date" in movie ? movie.release_date : movie.first_air_date]
+    () => movie ? getYear("release_date" in movie ? movie.release_date : movie.first_air_date) : "",
+    [movie]
   );
 
   const ageRating = useMemo(
-    () => getAgeRating(movie.vote_average),
-    [movie.vote_average]
+    () => movie ? getAgeRating(movie.vote_average) : "",
+    [movie]
   );
 
   const title = useMemo(
-    () => ("title" in movie ? movie.title : movie.name),
-    ["title" in movie ? movie.title : movie.name]
+    () => movie ? ("title" in movie ? movie.title : movie.name) : "",
+    [movie]
   );
 
   const genres = useMemo(
-    () => getGenres(movie.genre_ids),
-    [movie.genre_ids]
+    () => movie ? getGenres(movie.genre_ids) : [],
+    [movie]
   );
 
   const backdropUrl = useCallback((backdropPath: string | null) => {
@@ -50,6 +49,9 @@ const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieMod
       ? `https://image.tmdb.org/t/p/w500${posterPath}`
       : "https://via.placeholder.com/500x750?text=No+Image";
   }, []);
+
+  // Early return after hooks
+  if (!movie) return null;
   return (
     <AnimatePresence>
       {isOpen && (

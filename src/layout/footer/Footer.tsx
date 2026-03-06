@@ -1,10 +1,12 @@
+import { memo } from "react";
 import FooterLink from "./FooterLink";
 import { FooterLinks, SocialLinks } from "@/data/footer";
 import { Globe } from "lucide-react";
 
-export default function Footer() {
+// Memoized Footer component - purely presentational, avoids re-renders
+const Footer = memo(function Footer() {
   return (
-    <footer className=" bg-[var(--background-primary)] text-[var(--text-primary)] py-16">
+    <footer className="bg-[var(--background-primary)] text-[var(--text-primary)] py-16">
       <div className="container">
         {/* Social Links */}
         <div className="flex gap-4 mb-8">
@@ -36,7 +38,9 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
           <div className="flex items-center gap-2">
             <Globe className="w-4 h-4 text-[var(--text-secondary)]" />
-            <span className="text-sm text-[var(--text-secondary)]">English</span>
+            <span className="text-sm text-[var(--text-secondary)]">
+              English
+            </span>
           </div>
           <span className="text-xs text-[var(--text-secondary)]">
             © 1997-2026 Netflix, Inc.
@@ -45,4 +49,6 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+});
+
+export default Footer;

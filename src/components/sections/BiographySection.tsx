@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { formatDate, calculateAge } from "@/utils";
 
 interface BiographySectionProps {
@@ -9,18 +9,29 @@ interface BiographySectionProps {
   knownForDepartment?: string;
 }
 
-export default function BiographySection({
+// Memoized BiographySection component - avoids re-renders when parent updates
+const BiographySection = memo(function BiographySection({
   biography,
   placeOfBirth,
   birthday,
   deathday,
   knownForDepartment,
 }: BiographySectionProps) {
-  const formattedBirthday = useMemo(() => formatDate(birthday ?? null), [birthday]);
-  const formattedDeathday = useMemo(() => formatDate(deathday ?? null), [deathday]);
-  const age = useMemo(() => calculateAge(birthday ?? null, deathday ?? null), [birthday, deathday]);
+  // Memoized: Formatted dates and age - avoids date calculations on every render
+  const formattedBirthday = useMemo(
+    () => formatDate(birthday ?? null),
+    [birthday],
+  );
+  const formattedDeathday = useMemo(
+    () => formatDate(deathday ?? null),
+    [deathday],
+  );
+  const age = useMemo(
+    () => calculateAge(birthday ?? null, deathday ?? null),
+    [birthday, deathday],
+  );
 
-  // Truncate biography for initial display (optional expandable feature)
+  // Memoized: Display biography
   const displayBiography = useMemo(() => {
     if (!biography) return "No biography available.";
     return biography;
@@ -64,7 +75,8 @@ export default function BiographySection({
                   {formattedBirthday}
                   {age !== null && (
                     <span className="text-gray-400 ml-2">
-                      ({age}{deathday ? ` - ${age}` : ''} years old)
+                      ({age}
+                      {deathday ? ` - ${age}` : ""} years old)
                     </span>
                   )}
                 </p>
@@ -77,9 +89,7 @@ export default function BiographySection({
                 <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Died
                 </span>
-                <p className="text-base text-gray-200">
-                  {formattedDeathday}
-                </p>
+                <p className="text-base text-gray-200">{formattedDeathday}</p>
               </div>
             )}
 
@@ -89,17 +99,14 @@ export default function BiographySection({
                 <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Birthplace
                 </span>
-                <p className="text-base text-gray-200">
-                  {placeOfBirth}
-                </p>
+                <p className="text-base text-gray-200">{placeOfBirth}</p>
               </div>
             )}
-
-            {/* Also Known As */}
-            {/* Can be added if needed from also_known_as array */}
           </div>
         </div>
       </div>
     </section>
   );
-}
+});
+
+export default BiographySection;

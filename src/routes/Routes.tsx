@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, memo } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { Loader } from "@/components/ui";
@@ -38,18 +38,22 @@ const SpeedTest = lazy(() => import("@/pages/SpeedTest"));
 const LegalNotices = lazy(() => import("@/pages/LegalNotices"));
 const OnlyOnNetflix = lazy(() => import("@/pages/OnlyOnNetflix"));
 
+// Memoized loading fallback to prevent re-creation on every render
+const LoadingFallback = memo(function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
+      <Loader />
+    </div>
+  );
+});
 
-export default function AppRoutes() {
+// Memoized AppRoutes component - avoids re-renders when parent updates
+const AppRoutes = memo(function AppRoutes() {
   return (
     <AnimatePresence mode="wait">
-      <Suspense
-        fallback={
-          <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-            <Loader />
-          </div>
-        }
-      >
+      <Suspense fallback={<LoadingFallback />}>
         <Routes>
+          {/* Main routes */}
           <Route path="/" element={<Home />} />
           <Route path="/tv-shows" element={<TVShow />} />
           <Route path="/movies" element={<Movie />} />
@@ -58,13 +62,18 @@ export default function AppRoutes() {
           <Route path="/my-list" element={<MyList />} />
           <Route path="/actor" element={<Actor />} />
           <Route path="/session" element={<Session />} />
+
+          {/* Details routes */}
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/tv/:id" element={<TVShowDetailsPage />} />
           <Route path="/tv/:tvId/season/:seasonNumber" element={<SeasonDetailsPage />} />
-          <Route path="/tv/:tvId/season/:seasonNumber/episode/:episodeNumber" element={<EpisodeDetailsPage />} />
+          <Route
+            path="/tv/:tvId/season/:seasonNumber/episode/:episodeNumber"
+            element={<EpisodeDetailsPage />}
+          />
           <Route path="/person/:id" element={<PersonDetailsPage />} />
 
-          {/* Footer pages */}
+          {/* Footer routes */}
           <Route path="/faq" element={<FAQ />} />
           <Route path="/help-center" element={<HelpCenter />} />
           <Route path="/account" element={<Account />} />
@@ -75,18 +84,18 @@ export default function AppRoutes() {
           <Route path="/terms-of-use" element={<TermsOfUse />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/cookie-preferences" element={<CookiePreferences />} />
-          <Route
-            path="/corporate-information"
-            element={<CorporateInformation />}
-          />
+          <Route path="/corporate-information" element={<CorporateInformation />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/speed-test" element={<SpeedTest />} />
           <Route path="/legal-notices" element={<LegalNotices />} />
           <Route path="/only-on-netflix" element={<OnlyOnNetflix />} />
 
+          {/* 404 route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </AnimatePresence>
   );
-}
+});
+
+export default AppRoutes;

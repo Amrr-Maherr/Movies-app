@@ -16,13 +16,10 @@ const ZOOM_SCALE = 1.05;
 export default function HeroBackground({ movie }: HeroBackgroundProps) {
   const imageUrl = useMemo(
     () => getBackdropUrl(movie.backdrop_path),
-    [movie.backdrop_path]
+    [movie.backdrop_path],
   );
 
-  const title = useMemo(
-    () => getTitle(movie),
-    [movie]
-  );
+  const title = useMemo(() => getTitle(movie), [movie]);
 
   if (!imageUrl) {
     return (
@@ -41,7 +38,7 @@ export default function HeroBackground({ movie }: HeroBackgroundProps) {
           initial={{ scale: 1 }}
           animate={{ scale: ZOOM_SCALE }}
           transition={{ duration: SLIDE_INTERVAL / 1000, ease: "easeOut" }}
-          loading="eager"
+          loading="lazy"
         />
       </div>
 

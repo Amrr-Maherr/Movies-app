@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import type { MediaDetails, Genre } from "@/types";
 import { formatRuntime, formatDate, getLanguageName, formatNumber, getReleaseDate, getTitle, getRuntime } from "@/utils";
 import PersonCard from "@/components/shared/cards/PersonCard";
@@ -8,50 +9,60 @@ interface MediaInfoSectionProps {
   media: MediaDetails;
 }
 
-export default function MediaInfoSection({ media }: MediaInfoSectionProps) {
-  const title = getTitle(media);
-  const releaseDate = getReleaseDate(media);
-  const runtime = getRuntime(media);
+// Memoized MediaInfoSection component - avoids re-renders when parent updates
+const MediaInfoSection = memo(function MediaInfoSection({ media }: MediaInfoSectionProps) {
+  // Memoized: Pre-calculated values
+  const title = useMemo(() => getTitle(media), [media]);
+  const releaseDate = useMemo(() => getReleaseDate(media), [media]);
+  const runtime = useMemo(() => getRuntime(media), [media]);
 
-  // Build metadata rows dynamically
-  const metadataRows = [
-    {
-      label: "Genres",
-      value:
-        media.genres && media.genres.length > 0
-          ? media.genres.map((g: Genre) => g.name).join(", ")
+  // Memoized: Build metadata rows dynamically - avoids array operations on every render
+  const metadataRows = useMemo(() => {
+    const rows = [
+      {
+        label: "Genres",
+        value:
+          media.genres && media.genres.length > 0
+            ? media.genres.map((g: Genre) => g.name).join(", ")
+            : "",
+      },
+      {
+        label: "Release Date",
+        value: releaseDate ? formatDate(releaseDate) : "",
+      },
+      {
+        label: "Runtime",
+        value: runtime ? formatRuntime(runtime) : "",
+      },
+      {
+        label: "Original Language",
+        value: media.original_language ? getLanguageName(media.original_language) : "",
+      },
+      {
+        label: "Rating",
+        value: media.vote_average
+          ? `⭐ ${media.vote_average.toFixed(1)} (${formatNumber(media.vote_count)} votes)`
           : "",
-    },
-    {
-      label: "Release Date",
-      value: releaseDate ? formatDate(releaseDate) : "",
-    },
-    {
-      label: "Runtime",
-      value: runtime ? formatRuntime(runtime) : "",
-    },
-    {
-      label: "Original Language",
-      value: media.original_language ? getLanguageName(media.original_language) : "",
-    },
-    {
-      label: "Rating",
-      value: media.vote_average
-        ? `⭐ ${media.vote_average.toFixed(1)} (${formatNumber(media.vote_count)} votes)`
-        : "",
-    },
-    {
-      label: "Status",
-      value: media.status && media.status !== "Released" ? media.status : "",
-    },
-    {
-      label: "Production",
-      value:
-        media.production_companies && media.production_companies.length > 0
-          ? media.production_companies.map((c) => c.name).join(", ")
-          : "",
-    },
-  ].filter((row) => row.value);
+      },
+      {
+        label: "Status",
+        value: media.status && media.status !== "Released" ? media.status : "",
+      },
+      {
+        label: "Production",
+        value:
+          media.production_companies && media.production_companies.length > 0
+            ? media.production_companies.map((c) => c.name).join(", ")
+            : "",
+      },
+    ];
+    return rows.filter((row) => row.value);
+  }, [media, releaseDate, runtime]);
+
+  // Memoized: Top cast (limit to 12)
+  const topCast = useMemo(() => {
+    return media.credits?.cast?.slice(0, 12) || [];
+  }, [media.credits?.cast]);
 
   return (
     <section className="bg-black py-12 md:py-16">
@@ -82,7 +93,7 @@ export default function MediaInfoSection({ media }: MediaInfoSectionProps) {
             )}
 
             {/* Cast Section */}
-            {media.credits?.cast && media.credits.cast.length > 0 && (
+            {topCast.length > 0 && (
               <div className="space-y-4 pt-4">
                 <h3 className="text-xl md:text-2xl font-bold text-white">
                   Cast
@@ -93,7 +104,7 @@ export default function MediaInfoSection({ media }: MediaInfoSectionProps) {
                   spaceBetween={16}
                   hideNavigation={false}
                 >
-                  {media.credits.cast.slice(0, 12).map((actor) => (
+                  {topCast.map((actor) => (
                     <PersonCard
                       key={actor.id}
                       id={actor.id}
@@ -182,4 +193,6 @@ export default function MediaInfoSection({ media }: MediaInfoSectionProps) {
       </div>
     </section>
   );
-}
+});
+
+export default MediaInfoSection;

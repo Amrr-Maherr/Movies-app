@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import type { CastMember } from "@/types";
 import PersonCard from "@/components/shared/cards/PersonCard";
 import Slider from "@/components/shared/Slider/slider";
@@ -8,15 +9,16 @@ interface FullCreditsSectionProps {
   crew: CrewMember[];
 }
 
-export default function FullCreditsSection({
+// Memoized FullCreditsSection component - avoids re-renders when parent updates
+const FullCreditsSection = memo(function FullCreditsSection({
   cast,
   crew,
 }: FullCreditsSectionProps) {
-  // Limit cast to top 20 billed actors
-  const topBilledCast = cast.slice(0, 20);
+  // Memoized: Top billed cast (limit to 20)
+  const topBilledCast = useMemo(() => cast.slice(0, 20), [cast]);
 
-  // Filter crew to show only key roles
-  const keyCrew = filterKeyCrew(crew);
+  // Memoized: Filter crew to show only key roles
+  const keyCrew = useMemo(() => filterKeyCrew(crew), [crew]);
 
   // Don't render if no cast or crew data
   if (topBilledCast.length === 0 && keyCrew.length === 0) {
@@ -80,4 +82,6 @@ export default function FullCreditsSection({
       </div>
     </section>
   );
-}
+});
+
+export default FullCreditsSection;

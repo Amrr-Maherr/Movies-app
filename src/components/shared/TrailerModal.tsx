@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, memo } from "react";
 import { X } from "lucide-react";
 
 interface TrailerModalProps {
@@ -8,13 +8,14 @@ interface TrailerModalProps {
   onClose: () => void;
 }
 
-export default function TrailerModal({
+// Memoized TrailerModal component - avoids re-renders when parent updates
+const TrailerModal = memo(function TrailerModal({
   videoKey,
   title,
   isOpen,
   onClose,
 }: TrailerModalProps) {
-  // Close modal on Escape key
+  // Memoized: Close modal on Escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -33,13 +34,14 @@ export default function TrailerModal({
     };
   }, [isOpen, onClose]);
 
+  // Memoized: Handle backdrop click
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent) => {
       if (e.target === e.currentTarget) {
         onClose();
       }
     },
-    [onClose]
+    [onClose],
   );
 
   if (!isOpen) return null;
@@ -83,4 +85,6 @@ export default function TrailerModal({
       </div>
     </div>
   );
-}
+});
+
+export default TrailerModal;

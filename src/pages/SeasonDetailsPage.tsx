@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Calendar, Film, Clock, Star } from "lucide-react";
@@ -10,11 +11,52 @@ import type { Episode } from "@/types";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 
-export default function SeasonDetailsPage() {
-  const { tvId, seasonNumber } = useParams<{ tvId: string; seasonNumber: string }>();
+// Memoized SeasonDetailsPage component - avoids re-renders when parent updates
+const SeasonDetailsPage = memo(function SeasonDetailsPage() {
+  const { tvId, seasonNumber } = useParams<{
+    tvId: string;
+    seasonNumber: string;
+  }>();
   const { isLoading, data: season, error, refetch } = FetchTvSeasonDetails(
     Number(tvId),
-    Number(seasonNumber)
+    Number(seasonNumber),
+  );
+
+  // Memoized: Formatted air date
+  const formattedAirDate = useMemo(() => {
+    if (!season?.air_date) return "TBA";
+    return new Date(season.air_date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }, [season?.air_date]);
+
+  // Memoized: Average runtime calculation
+  const averageRuntime = useMemo(() => {
+    if (!season?.episodes || season.episodes.length === 0) return 0;
+    return Math.round(
+      season.episodes.reduce((acc, ep) => acc + (ep.runtime || 0), 0) /
+        season.episodes.length,
+    );
+  }, [season?.episodes]);
+
+  // Memoized: Average rating calculation
+  const averageRating = useMemo(() => {
+    if (!season?.episodes || season.episodes.length === 0) return "N/A";
+    return (
+      season.episodes.reduce((acc, ep) => acc + ep.vote_average, 0) /
+      season.episodes.length
+    ).toFixed(1);
+  }, [season?.episodes]);
+
+  // Memoized: Backdrop URL
+  const backdropUrl = useMemo(
+    () =>
+      season?.poster_path
+        ? `${BACKDROP_BASE_URL}${season.poster_path}`
+        : null,
+    [season?.poster_path],
   );
 
   if (isLoading) {
@@ -31,33 +73,6 @@ export default function SeasonDetailsPage() {
       />
     );
   }
-
-  // Format air date
-  const formattedAirDate = season.air_date
-    ? new Date(season.air_date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "TBA";
-
-  // Calculate average runtime
-  const averageRuntime = season.episodes && season.episodes.length > 0
-    ? Math.round(
-        season.episodes.reduce((acc, ep) => acc + (ep.runtime || 0), 0) /
-          season.episodes.length
-      )
-    : 0;
-
-  // Calculate average rating
-  const averageRating = season.episodes && season.episodes.length > 0
-    ? (season.episodes.reduce((acc, ep) => acc + ep.vote_average, 0) /
-        season.episodes.length).toFixed(1)
-    : "N/A";
-
-  const backdropUrl = season.poster_path
-    ? `${BACKDROP_BASE_URL}${season.poster_path}`
-    : null;
 
   return (
     <motion.div
@@ -113,7 +128,9 @@ export default function SeasonDetailsPage() {
                 {season.name}
               </h1>
 
-              <p className="text-gray-400 mb-4">{season.overview || "No overview available."}</p>
+              <p className="text-gray-400 mb-4">
+                {season.overview || "No overview available."}
+              </p>
 
               {/* Metadata */}
               <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-gray-300">
@@ -145,9 +162,7 @@ export default function SeasonDetailsPage() {
 
       {/* Episodes Section */}
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8">
-        <h2 className="text-2xl font-bold text-white mb-6">
-          Episodes
-        </h2>
+        <h2 className="text-2xl font-bold text-white mb-6">Episodes</h2>
 
         {season.episodes && season.episodes.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
@@ -168,4 +183,6 @@ export default function SeasonDetailsPage() {
       </div>
     </motion.div>
   );
-}
+});
+
+export default SeasonDetailsPage;

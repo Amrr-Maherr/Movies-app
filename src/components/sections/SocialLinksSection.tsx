@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import { Github, Twitter, Instagram, Globe, Film } from "lucide-react";
 
 interface SocialLinksSectionProps {
@@ -17,7 +17,8 @@ interface SocialLink {
   icon: React.ReactNode;
 }
 
-export default function SocialLinksSection({
+// Memoized SocialLinksSection component - avoids re-renders when parent updates
+const SocialLinksSection = memo(function SocialLinksSection({
   imdbId,
   twitterId,
   instagramId,
@@ -25,6 +26,7 @@ export default function SocialLinksSection({
   wikidataId,
   homepage,
 }: SocialLinksSectionProps) {
+  // Memoized: Build social links array - avoids array operations on every render
   const socialLinks = useMemo(() => {
     const links: SocialLink[] = [];
 
@@ -118,4 +120,6 @@ export default function SocialLinksSection({
       </div>
     </section>
   );
-}
+});
+
+export default SocialLinksSection;

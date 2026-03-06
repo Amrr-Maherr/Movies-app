@@ -1,3 +1,4 @@
+import { memo, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Clock, Calendar, Star } from "lucide-react";
@@ -9,7 +10,8 @@ import FetchEpisodeDetails from "@/queries/FetchEpisodeDetails";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-export default function EpisodeDetailsPage() {
+// Memoized EpisodeDetailsPage component - avoids re-renders when parent updates
+const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
   const { tvId, seasonNumber, episodeNumber } = useParams<{
     tvId: string;
     seasonNumber: string;
@@ -18,11 +20,82 @@ export default function EpisodeDetailsPage() {
 
   const navigate = useNavigate();
 
-  const { isLoading, data: episode, error, refetch } = FetchEpisodeDetails(
+  const {
+    isLoading,
+    data: episode,
+    error,
+    refetch,
+  } = FetchEpisodeDetails(
     Number(tvId),
     Number(seasonNumber),
-    Number(episodeNumber)
+    Number(episodeNumber),
   );
+
+  // Memoized: Formatted runtime
+  const formattedRuntime = useMemo(() => {
+    if (!episode?.runtime) return "N/A";
+    const hours = Math.floor(episode.runtime / 60);
+    const minutes = episode.runtime % 60;
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+    return `${minutes}m`;
+  }, [episode?.runtime]);
+
+  // Memoized: Formatted air date
+  const formattedAirDate = useMemo(() => {
+    if (!episode?.air_date) return "TBA";
+    return new Date(episode.air_date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }, [episode?.air_date]);
+
+  // Memoized: Still image URL
+  const stillImageUrl = useMemo(
+    () =>
+      episode?.still_path
+        ? `${IMAGE_BASE_URL}${episode.still_path}`
+        : null,
+    [episode?.still_path],
+  );
+
+  // Memoized: Guest stars (limit to 10)
+  const guestStars = useMemo(
+    () => episode?.guest_stars?.slice(0, 10) || [],
+    [episode?.guest_stars],
+  );
+
+  // Memoized: Key crew (Director, Writer)
+  const keyCrew = useMemo(
+    () =>
+      episode?.crew?.filter(
+        (member) => member.job === "Director" || member.job === "Writer",
+      ) || [],
+    [episode?.crew],
+  );
+
+  // Memoized: Navigation handlers
+  const handleBack = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
+
+  const handlePreviousEpisode = useCallback(() => {
+    if (episode && episode.episode_number > 1) {
+      navigate(
+        `/tv/${tvId}/season/${seasonNumber}/episode/${episode.episode_number - 1}`,
+      );
+    }
+  }, [navigate, tvId, seasonNumber, episode]);
+
+  const handleNextEpisode = useCallback(() => {
+    if (episode) {
+      navigate(
+        `/tv/${tvId}/season/${seasonNumber}/episode/${episode.episode_number + 1}`,
+      );
+    }
+  }, [navigate, tvId, seasonNumber, episode]);
 
   if (isLoading) {
     return <Loader fullscreen size="lg" />;
@@ -39,33 +112,6 @@ export default function EpisodeDetailsPage() {
     );
   }
 
-  // Format runtime
-  const formattedRuntime = episode.runtime
-    ? `${Math.floor(episode.runtime / 60)}h ${episode.runtime % 60}m`
-    : "N/A";
-
-  // Format air date
-  const formattedAirDate = episode.air_date
-    ? new Date(episode.air_date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "TBA";
-
-  // Get still image
-  const stillImageUrl = episode.still_path
-    ? `${IMAGE_BASE_URL}${episode.still_path}`
-    : null;
-
-  // Get guest stars
-  const guestStars = episode.guest_stars?.slice(0, 10) || [];
-
-  // Get key crew (Director, Writer)
-  const keyCrew = episode.crew?.filter(
-    (member) => member.job === "Director" || member.job === "Writer"
-  ) || [];
-
   return (
     <motion.div
       className="min-h-screen bg-[var(--background-primary)]"
@@ -77,7 +123,7 @@ export default function EpisodeDetailsPage() {
       {/* Back Button */}
       <div className="absolute top-4 left-4 z-50">
         <button
-          onClick={() => navigate(-1)}
+          onClick={handleBack}
           className="flex items-center gap-2 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-full hover:bg-black/80 transition-all transform hover:scale-105"
         >
           <ArrowLeft className="h-5 w-5" />
@@ -94,7 +140,7 @@ export default function EpisodeDetailsPage() {
               src={stillImageUrl}
               alt={episode.name}
               className="w-full h-full object-cover"
-              loading="eager"
+              loading="lazy"
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
@@ -272,11 +318,7 @@ export default function EpisodeDetailsPage() {
               </h3>
               <div className="space-y-3">
                 <button
-                  onClick={() =>
-                    navigate(
-                      `/tv/${tvId}/season/${seasonNumber}/episode/${episode.episode_number - 1}`
-                    )
-                  }
+                  onClick={handlePreviousEpisode}
                   disabled={episode.episode_number <= 1}
                   className="w-full flex items-center justify-between bg-zinc-800 hover:bg-zinc-700 disabled:bg-zinc-800/50 disabled:cursor-not-allowed text-white px-4 py-3 rounded-lg transition-colors"
                 >
@@ -287,11 +329,7 @@ export default function EpisodeDetailsPage() {
                   </span>
                 </button>
                 <button
-                  onClick={() =>
-                    navigate(
-                      `/tv/${tvId}/season/${seasonNumber}/episode/${episode.episode_number + 1}`
-                    )
-                  }
+                  onClick={handleNextEpisode}
                   className="w-full flex items-center justify-between bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-3 rounded-lg transition-colors"
                 >
                   <span>Next Episode</span>
@@ -307,4 +345,6 @@ export default function EpisodeDetailsPage() {
       </section>
     </motion.div>
   );
-}
+});
+
+export default EpisodeDetailsPage;

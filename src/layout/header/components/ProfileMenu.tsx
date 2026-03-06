@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import { User, LogOut, Settings } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -7,24 +8,26 @@ interface ProfileMenuProps {
   onClose: () => void;
 }
 
-export default function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
-  const handleLogout = () => {
-    // TODO: Implement logout logic
+// Memoized ProfileMenu component - avoids re-renders when parent updates
+const ProfileMenu = memo(function ProfileMenu({
+  isOpen,
+  onClose,
+}: ProfileMenuProps) {
+  // Memoized: Handler functions
+  const handleLogout = useCallback(() => {
     console.log("Logout clicked");
     onClose();
-  };
+  }, [onClose]);
 
-  const handleAccount = () => {
-    // TODO: Navigate to account page
+  const handleAccount = useCallback(() => {
     console.log("Account clicked");
     onClose();
-  };
+  }, [onClose]);
 
-  const handleSettings = () => {
-    // TODO: Navigate to settings page
+  const handleSettings = useCallback(() => {
     console.log("Settings clicked");
     onClose();
-  };
+  }, [onClose]);
 
   return (
     <motion.div
@@ -34,7 +37,7 @@ export default function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
       transition={{ duration: 0.2 }}
       className={cn(
         "absolute top-full right-0 mt-2 w-48 rounded-md border border-[var(--card-border)] bg-[var(--card-background)] shadow-lg z-50 overflow-hidden",
-        !isOpen && "hidden"
+        !isOpen && "hidden",
       )}
     >
       <div className="py-1">
@@ -66,4 +69,6 @@ export default function ProfileMenu({ isOpen, onClose }: ProfileMenuProps) {
       </div>
     </motion.div>
   );
-}
+});
+
+export default ProfileMenu;

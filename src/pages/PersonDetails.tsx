@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Loader } from "@/components/ui/loader";
@@ -10,7 +11,8 @@ import SocialLinksSection from "@/components/sections/SocialLinksSection";
 import FetchPersonDetails from "@/queries/FetchPersonDetails";
 import FetchPersonCredits from "@/queries/FetchPersonCredits";
 
-export default function PersonDetailsPage() {
+// Memoized PersonDetailsPage component - avoids re-renders when parent updates
+const PersonDetailsPage = memo(function PersonDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const personId = Number(id);
 
@@ -29,8 +31,23 @@ export default function PersonDetailsPage() {
     isLoading: creditsLoading,
   } = FetchPersonCredits(personId);
 
-  const isLoading = personLoading || creditsLoading;
-  const error = personError || creditsError;
+  // Memoized: Combined loading and error states
+  const isLoading = useMemo(
+    () => personLoading || creditsLoading,
+    [personLoading, creditsLoading],
+  );
+
+  const error = useMemo(
+    () => personError || creditsError,
+    [personError, creditsError],
+  );
+
+  // Memoized: Cast and crew arrays
+  const { cast, crew } = useMemo(() => {
+    const cast = creditsData?.cast || [];
+    const crew = creditsData?.crew || [];
+    return { cast, crew };
+  }, [creditsData]);
 
   if (isLoading) {
     return <Loader fullscreen size="lg" />;
@@ -49,9 +66,6 @@ export default function PersonDetailsPage() {
       />
     );
   }
-
-  const cast = creditsData?.cast || [];
-  const crew = creditsData?.crew || [];
 
   return (
     <motion.div
@@ -96,4 +110,6 @@ export default function PersonDetailsPage() {
       )}
     </motion.div>
   );
-}
+});
+
+export default PersonDetailsPage;

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import Card from "@/components/shared/Card/Card";
 import Slider from "@/components/shared/Slider/slider";
 import type { HeroMedia } from "@/types";
@@ -7,10 +7,11 @@ interface MoreLikeThisSectionProps {
   similar: HeroMedia[];
 }
 
-export default function MoreLikeThisSection({
+// Memoized MoreLikeThisSection component - avoids re-renders when parent updates
+const MoreLikeThisSection = memo(function MoreLikeThisSection({
   similar,
 }: MoreLikeThisSectionProps) {
-  // Limit to 15 similar titles and filter out items without posters
+  // Memoized: Filter and limit similar titles - avoids array operations on every render
   const filteredSimilar = useMemo(() => {
     return similar
       .filter((item) => item.poster_path !== null)
@@ -35,14 +36,12 @@ export default function MoreLikeThisSection({
           hideNavigation={false}
         >
           {filteredSimilar.map((item) => (
-            <Card
-              key={item.id}
-              movie={item}
-              variant="recommendation"
-            />
+            <Card key={item.id} movie={item} variant="recommendation" />
           ))}
         </Slider>
       </div>
     </section>
   );
-}
+});
+
+export default MoreLikeThisSection;

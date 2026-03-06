@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import Slider from "@/components/shared/Slider/slider";
 
 interface Company {
@@ -22,65 +22,21 @@ interface ProductionSectionProps {
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w185";
 
-export default function ProductionSection({
-  companies = [],
-  networks = [],
-}: ProductionSectionProps) {
-  // Combine companies and networks, or show them separately
-  const hasCompanies = companies.length > 0;
-  const hasNetworks = networks.length > 0;
-
-  // Don't render if no data
-  if (!hasCompanies && !hasNetworks) {
-    return null;
-  }
-
-  // Combine both arrays for display
-  const allItems = useMemo(() => {
-    const combined = [
-      ...companies.map((c) => ({ ...c, type: "company" as const })),
-      ...networks.map((n) => ({ ...n, type: "network" as const })),
-    ];
-    return combined.slice(0, 12); // Limit to 12 items
-  }, [companies, networks]);
-
-  return (
-    <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-        {/* Section Title */}
-        <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
-          {hasNetworks ? "Networks & Production" : "Production Companies"}
-        </h2>
-
-        {/* Slider with Company/Network Cards */}
-        <Slider
-          slidesPerView={6}
-          slidesPerViewMobile={3}
-          spaceBetween={16}
-          hideNavigation={false}
-        >
-          {allItems.map((item) => (
-            <ProductionCard
-              key={`${item.type}-${item.id}`}
-              name={item.name}
-              logoPath={item.logo_path}
-              type={item.type}
-            />
-          ))}
-        </Slider>
-      </div>
-    </section>
-  );
-}
-
-interface ProductionCardProps {
+// Memoized ProductionCard component
+const ProductionCard = memo(function ProductionCard({
+  name,
+  logoPath,
+  type,
+}: {
   name: string;
   logoPath: string | null;
   type: "company" | "network";
-}
-
-function ProductionCard({ name, logoPath, type }: ProductionCardProps) {
-  const imageUrl = logoPath ? `${IMAGE_BASE_URL}${logoPath}` : null;
+}) {
+  // Memoized: Image URL
+  const imageUrl = useMemo(
+    () => (logoPath ? `${IMAGE_BASE_URL}${logoPath}` : null),
+    [logoPath],
+  );
 
   return (
     <div className="group cursor-pointer">
@@ -117,4 +73,60 @@ function ProductionCard({ name, logoPath, type }: ProductionCardProps) {
       </div>
     </div>
   );
-}
+});
+
+// Memoized ProductionSection component - avoids re-renders when parent updates
+const ProductionSection = memo(function ProductionSection({
+  companies = [],
+  networks = [],
+}: ProductionSectionProps) {
+  // Memoized: Combine companies and networks
+  const allItems = useMemo(() => {
+    if (companies.length === 0 && networks.length === 0) {
+      return [];
+    }
+
+    const combined = [
+      ...companies.map((c) => ({ ...c, type: "company" as const })),
+      ...networks.map((n) => ({ ...n, type: "network" as const })),
+    ];
+    return combined.slice(0, 12); // Limit to 12 items
+  }, [companies, networks]);
+
+  // Don't render if no data
+  if (allItems.length === 0) {
+    return null;
+  }
+
+  const hasNetworks = networks.length > 0;
+
+  return (
+    <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
+      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+        {/* Section Title */}
+        <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
+          {hasNetworks ? "Networks & Production" : "Production Companies"}
+        </h2>
+
+        {/* Slider with Company/Network Cards */}
+        <Slider
+          slidesPerView={6}
+          slidesPerViewMobile={3}
+          spaceBetween={16}
+          hideNavigation={false}
+        >
+          {allItems.map((item) => (
+            <ProductionCard
+              key={`${item.type}-${item.id}`}
+              name={item.name}
+              logoPath={item.logo_path}
+              type={item.type}
+            />
+          ))}
+        </Slider>
+      </div>
+    </section>
+  );
+});
+
+export default ProductionSection;

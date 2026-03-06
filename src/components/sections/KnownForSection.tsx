@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import Card from "@/components/shared/Card/Card";
 import { getKnownForItems } from "@/utils";
@@ -9,10 +9,15 @@ interface KnownForSectionProps {
   crew: CrewCredit[];
 }
 
-export default function KnownForSection({ cast, crew }: KnownForSectionProps) {
+// Memoized KnownForSection component - avoids re-renders when parent updates
+const KnownForSection = memo(function KnownForSection({
+  cast,
+  crew,
+}: KnownForSectionProps) {
+  // Memoized: Get known for items - avoids array operations on every render
   const knownForItems = useMemo(
     () => getKnownForItems(cast, crew),
-    [cast, crew]
+    [cast, crew],
   );
 
   if (knownForItems.length === 0) {
@@ -60,4 +65,6 @@ export default function KnownForSection({ cast, crew }: KnownForSectionProps) {
       </div>
     </section>
   );
-}
+});
+
+export default KnownForSection;

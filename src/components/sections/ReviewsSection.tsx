@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import ReviewCard from "@/components/shared/cards/ReviewCard";
 
@@ -11,10 +12,15 @@ interface ReviewsSectionProps {
   }[];
 }
 
-const ReviewsSection = ({ reviews }: ReviewsSectionProps) => {
-  // Filter out empty or invalid reviews
-  const validReviews = reviews.filter(
-    (review) => review.author && review.content?.trim()
+// Memoized ReviewsSection component - avoids re-renders when parent updates
+const ReviewsSection = memo(function ReviewsSection({ reviews }: ReviewsSectionProps) {
+  // Memoized: Filter out empty or invalid reviews
+  const validReviews = useMemo(
+    () =>
+      reviews.filter(
+        (review) => review.author && review.content?.trim(),
+      ),
+    [reviews],
   );
 
   if (!validReviews || validReviews.length === 0) {
@@ -46,6 +52,6 @@ const ReviewsSection = ({ reviews }: ReviewsSectionProps) => {
       </div>
     </section>
   );
-};
+});
 
 export default ReviewsSection;

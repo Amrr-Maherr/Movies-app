@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { Loader } from "@/components/ui/loader";
@@ -14,9 +15,47 @@ import FetchTvShowDetails from "@/queries/FetchTvShowDetails";
 import { extractKeywords, extractWatchProviders } from "@/utils";
 import type { Video } from "@/types";
 
-export default function TVShowDetailsPage() {
+// Memoized TVShowDetailsPage component - avoids re-renders when parent updates
+const TVShowDetailsPage = memo(function TVShowDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const { isLoading, data, error, refetch } = FetchTvShowDetails(Number(id));
+
+  // Memoized: Extract and prepare data for child components (moved before early return)
+  const { trailers, reviews, keywords, watchProviders, similar, seasons } =
+    useMemo(() => {
+      if (!data) {
+        return {
+          trailers: [],
+          reviews: [],
+          keywords: [],
+          watchProviders: [],
+          similar: [],
+          seasons: [],
+        };
+      }
+
+      const trailers: Video[] =
+        data.videos?.results?.filter(
+          (video: Video) =>
+            video.site === "YouTube" &&
+            (video.type === "Trailer" ||
+              video.type === "Teaser" ||
+              video.type === "Clip"),
+        ) || [];
+
+      const reviews =
+        data.reviews?.results?.filter(
+          (review: { author: string; content: string }) =>
+            review.author && review.content?.trim(),
+        ) || [];
+
+      const keywords = extractKeywords(data.keywords);
+      const watchProviders = extractWatchProviders(data);
+      const similar = data.similar?.results || [];
+      const seasons = data.seasons || [];
+
+      return { trailers, reviews, keywords, watchProviders, similar, seasons };
+    }, [data]);
 
   if (isLoading) {
     return <Loader fullscreen size="lg" />;
@@ -32,23 +71,6 @@ export default function TVShowDetailsPage() {
       />
     );
   }
-
-  // Extract and prepare data for child components
-  const trailers: Video[] = data.videos?.results?.filter(
-    (video: Video) =>
-      video.site === "YouTube" &&
-      (video.type === "Trailer" || video.type === "Teaser" || video.type === "Clip")
-  ) || [];
-
-  const reviews = data.reviews?.results?.filter(
-    (review: { author: string; content: string }) =>
-      review.author && review.content?.trim()
-  ) || [];
-
-  const keywords = extractKeywords(data.keywords);
-  const watchProviders = extractWatchProviders(data);
-  const similar = data.similar?.results || [];
-  const seasons = data.seasons || [];
 
   return (
     <motion.div
@@ -70,14 +92,10 @@ export default function TVShowDetailsPage() {
       )}
 
       {/* Trailers Section - YouTube trailers */}
-      {trailers.length > 0 && (
-        <TrailersSection videos={trailers} />
-      )}
+      {trailers.length > 0 && <TrailersSection videos={trailers} />}
 
       {/* Reviews Section - User reviews */}
-      {reviews.length > 0 && (
-        <ReviewsSection reviews={reviews} />
-      )}
+      {reviews.length > 0 && <ReviewsSection reviews={reviews} />}
 
       {/* Keywords Section - Tags/Topics */}
       {keywords.length > 0 && (
@@ -97,9 +115,9 @@ export default function TVShowDetailsPage() {
       )}
 
       {/* More Like This Section - Similar TV shows */}
-      {similar.length > 0 && (
-        <MoreLikeThisSection similar={similar} />
-      )}
+      {similar.length > 0 && <MoreLikeThisSection similar={similar} />}
     </motion.div>
   );
-}
+});
+
+export default TVShowDetailsPage;

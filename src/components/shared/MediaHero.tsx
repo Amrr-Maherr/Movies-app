@@ -1,10 +1,10 @@
-import { useState, useMemo, useCallback } from 'react';
-import { Play, Plus, Info } from 'lucide-react';
-import type { MediaDetails, Video, Genre, CastMember, Keyword } from '@/types';
+import { useState, useMemo, useCallback, memo } from "react";
+import { Play, Plus, Info } from "lucide-react";
+import type { MediaDetails, Video, Genre, CastMember, Keyword } from "@/types";
 
-const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
-const POSTER_BASE_URL = 'https://image.tmdb.org/t/p/w500';
-const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v=';
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
+const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
+const YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
 
 interface MediaHeroProps {
   media: MediaDetails;
@@ -12,53 +12,61 @@ interface MediaHeroProps {
   onAddToList?: () => void;
 }
 
-export default function MediaHero({ media, onPlayTrailer, onAddToList }: MediaHeroProps) {
+// Memoized MediaHero component - avoids re-renders when parent updates
+const MediaHero = memo(function MediaHero({
+  media,
+  onPlayTrailer,
+  onAddToList,
+}: MediaHeroProps) {
   const [isAddedToList, setIsAddedToList] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
 
-  // Get first YouTube trailer
+  // Memoized: Get first YouTube trailer - avoids recalculation on every render
   const trailerUrl = useMemo(() => {
     if (!media?.videos?.results) return null;
     const trailer = media.videos.results.find(
-      (video: Video) => video.type === 'Trailer' && video.site === 'YouTube'
+      (video: Video) => video.type === "Trailer" && video.site === "YouTube",
     );
     return trailer ? `${YOUTUBE_BASE_URL}${trailer.key}` : null;
   }, [media]);
 
-  // Get first 3 cast members
+  // Memoized: Get first 3 cast members - avoids array slicing on every render
   const topCast = useMemo(() => {
     if (!media?.credits?.cast) return [];
     return media.credits.cast.slice(0, 3);
   }, [media]);
 
-  // Get release year (supports both movie and TV show)
+  // Memoized: Get release year - avoids date parsing on every render
   const releaseYear = useMemo(() => {
-    const date = 'release_date' in media ? media.release_date : media.first_air_date;
-    if (!date) return '';
+    const date =
+      "release_date" in media ? media.release_date : media.first_air_date;
+    if (!date) return "";
     return new Date(date).getFullYear().toString();
   }, [media]);
 
-  // Truncate overview to 150 characters
+  // Memoized: Truncate overview to 150 characters - avoids string operations on every render
   const truncatedOverview = useMemo(() => {
-    if (!media?.overview) return '';
+    if (!media?.overview) return "";
     if (media.overview.length <= 150) return media.overview;
-    return media.overview.slice(0, 150) + '...';
+    return media.overview.slice(0, 150) + "...";
   }, [media]);
 
-  // Format rating to one decimal place
+  // Memoized: Format rating to one decimal place
   const formattedRating = useMemo(() => {
-    if (!media?.vote_average) return 'N/A';
+    if (!media?.vote_average) return "N/A";
     return media.vote_average.toFixed(1);
   }, [media]);
 
+  // Memoized: Handle play trailer callback
   const handlePlayTrailer = useCallback(() => {
     if (onPlayTrailer) {
       onPlayTrailer();
     } else if (trailerUrl) {
-      window.open(trailerUrl, '_blank');
+      window.open(trailerUrl, "_blank");
     }
   }, [onPlayTrailer, trailerUrl]);
 
+  // Memoized: Handle add to list callback
   const handleAddToList = useCallback(() => {
     if (onAddToList) {
       onAddToList();
@@ -67,17 +75,25 @@ export default function MediaHero({ media, onPlayTrailer, onAddToList }: MediaHe
     }
   }, [onAddToList]);
 
-  const backdropUrl = media.backdrop_path
-    ? `${IMAGE_BASE_URL}${media.backdrop_path}`
-    : 'https://via.placeholder.com/1920x1080?text=No+Image';
+  // Memoized: Image URLs
+  const backdropUrl = useMemo(
+    () =>
+      media.backdrop_path
+        ? `${IMAGE_BASE_URL}${media.backdrop_path}`
+        : "https://via.placeholder.com/1920x1080?text=No+Image",
+    [media.backdrop_path],
+  );
 
-  const posterUrl = media.poster_path
-    ? `${POSTER_BASE_URL}${media.poster_path}`
-    : null;
+  const posterUrl = useMemo(
+    () =>
+      media.poster_path
+        ? `${POSTER_BASE_URL}${media.poster_path}`
+        : null,
+    [media.poster_path],
+  );
 
   // Get title (supports both movie.title and tv.name)
-  const title = 'title' in media ? media.title : media.name;
-console.log(media);
+  const title = "title" in media ? media.title : media.name;
 
   return (
     <div className="relative w-full h-[85vh] min-h-[600px]">
@@ -87,7 +103,7 @@ console.log(media);
           src={backdropUrl}
           alt={title}
           className="w-full h-full object-cover"
-          loading="eager"
+          loading="lazy"
         />
       </div>
 
@@ -135,7 +151,9 @@ console.log(media);
                 >
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
-                <span className="text-white font-semibold">{formattedRating}</span>
+                <span className="text-white font-semibold">
+                  {formattedRating}
+                </span>
               </div>
 
               {/* Separator */}
@@ -158,13 +176,15 @@ console.log(media);
 
             {/* Overview */}
             <p className="text-[var(--text-primary)] text-base md:text-lg leading-relaxed max-w-3xl">
-              {truncatedOverview || 'No description available.'}
+              {truncatedOverview || "No description available."}
             </p>
 
             {/* Cast (Optional) */}
             {topCast.length > 0 && (
               <div className="flex items-center gap-3 flex-wrap">
-                <span className="text-[var(--text-muted)] text-sm">Starring:</span>
+                <span className="text-[var(--text-muted)] text-sm">
+                  Starring:
+                </span>
                 {topCast.map((actor: CastMember) => (
                   <span
                     key={actor.id}
@@ -177,18 +197,23 @@ console.log(media);
             )}
 
             {/* Keywords/Tags (Optional) */}
-            {media.keywords && 'keywords' in media.keywords && media.keywords.keywords && media.keywords.keywords.length > 0 && (
-              <div className="flex items-center gap-2 flex-wrap pt-2">
-                {media.keywords.keywords.slice(0, 5).map((keyword: Keyword) => (
-                  <span
-                    key={keyword.id}
-                    className="text-[var(--text-muted)] text-xs bg-[var(--background-secondary)] px-2 py-1 rounded hover:bg-[var(--background-tertiary)] transition-colors cursor-default"
-                  >
-                    #{keyword.name.replace(/\s/g, '')}
-                  </span>
-                ))}
-              </div>
-            )}
+            {media.keywords &&
+              "keywords" in media.keywords &&
+              media.keywords.keywords &&
+              media.keywords.keywords.length > 0 && (
+                <div className="flex items-center gap-2 flex-wrap pt-2">
+                  {media.keywords.keywords
+                    .slice(0, 5)
+                    .map((keyword: Keyword) => (
+                      <span
+                        key={keyword.id}
+                        className="text-[var(--text-muted)] text-xs bg-[var(--background-secondary)] px-2 py-1 rounded hover:bg-[var(--background-tertiary)] transition-colors cursor-default"
+                      >
+                        #{keyword.name.replace(/\s/g, "")}
+                      </span>
+                    ))}
+                </div>
+              )}
 
             {/* Action Buttons */}
             <div className="flex items-center gap-3 pt-4 flex-wrap">
@@ -206,12 +231,12 @@ console.log(media);
                 onClick={handleAddToList}
                 className={`flex items-center gap-2 px-6 md:px-8 py-3 md:py-3.5 rounded font-bold text-sm md:text-base transition-all transform hover:scale-105 active:scale-95 border-2 ${
                   isAddedToList
-                    ? 'bg-[var(--netflix-red)] border-[var(--netflix-red)] text-white hover:bg-[var(--netflix-red-hover)]'
-                    : 'bg-[var(--background-secondary)]/80 backdrop-blur-sm border-white/40 text-white hover:bg-white/20'
+                    ? "bg-[var(--netflix-red)] border-[var(--netflix-red)] text-white hover:bg-[var(--netflix-red-hover)]"
+                    : "bg-[var(--background-secondary)]/80 backdrop-blur-sm border-white/40 text-white hover:bg-white/20"
                 }`}
               >
                 <Plus className="w-5 h-5" />
-                {isAddedToList ? 'Added to List' : 'Add to List'}
+                {isAddedToList ? "Added to List" : "Add to List"}
               </button>
 
               {/* More Info Button */}
@@ -238,12 +263,22 @@ console.log(media);
               onClick={() => setShowTrailer(false)}
               className="absolute -top-10 right-0 text-white hover:text-[var(--netflix-red)] transition-colors"
             >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
             <iframe
-              src={trailerUrl.replace('watch?v=', 'embed/')}
+              src={trailerUrl.replace("watch?v=", "embed/")}
               title="Media Trailer"
               className="w-full h-full rounded-lg"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -254,4 +289,6 @@ console.log(media);
       )}
     </div>
   );
-}
+});
+
+export default MediaHero;

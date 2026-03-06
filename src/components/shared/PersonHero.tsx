@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 import type { PersonDetails } from "@/api/PersonDetails";
 import { formatDate, calculateAge } from "@/utils";
 
@@ -8,16 +8,36 @@ interface PersonHeroProps {
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-export default function PersonHero({ person }: PersonHeroProps) {
-  const profileUrl = useMemo(() => {
-    return person.profile_path
-      ? `${IMAGE_BASE_URL}${person.profile_path}`
-      : null;
-  }, [person.profile_path]);
+// Memoized PersonHero component - avoids re-renders when parent updates
+const PersonHero = memo(function PersonHero({ person }: PersonHeroProps) {
+  // Memoized: Profile URL - avoids string concatenation on every render
+  const profileUrl = useMemo(
+    () =>
+      person.profile_path
+        ? `${IMAGE_BASE_URL}${person.profile_path}`
+        : null,
+    [person.profile_path],
+  );
 
-  const formattedBirthday = useMemo(() => formatDate(person.birthday), [person.birthday]);
-  const formattedDeathday = useMemo(() => formatDate(person.deathday), [person.deathday]);
-  const age = useMemo(() => calculateAge(person.birthday, person.deathday), [person.birthday, person.deathday]);
+  // Memoized: Formatted dates and age - avoids date calculations on every render
+  const formattedBirthday = useMemo(
+    () => formatDate(person.birthday),
+    [person.birthday],
+  );
+  const formattedDeathday = useMemo(
+    () => formatDate(person.deathday),
+    [person.deathday],
+  );
+  const age = useMemo(
+    () => calculateAge(person.birthday, person.deathday),
+    [person.birthday, person.deathday],
+  );
+
+  // Memoized: Also known as aliases (limit to 5)
+  const aliases = useMemo(
+    () => person.also_known_as?.slice(0, 5) || [],
+    [person.also_known_as],
+  );
 
   return (
     <div className="relative w-full min-h-[60vh] md:min-h-[70vh] bg-gradient-to-b from-zinc-900 to-black">
@@ -43,7 +63,7 @@ export default function PersonHero({ person }: PersonHeroProps) {
                   src={profileUrl}
                   alt={person.name}
                   className="w-64 md:w-80 rounded-lg shadow-2xl border-2 border-white/20"
-                  loading="eager"
+                  loading="lazy"
                 />
               ) : (
                 <div className="w-64 md:w-80 aspect-[2/3] bg-zinc-800 rounded-lg flex items-center justify-center border-2 border-white/10">
@@ -82,7 +102,8 @@ export default function PersonHero({ person }: PersonHeroProps) {
                   <span className="font-medium">{formattedBirthday}</span>
                   {age !== null && (
                     <span className="text-gray-500">
-                      ({age}{person.deathday ? ` - ${age}` : ''} years)
+                      ({age}
+                      {person.deathday ? ` - ${age}` : ""} years)
                     </span>
                   )}
                 </div>
@@ -112,11 +133,11 @@ export default function PersonHero({ person }: PersonHeroProps) {
             </div>
 
             {/* Also Known As */}
-            {person.also_known_as && person.also_known_as.length > 0 && (
+            {aliases.length > 0 && (
               <div className="space-y-2">
                 <span className="text-gray-400 text-sm">Also Known As:</span>
                 <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                  {person.also_known_as.slice(0, 5).map((alias, index) => (
+                  {aliases.map((alias, index) => (
                     <span
                       key={index}
                       className="text-sm text-gray-300 bg-zinc-800 px-3 py-1 rounded-full"
@@ -132,4 +153,6 @@ export default function PersonHero({ person }: PersonHeroProps) {
       </div>
     </div>
   );
-}
+});
+
+export default PersonHero;

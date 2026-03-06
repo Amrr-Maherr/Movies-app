@@ -1,3 +1,4 @@
+import { memo, useMemo, useCallback } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import Card from "@/components/shared/Card/Card";
 import { Error, Loader } from "@/components/ui";
@@ -11,14 +12,21 @@ interface MovieCardsSectionProps {
   onRetry: () => void;
 }
 
-export default function MovieCardsSection({
+// Memoized MovieCardsSection component - avoids re-renders when parent updates
+const MovieCardsSection = memo(function MovieCardsSection({
   title = "Popular Movies",
   data,
   isLoading,
   error,
   onRetry,
 }: MovieCardsSectionProps) {
-  const movies = data || [];
+  // Memoize movies array to prevent unnecessary re-renders
+  const movies = useMemo(() => data || [], [data]);
+
+  // Memoized retry handler
+  const handleRetry = useCallback(() => {
+    onRetry();
+  }, [onRetry]);
 
   if (isLoading) {
     return (
@@ -34,7 +42,7 @@ export default function MovieCardsSection({
     return (
       <section className="py-8">
         <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
-          <Error retryButtonText="Try Again" onRetry={onRetry} />
+          <Error retryButtonText="Try Again" onRetry={handleRetry} />
         </div>
       </section>
     );
@@ -68,4 +76,6 @@ export default function MovieCardsSection({
       </div>
     </section>
   );
-}
+});
+
+export default MovieCardsSection;
