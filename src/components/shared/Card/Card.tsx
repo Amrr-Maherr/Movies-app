@@ -45,7 +45,13 @@ const Card = memo(({
   const ageRating = useMemo(() => getAgeRating(movie.vote_average), [movie.vote_average]);
   const title = useMemo(() => getTitle(movie), [movie, getTitle]);
 
-  const isTvShow = useMemo(() => "first_air_date" in movie, [movie]);
+  // Determine if it's a TV show using media_type or first_air_date
+  const isTvShow = useMemo(() => {
+    if ("media_type" in movie && movie.media_type) {
+      return movie.media_type === "tv";
+    }
+    return "first_air_date" in movie;
+  }, [movie]);
 
   // Navigate to details page
   const handleNavigate = useCallback(() => {

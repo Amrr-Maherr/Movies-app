@@ -1,0 +1,310 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { ArrowLeft, Clock, Calendar, Star } from "lucide-react";
+import { Loader } from "@/components/ui/loader";
+import { Error } from "@/components/ui/error";
+import FullCreditsSection from "@/components/sections/FullCreditsSection";
+import FetchEpisodeDetails from "@/queries/FetchEpisodeDetails";
+
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
+const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
+
+export default function EpisodeDetailsPage() {
+  const { tvId, seasonNumber, episodeNumber } = useParams<{
+    tvId: string;
+    seasonNumber: string;
+    episodeNumber: string;
+  }>();
+
+  const navigate = useNavigate();
+
+  const { isLoading, data: episode, error, refetch } = FetchEpisodeDetails(
+    Number(tvId),
+    Number(seasonNumber),
+    Number(episodeNumber)
+  );
+
+  if (isLoading) {
+    return <Loader fullscreen size="lg" />;
+  }
+
+  if (error || !episode) {
+    return (
+      <Error
+        fullscreen
+        title="Failed to load episode details"
+        message="We couldn't load the episode information. Please try again."
+        onRetry={() => refetch()}
+      />
+    );
+  }
+
+  // Format runtime
+  const formattedRuntime = episode.runtime
+    ? `${Math.floor(episode.runtime / 60)}h ${episode.runtime % 60}m`
+    : "N/A";
+
+  // Format air date
+  const formattedAirDate = episode.air_date
+    ? new Date(episode.air_date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "TBA";
+
+  // Get still image
+  const stillImageUrl = episode.still_path
+    ? `${IMAGE_BASE_URL}${episode.still_path}`
+    : null;
+
+  // Get guest stars
+  const guestStars = episode.guest_stars?.slice(0, 10) || [];
+
+  // Get key crew (Director, Writer)
+  const keyCrew = episode.crew?.filter(
+    (member) => member.job === "Director" || member.job === "Writer"
+  ) || [];
+
+  return (
+    <motion.div
+      className="min-h-screen bg-[var(--background-primary)]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {/* Back Button */}
+      <div className="absolute top-4 left-4 z-50">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-full hover:bg-black/80 transition-all transform hover:scale-105"
+        >
+          <ArrowLeft className="h-5 w-5" />
+          <span className="hidden md:inline">Back to Series</span>
+        </button>
+      </div>
+
+      {/* Hero Section with Episode Still */}
+      <div className="relative w-full h-[70vh] min-h-[500px]">
+        {/* Background Image */}
+        <div className="absolute inset-0 w-full h-full">
+          {stillImageUrl ? (
+            <img
+              src={stillImageUrl}
+              alt={episode.name}
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
+              <div className="text-center">
+                <h1 className="text-6xl font-bold text-zinc-600">
+                  S{episode.season_number}:E{episode.episode_number}
+                </h1>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Gradient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-primary)] via-[var(--background-primary)]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+
+        {/* Content */}
+        <div className="relative h-full container mx-auto px-4 md:px-8 lg:px-16 flex items-end pb-16">
+          <div className="flex-1 space-y-4 md:space-y-6">
+            {/* Episode Number Badge */}
+            <div className="flex items-center gap-3">
+              <span className="bg-[var(--netflix-red)] text-white px-3 py-1 rounded-md text-sm font-bold">
+                Season {episode.season_number}
+              </span>
+              <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-md text-sm font-medium">
+                Episode {episode.episode_number}
+              </span>
+            </div>
+
+            {/* Episode Title */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg leading-tight max-w-4xl">
+              {episode.name}
+            </h1>
+
+            {/* Meta Row */}
+            <div className="flex items-center gap-4 flex-wrap">
+              {/* Air Date */}
+              <div className="flex items-center gap-2 text-gray-300">
+                <Calendar className="h-5 w-5" />
+                <span>{formattedAirDate}</span>
+              </div>
+
+              {/* Runtime */}
+              <div className="flex items-center gap-2 text-gray-300">
+                <Clock className="h-5 w-5" />
+                <span>{formattedRuntime}</span>
+              </div>
+
+              {/* Rating */}
+              {episode.vote_average > 0 && (
+                <div className="flex items-center gap-2 text-yellow-400">
+                  <Star className="h-5 w-5 fill-yellow-400" />
+                  <span className="font-semibold">
+                    {episode.vote_average.toFixed(1)}
+                  </span>
+                  <span className="text-gray-400 text-sm">
+                    ({episode.vote_count} votes)
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Overview */}
+            {episode.overview && (
+              <p className="text-gray-200 text-base md:text-lg leading-relaxed max-w-3xl">
+                {episode.overview}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Guest Stars Section */}
+      {guestStars.length > 0 && (
+        <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
+          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
+              Guest Stars
+            </h2>
+            <FullCreditsSection
+              cast={guestStars.map((guest) => ({
+                id: guest.id,
+                name: guest.name,
+                character: guest.character || "Guest role",
+                profile_path: guest.profile_path,
+                order: 0,
+              }))}
+              crew={[]}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Key Crew Section */}
+      {keyCrew.length > 0 && (
+        <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
+          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
+              Production Crew
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {keyCrew.map((member) => (
+                <div
+                  key={member.id}
+                  className="bg-zinc-900/50 rounded-lg p-4 text-center hover:bg-zinc-800/50 transition-colors"
+                >
+                  {member.profile_path ? (
+                    <img
+                      src={`${POSTER_BASE_URL}${member.profile_path}`}
+                      alt={member.name}
+                      className="w-full aspect-[2/3] object-cover rounded-md mb-3"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full aspect-[2/3] bg-zinc-800 rounded-md mb-3 flex items-center justify-center">
+                      <span className="text-4xl text-zinc-600">🎬</span>
+                    </div>
+                  )}
+                  <h3 className="text-sm font-medium text-white line-clamp-1">
+                    {member.name}
+                  </h3>
+                  <p className="text-xs text-gray-400 mt-1">{member.job}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Episode Info Section */}
+      <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Episode Details Card */}
+            <div className="bg-zinc-900/50 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">
+                Episode Details
+              </h3>
+              <dl className="space-y-3">
+                <div className="flex justify-between">
+                  <dt className="text-gray-400">Season</dt>
+                  <dd className="text-white font-medium">
+                    {episode.season_number}
+                  </dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-gray-400">Episode</dt>
+                  <dd className="text-white font-medium">
+                    {episode.episode_number}
+                  </dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-gray-400">Air Date</dt>
+                  <dd className="text-white font-medium">{formattedAirDate}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-gray-400">Runtime</dt>
+                  <dd className="text-white font-medium">{formattedRuntime}</dd>
+                </div>
+                {episode.production_code && (
+                  <div className="flex justify-between">
+                    <dt className="text-gray-400">Production Code</dt>
+                    <dd className="text-white font-medium">
+                      {episode.production_code}
+                    </dd>
+                  </div>
+                )}
+              </dl>
+            </div>
+
+            {/* Navigation Card */}
+            <div className="bg-zinc-900/50 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">
+                Navigation
+              </h3>
+              <div className="space-y-3">
+                <button
+                  onClick={() =>
+                    navigate(
+                      `/tv/${tvId}/season/${seasonNumber}/episode/${episode.episode_number - 1}`
+                    )
+                  }
+                  disabled={episode.episode_number <= 1}
+                  className="w-full flex items-center justify-between bg-zinc-800 hover:bg-zinc-700 disabled:bg-zinc-800/50 disabled:cursor-not-allowed text-white px-4 py-3 rounded-lg transition-colors"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                  <span>Previous Episode</span>
+                  <span className="text-gray-400 text-sm">
+                    Episode {episode.episode_number - 1}
+                  </span>
+                </button>
+                <button
+                  onClick={() =>
+                    navigate(
+                      `/tv/${tvId}/season/${seasonNumber}/episode/${episode.episode_number + 1}`
+                    )
+                  }
+                  className="w-full flex items-center justify-between bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-3 rounded-lg transition-colors"
+                >
+                  <span>Next Episode</span>
+                  <span className="text-gray-400 text-sm">
+                    Episode {episode.episode_number + 1}
+                  </span>
+                  <ArrowLeft className="h-5 w-5 rotate-180" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </motion.div>
+  );
+}

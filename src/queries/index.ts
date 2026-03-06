@@ -13,3 +13,5 @@ export { default as useAiringTodayTv } from "./FetchAiringTodayTv";
 export { default as useOnTheAirTv } from "./FetchOnTheAirTv";
 export { default as FetchTvShowDetails } from "./FetchTvShowDetails";
 export { default as FetchTvSeasonDetails } from "./FetchTvSeasonDetails";
+export { default as FetchPersonDetails } from "./FetchPersonDetails";
+export { default as FetchPersonCredits } from "./FetchPersonCredits";

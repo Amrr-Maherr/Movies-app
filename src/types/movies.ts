@@ -63,7 +63,7 @@ export interface TvShow {
   original_language: string;
   original_name: string;
   popularity: number;
-  origin_country: string[];
+  origin_country?: string[];
   vote_count: number;
 }
 

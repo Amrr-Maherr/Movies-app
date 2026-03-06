@@ -23,7 +23,15 @@ export function KeywordsSection({
 
   return (
     <div className={cn("w-full", className)}>
-      <div className="flex items-center justify-start gap-2 flex-wrap">
+      <Slider
+        slidesPerView={6}
+        slidesPerViewMobile={2}
+        spaceBetween={12}
+        hideNavigation={true}
+        swiperOptions={{
+          autoplay: false,
+        }}
+      >
         {keywords.map((keyword, index) => (
           <motion.button
             key={`${keyword}-${index}`}
@@ -51,7 +59,7 @@ export function KeywordsSection({
               "focus:outline-none focus:ring-2 focus:ring-netflix-red/60",
               "cursor-pointer select-none",
               "whitespace-nowrap",
-              "w-fit",
+              "w-fit"
             )}
             type="button"
             aria-label={`Filter by keyword: ${keyword}`}
@@ -59,7 +67,7 @@ export function KeywordsSection({
             {keyword}
           </motion.button>
         ))}
-      </div>
+      </Slider>
     </div>
   );
 }

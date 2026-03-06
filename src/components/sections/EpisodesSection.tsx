@@ -178,6 +178,8 @@ const EpisodesSection = ({ seasons, tvShowId }: EpisodesSectionProps) => {
                           <EpisodeCard
                             key={episode.id}
                             episode={episode}
+                            tvShowId={tvShowId}
+                            seasonNumber={season.season_number}
                           />
                         ))}
                       </Slider>

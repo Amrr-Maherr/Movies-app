@@ -6,9 +6,24 @@
 import type { Movie, TvShow } from "./movies";
 
 /**
- * Union type for media that can be displayed in hero
+ * Movie with media_type for person credits
  */
-export type HeroMedia = Movie | TvShow;
+export interface MovieWithMediaType extends Movie {
+  media_type?: "movie" | "tv";
+}
+
+/**
+ * TV Show with media_type for person credits
+ */
+export interface TvShowWithMediaType extends TvShow {
+  media_type?: "movie" | "tv";
+}
+
+/**
+ * Union type for media that can be displayed in hero
+ * Extended to support media_type for person credits
+ */
+export type HeroMedia = Movie | TvShow | MovieWithMediaType | TvShowWithMediaType;
 
 /**
  * Props for HeroBackground component

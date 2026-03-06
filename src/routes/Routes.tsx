@@ -4,6 +4,8 @@ import { AnimatePresence } from "framer-motion";
 import { Loader } from "@/components/ui";
 import MovieDetails from "@/pages/MovieDetails";
 import TVShowDetailsPage from "@/pages/TVShowDetails";
+import PersonDetailsPage from "@/pages/PersonDetails";
+import EpisodeDetailsPage from "@/pages/EpisodeDetailsPage";
 
 // Main pages
 const Home = lazy(() => import("../pages/Home"));
@@ -55,6 +57,8 @@ export default function AppRoutes() {
           <Route path="/session" element={<Session />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/tv/:id" element={<TVShowDetailsPage />} />
+          <Route path="/tv/:tvId/season/:seasonNumber/episode/:episodeNumber" element={<EpisodeDetailsPage />} />
+          <Route path="/person/:id" element={<PersonDetailsPage />} />
 
           {/* Footer pages */}
           <Route path="/faq" element={<FAQ />} />

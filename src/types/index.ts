@@ -45,3 +45,12 @@ export type {
   Provider,
   WatchProvidersSectionProps,
 } from "./mediaDetails";
+
+// Person types
+export type {
+  PersonDetails,
+  PersonExternalIds,
+  CastCredit,
+  CrewCredit,
+  CombinedCredits,
+} from "./person";
