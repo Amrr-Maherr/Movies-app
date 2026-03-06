@@ -1,54 +1,55 @@
 import { useState, useMemo, useCallback } from 'react';
 import { Play, Plus, Info } from 'lucide-react';
-import type { MovieDetails } from '@/types';
+import type { MediaDetails, Video, Genre, CastMember, Keyword } from '@/types';
 
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/original';
 const POSTER_BASE_URL = 'https://image.tmdb.org/t/p/w500';
 const YOUTUBE_BASE_URL = 'https://www.youtube.com/watch?v=';
 
-interface MovieHeroProps {
-  movie: MovieDetails;
+interface MediaHeroProps {
+  media: MediaDetails;
   onPlayTrailer?: () => void;
   onAddToList?: () => void;
 }
 
-export default function MovieHero({ movie, onPlayTrailer, onAddToList }: MovieHeroProps) {
+export default function MediaHero({ media, onPlayTrailer, onAddToList }: MediaHeroProps) {
   const [isAddedToList, setIsAddedToList] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
 
   // Get first YouTube trailer
   const trailerUrl = useMemo(() => {
-    if (!movie?.videos?.results) return null;
-    const trailer = movie.videos.results.find(
-      (video) => video.type === 'Trailer' && video.site === 'YouTube'
+    if (!media?.videos?.results) return null;
+    const trailer = media.videos.results.find(
+      (video: Video) => video.type === 'Trailer' && video.site === 'YouTube'
     );
     return trailer ? `${YOUTUBE_BASE_URL}${trailer.key}` : null;
-  }, [movie]);
+  }, [media]);
 
   // Get first 3 cast members
   const topCast = useMemo(() => {
-    if (!movie?.credits?.cast) return [];
-    return movie.credits.cast.slice(0, 3);
-  }, [movie]);
+    if (!media?.credits?.cast) return [];
+    return media.credits.cast.slice(0, 3);
+  }, [media]);
 
-  // Get release year
+  // Get release year (supports both movie and TV show)
   const releaseYear = useMemo(() => {
-    if (!movie?.release_date) return '';
-    return new Date(movie.release_date).getFullYear().toString();
-  }, [movie]);
+    const date = 'release_date' in media ? media.release_date : media.first_air_date;
+    if (!date) return '';
+    return new Date(date).getFullYear().toString();
+  }, [media]);
 
   // Truncate overview to 150 characters
   const truncatedOverview = useMemo(() => {
-    if (!movie?.overview) return '';
-    if (movie.overview.length <= 150) return movie.overview;
-    return movie.overview.slice(0, 150) + '...';
-  }, [movie]);
+    if (!media?.overview) return '';
+    if (media.overview.length <= 150) return media.overview;
+    return media.overview.slice(0, 150) + '...';
+  }, [media]);
 
   // Format rating to one decimal place
   const formattedRating = useMemo(() => {
-    if (!movie?.vote_average) return 'N/A';
-    return movie.vote_average.toFixed(1);
-  }, [movie]);
+    if (!media?.vote_average) return 'N/A';
+    return media.vote_average.toFixed(1);
+  }, [media]);
 
   const handlePlayTrailer = useCallback(() => {
     if (onPlayTrailer) {
@@ -66,15 +67,17 @@ export default function MovieHero({ movie, onPlayTrailer, onAddToList }: MovieHe
     }
   }, [onAddToList]);
 
-  const backdropUrl = movie.backdrop_path
-    ? `${IMAGE_BASE_URL}${movie.backdrop_path}`
+  const backdropUrl = media.backdrop_path
+    ? `${IMAGE_BASE_URL}${media.backdrop_path}`
     : 'https://via.placeholder.com/1920x1080?text=No+Image';
 
-  const posterUrl = movie.poster_path
-    ? `${POSTER_BASE_URL}${movie.poster_path}`
+  const posterUrl = media.poster_path
+    ? `${POSTER_BASE_URL}${media.poster_path}`
     : null;
 
-  const title = movie.title || movie.original_title;
+  // Get title (supports both movie.title and tv.name)
+  const title = 'title' in media ? media.title : media.name;
+console.log(media);
 
   return (
     <div className="relative w-full h-[85vh] min-h-[600px]">
@@ -108,7 +111,7 @@ export default function MovieHero({ movie, onPlayTrailer, onAddToList }: MovieHe
             </div>
           )}
 
-          {/* Movie Info */}
+          {/* Media Info */}
           <div className="flex-1 space-y-4 md:space-y-5">
             {/* Title */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg leading-tight max-w-4xl">
@@ -139,9 +142,9 @@ export default function MovieHero({ movie, onPlayTrailer, onAddToList }: MovieHe
               <span className="text-[var(--text-muted)]">•</span>
 
               {/* Genres */}
-              {movie.genres && movie.genres.length > 0 && (
+              {media.genres && media.genres.length > 0 && (
                 <div className="flex items-center gap-2 flex-wrap">
-                  {movie.genres.slice(0, 4).map((genre) => (
+                  {media.genres.slice(0, 4).map((genre: Genre) => (
                     <span
                       key={genre.id}
                       className="bg-white/10 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-white/20 transition-colors cursor-default"
@@ -162,7 +165,7 @@ export default function MovieHero({ movie, onPlayTrailer, onAddToList }: MovieHe
             {topCast.length > 0 && (
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-[var(--text-muted)] text-sm">Starring:</span>
-                {topCast.map((actor) => (
+                {topCast.map((actor: CastMember) => (
                   <span
                     key={actor.id}
                     className="text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors cursor-default"
@@ -174,9 +177,9 @@ export default function MovieHero({ movie, onPlayTrailer, onAddToList }: MovieHe
             )}
 
             {/* Keywords/Tags (Optional) */}
-            {movie.keywords?.keywords && movie.keywords.keywords.length > 0 && (
+            {media.keywords && 'keywords' in media.keywords && media.keywords.keywords && media.keywords.keywords.length > 0 && (
               <div className="flex items-center gap-2 flex-wrap pt-2">
-                {movie.keywords.keywords.slice(0, 5).map((keyword) => (
+                {media.keywords.keywords.slice(0, 5).map((keyword: Keyword) => (
                   <span
                     key={keyword.id}
                     className="text-[var(--text-muted)] text-xs bg-[var(--background-secondary)] px-2 py-1 rounded hover:bg-[var(--background-tertiary)] transition-colors cursor-default"
@@ -241,7 +244,7 @@ export default function MovieHero({ movie, onPlayTrailer, onAddToList }: MovieHe
             </button>
             <iframe
               src={trailerUrl.replace('watch?v=', 'embed/')}
-              title="Movie Trailer"
+              title="Media Trailer"
               className="w-full h-full rounded-lg"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

@@ -1,6 +1,6 @@
 import FetchMovieDetails from '@/queries/FetchMovieDetails';
 import { useParams } from 'react-router-dom';
-import MovieHero from '@/components/sections/MovieHero';
+import MediaHero from '@/components/shared/MediaHero';
 import { Loader } from '@/components/ui/loader';
 import { Error } from '@/components/ui/error';
 import type { MovieDetails } from '@/types';
@@ -32,7 +32,7 @@ export default function MovieDetails() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
-     <MovieHero movie={data} />
+     <MediaHero media={data} />
     </motion.div>
   );
 }

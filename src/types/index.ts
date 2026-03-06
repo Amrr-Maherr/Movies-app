@@ -33,3 +33,10 @@ export type {
   Keyword,
   Keywords,
 } from "./movieDetails";
+
+// Media Details types (shared for Movies and TV Shows)
+export type {
+  TvShowDetails,
+  MediaDetails,
+  MediaHeroProps,
+} from "./mediaDetails";
