@@ -1,6 +1,8 @@
-import { memo } from "react";
+import { memo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 
 export interface PersonCardProps {
+  id: number;
   name: string;
   profileImage: string | null;
   role: string;
@@ -9,11 +11,33 @@ export interface PersonCardProps {
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w185";
 
-const PersonCard = memo(({ name, profileImage, role }: PersonCardProps) => {
+const PersonCard = memo(({ id, name, profileImage, role }: PersonCardProps) => {
+  const navigate = useNavigate();
   const imageUrl = profileImage ? `${IMAGE_BASE_URL}${profileImage}` : null;
 
+  const handleClick = useCallback(() => {
+    navigate(`/person/${id}`);
+  }, [navigate, id]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleClick();
+      }
+    },
+    [handleClick]
+  );
+
   return (
-    <div className="group relative cursor-pointer">
+    <div
+      className="group relative cursor-pointer"
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+      aria-label={`View ${name}'s profile`}
+    >
       {/* Card Container */}
       <div className="relative overflow-hidden rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-2xl">
         {/* Image Container */}

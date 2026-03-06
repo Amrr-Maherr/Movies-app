@@ -178,6 +178,7 @@ export default function MediaInfoSection({ media }: MediaInfoSectionProps) {
                   {media.credits.cast.slice(0, 12).map((actor) => (
                     <PersonCard
                       key={actor.id}
+                      id={actor.id}
                       name={actor.name}
                       profileImage={actor.profile_path}
                       role={actor.character || "Unknown role"}

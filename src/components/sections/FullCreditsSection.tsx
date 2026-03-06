@@ -82,6 +82,7 @@ export default function FullCreditsSection({
               {topBilledCast.map((actor) => (
                 <PersonCard
                   key={actor.id}
+                  id={actor.id}
                   name={actor.name}
                   profileImage={actor.profile_path}
                   role={actor.character || "Unknown role"}
@@ -107,6 +108,7 @@ export default function FullCreditsSection({
               {keyCrew.map((member) => (
                 <PersonCard
                   key={member.id}
+                  id={member.id}
                   name={member.name}
                   profileImage={member.profile_path}
                   role={member.job}
