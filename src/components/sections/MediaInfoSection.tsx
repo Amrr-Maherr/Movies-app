@@ -1,93 +1,11 @@
 import type { MediaDetails, Genre } from "@/types";
+import { formatRuntime, formatDate, getLanguageName, formatNumber, getReleaseDate, getTitle, getRuntime } from "@/utils";
 import PersonCard from "@/components/shared/cards/PersonCard";
 import Slider from "@/components/shared/Slider/slider";
 import ProductionSection from "@/components/sections/ProductionSection";
 
 interface MediaInfoSectionProps {
   media: MediaDetails;
-}
-
-/**
- * Formats runtime from minutes to hours and minutes
- */
-function formatRuntime(minutes: number | null): string {
-  if (!minutes) return "";
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  return `${hours}h ${mins}m`;
-}
-
-/**
- * Formats date string to readable format
- */
-function formatDate(dateString: string): string {
-  if (!dateString) return "";
-  try {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  } catch {
-    return dateString;
-  }
-}
-
-/**
- * Gets language name from ISO code
- */
-function getLanguageName(code: string): string {
-  if (!code) return "";
-  try {
-    const displayNames = new Intl.DisplayNames(["en"], { type: "language" });
-    return displayNames.of(code) || "";
-  } catch {
-    return "";
-  }
-}
-
-/**
- * Formats large numbers with K/M suffix
- */
-function formatNumber(num: number): string {
-  if (num >= 1_000_000_000) {
-    return `${(num / 1_000_000_000).toFixed(1)}B`;
-  }
-  if (num >= 1_000_000) {
-    return `${(num / 1_000_000).toFixed(0)}M`;
-  }
-  if (num >= 1_000) {
-    return `${(num / 1_000).toFixed(0)}K`;
-  }
-  return num.toString();
-}
-
-/**
- * Extracts release date (supports both movie and TV show)
- */
-function getReleaseDate(media: MediaDetails): string {
-  return "release_date" in media ? media.release_date : media.first_air_date;
-}
-
-/**
- * Extracts title (supports both movie.title and tv.name)
- */
-function getTitle(media: MediaDetails): string {
-  return "title" in media ? media.title : media.name;
-}
-
-/**
- * Gets runtime (supports both movie and TV show)
- */
-function getRuntime(media: MediaDetails): number | null {
-  if ("runtime" in media && media.runtime) {
-    return media.runtime;
-  }
-  // For TV shows, try last_episode_to_air runtime
-  if ("last_episode_to_air" in media && media.last_episode_to_air?.runtime) {
-    return media.last_episode_to_air.runtime;
-  }
-  return null;
 }
 
 export default function MediaInfoSection({ media }: MediaInfoSectionProps) {

@@ -11,51 +11,8 @@ import WatchProvidersSection from "@/components/sections/WatchProvidersSection";
 import EpisodesSection from "@/components/sections/EpisodesSection";
 import MoreLikeThisSection from "@/components/sections/MoreLikeThisSection";
 import FetchTvShowDetails from "@/queries/FetchTvShowDetails";
-import type { TvShowDetails, Video, Keyword, Provider } from "@/types";
-
-/**
- * Extract keywords array from TV show keywords response
- * TMDB returns { results: Keyword[] } for TV shows
- */
-function extractKeywords(keywordsData: TvShowDetails["keywords"]): string[] {
-  if (!keywordsData?.results) return [];
-  return keywordsData.results.map((kw: Keyword) => kw.name);
-}
-
-/**
- * Extract watch providers from TV show watch/providers response
- */
-function extractWatchProviders(tvShow: TvShowDetails): Provider[] {
-  const providers: Provider[] = [];
-
-  // Check US region first, then fallback to any region
-  const usProviders = tvShow.watch_providers?.US;
-
-  if (usProviders) {
-    if (usProviders.flatrate) {
-      usProviders.flatrate.forEach((p: { provider_id: number; logo_path: string; provider_name: string }) => {
-        providers.push({ id: p.provider_id, name: p.provider_name, logo_path: p.logo_path, provider_type: "Subscription" });
-      });
-    }
-    if (usProviders.rent) {
-      usProviders.rent.forEach((p: { provider_id: number; logo_path: string; provider_name: string }) => {
-        providers.push({ id: p.provider_id, name: p.provider_name, logo_path: p.logo_path, provider_type: "Rent" });
-      });
-    }
-    if (usProviders.buy) {
-      usProviders.buy.forEach((p: { provider_id: number; logo_path: string; provider_name: string }) => {
-        providers.push({ id: p.provider_id, name: p.provider_name, logo_path: p.logo_path, provider_type: "Buy" });
-      });
-    }
-    if (usProviders.free) {
-      usProviders.free.forEach((p: { provider_id: number; logo_path: string; provider_name: string }) => {
-        providers.push({ id: p.provider_id, name: p.provider_name, logo_path: p.logo_path, provider_type: "Free" });
-      });
-    }
-  }
-
-  return providers;
-}
+import { extractKeywords, extractWatchProviders } from "@/utils";
+import type { Video } from "@/types";
 
 export default function TVShowDetailsPage() {
   const { id } = useParams<{ id: string }>();

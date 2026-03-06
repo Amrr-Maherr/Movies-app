@@ -1,21 +1,8 @@
 import { motion } from "framer-motion";
-import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
+import { getMatchScore, getAgeRating } from "@/utils/movieHelpers";
+import { getTitle, getReleaseYear } from "@/utils";
 import ActionButtons from "./ActionButtons";
 import type { HeroContentProps } from "@/types";
-
-// ============================================
-// HELPER FUNCTIONS
-// ============================================
-const getTitle = (media: HeroContentProps["movie"]) => {
-  return "title" in media ? media.title : media.name;
-};
-
-const getReleaseYear = (media: HeroContentProps["movie"]) => {
-  if ("release_date" in media) {
-    return getYear(media.release_date);
-  }
-  return "first_air_date" in media ? getYear(media.first_air_date) : undefined;
-};
 
 // ============================================
 // COMPONENT

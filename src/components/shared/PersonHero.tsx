@@ -1,42 +1,12 @@
 import { useMemo } from "react";
 import type { PersonDetails } from "@/api/PersonDetails";
+import { formatDate, calculateAge } from "@/utils";
 
 interface PersonHeroProps {
   person: PersonDetails;
 }
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
-
-/**
- * Formats a date string to a readable format
- */
-function formatDate(dateString: string | null): string {
-  if (!dateString) return "";
-  try {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  } catch {
-    return dateString;
-  }
-}
-
-/**
- * Calculates age from birthday and optional deathday
- */
-function calculateAge(birthday: string | null, deathday: string | null): number | null {
-  if (!birthday) return null;
-  const birth = new Date(birthday);
-  const end = deathday ? new Date(deathday) : new Date();
-  let age = end.getFullYear() - birth.getFullYear();
-  const monthDiff = end.getMonth() - birth.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && end.getDate() < birth.getDate())) {
-    age--;
-  }
-  return age;
-}
 
 export default function PersonHero({ person }: PersonHeroProps) {
   const profileUrl = useMemo(() => {

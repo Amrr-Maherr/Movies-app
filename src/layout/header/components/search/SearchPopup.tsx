@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useDebounce } from "@/utils";
 import SearchResultCard from "./SearchResultCard";
 import { useSearch } from "@/queries/FetchSearch";
 import { Loader } from "@/components/ui";
@@ -11,23 +12,6 @@ import { useNavigate } from "react-router-dom";
 interface SearchPopupProps {
   isOpen: boolean;
   onClose: () => void;
-}
-
-// Debounce hook for search input
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
 }
 
 export default function SearchPopup({ isOpen, onClose }: SearchPopupProps) {

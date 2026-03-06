@@ -1,37 +1,12 @@
 import { useMemo } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import Card from "@/components/shared/Card/Card";
+import { getKnownForItems } from "@/utils";
 import type { CastCredit, CrewCredit } from "@/api/PersonCredits";
 
 interface KnownForSectionProps {
   cast: CastCredit[];
   crew: CrewCredit[];
-}
-
-/**
- * Combines and sorts credits by popularity to show "known for" items
- */
-function getKnownForItems(cast: CastCredit[], crew: CrewCredit[]) {
-  // Combine cast and crew credits
-  const allCredits = [...cast, ...crew];
-  
-  // Filter out items without posters
-  const withPosters = allCredits.filter(
-    (credit) => credit.poster_path !== null && credit.poster_path !== undefined
-  );
-  
-  // Sort by popularity and vote average
-  const sorted = withPosters.sort((a, b) => {
-    // First by popularity
-    if (b.popularity !== a.popularity) {
-      return b.popularity - a.popularity;
-    }
-    // Then by vote average
-    return b.vote_average - a.vote_average;
-  });
-  
-  // Take top 12
-  return sorted.slice(0, 12);
 }
 
 export default function KnownForSection({ cast, crew }: KnownForSectionProps) {

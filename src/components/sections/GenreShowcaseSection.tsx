@@ -1,4 +1,5 @@
 import SectionHeader from "@/components/shared/SectionHeader";
+import { getTitle } from "@/utils";
 import type { HeroMedia } from "@/types";
 
 interface GenreShowcaseSectionProps {
@@ -6,10 +7,6 @@ interface GenreShowcaseSectionProps {
   genre: string;
   mediaType: "movie" | "tv";
 }
-
-const getTitle = (media: HeroMedia) => {
-  return "title" in media ? media.title : media.name;
-};
 
 export default function GenreShowcaseSection({ movies, genre, mediaType }: GenreShowcaseSectionProps) {
   const showcaseMovie = movies[0];

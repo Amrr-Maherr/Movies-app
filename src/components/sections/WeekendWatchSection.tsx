@@ -1,15 +1,12 @@
 import { Popcorn, Star } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
+import { getTitle } from "@/utils";
 import type { HeroMedia } from "@/types";
 
 interface WeekendWatchSectionProps {
   movies: HeroMedia[];
   mediaType: "movie" | "tv";
 }
-
-const getTitle = (media: HeroMedia) => {
-  return "title" in media ? media.title : media.name;
-};
 
 export default function WeekendWatchSection({ movies, mediaType }: WeekendWatchSectionProps) {
   const featuredMovie = movies[0];

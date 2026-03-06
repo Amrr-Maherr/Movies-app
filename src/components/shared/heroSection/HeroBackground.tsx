@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { getBackdropUrl } from "@/utils/tmdb";
+import { getTitle } from "@/utils";
 import type { HeroBackgroundProps } from "@/types";
 import { useMemo } from "react";
 
@@ -8,13 +9,6 @@ import { useMemo } from "react";
 // ============================================
 const SLIDE_INTERVAL = 8000;
 const ZOOM_SCALE = 1.05;
-
-// ============================================
-// HELPER FUNCTIONS
-// ============================================
-const getTitle = (media: HeroBackgroundProps["movie"]) => {
-  return "title" in media ? media.title : media.name;
-};
 
 // ============================================
 // COMPONENT
