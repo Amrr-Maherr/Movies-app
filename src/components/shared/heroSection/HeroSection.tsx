@@ -1,9 +1,9 @@
+import { memo, useMemo, useCallback } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import HeroSlide from "./HeroSlide";
 import { Autoplay } from "swiper/modules";
 import type { HeroMedia } from "@/types";
 import { Error, Loader } from "@/components/ui";
-import { useMemo } from "react";
 
 // ============================================
 // CONSTANTS
@@ -25,12 +25,17 @@ export interface HeroSectionProps {
 // ============================================
 // MAIN COMPONENT
 // ============================================
-export default function HeroSection({ data, isLoading, error, onRetry }: HeroSectionProps) {
+const HeroSection = memo(function HeroSection({ data, isLoading, error, onRetry }: HeroSectionProps) {
   // Get featured media with memoization
   const featuredMedia = useMemo(
     () => data || [],
     [data]
   );
+
+  // Memoized retry handler
+  const handleRetry = useCallback(() => {
+    onRetry();
+  }, [onRetry]);
 
   // Loading state - Theme-aware background
   if (isLoading || featuredMedia.length === 0) {
@@ -39,7 +44,7 @@ export default function HeroSection({ data, isLoading, error, onRetry }: HeroSec
     );
   }
   if (error || featuredMedia.length == 0) {
-    return <Error retryButtonText="Try Again" onRetry={onRetry} />;
+    return <Error retryButtonText="Try Again" onRetry={handleRetry} />;
   }
 
   return (
@@ -75,4 +80,6 @@ export default function HeroSection({ data, isLoading, error, onRetry }: HeroSec
       <div className="absolute bottom-0 left-0 right-0 h-24 sm:h-32 bg-gradient-to-t from-[var(--background-primary)] to-transparent z-20 pointer-events-none" />
     </section>
   );
-}
+});
+
+export default HeroSection;

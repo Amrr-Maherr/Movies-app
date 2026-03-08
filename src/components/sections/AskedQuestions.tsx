@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState, useCallback } from "react";
 import { ChevronDown } from "lucide-react";
 
 const faqs = [
@@ -36,12 +36,12 @@ const faqs = [
   },
 ];
 
-export default function AskedQuestions() {
+const AskedQuestions = memo(function AskedQuestions() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const toggleAccordion = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const toggleAccordion = useCallback((index: number) => {
+    setOpenIndex((prev) => (prev === index ? null : index));
+  }, []);
 
   return (
     <section className="space-y-10 py-16">
@@ -50,9 +50,9 @@ export default function AskedQuestions() {
           Frequently Asked Questions
         </h2>
         <p className="text-base md:text-lg text-gray-400 max-w-2xl mx-auto">
-          Have a different question and can't find the answer you're looking
-          for? Reach out to our support team by sending us an email and we'll
-          get back to you as soon as we can.
+          Have a different question and can&apos;t find the answer you&apos;re
+          looking for? Reach out to our support team by sending us an email and
+          we&apos;ll get back to you as soon as we can.
         </p>
       </div>
 
@@ -101,4 +101,6 @@ export default function AskedQuestions() {
       </div>
     </section>
   );
-}
+});
+
+export default AskedQuestions;

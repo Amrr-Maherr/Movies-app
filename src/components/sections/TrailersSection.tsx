@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { memo, useState, useMemo, useCallback } from "react";
 import type { Video } from "@/types";
 import Slider from "@/components/shared/Slider/slider";
 import TrailerCard from "@/components/shared/cards/TrailerCard";
@@ -8,11 +8,11 @@ interface TrailersSectionProps {
   videos: Video[];
 }
 
-export default function TrailersSection({ videos }: TrailersSectionProps) {
+const TrailersSection = memo(function TrailersSection({ videos }: TrailersSectionProps) {
   const [selectedTrailer, setSelectedTrailer] = useState<Video | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Filter and get YouTube trailers only
+  // Memoized: Filter and get YouTube trailers only
   const youtubeTrailers = useMemo(() => {
     return videos
       .filter(
@@ -77,4 +77,6 @@ export default function TrailersSection({ videos }: TrailersSectionProps) {
       )}
     </>
   );
-}
+});
+
+export default TrailersSection;

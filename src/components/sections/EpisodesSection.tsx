@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import SeasonCard from "@/components/shared/cards/SeasonCard";
 import type { Season } from "@/types";
 
@@ -6,11 +7,16 @@ interface EpisodesSectionProps {
   tvShowId: number;
 }
 
-const EpisodesSection = ({ seasons, tvShowId }: EpisodesSectionProps) => {
-  // Filter out special seasons (season 0) and sort by season number
-  const sortedSeasons = seasons
-    .filter((season) => season.season_number > 0)
-    .sort((a, b) => a.season_number - b.season_number);
+const EpisodesSection = memo(function EpisodesSection({
+  seasons,
+  tvShowId,
+}: EpisodesSectionProps) {
+  // Memoized: Filter and sort seasons to avoid re-computation on every render
+  const sortedSeasons = useMemo(() => {
+    return seasons
+      .filter((season) => season.season_number > 0)
+      .sort((a, b) => a.season_number - b.season_number);
+  }, [seasons]);
 
   if (!sortedSeasons || sortedSeasons.length === 0) {
     return null;
@@ -36,6 +42,6 @@ const EpisodesSection = ({ seasons, tvShowId }: EpisodesSectionProps) => {
       </div>
     </section>
   );
-};
+});
 
 export default EpisodesSection;

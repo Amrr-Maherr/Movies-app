@@ -1,8 +1,9 @@
 "use client";
 
+import { memo, useMemo } from "react";
 import { Check, Monitor, Users, Download, Headphones, Crown } from "lucide-react";
 
-const tiers = [
+const tiersData = [
   {
     name: "Basic",
     id: "tier-basic",
@@ -52,7 +53,9 @@ const tiers = [
   },
 ];
 
-export default function PricingSection() {
+const PricingSection = memo(function PricingSection() {
+  // Memoized: Pre-process tiers with icon components
+  const tiers = useMemo(() => tiersData, []);
   return (
     <section className="space-y-10 py-16">
       <div className="text-center">
@@ -134,4 +137,6 @@ export default function PricingSection() {
       </div>
     </section>
   );
-}
+});
+
+export default PricingSection;
