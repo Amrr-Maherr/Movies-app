@@ -1,21 +1,18 @@
-import { useState, useEffect, useCallback, memo } from "react";
-import { Menu } from "lucide-react";
-import { motion } from "framer-motion";
+import { useState, useEffect, memo } from "react";
+import { Bell, ChevronDown } from "lucide-react";
 import Logo from "@/components/shared/logo/Logo";
 import NavLinks from "./components/NavLinks";
 import SearchButton from "./components/search/SearchButton";
 import ProfileMenu from "./components/ProfileMenu";
-import MobileSidebar from "./components/MobileSidebar";
+import BrowseDropdown from "./components/BrowseDropdown";
 import { HeaderLinks } from "@/data/header";
 import { cn } from "@/lib/utils";
 
-// Memoized Header component - avoids re-renders when parent updates
 const Header = memo(function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isBrowseMenuOpen, setIsBrowseMenuOpen] = useState(false);
 
-  // Memoized: Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
@@ -25,7 +22,6 @@ const Header = memo(function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Memoized: Close profile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -38,92 +34,71 @@ const Header = memo(function Header() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Memoized: Profile menu toggle handler
-  const handleProfileMenuToggle = useCallback(() => {
-    setIsProfileMenuOpen((prev) => !prev);
-  }, []);
-
-  // Memoized: Mobile menu handlers
-  const handleMobileMenuOpen = useCallback(() => {
-    setIsMobileMenuOpen(true);
-  }, []);
-
-  const handleMobileMenuClose = useCallback((open: boolean) => {
-    setIsMobileMenuOpen(open);
-  }, []);
-
   return (
-    <>
-      <header
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-          isScrolled
-            ? "bg-[var(--header-bg-scrolled)] shadow-lg"
-            : "bg-gradient-to-b from-black/80 to-transparent",
-        )}
-      >
-        <div className="container mx-auto px-4 md:px-12 lg:px-16">
-          <div className="flex items-center justify-between gap-4 py-3 md:py-4">
-            {/* Left section: Logo + Desktop Nav */}
-            <div className="flex items-center gap-4 md:gap-8">
-              {/* Logo */}
-              <Logo className="w-20 h-6 sm:w-24 sm:h-7 md:w-28 md:h-8" />
+    <header
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50 transition-colors duration-500",
+        isScrolled
+          ? "bg-[#141414] shadow-lg"
+          : "bg-gradient-to-b from-black/80 via-black/40 to-transparent"
+      )}
+    >
+      <div className="px-4 md:px-12 lg:px-16 flex items-center py-4">
+        {/* Left section: Logo + Desktop Nav + Mobile Browse */}
+        <div className="flex items-center gap-4 md:gap-8 flex-1">
+          <Logo className="w-20 h-6 sm:w-24 sm:h-7 md:w-28 md:h-8" />
 
-              {/* Desktop Navigation - Hidden on mobile */}
-              <nav className="hidden md:flex items-center gap-5">
-                {HeaderLinks.map((link, index) => (
-                  <NavLinks key={index} link={link} />
-                ))}
-              </nav>
-            </div>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-5">
+            {HeaderLinks.map((link, index) => (
+              <NavLinks key={index} link={link} />
+            ))}
+          </nav>
 
-            {/* Right section: Search + Profile */}
-            <div className="flex items-center gap-2 md:gap-4">
-              {/* Search Button */}
-              <SearchButton />
+          {/* Mobile Browse Dropdown */}
+          <BrowseDropdown
+            isOpen={isBrowseMenuOpen}
+            onToggle={() => setIsBrowseMenuOpen(!isBrowseMenuOpen)}
+            onClose={() => setIsBrowseMenuOpen(false)}
+          />
+        </div>
 
-              {/* Profile Menu - Desktop */}
-              <div
-                className="relative hidden md:block"
-                data-profile-menu
-              >
-                <button
-                  onClick={handleProfileMenuToggle}
-                  className="flex items-center gap-2 text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors duration-200"
-                  aria-label="User menu"
-                >
-                  <div className="w-8 h-8 rounded bg-[var(--netflix-red)] flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">U</span>
-                  </div>
-                </button>
+        {/* Right section: Search + Bell + Profile */}
+        <div className="flex items-center gap-4 sm:gap-6">
+          <SearchButton />
 
-                <ProfileMenu
-                  isOpen={isProfileMenuOpen}
-                  onClose={() => setIsProfileMenuOpen(false)}
-                />
+          <button className="text-white hover:text-gray-300 transition-colors" aria-label="Notifications">
+            <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          {/* Profile Menu Dropdown Container */}
+          <div className="relative z-50" data-profile-menu>
+            <div
+              className="flex items-center gap-2 cursor-pointer pb-2 -mb-2"
+              onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
+            >
+              <div className="w-8 h-8 rounded bg-blue-500 overflow-hidden flex items-center justify-center text-white text-sm font-bold">
+                K
               </div>
-
-              {/* Mobile Menu Button */}
-              <motion.button
-                className="md:hidden text-[var(--text-primary)] p-2"
-                onClick={handleMobileMenuOpen}
-                whileTap={{ scale: 0.95 }}
-                aria-label="Open menu"
-              >
-                <Menu className="w-6 h-6" />
-              </motion.button>
+              <ChevronDown
+                className={cn(
+                  "w-4 h-4 text-white transition-transform duration-300 hidden sm:block",
+                  isProfileMenuOpen && "rotate-180"
+                )}
+              />
             </div>
+
+            {/* Profile Dropdown rendered absolute relative to this container */}
+            <ProfileMenu
+              isOpen={isProfileMenuOpen}
+              onClose={() => setIsProfileMenuOpen(false)}
+            />
           </div>
         </div>
-      </header>
-
-      {/* Mobile Sidebar */}
-      <MobileSidebar
-        open={isMobileMenuOpen}
-        onOpenChange={handleMobileMenuClose}
-      />
-    </>
+      </div>
+    </header>
   );
 });
 
 export default Header;
+

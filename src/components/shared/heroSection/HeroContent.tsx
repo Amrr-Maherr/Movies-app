@@ -2,12 +2,16 @@ import { motion } from "framer-motion";
 import { getMatchScore, getAgeRating } from "@/utils/movieHelpers";
 import { getTitle, getReleaseYear } from "@/utils";
 import ActionButtons from "./ActionButtons";
-import type { HeroContentProps } from "@/types";
+import type { HeroContentProps, HeroMedia } from "@/types";
+
+interface ExtraHeroContentProps extends HeroContentProps {
+  onMoreInfo?: (movie: HeroMedia) => void;
+}
 
 // ============================================
 // COMPONENT
 // ============================================
-export default function HeroContent({ movie }: HeroContentProps) {
+export default function HeroContent({ movie, onMoreInfo }: ExtraHeroContentProps) {
   const matchScore = getMatchScore(movie.vote_average);
   const year = getReleaseYear(movie);
   const ageRating = getAgeRating(movie.vote_average);
@@ -72,7 +76,7 @@ export default function HeroContent({ movie }: HeroContentProps) {
           </motion.p>
 
           {/* Action Buttons */}
-          <ActionButtons />
+          <ActionButtons movie={movie} onMoreInfo={onMoreInfo} />
         </div>
       </div>
     </div>

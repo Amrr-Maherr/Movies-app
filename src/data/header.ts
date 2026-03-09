@@ -11,4 +11,5 @@ export const HeaderLinks: HeaderLink[] = [
   { title: "Kids", link: "kids" },
   { title: "New & Popular", link: "new-popular" },
   { title: "My List", link: "my-list" },
+  { title: "Browse by Languages", link: "browse/languages" },
 ];
