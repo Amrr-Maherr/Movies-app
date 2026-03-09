@@ -1,9 +1,10 @@
-import { memo, useMemo, useCallback } from "react";
+import { memo, useMemo, useCallback, useState } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import HeroSlide from "./HeroSlide";
 import { Autoplay } from "swiper/modules";
 import type { HeroMedia } from "@/types";
 import { Error, Loader } from "@/components/ui";
+import MovieModal from "@/components/shared/MovieModal";
 
 // ============================================
 // CONSTANTS
@@ -26,6 +27,18 @@ export interface HeroSectionProps {
 // MAIN COMPONENT
 // ============================================
 const HeroSection = memo(function HeroSection({ data, isLoading, error, onRetry }: HeroSectionProps) {
+  const [selectedMovie, setSelectedMovie] = useState<HeroMedia | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = useCallback((movie: HeroMedia) => {
+    setSelectedMovie(movie);
+    setIsModalOpen(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+    setSelectedMovie(null);
+  }, []);
   // Get featured media with memoization
   const featuredMedia = useMemo(
     () => data || [],
@@ -72,9 +85,15 @@ const HeroSection = memo(function HeroSection({ data, isLoading, error, onRetry 
         className="hero-swiper"
       >
         {featuredMedia.map((media: HeroMedia) => (
-          <HeroSlide key={media.id} movie={media} />
+          <HeroSlide key={media.id} movie={media} onMoreInfo={handleOpenModal} />
         ))}
       </Slider>
+
+      <MovieModal
+        movie={selectedMovie}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
 
       {/* Bottom gradient overlay for smooth content blend - Theme-aware */}
       <div className="absolute bottom-0 left-0 right-0 h-24 sm:h-32 bg-gradient-to-t from-[var(--background-primary)] to-transparent z-20 pointer-events-none" />
