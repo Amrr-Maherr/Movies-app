@@ -1,13 +1,14 @@
 import { memo } from "react";
 import Card from "./Card/Card";
-import type { HeroMedia } from "@/types";
+import PersonCard from "./cards/PersonCard";
 
 interface MediaGridProps {
-  items: HeroMedia[];
+  items: any[];
+  type?: "movie" | "tv" | "person";
   emptyMessage?: string;
 }
 
-const MediaGrid = memo(({ items, emptyMessage = "No items found." }: MediaGridProps) => {
+const MediaGrid = memo(({ items, type = "movie", emptyMessage = "No items found." }: MediaGridProps) => {
   if (!items || items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
@@ -26,12 +27,21 @@ const MediaGrid = memo(({ items, emptyMessage = "No items found." }: MediaGridPr
             key={item.id}
             className="w-full transition-transform duration-300 hover:scale-105 hover:z-10"
           >
-            <Card
-              movie={item}
-              variant="standard"
-              showBadge={index < 10}
-              badgeType={index < 10 ? "trending" : undefined}
-            />
+            {type === "person" ? (
+              <PersonCard
+                id={item.id}
+                name={item.name}
+                profileImage={item.profile_path}
+                role={item.known_for_department || "Actor"}
+              />
+            ) : (
+              <Card
+                movie={item}
+                variant="standard"
+                showBadge={index < 10}
+                badgeType={index < 10 ? "trending" : undefined}
+              />
+            )}
           </div>
         ))}
       </div>
