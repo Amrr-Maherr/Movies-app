@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useParams, Link } from "react-router-dom";
+import { extractIdFromSlug } from "@/utils/slugify";
 import { ArrowLeft, Calendar, Film, Clock, Star } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
@@ -13,10 +14,14 @@ const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 // Memoized SeasonDetailsPage component - avoids re-renders when parent updates
 const SeasonDetailsPage = memo(function SeasonDetailsPage() {
-  const { tvId, seasonNumber } = useParams<{
+  const { tvId: tvIdParam, seasonNumber: seasonNumberParam } = useParams<{
     tvId: string;
     seasonNumber: string;
   }>();
+  
+  const tvId = extractIdFromSlug(tvIdParam);
+  const seasonNumber = seasonNumberParam; // It's just a number string now
+
   const { isLoading, data: season, error, refetch } = FetchTvSeasonDetails(
     Number(tvId),
     Number(seasonNumber),
@@ -98,7 +103,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
         <div className="relative z-10 container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl pt-8">
           {/* Back Button */}
           <Link
-            to={`/tv/${tvId}`}
+            to={`/tv/${tvIdParam}`}
             className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-6"
           >
             <ArrowLeft className="h-5 w-5" />

@@ -12,7 +12,12 @@ export interface EpisodeCardProps {
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w300";
 
-const EpisodeCard = ({ episode, tvShowId, seasonNumber, onClick }: EpisodeCardProps) => {
+const EpisodeCard = ({ 
+  episode, 
+  tvShowId, 
+  seasonNumber, 
+  onClick 
+}: EpisodeCardProps) => {
   // Format the air date
   const formattedAirDate = useMemo(() => {
     if (!episode.air_date) return "TBA";

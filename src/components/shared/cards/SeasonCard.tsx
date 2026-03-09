@@ -28,10 +28,10 @@ const SeasonCard = ({ season, tvShowId }: SeasonCardProps) => {
     ? `${IMAGE_BASE_URL}${season.poster_path}`
     : null;
 
-  const seasonLink = `/tv/${tvShowId}/season/${season.season_number}`;
+  const detailsUrl = `/tv/${tvShowId}/season/${season.season_number}`;
 
   return (
-    <Link to={seasonLink} className="block group">
+    <Link to={detailsUrl} className="block group">
       <div
         className="relative overflow-hidden rounded-lg bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-2xl"
         role="button"
