@@ -1,13 +1,41 @@
-import { motion } from "framer-motion";
+import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import MovieFilters, { MovieFilterOption } from "@/components/shared/MovieFilters";
+import MediaGrid from "@/components/shared/MediaGrid";
+import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import HeroSection from "@/components/shared/heroSection/HeroSection";
-import MediaSection from "@/components/shared/MediaSection";
-import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
+import type { Movie, HeroMedia } from "@/types";
+
+// Hooks
 import usePopularMovies from "@/queries/FetchPopularMovies";
-import type { Movie } from "@/types";
+import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
+import useNowPlayingMovies from "@/queries/FetchNowPlayingMovies";
+import useUpcomingMovies from "@/queries/FetchUpcomingMovies";
 
 export default function Movie() {
-  const { data: topRatedMovies, isLoading: topRatedLoading, error: topRatedError, refetch: topRatedRefetch } = useTopRatedMovies(1);
-  const { data: popularMovies, isLoading: popularLoading, error: popularError, refetch: popularRefetch } = usePopularMovies();
+  const [activeFilter, setActiveFilter] = useState<MovieFilterOption>("popular");
+
+  // Call all hooks (react-query caches perfectly)
+  const popularQuery = usePopularMovies();
+  const topRatedQuery = useTopRatedMovies(1);
+  const nowPlayingQuery = useNowPlayingMovies(1);
+  const upcomingQuery = useUpcomingMovies(1);
+
+  const getCurrentQuery = useCallback(() => {
+    switch (activeFilter) {
+      case "topRated":
+        return topRatedQuery;
+      case "nowPlaying":
+        return nowPlayingQuery;
+      case "upcoming":
+        return upcomingQuery;
+      case "popular":
+      default:
+        return popularQuery;
+    }
+  }, [activeFilter, popularQuery, topRatedQuery, nowPlayingQuery, upcomingQuery]);
+
+  const { data: movies, isLoading, error, refetch } = getCurrentQuery();
 
   return (
     <motion.div
@@ -18,25 +46,61 @@ export default function Movie() {
       transition={{ duration: 0.5 }}
     >
       <HeroSection
-        data={topRatedMovies as Movie[] | undefined}
-        isLoading={topRatedLoading}
-        error={topRatedError}
-        onRetry={topRatedRefetch}
+        data={movies as Movie[] | undefined}
+        isLoading={isLoading}
+        error={error}
+        onRetry={refetch}
       />
-      <MediaSection
-        title="Top Rated Movies"
-        data={topRatedMovies}
-        isLoading={topRatedLoading}
-        error={topRatedError}
-        onRetry={topRatedRefetch}
-      />
-      <MediaSection
-        title="Popular Movies"
-        data={popularMovies}
-        isLoading={popularLoading}
-        error={popularError}
-        onRetry={popularRefetch}
-      />
+
+      <div className="px-4 sm:px-8 mb-6 mt-8">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Movies</h1>
+        <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
+          Movies move us like nothing else can, whether they're scary, funny, dramatic, romantic or anywhere in-between.
+        </p>
+      </div>
+
+      <MovieFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+
+      {error ? (
+        <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
+          <p className="text-xl text-[var(--error)] font-medium mb-4">
+            Failed to load Movies. Please try again.
+          </p>
+          <button
+            onClick={() => refetch()}
+            className="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-white/80 transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      ) : (
+        <div className="mt-4">
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <motion.div
+                key="skeleton"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <MediaGridSkeleton />
+              </motion.div>
+            ) : (
+              <motion.div
+                key={`grid-${activeFilter}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <MediaGrid items={(movies || []) as unknown as HeroMedia[]} emptyMessage="No Movies found for this filter." />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </motion.div>
   );
 }
+
