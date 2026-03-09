@@ -2,7 +2,7 @@ import { memo } from "react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Slider from "@/components/shared/Slider/slider";
-
+import { useHandelUrl } from "@/utils/handelUrl";
 export interface Language {
   code: string;
   name: string;
@@ -48,6 +48,7 @@ const LanguagesFilter = memo(function LanguagesFilter({
   selectedLanguage,
   onLanguageSelect,
 }: LanguagesFilterProps) {
+  const handelUrl = useHandelUrl();
   return (
     <div className="w-full relative py-2">
       <div className="px-4 sm:px-8">
@@ -75,12 +76,18 @@ const LanguagesFilter = memo(function LanguagesFilter({
             return (
               <motion.button
                 key={lang.code}
-                onClick={() => onLanguageSelect(lang.code)}
+                onClick={() =>
+                  handelUrl({
+                    lang: { code: lang.code },
+                    key: "lang",
+                    set: onLanguageSelect,
+                  })
+                }
                 className={cn(
                   "w-full px-2 py-2 cursor-pointer sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 border",
                   isActive
                     ? "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)]"
-                    : "bg-[#141414] text-white border-[#404040] hover:border-white hover:bg-[#202020]"
+                    : "bg-[#141414] text-white border-[#404040] hover:border-white hover:bg-[#202020]",
                 )}
               >
                 {lang.name}

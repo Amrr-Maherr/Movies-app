@@ -1,5 +1,6 @@
 import { memo, useCallback, useState } from "react";
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
+import { useHandelUrl } from "@/utils/handelUrl";
 
 export interface PeopleFiltersProps {
   selectedGender: string;
@@ -83,6 +84,15 @@ const PeopleFilters = memo(({
   const activeCount =
     (selectedGender !== "all" ? 1 : 0) +
     (selectedLetter !== "all" ? 1 : 0);
+  const handelUrl = useHandelUrl();
+  
+  const url = (letter: string) => {
+    handelUrl({
+      lang: { code: letter },
+      key: "letter",
+      set: onLetterSelect,
+    });
+  }
 
   return (
     <div className="px-4 sm:px-8 mb-6">
@@ -145,7 +155,7 @@ const PeopleFilters = memo(({
                     key={letter}
                     letter={letter}
                     isActive={selectedLetter === value}
-                    onClick={onLetterSelect}
+                    onClick={()=>{url(letter)}}
                   />
                 );
               })}

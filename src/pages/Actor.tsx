@@ -56,7 +56,9 @@ const ActorsPage = memo(function ActorsPage() {
     >
       {/* Header Section */}
       <div className="px-4 sm:px-8 mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">Popular Actors</h1>
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
+          Popular Actors
+        </h1>
         <p className="text-[var(--text-secondary)] text-sm md:text-lg max-w-3xl leading-relaxed">
           Explore the most popular actors and celebrities in the industry today.
         </p>
@@ -73,7 +75,8 @@ const ActorsPage = memo(function ActorsPage() {
       {error ? (
         <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
           <p className="text-xl text-[var(--error)] font-semibold mb-6">
-            Something went wrong while fetching actors. Please check your connection.
+            Something went wrong while fetching actors. Please check your
+            connection.
           </p>
           <button
             onClick={() => refetch()}
@@ -106,13 +109,17 @@ const ActorsPage = memo(function ActorsPage() {
                   next={fetchNextPage}
                   hasMore={!!hasNextPage}
                   loader={
-                    <div className="py-10 flex items-center justify-center w-full">
-                      <Loader size="lg" />
-                    </div>
+                    isLoading ? (
+                      <div className="py-10 flex items-center justify-center w-full">
+                        <Loader size="lg" />
+                      </div>
+                    ) : null
                   }
                   endMessage={
                     <div className="py-16 text-center text-[var(--text-secondary)] border-t border-zinc-800/50 mt-10">
-                      <p className="text-lg font-medium italic">You've explored all the popular stars!</p>
+                      <p className="text-lg font-medium italic">
+                        You've explored all the popular stars!
+                      </p>
                     </div>
                   }
                   style={{ overflow: "hidden" }}
@@ -121,7 +128,11 @@ const ActorsPage = memo(function ActorsPage() {
                   <MediaGrid
                     items={allItems}
                     type="person"
-                    emptyMessage="No actors match your current filters. Try adjust them!"
+                    emptyMessage={
+                      !isLoading && allItems.length === 0
+                        ? "No actors match your current filters. Try adjust them!"
+                        : ""
+                    }
                   />
                 </InfiniteScroll>
               </motion.div>
