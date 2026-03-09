@@ -25,6 +25,7 @@
     "react-dom": "^19.2.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.71.2",
+    "react-infinite-scroll-component": "^6.1.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.13.1",
     "swiper": "^12.1.2",
