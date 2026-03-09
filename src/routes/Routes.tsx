@@ -66,7 +66,8 @@ const AppRoutes = memo(function AppRoutes() {
           <Route path="/new-popular" element={<NewPopular />} />
           <Route path="/my-list" element={<MyList />} />
           <Route path="/browse/languages" element={<BrowseByLanguages />} />
-          <Route path="/actor" element={<Actor />} />
+          <Route path="/actors" element={<Actor />} />
+          <Route path="/actor/:slugWithId" element={<PersonDetailsPage />} />
           <Route path="/session" element={<Session />} />
 
           {/* Auth routes */}
