@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 import { useRef, useMemo, memo, useCallback } from "react";
 import * as React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -33,7 +34,10 @@ const NavigationButton = memo(function NavigationButton({
 }) {
   return (
     <button
-      className="absolute top-1/2 left-4 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full opacity-100 transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50 flex items-center justify-center"
+      className={cn(
+        "absolute top-1/2 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full opacity-100 transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50 flex items-center justify-center",
+        direction === "prev" ? "left-4" : "right-4"
+      )}
       onClick={onClick}
       aria-label={ariaLabel}
     >
