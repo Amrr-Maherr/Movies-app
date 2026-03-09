@@ -5,6 +5,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import MediaHero from "@/components/shared/MediaHero";
 import MediaInfoSection from "@/components/sections/MediaInfoSection";
 import TrailersSection from "@/components/sections/TrailersSection";
+import BehindTheScenesSection from "@/components/sections/BehindTheScenesSection";
 import MoreLikeThisSection from "@/components/sections/MoreLikeThisSection";
 import FullCreditsSection from "@/components/sections/FullCreditsSection";
 import { Loader } from "@/components/ui/loader";
@@ -43,6 +44,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       <MediaHero media={data} />
       <MediaInfoSection media={data} />
       <TrailersSection videos={data.videos?.results || []} />
+      <BehindTheScenesSection images={data.images?.backdrops || []} />
       <MoreLikeThisSection similar={data.similar?.results || []} />
       <FullCreditsSection
         cast={data.credits?.cast || []}

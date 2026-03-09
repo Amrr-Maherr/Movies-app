@@ -43,6 +43,22 @@ export interface Videos {
   results: Video[];
 }
 
+export interface MediaImage {
+  aspect_ratio: number;
+  height: number;
+  iso_639_1: string | null;
+  file_path: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
+}
+
+export interface MediaImages {
+  backdrops: MediaImage[];
+  posters: MediaImage[];
+  logos: MediaImage[];
+}
+
 export interface Keyword {
   id: number;
   name: string;
@@ -123,6 +139,7 @@ export interface MovieDetails {
   }[];
   credits: Credits;
   videos: Videos;
+  images?: MediaImages;
   keywords: Keywords;
   similar: {
     page: number;

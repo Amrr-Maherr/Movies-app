@@ -13,6 +13,7 @@ import WatchProvidersSection from "@/components/sections/WatchProvidersSection";
 import EpisodesSection from "@/components/sections/EpisodesSection";
 import MoreLikeThisSection from "@/components/sections/MoreLikeThisSection";
 import FetchTvShowDetails from "@/queries/FetchTvShowDetails";
+import BehindTheScenesSection from "@/components/sections/BehindTheScenesSection";
 import { extractKeywords, extractWatchProviders } from "@/utils";
 import type { Video } from "@/types";
 
@@ -23,7 +24,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
   const { isLoading, data, error, refetch } = FetchTvShowDetails(Number(id));
 
   // Memoized: Extract and prepare data for child components (moved before early return)
-  const { trailers, reviews, keywords, watchProviders, similar, seasons } =
+  const { trailers, reviews, keywords, watchProviders, similar, seasons, backdrops } =
     useMemo(() => {
       if (!data) {
         return {
@@ -33,6 +34,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
           watchProviders: [],
           similar: [],
           seasons: [],
+          backdrops: [],
         };
       }
 
@@ -55,8 +57,9 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       const watchProviders = extractWatchProviders(data);
       const similar = data.similar?.results || [];
       const seasons = data.seasons || [];
+      const backdrops = data.images?.backdrops || [];
 
-      return { trailers, reviews, keywords, watchProviders, similar, seasons };
+      return { trailers, reviews, keywords, watchProviders, similar, seasons, backdrops };
     }, [data]);
 
   if (isLoading) {
@@ -95,6 +98,9 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 
       {/* Trailers Section - YouTube trailers */}
       {trailers.length > 0 && <TrailersSection videos={trailers} />}
+
+      {/* Behind the Scenes - Backdrop photos */}
+      <BehindTheScenesSection images={backdrops} />
 
       {/* Reviews Section - User reviews */}
       {reviews.length > 0 && <ReviewsSection reviews={reviews} />}

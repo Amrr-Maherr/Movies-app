@@ -3,7 +3,7 @@
  * Includes credits, videos, keywords, and genres from TMDB API
  */
 
-import type { Genre, CastMember, Credits, Video, Videos, Keyword, Keywords, MovieDetails, CrewMember, Season } from './movieDetails';
+import type { Genre, CastMember, Credits, Video, Videos, Keyword, Keywords, MovieDetails, CrewMember, Season, MediaImages } from './movieDetails';
 
 /**
  * Extended TV Show details with all appended responses from TMDB API
@@ -119,6 +119,7 @@ export interface TvShowDetails {
       author_details?: { rating?: number | null };
     }[];
   };
+  images?: MediaImages;
 }
 
 /**
