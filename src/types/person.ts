@@ -113,3 +113,21 @@ export interface HeroMediaWithMediaType {
   popularity: number;
   media_type?: "movie" | "tv";
 }
+
+export interface PopularPersonResult {
+  id: number;
+  name: string;
+  profile_path: string | null;
+  known_for_department: string;
+  gender: number;
+  popularity: number;
+  adult: boolean;
+  known_for: HeroMediaWithMediaType[];
+}
+
+export interface PopularPeopleResponse {
+  page: number;
+  results: PopularPersonResult[];
+  total_pages: number;
+  total_results: number;
+}
