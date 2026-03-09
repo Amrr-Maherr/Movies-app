@@ -1,5 +1,6 @@
-import { memo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { memo, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 
 export interface PersonCardProps {
   id: number;
@@ -12,30 +13,17 @@ export interface PersonCardProps {
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w185";
 
 const PersonCard = memo(({ id, name, profileImage, role }: PersonCardProps) => {
-  const navigate = useNavigate();
   const imageUrl = profileImage ? `${IMAGE_BASE_URL}${profileImage}` : null;
 
-  const handleClick = useCallback(() => {
-    navigate(`/person/${id}`);
-  }, [navigate, id]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleClick();
-      }
-    },
-    [handleClick]
-  );
+  const detailsUrl = useMemo(() => {
+    const slug = generateSlug(name);
+    return `/person/${formatSlugWithId(slug, id)}`;
+  }, [name, id]);
 
   return (
-    <div
-      className="group relative cursor-pointer"
-      onClick={handleClick}
-      onKeyDown={handleKeyDown}
-      tabIndex={0}
-      role="button"
+    <Link
+      to={detailsUrl}
+      className="group relative cursor-pointer block"
       aria-label={`View ${name}'s profile`}
     >
       {/* Card Container */}
@@ -86,7 +74,7 @@ const PersonCard = memo(({ id, name, profileImage, role }: PersonCardProps) => {
           {role}
         </p>
       </div>
-    </div>
+    </Link>
   );
 });
 

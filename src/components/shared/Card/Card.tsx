@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
+import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import MovieModal from "@/components/shared/MovieModal";
 import type { HeroMedia } from "@/types";
 
@@ -82,14 +83,21 @@ const Card = memo(
       return "first_air_date" in movie;
     }, [movie]);
 
+    // Generate Slug-based URL
+    const detailsUrl = useMemo(() => {
+      const slug = generateSlug(title);
+      const slugWithId = formatSlugWithId(slug, movie.id);
+      return `/${isTvShow ? "tv" : "movie"}/${slugWithId}`;
+    }, [title, movie.id, isTvShow]);
+
     // Navigate to details page
     const handleNavigate = useCallback(() => {
       if (onClick) {
         onClick();
       } else {
-        navigate(`/${isTvShow ? "tv" : "movie"}/${movie.id}`);
+        navigate(detailsUrl);
       }
-    }, [onClick, navigate, isTvShow, movie.id]);
+    }, [onClick, navigate, detailsUrl]);
 
     const handleMoreInfoClick = useCallback((e: React.MouseEvent) => {
       e.stopPropagation();
@@ -108,14 +116,6 @@ const Card = memo(
 
     const handleCardMouseEnter = useCallback(() => setIsHovered(true), []);
     const handleCardMouseLeave = useCallback(() => setIsHovered(false), []);
-
-    const handleLinkClick = useCallback(
-      (e: React.MouseEvent) => {
-        e.preventDefault();
-        handleNavigate();
-      },
-      [handleNavigate],
-    );
 
     const formattedReleaseDate = useMemo(() => {
       const releaseDate =
@@ -144,17 +144,17 @@ const Card = memo(
     if (variant === "compact") {
       return (
         <>
-          <div
-            className="relative group cursor-pointer"
+          <Link
+            to={detailsUrl}
+            className="relative group cursor-pointer block"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}
-            onClick={handleNavigate}
           >
             <div className="relative aspect-[2/3] rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]">
               <img
                 src={posterUrl}
                 alt={title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />
               <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
@@ -200,10 +200,10 @@ const Card = memo(
                 />
               </div>
             </div>
-            <p className="mt-2 text-xs sm:text-sm text-[var(--text-primary)] font-medium text-center line-clamp-1 group-hover:text-white">
+            <p className="mt-2 text-xs sm:text-sm text-[var(--text-primary)] font-medium text-center line-clamp-1 group-hover:text-white transition-colors">
               {title}
             </p>
-          </div>
+          </Link>
           <MovieModal
             movie={movie}
             isOpen={isModalOpen}
@@ -218,18 +218,17 @@ const Card = memo(
       return (
         <>
           <Link
-            to={`/movies/${movie.id}`}
+            to={detailsUrl}
             className="relative group cursor-pointer block"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}
-            onClick={handleLinkClick}
           >
             <Top10Badge rank={rank} />
             <div className="relative aspect-[2/3] overflow-hidden rounded">
               <img
                 src={posterUrl}
                 alt={title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
@@ -248,12 +247,11 @@ const Card = memo(
     if (variant === "newRelease") {
       return (
         <>
-          <a
-            href={movie.id ? `/${isTvShow ? "tv" : "movie"}/${movie.id}` : "#"}
+          <Link
+            to={detailsUrl}
             className="group cursor-pointer block"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}
-            onClick={handleLinkClick}
           >
             <NewReleaseLayout
               movie={movie}
@@ -263,7 +261,7 @@ const Card = memo(
               formattedReleaseDate={formattedReleaseDate ?? undefined}
               isHovered={isHovered}
             />
-          </a>
+          </Link>
           <MovieModal
             movie={movie}
             isOpen={isModalOpen}
@@ -277,12 +275,11 @@ const Card = memo(
     if (variant === "awardWinner") {
       return (
         <>
-          <a
-            href={movie.id ? `/${isTvShow ? "tv" : "movie"}/${movie.id}` : "#"}
+          <Link
+            to={detailsUrl}
             className="group cursor-pointer relative block"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}
-            onClick={handleLinkClick}
           >
             <AwardWinnerLayout
               movie={movie}
@@ -291,7 +288,7 @@ const Card = memo(
               ratingValue={ratingValue ?? undefined}
               isHovered={isHovered}
             />
-          </a>
+          </Link>
           <MovieModal
             movie={movie}
             isOpen={isModalOpen}
@@ -305,12 +302,11 @@ const Card = memo(
     if (variant === "recommendation") {
       return (
         <>
-          <a
-            href={movie.id ? `/${isTvShow ? "tv" : "movie"}/${movie.id}` : "#"}
+          <Link
+            to={detailsUrl}
             className="group cursor-pointer block"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}
-            onClick={handleLinkClick}
           >
             <RecommendationLayout
               movie={movie}
@@ -319,7 +315,7 @@ const Card = memo(
               matchPercentage={matchPercentage ?? undefined}
               isHovered={isHovered}
             />
-          </a>
+          </Link>
           <MovieModal
             movie={movie}
             isOpen={isModalOpen}

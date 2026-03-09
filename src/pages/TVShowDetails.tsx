@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
+import { extractIdFromSlug } from "@/utils/slugify";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
 import MediaHero from "@/components/shared/MediaHero";
@@ -17,7 +18,8 @@ import type { Video } from "@/types";
 
 // Memoized TVShowDetailsPage component - avoids re-renders when parent updates
 const TVShowDetailsPage = memo(function TVShowDetailsPage() {
-  const { id } = useParams<{ id: string }>();
+  const { slugWithId } = useParams<{ slugWithId: string }>();
+  const id = extractIdFromSlug(slugWithId);
   const { isLoading, data, error, refetch } = FetchTvShowDetails(Number(id));
 
   // Memoized: Extract and prepare data for child components (moved before early return)

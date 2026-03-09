@@ -1,6 +1,7 @@
 import { memo } from "react";
 import FetchMovieDetails from "@/queries/FetchMovieDetails";
 import { useParams } from "react-router-dom";
+import { extractIdFromSlug } from "@/utils/slugify";
 import MediaHero from "@/components/shared/MediaHero";
 import MediaInfoSection from "@/components/sections/MediaInfoSection";
 import TrailersSection from "@/components/sections/TrailersSection";
@@ -12,7 +13,8 @@ import { motion } from "framer-motion";
 
 // Memoized MovieDetailsPage component - avoids re-renders when parent updates
 const MovieDetailsPage = memo(function MovieDetailsPage() {
-  const { id } = useParams();
+  const { slugWithId } = useParams<{ slugWithId: string }>();
+  const id = extractIdFromSlug(slugWithId);
   const { isLoading, data, error, refetch } = FetchMovieDetails(Number(id));
 
   if (isLoading) {

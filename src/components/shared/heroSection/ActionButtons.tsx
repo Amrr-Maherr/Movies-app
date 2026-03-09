@@ -1,6 +1,8 @@
 import { Play, Info } from "lucide-react";
 import { motion } from "framer-motion";
-
+import { Link } from "react-router-dom";
+import { generateSlug, formatSlugWithId } from "@/utils/slugify";
+import { getTitle } from "@/utils";
 import { HeroMedia } from "@/types";
 
 interface ActionButtonsProps {
@@ -12,6 +14,14 @@ interface ActionButtonsProps {
 // COMPONENT
 // ============================================
 export default function ActionButtons({ movie, onMoreInfo }: ActionButtonsProps) {
+  if (!movie) return null;
+
+  const isTvShow = "first_air_date" in movie;
+  const title = getTitle(movie);
+  const slug = generateSlug(title);
+  const slugWithId = formatSlugWithId(slug, movie.id);
+  const detailsUrl = `/${isTvShow ? "tv" : "movie"}/${slugWithId}`;
+
   return (
     <motion.div
       className="flex flex-wrap gap-3 pt-4"
@@ -20,14 +30,16 @@ export default function ActionButtons({ movie, onMoreInfo }: ActionButtonsProps)
       transition={{ delay: 0.6 }}
     >
       {/* Play Button - White bg, black text (Netflix primary) */}
-      <motion.button
-        className="flex items-center gap-2 bg-white text-[var(--text-inverse)] px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded font-bold text-sm sm:text-base md:text-lg transition-all duration-200 hover:bg-white/90 active:scale-95 min-w-[120px] sm:min-w-[140px] justify-center touch-manipulation"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <Play className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 fill-current" />
-        Play
-      </motion.button>
+      <Link to={detailsUrl} className="block">
+        <motion.button
+          className="flex items-center gap-2 bg-white text-[var(--text-inverse)] px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded font-bold text-sm sm:text-base md:text-lg transition-all duration-200 hover:bg-white/90 active:scale-95 min-w-[120px] sm:min-w-[140px] justify-center touch-manipulation"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Play className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 fill-current" />
+          Play
+        </motion.button>
+      </Link>
 
       {/* More Info Button - Semi-transparent with blur (theme-aware) */}
       <motion.button

@@ -8,6 +8,8 @@ import SearchResultCard from "./SearchResultCard";
 import { useSearch } from "@/queries/FetchSearch";
 import { Loader } from "@/components/ui";
 import { useNavigate } from "react-router-dom";
+import { generateSlug, formatSlugWithId } from "@/utils/slugify";
+import { Movie, TvShow } from "@/types/movies";
 
 interface SearchPopupProps {
   isOpen: boolean;
@@ -56,11 +58,12 @@ const SearchPopup = memo(function SearchPopup({
   );
 
   const handleSelect = useCallback(
-    (item: { item: { id: number }; type: string }) => {
-      const route =
-        item.type === "movie"
-          ? `/movie/${item.item.id}`
-          : `/tv/${item.item.id}`;
+    ({ item, type }: { item: Movie | TvShow; type: "movie" | "tv" }) => {
+      const title = type === "movie" ? (item as Movie).title : (item as TvShow).name;
+      const slug = generateSlug(title);
+      const slugWithId = formatSlugWithId(slug, item.id);
+      const route = `/${type}/${slugWithId}`;
+      
       navigate(route);
       onClose();
     },

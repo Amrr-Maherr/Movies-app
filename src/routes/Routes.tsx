@@ -74,14 +74,14 @@ const AppRoutes = memo(function AppRoutes() {
           <Route path="/signup" element={<Signup />} />
 
           {/* Details routes */}
-          <Route path="/movie/:id" element={<MovieDetails />} />
-          <Route path="/tv/:id" element={<TVShowDetailsPage />} />
+          <Route path="/movie/:slugWithId" element={<MovieDetails />} />
+          <Route path="/tv/:slugWithId" element={<TVShowDetailsPage />} />
           <Route path="/tv/:tvId/season/:seasonNumber" element={<SeasonDetailsPage />} />
           <Route
             path="/tv/:tvId/season/:seasonNumber/episode/:episodeNumber"
             element={<EpisodeDetailsPage />}
           />
-          <Route path="/person/:id" element={<PersonDetailsPage />} />
+          <Route path="/person/:slugWithId" element={<PersonDetailsPage />} />
 
           {/* Footer routes */}
           <Route path="/faq" element={<FAQ />} />

@@ -1,5 +1,6 @@
 import { memo, useMemo } from "react";
 import { useParams } from "react-router-dom";
+import { extractIdFromSlug } from "@/utils/slugify";
 import { motion } from "framer-motion";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
@@ -13,7 +14,8 @@ import FetchPersonCredits from "@/queries/FetchPersonCredits";
 
 // Memoized PersonDetailsPage component - avoids re-renders when parent updates
 const PersonDetailsPage = memo(function PersonDetailsPage() {
-  const { id } = useParams<{ id: string }>();
+  const { slugWithId } = useParams<{ slugWithId: string }>();
+  const id = extractIdFromSlug(slugWithId);
   const personId = Number(id);
 
   const {
