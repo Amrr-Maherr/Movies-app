@@ -19,7 +19,12 @@ const Session = lazy(() => import("@/pages/Session"));
 const Kids = lazy(() => import("@/pages/Kids"));
 const NewPopular = lazy(() => import("@/pages/NewPopular"));
 const MyList = lazy(() => import("@/pages/MyList"));
+const BrowseByLanguages = lazy(() => import("@/pages/BrowseByLanguages"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
+
+// Auth pages
+const Login = lazy(() => import("@/pages/auth/Login"));
+const Signup = lazy(() => import("@/pages/auth/Signup"));
 
 // Footer pages
 const FAQ = lazy(() => import("@/pages/FAQ"));
@@ -60,8 +65,13 @@ const AppRoutes = memo(function AppRoutes() {
           <Route path="/kids" element={<Kids />} />
           <Route path="/new-popular" element={<NewPopular />} />
           <Route path="/my-list" element={<MyList />} />
+          <Route path="/browse/languages" element={<BrowseByLanguages />} />
           <Route path="/actor" element={<Actor />} />
           <Route path="/session" element={<Session />} />
+
+          {/* Auth routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
           {/* Details routes */}
           <Route path="/movie/:id" element={<MovieDetails />} />
