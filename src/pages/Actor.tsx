@@ -1,5 +1,6 @@
 import { useState, memo, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLazyLoad } from "@/hooks/useLazyLoad";
 import InfiniteScroll from "react-infinite-scroll-component";
 import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
@@ -38,13 +39,18 @@ const ActorsPage = memo(function ActorsPage() {
     }
 
     if (selectedLetter !== "all") {
-      items = items.filter((person) => 
+      items = items.filter((person) =>
         person.name.toUpperCase().startsWith(selectedLetter)
       );
     }
 
     return items;
   }, [data, selectedGender, selectedLetter]);
+
+  // Lazy load hooks for each section
+  const { ref: titleRef, isVisible: titleVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: filtersRef, isVisible: filtersVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: gridRef, isVisible: gridVisible } = useLazyLoad<HTMLDivElement>();
 
   return (
     <motion.div
@@ -55,22 +61,30 @@ const ActorsPage = memo(function ActorsPage() {
       transition={{ duration: 0.5 }}
     >
       {/* Header Section */}
-      <div className="px-4 sm:px-8 mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
-          Popular Actors
-        </h1>
-        <p className="text-[var(--text-secondary)] text-sm md:text-lg max-w-3xl leading-relaxed">
-          Explore the most popular actors and celebrities in the industry today.
-        </p>
+      <div ref={titleRef} className="px-4 sm:px-8 mb-8">
+        {titleVisible && (
+          <>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
+              Popular Actors
+            </h1>
+            <p className="text-[var(--text-secondary)] text-sm md:text-lg max-w-3xl leading-relaxed">
+              Explore the most popular actors and celebrities in the industry today.
+            </p>
+          </>
+        )}
       </div>
 
       {/* Filters Section */}
-      <PeopleFilters
-        selectedGender={selectedGender}
-        onGenderSelect={handleGenderSelect}
-        selectedLetter={selectedLetter}
-        onLetterSelect={handleLetterSelect}
-      />
+      <div ref={filtersRef}>
+        {filtersVisible && (
+          <PeopleFilters
+            selectedGender={selectedGender}
+            onGenderSelect={handleGenderSelect}
+            selectedLetter={selectedLetter}
+            onLetterSelect={handleLetterSelect}
+          />
+        )}
+      </div>
 
       {error ? (
         <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
@@ -86,58 +100,60 @@ const ActorsPage = memo(function ActorsPage() {
           </button>
         </div>
       ) : (
-        <div className="pb-20">
-          <AnimatePresence mode="wait">
-            {isLoading ? (
-              <motion.div
-                key="skeleton"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <MediaGridSkeleton />
-              </motion.div>
-            ) : (
-              <motion.div
-                key={`grid-actors-${selectedGender}-${selectedLetter}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-              >
-                <InfiniteScroll
-                  dataLength={allItems.length}
-                  next={fetchNextPage}
-                  hasMore={!!hasNextPage}
-                  loader={
-                    isLoading ? (
-                      <div className="py-10 flex items-center justify-center w-full">
-                        <Loader size="lg" />
-                      </div>
-                    ) : null
-                  }
-                  endMessage={
-                    <div className="py-16 text-center text-[var(--text-secondary)] border-t border-zinc-800/50 mt-10">
-                      <p className="text-lg font-medium italic">
-                        You've explored all the popular stars!
-                      </p>
-                    </div>
-                  }
-                  style={{ overflow: "hidden" }}
-                  scrollThreshold={0.8}
+        <div ref={gridRef} className="pb-20">
+          {gridVisible && (
+            <AnimatePresence mode="wait">
+              {isLoading ? (
+                <motion.div
+                  key="skeleton"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                 >
-                  <MediaGrid
-                    items={allItems}
-                    type="person"
-                    emptyMessage={
-                      !isLoading && allItems.length === 0
-                        ? "No actors match your current filters. Try adjust them!"
-                        : ""
+                  <MediaGridSkeleton />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={`grid-actors-${selectedGender}-${selectedLetter}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <InfiniteScroll
+                    dataLength={allItems.length}
+                    next={fetchNextPage}
+                    hasMore={!!hasNextPage}
+                    loader={
+                      isLoading ? (
+                        <div className="py-10 flex items-center justify-center w-full">
+                          <Loader size="lg" />
+                        </div>
+                      ) : null
                     }
-                  />
-                </InfiniteScroll>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                    endMessage={
+                      <div className="py-16 text-center text-[var(--text-secondary)] border-t border-zinc-800/50 mt-10">
+                        <p className="text-lg font-medium italic">
+                          You&apos;ve explored all the popular stars!
+                        </p>
+                      </div>
+                    }
+                    style={{ overflow: "hidden" }}
+                    scrollThreshold={0.8}
+                  >
+                    <MediaGrid
+                      items={allItems}
+                      type="person"
+                      emptyMessage={
+                        !isLoading && allItems.length === 0
+                          ? "No actors match your current filters. Try adjust them!"
+                          : ""
+                      }
+                    />
+                  </InfiniteScroll>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       )}
     </motion.div>

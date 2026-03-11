@@ -1,5 +1,6 @@
 import { useState, memo, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLazyLoad } from "@/hooks/useLazyLoad";
 import InfiniteScroll from "react-infinite-scroll-component";
 import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
@@ -14,12 +15,12 @@ import { Loader } from "@/components/ui";
 const BrowseByLanguages = memo(function BrowseByLanguages() {
   // Default to English ("en")
   const [selectedLanguage, setSelectedLanguage] = useState<string>(SUPPORTED_LANGUAGES[0].code);
-  const { 
-    data, 
-    isLoading, 
-    error, 
-    refetch, 
-    fetchNextPage, 
+  const {
+    data,
+    isLoading,
+    error,
+    refetch,
+    fetchNextPage,
     hasNextPage
   } = useMediaByLanguage(selectedLanguage);
 
@@ -29,10 +30,15 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
   }, []);
 
   // Memoized flattened items list
-  const allItems = useMemo(() => 
+  const allItems = useMemo(() =>
     data?.pages.flatMap((page) => page.results) || [],
     [data]
   );
+
+  // Lazy load hooks for each section
+  const { ref: titleRef, isVisible: titleVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: filtersRef, isVisible: filtersVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: gridRef, isVisible: gridVisible } = useLazyLoad<HTMLDivElement>();
 
   return (
     <motion.div
@@ -42,18 +48,26 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="px-4 sm:px-8 mb-6">
-        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Browse by Languages</h1>
-        <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
-          Discover movies and TV shows based on their original language.
-        </p>
+      <div ref={titleRef} className="px-4 sm:px-8 mb-6">
+        {titleVisible && (
+          <>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Browse by Languages</h1>
+            <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
+              Discover movies and TV shows based on their original language.
+            </p>
+          </>
+        )}
       </div>
 
       {/* Language Filter Tags */}
-      <LanguagesFilter
-        selectedLanguage={selectedLanguage}
-        onLanguageSelect={handleLanguageSelect}
-      />
+      <div ref={filtersRef}>
+        {filtersVisible && (
+          <LanguagesFilter
+            selectedLanguage={selectedLanguage}
+            onLanguageSelect={handleLanguageSelect}
+          />
+        )}
+      </div>
 
       {error ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
@@ -68,52 +82,54 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
           </button>
         </div>
       ) : (
-        <div className="mt-4">
-          <AnimatePresence mode="wait">
-            {isLoading ? (
-              <motion.div
-                key="skeleton"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <MediaGridSkeleton />
-              </motion.div>
-            ) : (
-              <motion.div
-                key={`grid-lang-${selectedLanguage}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <InfiniteScroll
-                  dataLength={allItems.length}
-                  next={fetchNextPage}
-                  hasMore={!!hasNextPage}
-                  loader={
-                    <div className="h-24 flex items-center justify-center w-full">
-                      <Loader />
-                    </div>
-                  }
-                  endMessage={
-                    <div className="py-10 text-center text-[var(--text-secondary)]">
-                      <p>You've reached the end of the list.</p>
-                    </div>
-                  }
-                  // Hide unintended scrollbar
-                  style={{ overflow: "hidden" }}
-                  scrollThreshold={0.9}
+        <div ref={gridRef} className="mt-4">
+          {gridVisible && (
+            <AnimatePresence mode="wait">
+              {isLoading ? (
+                <motion.div
+                  key="skeleton"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  <MediaGrid
-                    items={allItems as unknown as HeroMedia[]}
-                    emptyMessage="No content available for this language."
-                  />
-                </InfiniteScroll>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  <MediaGridSkeleton />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={`grid-lang-${selectedLanguage}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <InfiniteScroll
+                    dataLength={allItems.length}
+                    next={fetchNextPage}
+                    hasMore={!!hasNextPage}
+                    loader={
+                      <div className="h-24 flex items-center justify-center w-full">
+                        <Loader />
+                      </div>
+                    }
+                    endMessage={
+                      <div className="py-10 text-center text-[var(--text-secondary)]">
+                        <p>You&apos;ve reached the end of the list.</p>
+                      </div>
+                    }
+                    // Hide unintended scrollbar
+                    style={{ overflow: "hidden" }}
+                    scrollThreshold={0.9}
+                  >
+                    <MediaGrid
+                      items={allItems as unknown as HeroMedia[]}
+                      emptyMessage="No content available for this language."
+                    />
+                  </InfiniteScroll>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
         </div>
       )}
     </motion.div>
