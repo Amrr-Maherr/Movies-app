@@ -2,6 +2,7 @@ import { memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Loader, Error as ErrorComponent } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HeroSection from "@/components/shared/heroSection/HeroSection";
 
 import usePopularMovies from "@/queries/FetchPopularMovies";
 import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
@@ -16,7 +17,6 @@ import useTopRatedTvShows from "@/queries/FetchTopRatedTvShows";
 import useAiringTodayTv from "@/queries/FetchAiringTodayTv";
 import useOnTheAirTv from "@/queries/FetchOnTheAirTv";
 
-const HeroSection = lazy(() => import("@/components/shared/heroSection").then((m) => ({ default: m.HeroSection })));
 const MediaSection = lazy(() => import("@/components/shared/MediaSection"));
 const TopPicksSection = lazy(() => import("@/components/sections/TopPicksSection"));
 const MoviePromo = lazy(() => import("@/components/sections/MoviePromo"));
@@ -30,12 +30,6 @@ const BingeWorthySection = lazy(() => import("@/components/sections/BingeWorthyS
 const WeekendWatchSection = lazy(() => import("@/components/sections/WeekendWatchSection"));
 const PricingSection = lazy(() => import("@/components/sections/PricingSection"));
 const AskedQuestions = lazy(() => import("@/components/sections/AskedQuestions"));
-
-const SectionLoader = () => (
-  <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-    <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-  </div>
-);
 
 const Home = memo(function Home() {
   const {
@@ -232,7 +226,11 @@ const Home = memo(function Home() {
   }
 
   return (
-    <Suspense fallback={<SectionLoader />}>
+    <Suspense fallback={
+      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
       <motion.div
         className="min-h-screen bg-[var(--background-primary)]"
         initial={{ opacity: 0, x: -50 }}
@@ -240,15 +238,13 @@ const Home = memo(function Home() {
         exit={{ opacity: 0, x: 50 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Hero Section - No LazyWrapper, always visible */}
-        <Suspense fallback={<SectionLoader />}>
-          <HeroSection
-            data={AllData}
-            isLoading={false}
-            error={null}
-            onRetry={handleEmptyHeroRetry}
-          />
-        </Suspense>
+        {/* Hero Section - always visible, no lazy loading */}
+        <HeroSection
+          data={AllData}
+          isLoading={false}
+          error={null}
+          onRetry={handleEmptyHeroRetry}
+        />
 
         {/* Top 10 Movies Section */}
         {trendingMoviesWeek && (
