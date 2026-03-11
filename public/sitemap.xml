@@ -4,39 +4,129 @@
   <url>
     <loc>https://www.myapp.com/</loc>
     <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <priority>0.7</priority>
     <lastmod>2026-03-11</lastmod>
   </url>
-  
+
   <!-- Main Sections -->
   <url>
     <loc>https://www.myapp.com/movies</loc>
     <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.myapp.com/tv-shows</loc>
     <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.myapp.com/actors</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.myapp.com/new-popular</loc>
     <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.myapp.com/kids</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.myapp.com/browse/languages</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Example Movie Pages -->
+  <!-- Replace with actual movie IDs from your database -->
+  <url>
+    <loc>https://www.myapp.com/movies/123456</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.myapp.com/movies/234567</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.myapp.com/movies/345678</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Example Series Pages -->
+  <!-- Replace with actual series IDs from your database -->
+  <url>
+    <loc>https://www.myapp.com/series/123456</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.myapp.com/series/234567</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.myapp.com/series/345678</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Example Actor Pages -->
+  <!-- Replace with actual actor IDs from your database -->
+  <url>
+    <loc>https://www.myapp.com/actors/123456</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.myapp.com/actors/234567</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.myapp.com/actors/345678</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Example Season Pages -->
+  <!-- Replace with actual season IDs from your database -->
+  <url>
+    <loc>https://www.myapp.com/seasons/123456/1</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.myapp.com/seasons/234567/1</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.myapp.com/seasons/345678/1</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Example Episode Pages -->
+  <!-- Replace with actual episode IDs from your database -->
+  <url>
+    <loc>https://www.myapp.com/episodes/123456/1/1</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.myapp.com/episodes/234567/1/1</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.myapp.com/episodes/345678/1/1</loc>
+    <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
 </urlset>

@@ -1,0 +1,19 @@
+# robots.txt for Netflix Clone
+# https://www.myapp.com/robots.txt
+
+# Sitemap location
+Sitemap: https://www.myapp.com/sitemap.xml
+
+# Allow all search engines to crawl the site
+User-agent: *
+
+# Allow access to all pages except admin and login
+Disallow: /admin
+Disallow: /login
+
+# Optional: Crawl-delay for polite crawling (in seconds)
+# Crawl-delay: 1
+
+# Notes:
+# - All other pages are allowed to be crawled
+# - This includes: /, /movies/*, /series/*, /actors/*, /seasons/*, /episodes/*
