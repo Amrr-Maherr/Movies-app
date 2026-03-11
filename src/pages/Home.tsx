@@ -240,15 +240,15 @@ const Home = memo(function Home() {
         exit={{ opacity: 0, x: 50 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Hero Section */}
-        <LazyWrapper height={500}>
+        {/* Hero Section - No LazyWrapper, always visible */}
+        <Suspense fallback={<SectionLoader />}>
           <HeroSection
             data={AllData}
             isLoading={false}
             error={null}
             onRetry={handleEmptyHeroRetry}
           />
-        </LazyWrapper>
+        </Suspense>
 
         {/* Top 10 Movies Section */}
         {trendingMoviesWeek && (
