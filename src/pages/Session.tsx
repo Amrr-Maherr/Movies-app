@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function Session() {
   return (
@@ -9,6 +10,11 @@ export default function Session() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Session"
+        description="Manage your Netflix session settings."
+      />
+
       <h1>Session</h1>
     </motion.div>
   );

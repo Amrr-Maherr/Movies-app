@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { FileText, Scale, Shield } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function LegalNotices() {
   const notices = [
@@ -44,6 +45,11 @@ export default function LegalNotices() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Legal Notices"
+        description="Important legal information and notices from Netflix."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Legal Notices

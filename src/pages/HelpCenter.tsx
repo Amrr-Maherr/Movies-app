@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { HelpCircle, Book, MessageSquare, Phone } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function HelpCenter() {
   const helpCategories = [
@@ -42,6 +43,11 @@ export default function HelpCenter() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Help Center"
+        description="Get help with your Netflix account, streaming issues, and more."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Help Center

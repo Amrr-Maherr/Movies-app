@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function NotFound() {
   return (
@@ -10,6 +11,11 @@ export default function NotFound() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Page Not Found"
+        description="The page you're looking for doesn't exist. Return to Netflix home."
+      />
+
       <h1 className="text-9xl font-bold text-[var(--netflix-red)] mb-4">404</h1>
       <h2 className="text-2xl font-semibold mb-4">
         Lost your way?

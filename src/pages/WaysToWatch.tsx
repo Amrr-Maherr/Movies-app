@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Tv, Smartphone, Tablet, Laptop, Gamepad2 } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function WaysToWatch() {
   const devices = [
@@ -38,6 +39,11 @@ export default function WaysToWatch() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Ways to Watch"
+        description="Watch Netflix on your favorite devices - Smart TV, smartphone, tablet, laptop, and more."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Ways to Watch

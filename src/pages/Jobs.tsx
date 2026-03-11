@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Briefcase, Globe, Award, Heart } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function Jobs() {
   const departments = [
@@ -26,6 +27,11 @@ export default function Jobs() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Jobs at Netflix"
+        description="Explore career opportunities at Netflix. Join our team and help us entertain the world."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Jobs at Netflix

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Film, Tv, Newspaper, Video, ChevronLeft } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function MediaCenter() {
   const news = [
@@ -38,6 +39,11 @@ export default function MediaCenter() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Media Center"
+        description="Latest news, press releases, and updates from Netflix."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Media Center

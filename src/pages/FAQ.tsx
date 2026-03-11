@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function FAQ() {
   const faqs = [
@@ -37,6 +38,11 @@ export default function FAQ() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Frequently Asked Questions"
+        description="Find answers to common questions about Netflix streaming service."
+      />
+
       {/* Header */}
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-12 text-center">

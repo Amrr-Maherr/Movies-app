@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function TermsOfUse() {
   const sections = [
@@ -45,6 +46,11 @@ export default function TermsOfUse() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Terms of Use"
+        description="Netflix Terms of Use and membership agreement."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Terms of Use

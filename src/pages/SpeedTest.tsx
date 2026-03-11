@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Gauge, Wifi, Download, Server } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function SpeedTest() {
   const speedFactors = [
@@ -33,6 +34,11 @@ export default function SpeedTest() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Speed Test"
+        description="Test your internet speed and optimize your Netflix streaming experience."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Speed Test

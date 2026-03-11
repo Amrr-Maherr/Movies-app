@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 import TVShowFilters, { TVShowFilterOption } from "@/components/shared/TVShowFilters";
 import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
@@ -45,6 +46,11 @@ export default function TVShow() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="TV Shows"
+        description="Browse the most popular, highly-rated, and currently airing TV series on Netflix."
+      />
+
       <LazyWrapper>
         <HeroSection
           data={tvShows as TvShow[] | undefined}

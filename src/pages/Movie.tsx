@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 import MovieFilters, { MovieFilterOption } from "@/components/shared/MovieFilters";
 import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
@@ -45,6 +46,11 @@ export default function Movie() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Movies"
+        description="Movies move us like nothing else can, whether they're scary, funny, dramatic, romantic or anywhere in-between."
+      />
+
       <LazyWrapper height={400}>
         <HeroSection
           data={movies as Movie[] | undefined}

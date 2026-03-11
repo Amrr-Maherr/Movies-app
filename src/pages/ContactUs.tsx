@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Mail, Phone, MessageSquare, HelpCircle, ChevronLeft } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function ContactUs() {
   const contactMethods = [
@@ -43,6 +44,11 @@ export default function ContactUs() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Contact Us"
+        description="Get in touch with Netflix support. We're here to help."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Contact Us

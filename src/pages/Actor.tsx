@@ -1,6 +1,7 @@
 import { useState, memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 import InfiniteScroll from "react-infinite-scroll-component";
 import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
@@ -64,6 +65,11 @@ const ActorsPage = memo(function ActorsPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Popular Actors"
+        description="Explore the most popular actors and celebrities in the industry today on Netflix."
+      />
+
       {/* Header Section */}
       <div className="px-4 sm:px-8 mb-8">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">

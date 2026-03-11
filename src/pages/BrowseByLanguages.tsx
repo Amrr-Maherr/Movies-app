@@ -1,6 +1,7 @@
 import { useState, memo, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 import InfiniteScroll from "react-infinite-scroll-component";
 import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
@@ -37,6 +38,11 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Browse by Languages"
+        description="Discover movies and TV shows based on their original language on Netflix."
+      />
+
       <LazyWrapper>
         <>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Browse by Languages</h1>

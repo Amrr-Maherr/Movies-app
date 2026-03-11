@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { TrendingUp, DollarSign, Users, FileText } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function InvestorRelations() {
   const financialHighlights = [
@@ -24,6 +25,11 @@ export default function InvestorRelations() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Investor Relations"
+        description="Netflix investor information, financial data, and stock information."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Investor Relations

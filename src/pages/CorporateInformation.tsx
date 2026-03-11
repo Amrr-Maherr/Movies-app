@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Building2, Users, Award, Globe } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function CorporateInformation() {
   const info = [
@@ -40,6 +41,11 @@ export default function CorporateInformation() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Corporate Information"
+        description="Learn about Netflix's mission, leadership, and global impact."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Corporate Information

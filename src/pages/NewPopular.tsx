@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 import NewPopularFilters, { NewPopularFilterOption } from "@/components/shared/NewPopularFilters";
 import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
@@ -45,6 +46,11 @@ export default function NewPopular() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="New & Popular"
+        description="See what's trending, highly anticipated, and making waves right now on Netflix."
+      />
+
       <LazyWrapper height={400}>
         <HeroSection
           data={mediaItems as HeroMedia[] | undefined}

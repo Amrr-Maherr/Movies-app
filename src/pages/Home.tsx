@@ -2,6 +2,7 @@ import { memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Loader, Error as ErrorComponent } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 import HeroSection from "@/components/shared/heroSection/HeroSection";
 
 import usePopularMovies from "@/queries/FetchPopularMovies";
@@ -233,6 +234,11 @@ const Home = memo(function Home() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Netflix Egypt - Watch TV Shows Online, Watch Movies Online"
+        description="Watch unlimited movies and TV shows on Netflix. Stream anytime, anywhere on any device."
+      />
+
       {/* Hero Section - always visible, no lazy loading */}
       <HeroSection
         data={AllData}
@@ -243,11 +249,13 @@ const Home = memo(function Home() {
 
       {/* Top 10 Movies Section */}
       {trendingMoviesWeek && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <TopPicksSection
               movies={trendingMoviesWeek}
@@ -258,11 +266,13 @@ const Home = memo(function Home() {
       )}
 
       {/* Trending Now */}
-      <Suspense fallback={
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="py-12 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -278,11 +288,13 @@ const Home = memo(function Home() {
 
       {/* New Releases Section */}
       {upcomingMovies && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <NewReleasesSection
               movies={upcomingMovies}
@@ -294,11 +306,13 @@ const Home = memo(function Home() {
 
       {/* Continue Watching Section */}
       {trendingTvWeek && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <ContinueWatchingSection
               movies={trendingTvWeek}
@@ -310,11 +324,13 @@ const Home = memo(function Home() {
       )}
 
       {/* Trending TV Shows */}
-      <Suspense fallback={
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="py-12 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -330,11 +346,13 @@ const Home = memo(function Home() {
 
       {/* First Promo - Left Aligned */}
       {popularMovies && popularMovies[0] && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper height={400}>
             <MoviePromo
               movie={popularMovies[0]}
@@ -347,11 +365,13 @@ const Home = memo(function Home() {
 
       {/* Only on Netflix Section */}
       {popularTv && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <OnlyOnNetflixSection movies={popularTv} mediaType="tv" />
           </LazyWrapper>
@@ -360,11 +380,13 @@ const Home = memo(function Home() {
 
       {/* Genre Showcase - Action */}
       {trendingMoviesDay && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <GenreShowcaseSection
               movies={trendingMoviesDay}
@@ -376,11 +398,13 @@ const Home = memo(function Home() {
       )}
 
       {/* Trending Today */}
-      <Suspense fallback={
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="py-12 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -396,27 +420,28 @@ const Home = memo(function Home() {
 
       {/* Weekend Watch Section */}
       {popularMovies && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
-            <WeekendWatchSection
-              movies={popularMovies}
-              mediaType="movie"
-            />
+            <WeekendWatchSection movies={popularMovies} mediaType="movie" />
           </LazyWrapper>
         </Suspense>
       )}
 
       {/* Because You Watched Section */}
       {trendingTvDay && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <BecauseYouWatchedSection
               movies={trendingTvDay}
@@ -428,11 +453,13 @@ const Home = memo(function Home() {
       )}
 
       {/* Hot TV Shows Today & Popular Movies */}
-      <Suspense fallback={
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="py-12 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -455,28 +482,28 @@ const Home = memo(function Home() {
 
       {/* Second Promo - Right Aligned */}
       {popularTv && popularTv[1] && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper height={400}>
-            <MoviePromo
-              movie={popularTv[1]}
-              mediaType="tv"
-              variant="right"
-            />
+            <MoviePromo movie={popularTv[1]} mediaType="tv" variant="right" />
           </LazyWrapper>
         </Suspense>
       )}
 
       {/* Binge-Worthy Section */}
       {onTheAirTv && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <BingeWorthySection movies={onTheAirTv} mediaType="tv" />
           </LazyWrapper>
@@ -485,11 +512,13 @@ const Home = memo(function Home() {
 
       {/* Top 10 TV Shows */}
       {popularTv && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <TopPicksSection
               movies={popularTv}
@@ -500,11 +529,13 @@ const Home = memo(function Home() {
       )}
 
       {/* Popular TV Shows & Coming Soon */}
-      <Suspense fallback={
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="py-12 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -527,11 +558,13 @@ const Home = memo(function Home() {
 
       {/* Award Winners Section */}
       {topRatedMovies && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <AwardWinnersSection movies={topRatedMovies} mediaType="movie" />
           </LazyWrapper>
@@ -540,11 +573,13 @@ const Home = memo(function Home() {
 
       {/* Third Promo - Center Aligned */}
       {topRatedMovies && topRatedMovies[2] && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper height={400}>
             <MoviePromo
               movie={topRatedMovies[2]}
@@ -557,11 +592,13 @@ const Home = memo(function Home() {
 
       {/* Genre Showcase - Drama */}
       {airingTodayTv && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <GenreShowcaseSection
               movies={airingTodayTv}
@@ -573,11 +610,13 @@ const Home = memo(function Home() {
       )}
 
       {/* Airing Today */}
-      <Suspense fallback={
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="py-12 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -593,11 +632,13 @@ const Home = memo(function Home() {
 
       {/* New Episodes This Week */}
       {airingTodayTv && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <NewReleasesSection
               movies={airingTodayTv}
@@ -608,11 +649,13 @@ const Home = memo(function Home() {
       )}
 
       {/* Now Playing in Theaters */}
-      <Suspense fallback={
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="py-12 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -628,28 +671,28 @@ const Home = memo(function Home() {
 
       {/* Fourth Promo - Left Aligned */}
       {topRatedTv && topRatedTv[3] && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper height={400}>
-            <MoviePromo
-              movie={topRatedTv[3]}
-              mediaType="tv"
-              variant="left"
-            />
+            <MoviePromo movie={topRatedTv[3]} mediaType="tv" variant="left" />
           </LazyWrapper>
         </Suspense>
       )}
 
       {/* Award Winners TV */}
       {topRatedTv && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <AwardWinnersSection movies={topRatedTv} mediaType="tv" />
           </LazyWrapper>
@@ -658,11 +701,13 @@ const Home = memo(function Home() {
 
       {/* Because You Watched Section 2 */}
       {nowPlayingMovies && (
-        <Suspense fallback={
-          <div className="py-12 flex items-center justify-center">
-            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="py-12 flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          }
+        >
           <LazyWrapper>
             <BecauseYouWatchedSection
               movies={nowPlayingMovies}
@@ -674,11 +719,13 @@ const Home = memo(function Home() {
       )}
 
       {/* Currently Airing */}
-      <Suspense fallback={
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="py-12 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -693,22 +740,26 @@ const Home = memo(function Home() {
       </Suspense>
 
       {/* Pricing Section */}
-      <Suspense fallback={
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="py-12 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <LazyWrapper>
           <PricingSection />
         </LazyWrapper>
       </Suspense>
 
       {/* FAQ Section */}
-      <Suspense fallback={
-        <div className="py-12 flex items-center justify-center">
-          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="py-12 flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          </div>
+        }
+      >
         <LazyWrapper>
           <AskedQuestions />
         </LazyWrapper>

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Shield, Lock, Eye, Database } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function Privacy() {
   const sections = [
@@ -44,6 +45,11 @@ export default function Privacy() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      <HelmetMeta
+        name="Privacy Policy"
+        description="Netflix Privacy Policy - Learn how we collect, use, and protect your personal information."
+      />
+
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
           Privacy Policy
