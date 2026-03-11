@@ -241,7 +241,7 @@ const Home = memo(function Home() {
         transition={{ duration: 0.5 }}
       >
         {/* Hero Section */}
-        <LazyWrapper threshold={0.01} rootMargin="100px" height={500}>
+        <LazyWrapper height={500}>
           <HeroSection
             data={AllData}
             isLoading={false}
@@ -252,7 +252,7 @@ const Home = memo(function Home() {
 
         {/* Top 10 Movies Section */}
         {trendingMoviesWeek && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <TopPicksSection
               movies={trendingMoviesWeek}
               title="Top 10 Movies in Egypt Today"
@@ -261,7 +261,7 @@ const Home = memo(function Home() {
         )}
 
         {/* Trending Now */}
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
               title="Trending Now"
@@ -275,7 +275,7 @@ const Home = memo(function Home() {
 
         {/* New Releases Section */}
         {upcomingMovies && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <NewReleasesSection
               movies={upcomingMovies}
               title="New Releases This Week"
@@ -285,7 +285,7 @@ const Home = memo(function Home() {
 
         {/* Continue Watching Section */}
         {trendingTvWeek && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <ContinueWatchingSection
               movies={trendingTvWeek}
               title="Continue Watching"
@@ -295,7 +295,7 @@ const Home = memo(function Home() {
         )}
 
         {/* Trending TV Shows */}
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
               title="Trending TV Shows"
@@ -309,7 +309,7 @@ const Home = memo(function Home() {
 
         {/* First Promo - Left Aligned */}
         {popularMovies && popularMovies[0] && (
-          <LazyWrapper threshold={0.01} rootMargin="100px" height={400}>
+          <LazyWrapper height={400}>
             <MoviePromo
               movie={popularMovies[0]}
               mediaType="movie"
@@ -320,14 +320,14 @@ const Home = memo(function Home() {
 
         {/* Only on Netflix Section */}
         {popularTv && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <OnlyOnNetflixSection movies={popularTv} mediaType="tv" />
           </LazyWrapper>
         )}
 
         {/* Genre Showcase - Action */}
         {trendingMoviesDay && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <GenreShowcaseSection
               movies={trendingMoviesDay}
               genre="Action & Adventure"
@@ -337,7 +337,7 @@ const Home = memo(function Home() {
         )}
 
         {/* Trending Today */}
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
               title="Trending Today"
@@ -351,7 +351,7 @@ const Home = memo(function Home() {
 
         {/* Weekend Watch Section */}
         {popularMovies && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <WeekendWatchSection
               movies={popularMovies}
               mediaType="movie"
@@ -361,7 +361,7 @@ const Home = memo(function Home() {
 
         {/* Because You Watched Section */}
         {trendingTvDay && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <BecauseYouWatchedSection
               movies={trendingTvDay}
               basedOn="Stranger Things"
@@ -371,7 +371,7 @@ const Home = memo(function Home() {
         )}
 
         {/* Hot TV Shows Today & Popular Movies */}
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
               title="Hot TV Shows Today"
@@ -392,7 +392,7 @@ const Home = memo(function Home() {
 
         {/* Second Promo - Right Aligned */}
         {popularTv && popularTv[1] && (
-          <LazyWrapper threshold={0.01} rootMargin="100px" height={400}>
+          <LazyWrapper height={400}>
             <MoviePromo
               movie={popularTv[1]}
               mediaType="tv"
@@ -403,14 +403,14 @@ const Home = memo(function Home() {
 
         {/* Binge-Worthy Section */}
         {onTheAirTv && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <BingeWorthySection movies={onTheAirTv} mediaType="tv" />
           </LazyWrapper>
         )}
 
         {/* Top 10 TV Shows */}
         {popularTv && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <TopPicksSection
               movies={popularTv}
               title="Top 10 TV Shows in Egypt Today"
@@ -419,7 +419,7 @@ const Home = memo(function Home() {
         )}
 
         {/* Popular TV Shows & Coming Soon */}
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
               title="Popular TV Shows"
@@ -440,14 +440,14 @@ const Home = memo(function Home() {
 
         {/* Award Winners Section */}
         {topRatedMovies && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <AwardWinnersSection movies={topRatedMovies} mediaType="movie" />
           </LazyWrapper>
         )}
 
         {/* Third Promo - Center Aligned */}
         {topRatedMovies && topRatedMovies[2] && (
-          <LazyWrapper threshold={0.01} rootMargin="100px" height={400}>
+          <LazyWrapper height={400}>
             <MoviePromo
               movie={topRatedMovies[2]}
               mediaType="movie"
@@ -458,7 +458,7 @@ const Home = memo(function Home() {
 
         {/* Genre Showcase - Drama */}
         {airingTodayTv && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <GenreShowcaseSection
               movies={airingTodayTv}
               genre="Drama Series"
@@ -468,7 +468,7 @@ const Home = memo(function Home() {
         )}
 
         {/* Airing Today */}
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
               title="Airing Today"
@@ -482,7 +482,7 @@ const Home = memo(function Home() {
 
         {/* New Episodes This Week */}
         {airingTodayTv && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <NewReleasesSection
               movies={airingTodayTv}
               title="New Episodes This Week"
@@ -491,7 +491,7 @@ const Home = memo(function Home() {
         )}
 
         {/* Now Playing in Theaters */}
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
               title="Now Playing in Theaters"
@@ -505,7 +505,7 @@ const Home = memo(function Home() {
 
         {/* Fourth Promo - Left Aligned */}
         {topRatedTv && topRatedTv[3] && (
-          <LazyWrapper threshold={0.01} rootMargin="100px" height={400}>
+          <LazyWrapper height={400}>
             <MoviePromo
               movie={topRatedTv[3]}
               mediaType="tv"
@@ -516,14 +516,14 @@ const Home = memo(function Home() {
 
         {/* Award Winners TV */}
         {topRatedTv && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <AwardWinnersSection movies={topRatedTv} mediaType="tv" />
           </LazyWrapper>
         )}
 
         {/* Because You Watched Section 2 */}
         {nowPlayingMovies && (
-          <LazyWrapper threshold={0.01} rootMargin="100px">
+          <LazyWrapper>
             <BecauseYouWatchedSection
               movies={nowPlayingMovies}
               basedOn="The Dark Knight"
@@ -533,7 +533,7 @@ const Home = memo(function Home() {
         )}
 
         {/* Currently Airing */}
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <div className="py-6 md:py-8 container">
             <MediaSection
               title="Currently Airing"
@@ -546,12 +546,12 @@ const Home = memo(function Home() {
         </LazyWrapper>
 
         {/* Pricing Section */}
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <PricingSection />
         </LazyWrapper>
 
         {/* FAQ Section */}
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <AskedQuestions />
         </LazyWrapper>
       </motion.div>

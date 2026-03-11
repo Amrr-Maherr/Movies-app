@@ -76,13 +76,13 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       transition={{ duration: 0.5 }}
     >
       {/* Hero Section */}
-      <LazyWrapper threshold={0.01} rootMargin="100px" height={500}>
+      <LazyWrapper height={500}>
         <PersonHero person={personData} />
       </LazyWrapper>
 
       {/* Social Links Section */}
       {externalIdsData && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <SocialLinksSection
             imdbId={externalIdsData.imdb_id}
             twitterId={externalIdsData.twitter_id}
@@ -96,13 +96,13 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
 
       {/* Known For Section */}
       {(cast.length > 0 || crew.length > 0) && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <KnownForSection cast={cast} crew={crew} />
         </LazyWrapper>
       )}
 
       {/* Biography Section */}
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <BiographySection
           biography={personData.biography}
           placeOfBirth={personData.place_of_birth}
@@ -114,7 +114,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
 
       {/* Credits Section */}
       {(cast.length > 0 || crew.length > 0) && (
-        <LazyWrapper threshold={0.01} rootMargin="200px">
+        <LazyWrapper>
           <CreditsSection cast={cast} crew={crew} />
         </LazyWrapper>
       )}

@@ -148,7 +148,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       </div>
 
       {/* Hero Section with Episode Still */}
-      <LazyWrapper threshold={0.01} rootMargin="100px" height={500}>
+      <LazyWrapper height={500}>
         <>
           <div className="relative w-full h-[70vh] min-h-[500px]">
             <div className="absolute inset-0 w-full h-full">
@@ -225,7 +225,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
 
       {/* Guest Stars Section */}
       {guestStars.length > 0 && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <Suspense fallback={<CreditsSectionSkeleton />}>
             <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
               <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
@@ -250,7 +250,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
 
       {/* Key Crew Section */}
       {keyCrew.length > 0 && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
             <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
@@ -287,7 +287,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       )}
 
       {/* Episode Info Section */}
-      <LazyWrapper threshold={0.01} rootMargin="200px">
+      <LazyWrapper>
         <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
             <div className="grid md:grid-cols-2 gap-8">

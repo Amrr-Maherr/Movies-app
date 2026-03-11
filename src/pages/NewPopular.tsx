@@ -45,7 +45,7 @@ export default function NewPopular() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
-      <LazyWrapper threshold={0.01} rootMargin="100px" height={400}>
+      <LazyWrapper height={400}>
         <HeroSection
           data={mediaItems as HeroMedia[] | undefined}
           isLoading={isLoading}
@@ -61,7 +61,7 @@ export default function NewPopular() {
         </p>
       </div>
 
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <NewPopularFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
       </LazyWrapper>
 
@@ -78,7 +78,7 @@ export default function NewPopular() {
           </button>
         </div>
       ) : (
-        <LazyWrapper threshold={0.01} rootMargin="200px">
+        <LazyWrapper>
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div

@@ -19,7 +19,7 @@ export default function Kids() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
-      <LazyWrapper threshold={0.01} rootMargin="100px" height={400}>
+      <LazyWrapper height={400}>
         <HeroSection
           data={movies as Movie[] | undefined}
           isLoading={isLoading}
@@ -48,7 +48,7 @@ export default function Kids() {
           </button>
         </div>
       ) : (
-        <LazyWrapper threshold={0.01} rootMargin="200px">
+        <LazyWrapper>
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div

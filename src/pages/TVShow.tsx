@@ -45,7 +45,7 @@ export default function TVShow() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <HeroSection
           data={tvShows as TvShow[] | undefined}
           isLoading={isLoading}
@@ -61,7 +61,7 @@ export default function TVShow() {
         </p>
       </div>
 
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <TVShowFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
       </LazyWrapper>
 
@@ -78,7 +78,7 @@ export default function TVShow() {
           </button>
         </div>
       ) : (
-        <LazyWrapper threshold={0.01} rootMargin="200px">
+        <LazyWrapper>
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div

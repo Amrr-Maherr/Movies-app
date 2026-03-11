@@ -68,14 +68,14 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       transition={{ duration: 0.5 }}
     >
       {/* Hero Section */}
-      <LazyWrapper threshold={0.01} rootMargin="100px" height={500}>
+      <LazyWrapper height={500}>
         <Suspense fallback={<SectionSkeleton />}>
           <MediaHero media={data} />
         </Suspense>
       </LazyWrapper>
 
       {/* Media Info Section */}
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <Suspense fallback={<SectionSkeleton />}>
           <MediaInfoSection media={data} />
         </Suspense>
@@ -83,7 +83,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
 
       {/* Trailers Section */}
       {videos.length > 0 && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <Suspense fallback={<SectionSkeleton />}>
             <TrailersSection videos={videos} />
           </Suspense>
@@ -91,7 +91,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       )}
 
       {/* Behind the Scenes Section */}
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <Suspense fallback={<SectionSkeleton />}>
           <BehindTheScenesSection images={images} />
         </Suspense>
@@ -99,7 +99,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
 
       {/* More Like This Section */}
       {similar.length > 0 && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <Suspense fallback={<SectionSkeleton />}>
             <MoreLikeThisSection similar={similar} />
           </Suspense>
@@ -108,7 +108,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
 
       {/* Full Credits Section */}
       {(credits.cast.length > 0 || credits.crew.length > 0) && (
-        <LazyWrapper threshold={0.01} rootMargin="200px">
+        <LazyWrapper>
           <Suspense fallback={<SectionSkeleton />}>
             <FullCreditsSection cast={credits.cast || []} crew={credits.crew || []} />
           </Suspense>

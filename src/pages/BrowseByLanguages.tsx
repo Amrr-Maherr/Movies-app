@@ -37,7 +37,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Browse by Languages</h1>
           <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
@@ -47,7 +47,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
       </LazyWrapper>
 
       {/* Language Filter Tags */}
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <LanguagesFilter
           selectedLanguage={selectedLanguage}
           onLanguageSelect={handleLanguageSelect}
@@ -67,7 +67,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
           </button>
         </div>
       ) : (
-        <LazyWrapper threshold={0.01} rootMargin="200px">
+        <LazyWrapper>
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div

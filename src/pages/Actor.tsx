@@ -75,7 +75,7 @@ const ActorsPage = memo(function ActorsPage() {
       </div>
 
       {/* Filters Section */}
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <Suspense fallback={<FiltersSkeleton />}>
           <PeopleFiltersLazy
             selectedGender={selectedGender}
@@ -100,7 +100,7 @@ const ActorsPage = memo(function ActorsPage() {
           </button>
         </div>
       ) : (
-        <LazyWrapper threshold={0.01} rootMargin="200px">
+        <LazyWrapper>
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div

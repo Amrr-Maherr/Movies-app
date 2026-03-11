@@ -3,16 +3,12 @@ import React, { useEffect, useRef, useState } from "react";
 interface LazyWrapperProps {
   children: React.ReactNode;
   placeholder?: React.ReactNode;
-  threshold?: number;
-  rootMargin?: string;
   height?: string | number;
 }
 
 const LazyWrapper: React.FC<LazyWrapperProps> = ({
   children,
   placeholder = null,
-  threshold = 0.1,
-  rootMargin = "0px",
   height,
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -37,7 +33,7 @@ const LazyWrapper: React.FC<LazyWrapperProps> = ({
           observer.disconnect();
         }
       },
-      { threshold, rootMargin }
+      { threshold: 0, rootMargin: "500px" }
     );
 
     observer.observe(wrapperRef.current);
@@ -45,7 +41,7 @@ const LazyWrapper: React.FC<LazyWrapperProps> = ({
     return () => {
       observer.disconnect();
     };
-  }, [threshold, rootMargin]);
+  }, []);
 
   return (
     <div ref={wrapperRef}>

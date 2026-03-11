@@ -109,7 +109,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
       transition={{ duration: 0.3 }}
     >
       {/* Header Section */}
-      <LazyWrapper threshold={0.01} rootMargin="100px" height={400}>
+      <LazyWrapper height={400}>
         <>
           {backdropUrl && (
             <div
@@ -182,7 +182,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
       </LazyWrapper>
 
       {/* Episodes Section */}
-      <LazyWrapper threshold={0.01} rootMargin="200px">
+      <LazyWrapper>
         <Suspense fallback={<SectionSkeleton />}>
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8">
             <h2 className="text-2xl font-bold text-white mb-6">Episodes</h2>

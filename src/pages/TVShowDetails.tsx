@@ -99,14 +99,14 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       transition={{ duration: 0.5 }}
     >
       {/* Hero Section */}
-      <LazyWrapper threshold={0.01} rootMargin="100px" height={500}>
+      <LazyWrapper height={500}>
         <Suspense fallback={<SectionSkeleton />}>
           <MediaHero media={data} />
         </Suspense>
       </LazyWrapper>
 
       {/* Media Info Section */}
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <Suspense fallback={<SectionSkeleton />}>
           <MediaInfoSection media={data} />
         </Suspense>
@@ -114,7 +114,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 
       {/* Episodes/Seasons Section */}
       {seasons.length > 0 && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <Suspense fallback={<SectionSkeleton />}>
             <EpisodesSection seasons={seasons} tvShowId={data.id} />
           </Suspense>
@@ -123,7 +123,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 
       {/* Trailers Section */}
       {trailers.length > 0 && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <Suspense fallback={<SectionSkeleton />}>
             <TrailersSection videos={trailers} />
           </Suspense>
@@ -131,7 +131,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       )}
 
       {/* Behind the Scenes Section */}
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <Suspense fallback={<SectionSkeleton />}>
           <BehindTheScenesSection images={backdrops} />
         </Suspense>
@@ -139,7 +139,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 
       {/* Reviews Section */}
       {reviews.length > 0 && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <Suspense fallback={<SectionSkeleton />}>
             <ReviewsSection reviews={reviews} />
           </Suspense>
@@ -148,7 +148,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 
       {/* Keywords Section */}
       {keywords.length > 0 && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <Suspense fallback={<SectionSkeleton />}>
             <section className="bg-black py-8 md:py-12">
               <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
@@ -164,7 +164,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 
       {/* Watch Providers Section */}
       {watchProviders.length > 0 && (
-        <LazyWrapper threshold={0.01} rootMargin="100px">
+        <LazyWrapper>
           <Suspense fallback={<SectionSkeleton />}>
             <WatchProvidersSection providers={watchProviders} />
           </Suspense>
@@ -173,7 +173,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 
       {/* More Like This Section */}
       {similar.length > 0 && (
-        <LazyWrapper threshold={0.01} rootMargin="200px">
+        <LazyWrapper>
           <Suspense fallback={<SectionSkeleton />}>
             <MoreLikeThisSection similar={similar} />
           </Suspense>

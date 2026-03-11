@@ -10,7 +10,7 @@ export default function MyList() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
-      <LazyWrapper threshold={0.01} rootMargin="100px">
+      <LazyWrapper>
         <h1>My List</h1>
       </LazyWrapper>
     </motion.div>
