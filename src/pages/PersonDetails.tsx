@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import { motion } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
 import PersonHero from "@/components/shared/PersonHero";
@@ -75,6 +76,12 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      {/* SEO Meta Tags */}
+      <HelmetMeta
+        name={personData.name || "Person Details"}
+        description={personData.biography?.substring(0, 160) || `Discover more about ${personData.name} on Netflix`}
+      />
+
       {/* Hero Section */}
       <LazyWrapper height={500}>
         <PersonHero person={personData} />

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchMovieDetails from "@/queries/FetchMovieDetails";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
@@ -67,6 +68,12 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
+      {/* SEO Meta Tags */}
+      <HelmetMeta
+        name={data.title || "Movie Details"}
+        description={data.overview || "Watch this movie on Netflix"}
+      />
+
       {/* Hero Section */}
       <LazyWrapper height={500}>
         <Suspense fallback={<SectionSkeleton />}>

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useParams, Link } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 import { ArrowLeft, Calendar, Film, Clock, Star } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
@@ -108,6 +109,12 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
     >
+      {/* SEO Meta Tags */}
+      <HelmetMeta
+        name={season.name || "Season Details"}
+        description={season.overview || `Watch Season ${seasonNumber} on Netflix`}
+      />
+
       {/* Header Section */}
       <LazyWrapper height={400}>
         <>

@@ -2,6 +2,7 @@ import { memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 import { ArrowLeft, Clock, Calendar, Star } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
@@ -136,6 +137,12 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
+      {/* SEO Meta Tags */}
+      <HelmetMeta
+        name={episode.name || "Episode Details"}
+        description={episode.overview?.substring(0, 160) || `Watch Episode ${episode.episode_number} of Season ${episode.season_number} on Netflix`}
+      />
+
       {/* Back Button */}
       <div className="absolute top-4 left-4 z-50">
         <button
