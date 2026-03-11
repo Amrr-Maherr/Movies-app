@@ -223,35 +223,123 @@ const Home = memo(function Home() {
   const handleEmptyHeroRetry = useCallback(() => {}, []);
 
   // ======== Lazy Load Hooks for Each Section ========
-  const { ref: heroRef, isVisible: heroVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: top10MoviesRef, isVisible: top10MoviesVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: trendingNowRef, isVisible: trendingNowVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: newReleasesRef, isVisible: newReleasesVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: continueWatchingRef, isVisible: continueWatchingVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: trendingTvRef, isVisible: trendingTvVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: firstPromoRef, isVisible: firstPromoVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: onlyOnNetflixRef, isVisible: onlyOnNetflixVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: genreActionRef, isVisible: genreActionVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: trendingTodayRef, isVisible: trendingTodayVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: weekendWatchRef, isVisible: weekendWatchVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: becauseYouWatchedRef, isVisible: becauseYouWatchedVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: hotTvShowsRef, isVisible: hotTvShowsVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: secondPromoRef, isVisible: secondPromoVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: bingeWorthyRef, isVisible: bingeWorthyVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: top10TvRef, isVisible: top10TvVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: popularTvComingSoonRef, isVisible: popularTvComingSoonVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: awardWinnersMoviesRef, isVisible: awardWinnersMoviesVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: thirdPromoRef, isVisible: thirdPromoVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: genreDramaRef, isVisible: genreDramaVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: airingTodayRef, isVisible: airingTodayVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: newEpisodesRef, isVisible: newEpisodesVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: nowPlayingRef, isVisible: nowPlayingVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: fourthPromoRef, isVisible: fourthPromoVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: awardWinnersTvRef, isVisible: awardWinnersTvVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: becauseYouWatched2Ref, isVisible: becauseYouWatched2Visible } = useLazyLoad<HTMLDivElement>();
-  const { ref: currentlyAiringRef, isVisible: currentlyAiringVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: pricingRef, isVisible: pricingVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: faqRef, isVisible: faqVisible } = useLazyLoad<HTMLDivElement>();
+  // Each section has a persistenceKey to stay loaded across navigation
+  const { ref: heroRef, isVisible: heroVisible, hasLoaded: heroLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-hero',
+    fallbackTimeout: 1500,
+  });
+  const { ref: top10MoviesRef, isVisible: top10MoviesVisible, hasLoaded: top10MoviesLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-top10-movies',
+    fallbackTimeout: 2000,
+  });
+  const { ref: trendingNowRef, isVisible: trendingNowVisible, hasLoaded: trendingNowLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-trending-now',
+    fallbackTimeout: 2000,
+  });
+  const { ref: newReleasesRef, isVisible: newReleasesVisible, hasLoaded: newReleasesLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-new-releases',
+    fallbackTimeout: 2000,
+  });
+  const { ref: continueWatchingRef, isVisible: continueWatchingVisible, hasLoaded: continueWatchingLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-continue-watching',
+    fallbackTimeout: 2000,
+  });
+  const { ref: trendingTvRef, isVisible: trendingTvVisible, hasLoaded: trendingTvLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-trending-tv',
+    fallbackTimeout: 2000,
+  });
+  const { ref: firstPromoRef, isVisible: firstPromoVisible, hasLoaded: firstPromoLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-first-promo',
+    fallbackTimeout: 2000,
+  });
+  const { ref: onlyOnNetflixRef, isVisible: onlyOnNetflixVisible, hasLoaded: onlyOnNetflixLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-only-on-netflix',
+    fallbackTimeout: 2000,
+  });
+  const { ref: genreActionRef, isVisible: genreActionVisible, hasLoaded: genreActionLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-genre-action',
+    fallbackTimeout: 2000,
+  });
+  const { ref: trendingTodayRef, isVisible: trendingTodayVisible, hasLoaded: trendingTodayLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-trending-today',
+    fallbackTimeout: 2000,
+  });
+  const { ref: weekendWatchRef, isVisible: weekendWatchVisible, hasLoaded: weekendWatchLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-weekend-watch',
+    fallbackTimeout: 2000,
+  });
+  const { ref: becauseYouWatchedRef, isVisible: becauseYouWatchedVisible, hasLoaded: becauseYouWatchedLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-because-you-watched',
+    fallbackTimeout: 2000,
+  });
+  const { ref: hotTvShowsRef, isVisible: hotTvShowsVisible, hasLoaded: hotTvShowsLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-hot-tv-shows',
+    fallbackTimeout: 2000,
+  });
+  const { ref: secondPromoRef, isVisible: secondPromoVisible, hasLoaded: secondPromoLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-second-promo',
+    fallbackTimeout: 2000,
+  });
+  const { ref: bingeWorthyRef, isVisible: bingeWorthyVisible, hasLoaded: bingeWorthyLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-binge-worthy',
+    fallbackTimeout: 2000,
+  });
+  const { ref: top10TvRef, isVisible: top10TvVisible, hasLoaded: top10TvLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-top10-tv',
+    fallbackTimeout: 2000,
+  });
+  const { ref: popularTvComingSoonRef, isVisible: popularTvComingSoonVisible, hasLoaded: popularTvComingSoonLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-popular-tv-coming-soon',
+    fallbackTimeout: 2000,
+  });
+  const { ref: awardWinnersMoviesRef, isVisible: awardWinnersMoviesVisible, hasLoaded: awardWinnersMoviesLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-award-winners-movies',
+    fallbackTimeout: 2000,
+  });
+  const { ref: thirdPromoRef, isVisible: thirdPromoVisible, hasLoaded: thirdPromoLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-third-promo',
+    fallbackTimeout: 2000,
+  });
+  const { ref: genreDramaRef, isVisible: genreDramaVisible, hasLoaded: genreDramaLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-genre-drama',
+    fallbackTimeout: 2000,
+  });
+  const { ref: airingTodayRef, isVisible: airingTodayVisible, hasLoaded: airingTodayLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-airing-today',
+    fallbackTimeout: 2000,
+  });
+  const { ref: newEpisodesRef, isVisible: newEpisodesVisible, hasLoaded: newEpisodesLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-new-episodes',
+    fallbackTimeout: 2000,
+  });
+  const { ref: nowPlayingRef, isVisible: nowPlayingVisible, hasLoaded: nowPlayingLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-now-playing',
+    fallbackTimeout: 2000,
+  });
+  const { ref: fourthPromoRef, isVisible: fourthPromoVisible, hasLoaded: fourthPromoLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-fourth-promo',
+    fallbackTimeout: 2000,
+  });
+  const { ref: awardWinnersTvRef, isVisible: awardWinnersTvVisible, hasLoaded: awardWinnersTvLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-award-winners-tv',
+    fallbackTimeout: 2000,
+  });
+  const { ref: becauseYouWatched2Ref, isVisible: becauseYouWatched2Visible, hasLoaded: becauseYouWatched2Loaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-because-you-watched-2',
+    fallbackTimeout: 2000,
+  });
+  const { ref: currentlyAiringRef, isVisible: currentlyAiringVisible, hasLoaded: currentlyAiringLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-currently-airing',
+    fallbackTimeout: 2000,
+  });
+  const { ref: pricingRef, isVisible: pricingVisible, hasLoaded: pricingLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-pricing',
+    fallbackTimeout: 2000,
+  });
+  const { ref: faqRef, isVisible: faqVisible, hasLoaded: faqLoaded } = useLazyLoad<HTMLDivElement>({
+    persistenceKey: 'home-faq',
+    fallbackTimeout: 2000,
+  });
 
   if (isLoading) {
     return (
@@ -283,7 +371,7 @@ const Home = memo(function Home() {
       >
         {/* Hero Section */}
         <div ref={heroRef}>
-          {heroVisible && (
+          {(heroVisible || heroLoaded) && (
             <HeroSection
               data={AllData}
               isLoading={false}
@@ -295,7 +383,7 @@ const Home = memo(function Home() {
 
         {/* Top 10 Movies Section */}
         <div ref={top10MoviesRef}>
-          {top10MoviesVisible && trendingMoviesWeek && (
+          {(top10MoviesVisible || top10MoviesLoaded) && trendingMoviesWeek && (
             <TopPicksSection
               movies={trendingMoviesWeek}
               title="Top 10 Movies in Egypt Today"
@@ -305,7 +393,7 @@ const Home = memo(function Home() {
 
         {/* Trending Now */}
         <div ref={trendingNowRef} className="py-6 md:py-8">
-          {trendingNowVisible && (
+          {(trendingNowVisible || trendingNowLoaded) && (
             <div className="container">
               <MediaSection
                 title="Trending Now"
@@ -320,7 +408,7 @@ const Home = memo(function Home() {
 
         {/* New Releases Section */}
         <div ref={newReleasesRef}>
-          {newReleasesVisible && upcomingMovies && (
+          {(newReleasesVisible || newReleasesLoaded) && upcomingMovies && (
             <NewReleasesSection
               movies={upcomingMovies}
               title="New Releases This Week"
@@ -330,7 +418,7 @@ const Home = memo(function Home() {
 
         {/* Continue Watching Section */}
         <div ref={continueWatchingRef}>
-          {continueWatchingVisible && trendingTvWeek && (
+          {(continueWatchingVisible || continueWatchingLoaded) && trendingTvWeek && (
             <ContinueWatchingSection
               movies={trendingTvWeek}
               title="Continue Watching"
@@ -341,7 +429,7 @@ const Home = memo(function Home() {
 
         {/* Trending TV Shows */}
         <div ref={trendingTvRef} className="py-6 md:py-8">
-          {trendingTvVisible && (
+          {(trendingTvVisible || trendingTvLoaded) && (
             <div className="container">
               <MediaSection
                 title="Trending TV Shows"
@@ -356,7 +444,7 @@ const Home = memo(function Home() {
 
         {/* First Promo - Left Aligned */}
         <div ref={firstPromoRef}>
-          {firstPromoVisible && popularMovies && popularMovies[0] && (
+          {(firstPromoVisible || firstPromoLoaded) && popularMovies && popularMovies[0] && (
             <MoviePromo
               movie={popularMovies[0]}
               mediaType="movie"
@@ -367,14 +455,14 @@ const Home = memo(function Home() {
 
         {/* Only on Netflix Section */}
         <div ref={onlyOnNetflixRef}>
-          {onlyOnNetflixVisible && popularTv && (
+          {(onlyOnNetflixVisible || onlyOnNetflixLoaded) && popularTv && (
             <OnlyOnNetflixSection movies={popularTv} mediaType="tv" />
           )}
         </div>
 
         {/* Genre Showcase - Action */}
         <div ref={genreActionRef}>
-          {genreActionVisible && trendingMoviesDay && (
+          {(genreActionVisible || genreActionLoaded) && trendingMoviesDay && (
             <GenreShowcaseSection
               movies={trendingMoviesDay}
               genre="Action & Adventure"
@@ -385,7 +473,7 @@ const Home = memo(function Home() {
 
         {/* Trending Today */}
         <div ref={trendingTodayRef} className="py-6 md:py-8">
-          {trendingTodayVisible && (
+          {(trendingTodayVisible || trendingTodayLoaded) && (
             <div className="container">
               <MediaSection
                 title="Trending Today"
@@ -400,7 +488,7 @@ const Home = memo(function Home() {
 
         {/* Weekend Watch Section */}
         <div ref={weekendWatchRef}>
-          {weekendWatchVisible && popularMovies && (
+          {(weekendWatchVisible || weekendWatchLoaded) && popularMovies && (
             <WeekendWatchSection
               movies={popularMovies}
               mediaType="movie"
@@ -410,7 +498,7 @@ const Home = memo(function Home() {
 
         {/* Because You Watched Section */}
         <div ref={becauseYouWatchedRef}>
-          {becauseYouWatchedVisible && trendingTvDay && (
+          {(becauseYouWatchedVisible || becauseYouWatchedLoaded) && trendingTvDay && (
             <BecauseYouWatchedSection
               movies={trendingTvDay}
               basedOn="Stranger Things"
@@ -421,7 +509,7 @@ const Home = memo(function Home() {
 
         {/* Hot TV Shows Today & Popular Movies */}
         <div ref={hotTvShowsRef} className="py-6 md:py-8">
-          {hotTvShowsVisible && (
+          {(hotTvShowsVisible || hotTvShowsLoaded) && (
             <div className="container">
               <MediaSection
                 title="Hot TV Shows Today"
@@ -443,7 +531,7 @@ const Home = memo(function Home() {
 
         {/* Second Promo - Right Aligned */}
         <div ref={secondPromoRef}>
-          {secondPromoVisible && popularTv && popularTv[1] && (
+          {(secondPromoVisible || secondPromoLoaded) && popularTv && popularTv[1] && (
             <MoviePromo
               movie={popularTv[1]}
               mediaType="tv"
@@ -454,14 +542,14 @@ const Home = memo(function Home() {
 
         {/* Binge-Worthy Section */}
         <div ref={bingeWorthyRef}>
-          {bingeWorthyVisible && onTheAirTv && (
+          {(bingeWorthyVisible || bingeWorthyLoaded) && onTheAirTv && (
             <BingeWorthySection movies={onTheAirTv} mediaType="tv" />
           )}
         </div>
 
         {/* Top 10 TV Shows */}
         <div ref={top10TvRef}>
-          {top10TvVisible && popularTv && (
+          {(top10TvVisible || top10TvLoaded) && popularTv && (
             <TopPicksSection
               movies={popularTv}
               title="Top 10 TV Shows in Egypt Today"
@@ -471,7 +559,7 @@ const Home = memo(function Home() {
 
         {/* Popular TV Shows & Coming Soon */}
         <div ref={popularTvComingSoonRef} className="py-6 md:py-8">
-          {popularTvComingSoonVisible && (
+          {(popularTvComingSoonVisible || popularTvComingSoonLoaded) && (
             <div className="container">
               <MediaSection
                 title="Popular TV Shows"
@@ -493,14 +581,14 @@ const Home = memo(function Home() {
 
         {/* Award Winners Section */}
         <div ref={awardWinnersMoviesRef}>
-          {awardWinnersMoviesVisible && topRatedMovies && (
+          {(awardWinnersMoviesVisible || awardWinnersMoviesLoaded) && topRatedMovies && (
             <AwardWinnersSection movies={topRatedMovies} mediaType="movie" />
           )}
         </div>
 
         {/* Third Promo - Center Aligned */}
         <div ref={thirdPromoRef}>
-          {thirdPromoVisible && topRatedMovies && topRatedMovies[2] && (
+          {(thirdPromoVisible || thirdPromoLoaded) && topRatedMovies && topRatedMovies[2] && (
             <MoviePromo
               movie={topRatedMovies[2]}
               mediaType="movie"
@@ -511,7 +599,7 @@ const Home = memo(function Home() {
 
         {/* Genre Showcase - Drama */}
         <div ref={genreDramaRef}>
-          {genreDramaVisible && airingTodayTv && (
+          {(genreDramaVisible || genreDramaLoaded) && airingTodayTv && (
             <GenreShowcaseSection
               movies={airingTodayTv}
               genre="Drama Series"
@@ -522,7 +610,7 @@ const Home = memo(function Home() {
 
         {/* Airing Today */}
         <div ref={airingTodayRef} className="py-6 md:py-8">
-          {airingTodayVisible && (
+          {(airingTodayVisible || airingTodayLoaded) && (
             <div className="container">
               <MediaSection
                 title="Airing Today"
@@ -537,7 +625,7 @@ const Home = memo(function Home() {
 
         {/* New Episodes This Week */}
         <div ref={newEpisodesRef}>
-          {newEpisodesVisible && airingTodayTv && (
+          {(newEpisodesVisible || newEpisodesLoaded) && airingTodayTv && (
             <NewReleasesSection
               movies={airingTodayTv}
               title="New Episodes This Week"
@@ -547,7 +635,7 @@ const Home = memo(function Home() {
 
         {/* Now Playing in Theaters */}
         <div ref={nowPlayingRef} className="py-6 md:py-8">
-          {nowPlayingVisible && (
+          {(nowPlayingVisible || nowPlayingLoaded) && (
             <div className="container">
               <MediaSection
                 title="Now Playing in Theaters"
@@ -562,7 +650,7 @@ const Home = memo(function Home() {
 
         {/* Fourth Promo - Left Aligned */}
         <div ref={fourthPromoRef}>
-          {fourthPromoVisible && topRatedTv && topRatedTv[3] && (
+          {(fourthPromoVisible || fourthPromoLoaded) && topRatedTv && topRatedTv[3] && (
             <MoviePromo
               movie={topRatedTv[3]}
               mediaType="tv"
@@ -573,14 +661,14 @@ const Home = memo(function Home() {
 
         {/* Award Winners TV */}
         <div ref={awardWinnersTvRef}>
-          {awardWinnersTvVisible && topRatedTv && (
+          {(awardWinnersTvVisible || awardWinnersTvLoaded) && topRatedTv && (
             <AwardWinnersSection movies={topRatedTv} mediaType="tv" />
           )}
         </div>
 
         {/* Because You Watched Section 2 */}
         <div ref={becauseYouWatched2Ref}>
-          {becauseYouWatched2Visible && nowPlayingMovies && (
+          {(becauseYouWatched2Visible || becauseYouWatched2Loaded) && nowPlayingMovies && (
             <BecauseYouWatchedSection
               movies={nowPlayingMovies}
               basedOn="The Dark Knight"
@@ -591,7 +679,7 @@ const Home = memo(function Home() {
 
         {/* Currently Airing */}
         <div ref={currentlyAiringRef} className="py-6 md:py-8">
-          {currentlyAiringVisible && (
+          {(currentlyAiringVisible || currentlyAiringLoaded) && (
             <div className="container">
               <MediaSection
                 title="Currently Airing"
@@ -606,12 +694,12 @@ const Home = memo(function Home() {
 
         {/* Pricing Section */}
         <div ref={pricingRef}>
-          {pricingVisible && <PricingSection />}
+          {(pricingVisible || pricingLoaded) && <PricingSection />}
         </div>
 
         {/* FAQ Section */}
         <div ref={faqRef}>
-          {faqVisible && <AskedQuestions />}
+          {(faqVisible || faqLoaded) && <AskedQuestions />}
         </div>
       </motion.div>
     </Suspense>

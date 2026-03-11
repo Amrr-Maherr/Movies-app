@@ -9,7 +9,7 @@ interface UseLazyLoadOptions {
   /**
    * Margin around the viewport to expand detection area
    * Use positive values to trigger earlier (e.g., "200px" triggers 200px before element enters)
-   * @default "200px" (triggers 200px before element is visible)
+   * @default "300px" (triggers 300px before element is visible)
    */
   rootMargin?: string;
   /**
@@ -20,11 +20,16 @@ interface UseLazyLoadOptions {
   triggerOnce?: boolean;
   /**
    * Fallback timeout in milliseconds to force visibility if IntersectionObserver fails
-   * Useful for elements that might not be detected (e.g., height: 0, display: none initially)
    * Set to 0, false, or null to disable fallback
-   * @default 1000 (1 second)
+   * @default 2000 (2 seconds - gives enough time for layout to settle)
    */
   fallbackTimeout?: number | false | null;
+  /**
+   * Unique key to persist visibility state across navigation
+   * Useful for sections that should stay loaded once viewed
+   * @default undefined (no persistence)
+   */
+  persistenceKey?: string;
 }
 
 interface UseLazyLoadReturn<T extends HTMLElement = HTMLDivElement> {
@@ -33,59 +38,55 @@ interface UseLazyLoadReturn<T extends HTMLElement = HTMLDivElement> {
   hasLoaded: boolean;
 }
 
+// Global map to track loaded sections across navigation
+const loadedSections = new Set<string>();
+
 /**
- * useLazyLoad Hook
- * 
+ * useLazyLoad Hook - Enhanced Version
+ *
  * Lazily loads content when it enters the viewport using Intersection Observer API.
- * Includes a fallback timeout to ensure content loads even if the observer fails.
- * 
- * Key improvements:
- * - Checks initial visibility on mount
- * - Fallback timeout ensures content always loads
- * - Handles elements with 0 dimensions
- * - Proper cleanup on unmount
- * 
+ * Includes multiple fallback mechanisms to ensure content always loads.
+ *
+ * Key improvements in this version:
+ * - Delayed initial check with RAF to wait for layout
+ * - Multiple fallback attempts
+ * - Persistence across navigation
+ * - Better handling of cached pages
+ *
  * @param options - Configuration options for lazy loading
  * @returns Object containing ref, isVisible, and hasLoaded
- * 
- * @example
- * // Basic usage
- * const { ref, isVisible, hasLoaded } = useLazyLoad();
- * 
- * return (
- *   <div ref={ref}>
- *     {isVisible && <HeavyComponent />}
- *   </div>
- * );
- * 
- * @example
- * // With custom options
- * const { ref, isVisible } = useLazyLoad<HTMLDivElement>({
- *   threshold: 0.1,
- *   rootMargin: "100px",
- *   triggerOnce: true,
- *   fallbackTimeout: 2000
- * });
  */
 export function useLazyLoad<T extends HTMLElement = HTMLDivElement>(
   options: UseLazyLoadOptions = {},
 ): UseLazyLoadReturn<T> {
   const {
     threshold = 0.01,
-    rootMargin = "200px",
+    rootMargin = "300px",
     triggerOnce = true,
-    fallbackTimeout = 1000,
+    fallbackTimeout = 2000,
+    persistenceKey,
   } = options;
 
   const ref = useRef<T>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [hasLoaded, setHasLoaded] = useState(false);
+  
+  // Check persistence first
+  const wasPersisted = persistenceKey ? loadedSections.has(persistenceKey) : false;
+  
+  const [isVisible, setIsVisible] = useState(wasPersisted);
+  const [hasLoaded, setHasLoaded] = useState(wasPersisted);
+  
   const observerRef = useRef<IntersectionObserver | null>(null);
   const fallbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const hasCheckedInitialRef = useRef(false);
+  const rafIdRef = useRef<number | null>(null);
+  const retryCountRef = useRef(0);
+  const MAX_RETRIES = 3;
 
   // Cleanup function
   const cleanup = useCallback(() => {
+    if (rafIdRef.current) {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = null;
+    }
     if (observerRef.current) {
       observerRef.current.disconnect();
       observerRef.current = null;
@@ -96,90 +97,131 @@ export function useLazyLoad<T extends HTMLElement = HTMLDivElement>(
     }
   }, []);
 
+  // Check if element is visible in viewport
+  const checkVisibility = useCallback((element: HTMLElement): boolean => {
+    const rect = element.getBoundingClientRect();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+    const margin = Number(rootMargin) || 0;
+
+    // Element is visible if any part is within viewport (with margin)
+    const isInViewport =
+      rect.bottom >= -margin &&
+      rect.top <= viewportHeight + margin &&
+      rect.right >= -margin &&
+      rect.left <= viewportWidth + margin;
+
+    // Also check if element has actual dimensions
+    const hasDimensions = rect.width > 0 && rect.height > 0;
+
+    return isInViewport && hasDimensions;
+  }, [rootMargin]);
+
   useEffect(() => {
+    // Skip if already loaded
+    if (hasLoaded && triggerOnce) return;
+
     const element = ref.current;
     
     // Skip if no element
     if (!element) return;
 
-    // Skip if already loaded and triggerOnce is true
-    if (hasLoaded && triggerOnce) return;
+    // Use RAF to wait for layout to settle
+    rafIdRef.current = requestAnimationFrame(() => {
+      // Double-check with another RAF for complex layouts
+      rafIdRef.current = requestAnimationFrame(() => {
+        const isInitiallyVisible = checkVisibility(element);
 
-    // Check if element is already visible on mount
-    // This handles the case where element is already in viewport
-    if (!hasCheckedInitialRef.current) {
-      hasCheckedInitialRef.current = true;
-      
-      const rect = element.getBoundingClientRect();
-      const isInitiallyVisible =
-        rect.top >= -Number(rootMargin) &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + Number(rootMargin) &&
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth);
-
-      if (isInitiallyVisible) {
-        setIsVisible(true);
-        setHasLoaded(true);
-        return;
-      }
-    }
-
-    // Set up fallback timeout - ensures content loads even if observer fails
-    const useFallback = fallbackTimeout !== false && fallbackTimeout !== null && fallbackTimeout > 0;
-    if (useFallback && !fallbackTimerRef.current && !hasLoaded) {
-      fallbackTimerRef.current = setTimeout(() => {
-        setIsVisible(true);
-        setHasLoaded(true);
-        cleanup();
-      }, fallbackTimeout);
-    }
-
-    // Set up Intersection Observer
-    observerRef.current = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+        if (isInitiallyVisible) {
           setIsVisible(true);
           setHasLoaded(true);
-          
-          // Stop observing if triggerOnce
-          if (triggerOnce && observerRef.current) {
-            observerRef.current.unobserve(element);
-            observerRef.current.disconnect();
-            observerRef.current = null;
+          if (persistenceKey) {
+            loadedSections.add(persistenceKey);
           }
-          
-          // Clear fallback timer since we've detected visibility
-          if (fallbackTimerRef.current) {
-            clearTimeout(fallbackTimerRef.current);
-            fallbackTimerRef.current = null;
-          }
-        } else if (!triggerOnce) {
-          setIsVisible(false);
+          cleanup();
+          return;
         }
-      },
-      {
-        threshold,
-        rootMargin,
-        root: null, // Use viewport as root
-      },
-    );
 
-    // Start observing
-    observerRef.current.observe(element);
+        // Set up fallback timeout with retry mechanism
+        const useFallback = fallbackTimeout !== false && fallbackTimeout !== null && fallbackTimeout > 0;
+        if (useFallback && !fallbackTimerRef.current && !hasLoaded) {
+          fallbackTimerRef.current = setTimeout(() => {
+            // Retry check before forcing
+            retryCountRef.current += 1;
+            const retryVisible = checkVisibility(element);
+            
+            if (retryVisible || retryCountRef.current >= MAX_RETRIES) {
+              setIsVisible(true);
+              setHasLoaded(true);
+              if (persistenceKey) {
+                loadedSections.add(persistenceKey);
+              }
+              cleanup();
+            } else {
+              // Schedule another fallback
+              fallbackTimerRef.current = setTimeout(() => {
+                setIsVisible(true);
+                setHasLoaded(true);
+                if (persistenceKey) {
+                  loadedSections.add(persistenceKey);
+                }
+                cleanup();
+              }, fallbackTimeout);
+            }
+          }, fallbackTimeout);
+        }
 
-    // Cleanup on unmount or dependency change
+        // Set up Intersection Observer
+        observerRef.current = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              setIsVisible(true);
+              setHasLoaded(true);
+              if (persistenceKey) {
+                loadedSections.add(persistenceKey);
+              }
+
+              // Stop observing if triggerOnce
+              if (triggerOnce && observerRef.current) {
+                observerRef.current.unobserve(element);
+                observerRef.current.disconnect();
+                observerRef.current = null;
+              }
+
+              // Clear fallback timer
+              if (fallbackTimerRef.current) {
+                clearTimeout(fallbackTimerRef.current);
+                fallbackTimerRef.current = null;
+              }
+            } else if (!triggerOnce) {
+              setIsVisible(false);
+            }
+          },
+          {
+            threshold,
+            rootMargin,
+            root: null,
+          },
+        );
+
+        // Start observing
+        observerRef.current.observe(element);
+      });
+    });
+
+    // Cleanup on unmount
     return () => {
       cleanup();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [threshold, rootMargin, triggerOnce, fallbackTimeout, hasLoaded]);
+  }, [threshold, rootMargin, triggerOnce, fallbackTimeout, hasLoaded, checkVisibility, cleanup, persistenceKey]);
 
-  // Reset hasLoaded when isVisible becomes true
+  // Persist when visibility changes
   useEffect(() => {
-    if (isVisible) {
-      setHasLoaded(true);
+    if (isVisible && persistenceKey) {
+      loadedSections.add(persistenceKey);
     }
-  }, [isVisible]);
+  }, [isVisible, persistenceKey]);
 
   return { ref, isVisible, hasLoaded };
 }
