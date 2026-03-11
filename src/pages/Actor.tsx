@@ -1,12 +1,33 @@
-import { useState, memo, useMemo, useCallback } from "react";
+import { useState, memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLazyLoad } from "@/hooks/useLazyLoad";
 import InfiniteScroll from "react-infinite-scroll-component";
 import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import usePopularPeople from "@/queries/FetchPopularPeople";
-import PeopleFilters from "@/components/Actors/PeopleFilters";
 import { Loader } from "@/components/ui";
+
+// ============================================
+// CODE SPLITTING WITH REACT.LAZY
+// Lazy-load heavy components to improve initial bundle size
+// ============================================
+
+// PeopleFilters - filter component, lazy loaded
+const PeopleFiltersLazy = lazy(() => import("@/components/Actors/PeopleFilters"));
+
+// ============================================
+// SUSPENSE FALLBACK COMPONENTS
+// Shown while lazy components are loading
+// ============================================
+const FiltersSkeleton = () => (
+  <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6 animate-pulse">
+    <div className="flex flex-wrap gap-3">
+      {[...Array(8)].map((_, i) => (
+        <div key={i} className="h-10 w-24 bg-zinc-800 rounded-full" />
+      ))}
+    </div>
+  </div>
+);
 
 const ActorsPage = memo(function ActorsPage() {
   const [selectedGender, setSelectedGender] = useState<string>("all");
@@ -47,7 +68,10 @@ const ActorsPage = memo(function ActorsPage() {
     return items;
   }, [data, selectedGender, selectedLetter]);
 
-  // Lazy load hooks for each section
+  // ============================================
+  // LAZY LOAD HOOKS FOR SECTION-LEVEL RENDERING
+  // Combined with React.lazy for optimal performance
+  // ============================================
   const { ref: titleRef, isVisible: titleVisible } = useLazyLoad<HTMLDivElement>();
   const { ref: filtersRef, isVisible: filtersVisible } = useLazyLoad<HTMLDivElement>();
   const { ref: gridRef, isVisible: gridVisible } = useLazyLoad<HTMLDivElement>();
@@ -60,7 +84,13 @@ const ActorsPage = memo(function ActorsPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Header Section */}
+      {/* 
+        ============================================
+        HEADER SECTION
+        - Page title and description
+        - Lazy-loaded with viewport detection
+        ============================================
+      */}
       <div ref={titleRef} className="px-4 sm:px-8 mb-8">
         {titleVisible && (
           <>
@@ -74,15 +104,23 @@ const ActorsPage = memo(function ActorsPage() {
         )}
       </div>
 
-      {/* Filters Section */}
+      {/* 
+        ============================================
+        FILTERS SECTION
+        - Gender and alphabetical filters
+        - Lazy-loaded component with Suspense
+        ============================================
+      */}
       <div ref={filtersRef}>
         {filtersVisible && (
-          <PeopleFilters
-            selectedGender={selectedGender}
-            onGenderSelect={handleGenderSelect}
-            selectedLetter={selectedLetter}
-            onLetterSelect={handleLetterSelect}
-          />
+          <Suspense fallback={<FiltersSkeleton />}>
+            <PeopleFiltersLazy
+              selectedGender={selectedGender}
+              onGenderSelect={handleGenderSelect}
+              selectedLetter={selectedLetter}
+              onLetterSelect={handleLetterSelect}
+            />
+          </Suspense>
         )}
       </div>
 
@@ -140,15 +178,17 @@ const ActorsPage = memo(function ActorsPage() {
                     style={{ overflow: "hidden" }}
                     scrollThreshold={0.8}
                   >
-                    <MediaGrid
-                      items={allItems}
-                      type="person"
-                      emptyMessage={
-                        !isLoading && allItems.length === 0
-                          ? "No actors match your current filters. Try adjust them!"
-                          : ""
-                      }
-                    />
+                    <Suspense fallback={<MediaGridSkeleton />}>
+                      <MediaGrid
+                        items={allItems}
+                        type="person"
+                        emptyMessage={
+                          !isLoading && allItems.length === 0
+                            ? "No actors match your current filters. Try adjust them!"
+                            : ""
+                        }
+                      />
+                    </Suspense>
                   </InfiniteScroll>
                 </motion.div>
               )}

@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useParams, Link } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
@@ -7,11 +7,46 @@ import { ArrowLeft, Calendar, Film, Clock, Star } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
 import FetchTvSeasonDetails from "@/queries/FetchTvSeasonDetails";
-import EpisodeCard from "@/components/shared/cards/EpisodeCard";
 import type { Episode } from "@/types";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
+
+// ============================================
+// CODE SPLITTING WITH REACT.LAZY
+// Lazy-load heavy components to improve initial bundle size
+// ============================================
+
+// EpisodeCard - individual episode card, lazy loaded for better performance
+const EpisodeCard = lazy(() => import("@/components/shared/cards/EpisodeCard"));
+
+// ============================================
+// SUSPENSE FALLBACK COMPONENT
+// Shown while lazy components are loading
+// ============================================
+const EpisodeCardSkeleton = () => (
+  <div className="bg-zinc-900/50 rounded-lg overflow-hidden animate-pulse">
+    <div className="aspect-video bg-zinc-800" />
+    <div className="p-4 space-y-3">
+      <div className="h-4 bg-zinc-800 rounded w-3/4" />
+      <div className="h-3 bg-zinc-800 rounded w-1/2" />
+      <div className="h-3 bg-zinc-800 rounded w-full" />
+    </div>
+  </div>
+);
+
+const SectionSkeleton = () => (
+  <div className="w-full py-12 bg-zinc-900/50 animate-pulse">
+    <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="h-8 bg-zinc-800 rounded w-48 mb-6" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+        {[...Array(4)].map((_, i) => (
+          <EpisodeCardSkeleton key={i} />
+        ))}
+      </div>
+    </div>
+  </div>
+);
 
 // Memoized SeasonDetailsPage component - avoids re-renders when parent updates
 const SeasonDetailsPage = memo(function SeasonDetailsPage() {
@@ -21,7 +56,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
   }>();
 
   const tvId = extractIdFromSlug(tvIdParam);
-  const seasonNumber = seasonNumberParam; // It's just a number string now
+  const seasonNumber = seasonNumberParam;
 
   const { isLoading, data: season, error, refetch } = FetchTvSeasonDetails(
     Number(tvId),
@@ -65,7 +100,10 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
     [season?.poster_path],
   );
 
-  // Lazy load hooks for each section
+  // ============================================
+  // LAZY LOAD HOOKS FOR SECTION-LEVEL RENDERING
+  // Combined with React.lazy for optimal performance
+  // ============================================
   const { ref: headerRef, isVisible: headerVisible } = useLazyLoad<HTMLDivElement>();
   const { ref: episodesRef, isVisible: episodesVisible } = useLazyLoad<HTMLDivElement>();
 
@@ -92,8 +130,14 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Header Section */}
-      <div ref={headerRef} className="relative">
+      {/* 
+        ============================================
+        HEADER SECTION
+        - Backdrop, Poster, Season Info, Metadata
+        - Lazy-loaded with viewport detection
+        ============================================
+      */}
+      <div ref={headerRef}>
         {headerVisible && (
           <>
             {/* Backdrop Background */}
@@ -126,6 +170,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
                       src={`${IMAGE_BASE_URL}${season.poster_path}`}
                       alt={season.name}
                       className="w-40 md:w-52 rounded-lg shadow-2xl mx-auto md:mx-0"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="w-40 md:w-52 aspect-[2/3] rounded-lg bg-zinc-800 flex items-center justify-center mx-auto md:mx-0 shadow-2xl">
@@ -174,29 +219,39 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
         )}
       </div>
 
-      {/* Episodes Section */}
-      <div ref={episodesRef} className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8">
+      {/* 
+        ============================================
+        EPISODES SECTION
+        - Grid of EpisodeCard components
+        - Each EpisodeCard is lazy-loaded
+        - Section uses Suspense for loading state
+        ============================================
+      */}
+      <div ref={episodesRef}>
         {episodesVisible && (
-          <>
-            <h2 className="text-2xl font-bold text-white mb-6">Episodes</h2>
+          <Suspense fallback={<SectionSkeleton />}>
+            <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8">
+              <h2 className="text-2xl font-bold text-white mb-6">Episodes</h2>
 
-            {season.episodes && season.episodes.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-                {season.episodes.map((episode: Episode) => (
-                  <EpisodeCard
-                    key={episode.id}
-                    episode={episode}
-                    tvShowId={Number(tvId)}
-                    seasonNumber={Number(seasonNumber)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="flex items-center justify-center py-12 text-gray-400">
-                <p>Episodes coming soon...</p>
-              </div>
-            )}
-          </>
+              {season.episodes && season.episodes.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                  {season.episodes.map((episode: Episode) => (
+                    <Suspense key={episode.id} fallback={<EpisodeCardSkeleton />}>
+                      <EpisodeCard
+                        episode={episode}
+                        tvShowId={Number(tvId)}
+                        seasonNumber={Number(seasonNumber)}
+                      />
+                    </Suspense>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center justify-center py-12 text-gray-400">
+                  <p>Episodes coming soon...</p>
+                </div>
+              )}
+            </div>
+          </Suspense>
         )}
       </div>
     </motion.div>
