@@ -1,6 +1,7 @@
 import { memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Loader, Error as ErrorComponent } from "@/components/ui";
+import { useLazyLoad } from "@/hooks/useLazyLoad";
 
 import usePopularMovies from "@/queries/FetchPopularMovies";
 import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
@@ -221,6 +222,37 @@ const Home = memo(function Home() {
   const handleEmptyRetry = useCallback(() => {}, []);
   const handleEmptyHeroRetry = useCallback(() => {}, []);
 
+  // ======== Lazy Load Hooks for Each Section ========
+  const { ref: heroRef, isVisible: heroVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: top10MoviesRef, isVisible: top10MoviesVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: trendingNowRef, isVisible: trendingNowVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: newReleasesRef, isVisible: newReleasesVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: continueWatchingRef, isVisible: continueWatchingVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: trendingTvRef, isVisible: trendingTvVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: firstPromoRef, isVisible: firstPromoVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: onlyOnNetflixRef, isVisible: onlyOnNetflixVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: genreActionRef, isVisible: genreActionVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: trendingTodayRef, isVisible: trendingTodayVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: weekendWatchRef, isVisible: weekendWatchVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: becauseYouWatchedRef, isVisible: becauseYouWatchedVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: hotTvShowsRef, isVisible: hotTvShowsVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: secondPromoRef, isVisible: secondPromoVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: bingeWorthyRef, isVisible: bingeWorthyVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: top10TvRef, isVisible: top10TvVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: popularTvComingSoonRef, isVisible: popularTvComingSoonVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: awardWinnersMoviesRef, isVisible: awardWinnersMoviesVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: thirdPromoRef, isVisible: thirdPromoVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: genreDramaRef, isVisible: genreDramaVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: airingTodayRef, isVisible: airingTodayVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: newEpisodesRef, isVisible: newEpisodesVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: nowPlayingRef, isVisible: nowPlayingVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: fourthPromoRef, isVisible: fourthPromoVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: awardWinnersTvRef, isVisible: awardWinnersTvVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: becauseYouWatched2Ref, isVisible: becauseYouWatched2Visible } = useLazyLoad<HTMLDivElement>();
+  const { ref: currentlyAiringRef, isVisible: currentlyAiringVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: pricingRef, isVisible: pricingVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: faqRef, isVisible: faqVisible } = useLazyLoad<HTMLDivElement>();
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
@@ -250,277 +282,337 @@ const Home = memo(function Home() {
         transition={{ duration: 0.5 }}
       >
         {/* Hero Section */}
-        <HeroSection
-          data={AllData}
-          isLoading={false}
-          error={null}
-          onRetry={handleEmptyHeroRetry}
-        />
-
-        {/* Top 10 Movies Section */}
-        {trendingMoviesWeek && (
-          <TopPicksSection
-            movies={trendingMoviesWeek}
-            title="Top 10 Movies in Egypt Today"
-          />
-        )}
-
-        {/* Trending Now */}
-        <div className="py-6 md:py-8">
-          <div className="container">
-            <MediaSection
-              title="Trending Now"
-              data={trendingMoviesWeek}
+        <div ref={heroRef}>
+          {heroVisible && (
+            <HeroSection
+              data={AllData}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={handleEmptyHeroRetry}
             />
-          </div>
+          )}
+        </div>
+
+        {/* Top 10 Movies Section */}
+        <div ref={top10MoviesRef}>
+          {top10MoviesVisible && trendingMoviesWeek && (
+            <TopPicksSection
+              movies={trendingMoviesWeek}
+              title="Top 10 Movies in Egypt Today"
+            />
+          )}
+        </div>
+
+        {/* Trending Now */}
+        <div ref={trendingNowRef} className="py-6 md:py-8">
+          {trendingNowVisible && (
+            <div className="container">
+              <MediaSection
+                title="Trending Now"
+                data={trendingMoviesWeek}
+                isLoading={false}
+                error={null}
+                onRetry={handleEmptyRetry}
+              />
+            </div>
+          )}
         </div>
 
         {/* New Releases Section */}
-        {upcomingMovies && (
-          <NewReleasesSection
-            movies={upcomingMovies}
-            title="New Releases This Week"
-          />
-        )}
+        <div ref={newReleasesRef}>
+          {newReleasesVisible && upcomingMovies && (
+            <NewReleasesSection
+              movies={upcomingMovies}
+              title="New Releases This Week"
+            />
+          )}
+        </div>
 
         {/* Continue Watching Section */}
-        {trendingTvWeek && (
-          <ContinueWatchingSection
-            movies={trendingTvWeek}
-            title="Continue Watching"
-            mediaType="tv"
-          />
-        )}
+        <div ref={continueWatchingRef}>
+          {continueWatchingVisible && trendingTvWeek && (
+            <ContinueWatchingSection
+              movies={trendingTvWeek}
+              title="Continue Watching"
+              mediaType="tv"
+            />
+          )}
+        </div>
 
         {/* Trending TV Shows */}
-        <div className="py-6 md:py-8">
-          <div className="container">
-            <MediaSection
-              title="Trending TV Shows"
-              data={trendingTvWeek}
-              isLoading={false}
-              error={null}
-              onRetry={handleEmptyRetry}
-            />
-          </div>
+        <div ref={trendingTvRef} className="py-6 md:py-8">
+          {trendingTvVisible && (
+            <div className="container">
+              <MediaSection
+                title="Trending TV Shows"
+                data={trendingTvWeek}
+                isLoading={false}
+                error={null}
+                onRetry={handleEmptyRetry}
+              />
+            </div>
+          )}
         </div>
 
         {/* First Promo - Left Aligned */}
-        {popularMovies && popularMovies[0] && (
-          <MoviePromo
-            movie={popularMovies[0]}
-            mediaType="movie"
-            variant="left"
-          />
-        )}
+        <div ref={firstPromoRef}>
+          {firstPromoVisible && popularMovies && popularMovies[0] && (
+            <MoviePromo
+              movie={popularMovies[0]}
+              mediaType="movie"
+              variant="left"
+            />
+          )}
+        </div>
 
         {/* Only on Netflix Section */}
-        {popularTv && (
-          <OnlyOnNetflixSection movies={popularTv} mediaType="tv" />
-        )}
+        <div ref={onlyOnNetflixRef}>
+          {onlyOnNetflixVisible && popularTv && (
+            <OnlyOnNetflixSection movies={popularTv} mediaType="tv" />
+          )}
+        </div>
 
         {/* Genre Showcase - Action */}
-        {trendingMoviesDay && (
-          <GenreShowcaseSection
-            movies={trendingMoviesDay}
-            genre="Action & Adventure"
-            mediaType="movie"
-          />
-        )}
+        <div ref={genreActionRef}>
+          {genreActionVisible && trendingMoviesDay && (
+            <GenreShowcaseSection
+              movies={trendingMoviesDay}
+              genre="Action & Adventure"
+              mediaType="movie"
+            />
+          )}
+        </div>
 
         {/* Trending Today */}
-        <div className="py-6 md:py-8">
-          <div className="container">
-            <MediaSection
-              title="Trending Today"
-              data={trendingMoviesDay}
-              isLoading={false}
-              error={null}
-              onRetry={handleEmptyRetry}
-            />
-          </div>
+        <div ref={trendingTodayRef} className="py-6 md:py-8">
+          {trendingTodayVisible && (
+            <div className="container">
+              <MediaSection
+                title="Trending Today"
+                data={trendingMoviesDay}
+                isLoading={false}
+                error={null}
+                onRetry={handleEmptyRetry}
+              />
+            </div>
+          )}
         </div>
 
         {/* Weekend Watch Section */}
-        {popularMovies && (
-          <WeekendWatchSection
-            movies={popularMovies}
-            mediaType="movie"
-          />
-        )}
+        <div ref={weekendWatchRef}>
+          {weekendWatchVisible && popularMovies && (
+            <WeekendWatchSection
+              movies={popularMovies}
+              mediaType="movie"
+            />
+          )}
+        </div>
 
         {/* Because You Watched Section */}
-        {trendingTvDay && (
-          <BecauseYouWatchedSection
-            movies={trendingTvDay}
-            basedOn="Stranger Things"
-            mediaType="tv"
-          />
-        )}
+        <div ref={becauseYouWatchedRef}>
+          {becauseYouWatchedVisible && trendingTvDay && (
+            <BecauseYouWatchedSection
+              movies={trendingTvDay}
+              basedOn="Stranger Things"
+              mediaType="tv"
+            />
+          )}
+        </div>
 
         {/* Hot TV Shows Today & Popular Movies */}
-        <div className="py-6 md:py-8">
-          <div className="container">
-            <MediaSection
-              title="Hot TV Shows Today"
-              data={trendingTvDay}
-              isLoading={false}
-              error={null}
-              onRetry={handleEmptyRetry}
-            />
-            <MediaSection
-              title="Popular Movies"
-              data={popularMovies}
-              isLoading={false}
-              error={null}
-              onRetry={handleEmptyRetry}
-            />
-          </div>
+        <div ref={hotTvShowsRef} className="py-6 md:py-8">
+          {hotTvShowsVisible && (
+            <div className="container">
+              <MediaSection
+                title="Hot TV Shows Today"
+                data={trendingTvDay}
+                isLoading={false}
+                error={null}
+                onRetry={handleEmptyRetry}
+              />
+              <MediaSection
+                title="Popular Movies"
+                data={popularMovies}
+                isLoading={false}
+                error={null}
+                onRetry={handleEmptyRetry}
+              />
+            </div>
+          )}
         </div>
 
         {/* Second Promo - Right Aligned */}
-        {popularTv && popularTv[1] && (
-          <MoviePromo
-            movie={popularTv[1]}
-            mediaType="tv"
-            variant="right"
-          />
-        )}
+        <div ref={secondPromoRef}>
+          {secondPromoVisible && popularTv && popularTv[1] && (
+            <MoviePromo
+              movie={popularTv[1]}
+              mediaType="tv"
+              variant="right"
+            />
+          )}
+        </div>
 
         {/* Binge-Worthy Section */}
-        {onTheAirTv && (
-          <BingeWorthySection movies={onTheAirTv} mediaType="tv" />
-        )}
+        <div ref={bingeWorthyRef}>
+          {bingeWorthyVisible && onTheAirTv && (
+            <BingeWorthySection movies={onTheAirTv} mediaType="tv" />
+          )}
+        </div>
 
         {/* Top 10 TV Shows */}
-        {popularTv && (
-          <TopPicksSection
-            movies={popularTv}
-            title="Top 10 TV Shows in Egypt Today"
-          />
-        )}
+        <div ref={top10TvRef}>
+          {top10TvVisible && popularTv && (
+            <TopPicksSection
+              movies={popularTv}
+              title="Top 10 TV Shows in Egypt Today"
+            />
+          )}
+        </div>
 
         {/* Popular TV Shows & Coming Soon */}
-        <div className="py-6 md:py-8">
-          <div className="container">
-            <MediaSection
-              title="Popular TV Shows"
-              data={popularTv}
-              isLoading={false}
-              error={null}
-              onRetry={handleEmptyRetry}
-            />
-            <MediaSection
-              title="Coming Soon"
-              data={upcomingMovies}
-              isLoading={false}
-              error={null}
-              onRetry={handleEmptyRetry}
-            />
-          </div>
+        <div ref={popularTvComingSoonRef} className="py-6 md:py-8">
+          {popularTvComingSoonVisible && (
+            <div className="container">
+              <MediaSection
+                title="Popular TV Shows"
+                data={popularTv}
+                isLoading={false}
+                error={null}
+                onRetry={handleEmptyRetry}
+              />
+              <MediaSection
+                title="Coming Soon"
+                data={upcomingMovies}
+                isLoading={false}
+                error={null}
+                onRetry={handleEmptyRetry}
+              />
+            </div>
+          )}
         </div>
 
         {/* Award Winners Section */}
-        {topRatedMovies && (
-          <AwardWinnersSection movies={topRatedMovies} mediaType="movie" />
-        )}
+        <div ref={awardWinnersMoviesRef}>
+          {awardWinnersMoviesVisible && topRatedMovies && (
+            <AwardWinnersSection movies={topRatedMovies} mediaType="movie" />
+          )}
+        </div>
 
         {/* Third Promo - Center Aligned */}
-        {topRatedMovies && topRatedMovies[2] && (
-          <MoviePromo
-            movie={topRatedMovies[2]}
-            mediaType="movie"
-            variant="center"
-          />
-        )}
+        <div ref={thirdPromoRef}>
+          {thirdPromoVisible && topRatedMovies && topRatedMovies[2] && (
+            <MoviePromo
+              movie={topRatedMovies[2]}
+              mediaType="movie"
+              variant="center"
+            />
+          )}
+        </div>
 
         {/* Genre Showcase - Drama */}
-        {airingTodayTv && (
-          <GenreShowcaseSection
-            movies={airingTodayTv}
-            genre="Drama Series"
-            mediaType="tv"
-          />
-        )}
+        <div ref={genreDramaRef}>
+          {genreDramaVisible && airingTodayTv && (
+            <GenreShowcaseSection
+              movies={airingTodayTv}
+              genre="Drama Series"
+              mediaType="tv"
+            />
+          )}
+        </div>
 
         {/* Airing Today */}
-        <div className="py-6 md:py-8">
-          <div className="container">
-            <MediaSection
-              title="Airing Today"
-              data={airingTodayTv}
-              isLoading={false}
-              error={null}
-              onRetry={handleEmptyRetry}
-            />
-          </div>
+        <div ref={airingTodayRef} className="py-6 md:py-8">
+          {airingTodayVisible && (
+            <div className="container">
+              <MediaSection
+                title="Airing Today"
+                data={airingTodayTv}
+                isLoading={false}
+                error={null}
+                onRetry={handleEmptyRetry}
+              />
+            </div>
+          )}
         </div>
 
         {/* New Episodes This Week */}
-        {airingTodayTv && (
-          <NewReleasesSection
-            movies={airingTodayTv}
-            title="New Episodes This Week"
-          />
-        )}
+        <div ref={newEpisodesRef}>
+          {newEpisodesVisible && airingTodayTv && (
+            <NewReleasesSection
+              movies={airingTodayTv}
+              title="New Episodes This Week"
+            />
+          )}
+        </div>
 
         {/* Now Playing in Theaters */}
-        <div className="py-6 md:py-8">
-          <div className="container">
-            <MediaSection
-              title="Now Playing in Theaters"
-              data={nowPlayingMovies}
-              isLoading={false}
-              error={null}
-              onRetry={handleEmptyRetry}
-            />
-          </div>
+        <div ref={nowPlayingRef} className="py-6 md:py-8">
+          {nowPlayingVisible && (
+            <div className="container">
+              <MediaSection
+                title="Now Playing in Theaters"
+                data={nowPlayingMovies}
+                isLoading={false}
+                error={null}
+                onRetry={handleEmptyRetry}
+              />
+            </div>
+          )}
         </div>
 
         {/* Fourth Promo - Left Aligned */}
-        {topRatedTv && topRatedTv[3] && (
-          <MoviePromo
-            movie={topRatedTv[3]}
-            mediaType="tv"
-            variant="left"
-          />
-        )}
+        <div ref={fourthPromoRef}>
+          {fourthPromoVisible && topRatedTv && topRatedTv[3] && (
+            <MoviePromo
+              movie={topRatedTv[3]}
+              mediaType="tv"
+              variant="left"
+            />
+          )}
+        </div>
 
         {/* Award Winners TV */}
-        {topRatedTv && (
-          <AwardWinnersSection movies={topRatedTv} mediaType="tv" />
-        )}
+        <div ref={awardWinnersTvRef}>
+          {awardWinnersTvVisible && topRatedTv && (
+            <AwardWinnersSection movies={topRatedTv} mediaType="tv" />
+          )}
+        </div>
 
         {/* Because You Watched Section 2 */}
-        {nowPlayingMovies && (
-          <BecauseYouWatchedSection
-            movies={nowPlayingMovies}
-            basedOn="The Dark Knight"
-            mediaType="movie"
-          />
-        )}
+        <div ref={becauseYouWatched2Ref}>
+          {becauseYouWatched2Visible && nowPlayingMovies && (
+            <BecauseYouWatchedSection
+              movies={nowPlayingMovies}
+              basedOn="The Dark Knight"
+              mediaType="movie"
+            />
+          )}
+        </div>
 
         {/* Currently Airing */}
-        <div className="py-6 md:py-8">
-          <div className="container">
-            <MediaSection
-              title="Currently Airing"
-              data={onTheAirTv}
-              isLoading={false}
-              error={null}
-              onRetry={handleEmptyRetry}
-            />
-          </div>
+        <div ref={currentlyAiringRef} className="py-6 md:py-8">
+          {currentlyAiringVisible && (
+            <div className="container">
+              <MediaSection
+                title="Currently Airing"
+                data={onTheAirTv}
+                isLoading={false}
+                error={null}
+                onRetry={handleEmptyRetry}
+              />
+            </div>
+          )}
         </div>
 
         {/* Pricing Section */}
-        <PricingSection />
+        <div ref={pricingRef}>
+          {pricingVisible && <PricingSection />}
+        </div>
 
         {/* FAQ Section */}
-        <AskedQuestions />
+        <div ref={faqRef}>
+          {faqVisible && <AskedQuestions />}
+        </div>
       </motion.div>
     </Suspense>
   );
