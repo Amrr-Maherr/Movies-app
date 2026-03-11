@@ -1,24 +1,14 @@
 import { useState, memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLazyLoad } from "@/hooks/useLazyLoad";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import InfiniteScroll from "react-infinite-scroll-component";
 import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import usePopularPeople from "@/queries/FetchPopularPeople";
 import { Loader } from "@/components/ui";
 
-// ============================================
-// CODE SPLITTING WITH REACT.LAZY
-// Lazy-load heavy components to improve initial bundle size
-// ============================================
-
-// PeopleFilters - filter component, lazy loaded
 const PeopleFiltersLazy = lazy(() => import("@/components/Actors/PeopleFilters"));
 
-// ============================================
-// SUSPENSE FALLBACK COMPONENTS
-// Shown while lazy components are loading
-// ============================================
 const FiltersSkeleton = () => (
   <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6 animate-pulse">
     <div className="flex flex-wrap gap-3">
@@ -50,11 +40,9 @@ const ActorsPage = memo(function ActorsPage() {
     setSelectedLetter(letter);
   }, []);
 
-  // Flatten and filter items
   const allItems = useMemo(() => {
     let items = data?.pages.flatMap((page) => page.results) || [];
 
-    // Client-side filtering as TMDB popular people endpoint has limited filters
     if (selectedGender !== "all") {
       items = items.filter((person) => person.gender.toString() === selectedGender);
     }
@@ -68,27 +56,6 @@ const ActorsPage = memo(function ActorsPage() {
     return items;
   }, [data, selectedGender, selectedLetter]);
 
-  // ============================================
-  // LAZY LOAD HOOKS FOR SECTION-LEVEL RENDERING
-  // - Title section: No lazy loading (above the fold)
-  // - Filters: Short timeout since it's near the top
-  // - Grid: Standard lazy loading for main content
-  // ============================================
-  // Note: Title is always visible, no need for lazy load
-  const { ref: filtersRef, isVisible: filtersVisible, hasLoaded: filtersLoaded } = useLazyLoad<HTMLDivElement>({
-    threshold: 0.01,
-    rootMargin: "100px",
-    triggerOnce: true,
-    fallbackTimeout: 500, // Short timeout for near-fold content
-  });
-  
-  const { ref: gridRef, isVisible: gridVisible, hasLoaded: gridLoaded } = useLazyLoad<HTMLDivElement>({
-    threshold: 0.01,
-    rootMargin: "200px",
-    triggerOnce: true,
-    fallbackTimeout: 1000, // Standard timeout for main content
-  });
-
   return (
     <motion.div
       className="min-h-screen bg-[var(--background-primary)] pt-24"
@@ -97,13 +64,7 @@ const ActorsPage = memo(function ActorsPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/*
-        ============================================
-        HEADER SECTION
-        - Always rendered (above the fold)
-        - No lazy loading needed for critical content
-        ============================================
-      */}
+      {/* Header Section */}
       <div className="px-4 sm:px-8 mb-8">
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
           Popular Actors
@@ -113,25 +74,17 @@ const ActorsPage = memo(function ActorsPage() {
         </p>
       </div>
 
-      {/*
-        ============================================
-        FILTERS SECTION
-        - Lazy-loaded with short fallback timeout
-        - Uses Suspense for code splitting
-        ============================================
-      */}
-      <div ref={filtersRef}>
-        {(filtersVisible || filtersLoaded) && (
-          <Suspense fallback={<FiltersSkeleton />}>
-            <PeopleFiltersLazy
-              selectedGender={selectedGender}
-              onGenderSelect={handleGenderSelect}
-              selectedLetter={selectedLetter}
-              onLetterSelect={handleLetterSelect}
-            />
-          </Suspense>
-        )}
-      </div>
+      {/* Filters Section */}
+      <LazyWrapper threshold={0.01} rootMargin="100px">
+        <Suspense fallback={<FiltersSkeleton />}>
+          <PeopleFiltersLazy
+            selectedGender={selectedGender}
+            onGenderSelect={handleGenderSelect}
+            selectedLetter={selectedLetter}
+            onLetterSelect={handleLetterSelect}
+          />
+        </Suspense>
+      </LazyWrapper>
 
       {error ? (
         <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
@@ -147,63 +100,61 @@ const ActorsPage = memo(function ActorsPage() {
           </button>
         </div>
       ) : (
-        <div ref={gridRef} className="pb-20">
-          {(gridVisible || gridLoaded) && (
-            <AnimatePresence mode="wait">
-              {isLoading ? (
-                <motion.div
-                  key="skeleton"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <MediaGridSkeleton />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key={`grid-actors-${selectedGender}-${selectedLetter}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <InfiniteScroll
-                    dataLength={allItems.length}
-                    next={fetchNextPage}
-                    hasMore={!!hasNextPage}
-                    loader={
-                      isLoading ? (
-                        <div className="py-10 flex items-center justify-center w-full">
-                          <Loader size="lg" />
-                        </div>
-                      ) : null
-                    }
-                    endMessage={
-                      <div className="py-16 text-center text-[var(--text-secondary)] border-t border-zinc-800/50 mt-10">
-                        <p className="text-lg font-medium italic">
-                          You&apos;ve explored all the popular stars!
-                        </p>
+        <LazyWrapper threshold={0.01} rootMargin="200px">
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <motion.div
+                key="skeleton"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <MediaGridSkeleton />
+              </motion.div>
+            ) : (
+              <motion.div
+                key={`grid-actors-${selectedGender}-${selectedLetter}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <InfiniteScroll
+                  dataLength={allItems.length}
+                  next={fetchNextPage}
+                  hasMore={!!hasNextPage}
+                  loader={
+                    isLoading ? (
+                      <div className="py-10 flex items-center justify-center w-full">
+                        <Loader size="lg" />
                       </div>
-                    }
-                    style={{ overflow: "hidden" }}
-                    scrollThreshold={0.8}
-                  >
-                    <Suspense fallback={<MediaGridSkeleton />}>
-                      <MediaGrid
-                        items={allItems}
-                        type="person"
-                        emptyMessage={
-                          !isLoading && allItems.length === 0
-                            ? "No actors match your current filters. Try adjust them!"
-                            : ""
-                        }
-                      />
-                    </Suspense>
-                  </InfiniteScroll>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          )}
-        </div>
+                    ) : null
+                  }
+                  endMessage={
+                    <div className="py-16 text-center text-[var(--text-secondary)] border-t border-zinc-800/50 mt-10">
+                      <p className="text-lg font-medium italic">
+                        You&apos;ve explored all the popular stars!
+                      </p>
+                    </div>
+                  }
+                  style={{ overflow: "hidden" }}
+                  scrollThreshold={0.8}
+                >
+                  <Suspense fallback={<MediaGridSkeleton />}>
+                    <MediaGrid
+                      items={allItems}
+                      type="person"
+                      emptyMessage={
+                        !isLoading && allItems.length === 0
+                          ? "No actors match your current filters. Try adjust them!"
+                          : ""
+                      }
+                    />
+                  </Suspense>
+                </InfiniteScroll>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </LazyWrapper>
       )}
     </motion.div>
   );

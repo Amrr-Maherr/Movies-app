@@ -1,40 +1,19 @@
-import { memo, lazy, Suspense, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
-import { useLazyLoad } from "@/hooks/useLazyLoad";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import FetchMovieDetails from "@/queries/FetchMovieDetails";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
 
-// ============================================
-// CODE SPLITTING WITH REACT.LAZY
-// Lazy-load heavy components to improve initial bundle size
-// Each component will be loaded on-demand when rendered
-// ============================================
-
-// Hero section - loaded first as it's above the fold
 const MediaHero = lazy(() => import("@/components/shared/MediaHero"));
-
-// Info section - loaded immediately after hero
 const MediaInfoSection = lazy(() => import("@/components/sections/MediaInfoSection"));
-
-// Trailers section - heavy video content, lazy load
 const TrailersSection = lazy(() => import("@/components/sections/TrailersSection"));
-
-// Behind the scenes - image gallery, lazy load
 const BehindTheScenesSection = lazy(() => import("@/components/sections/BehindTheScenesSection"));
-
-// More like this - recommendation carousel, lazy load
 const MoreLikeThisSection = lazy(() => import("@/components/sections/MoreLikeThisSection"));
-
-// Full credits - large cast/crew list, lazy load
 const FullCreditsSection = lazy(() => import("@/components/sections/FullCreditsSection"));
 
-// ============================================
-// SUSPENSE FALLBACK COMPONENT
-// Shown while lazy components are loading
-// ============================================
 const SectionSkeleton = () => (
   <div className="w-full py-12 bg-zinc-900/50 animate-pulse">
     <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
@@ -48,13 +27,11 @@ const SectionSkeleton = () => (
   </div>
 );
 
-// Memoized MovieDetailsPage component - avoids re-renders when parent updates
 const MovieDetailsPage = memo(function MovieDetailsPage() {
   const { slugWithId } = useParams<{ slugWithId: string }>();
   const id = extractIdFromSlug(slugWithId);
   const { isLoading, data, error, refetch } = FetchMovieDetails(Number(id));
 
-  // Memoized: Extract data for child components
   const { videos, images, similar, credits } = useMemo(() => {
     if (!data) {
       return { videos: [], images: [], similar: [], credits: { cast: [], crew: [] } };
@@ -66,18 +43,6 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       credits: data.credits || { cast: [], crew: [] },
     };
   }, [data]);
-
-  // ============================================
-  // LAZY LOAD HOOKS FOR SECTION-LEVEL RENDERING
-  // Combined with React.lazy for optimal performance
-  // Sections only render when visible in viewport
-  // ============================================
-  const { ref: heroRef, isVisible: heroVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: infoRef, isVisible: infoVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: trailersRef, isVisible: trailersVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: behindScenesRef, isVisible: behindScenesVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: moreLikeThisRef, isVisible: moreLikeThisVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: creditsRef, isVisible: creditsVisible } = useLazyLoad<HTMLDivElement>();
 
   if (isLoading) {
     return <Loader fullscreen size="lg" />;
@@ -102,95 +67,53 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.5 }}
     >
-      {/* 
-        ============================================
-        HERO SECTION
-        - Lazy-loaded component with Suspense
-        - useLazyLoad for viewport-based rendering
-        ============================================
-      */}
-      <div ref={heroRef}>
-        {heroVisible && (
-          <Suspense fallback={<SectionSkeleton />}>
-            <MediaHero media={data} />
-          </Suspense>
-        )}
-      </div>
+      {/* Hero Section */}
+      <LazyWrapper threshold={0.01} rootMargin="100px" height={500}>
+        <Suspense fallback={<SectionSkeleton />}>
+          <MediaHero media={data} />
+        </Suspense>
+      </LazyWrapper>
 
-      {/* 
-        ============================================
-        MEDIA INFO SECTION
-        - Contains overview, tagline, cast, metadata
-        - Lazy-loaded with viewport detection
-        ============================================
-      */}
-      <div ref={infoRef}>
-        {infoVisible && (
-          <Suspense fallback={<SectionSkeleton />}>
-            <MediaInfoSection media={data} />
-          </Suspense>
-        )}
-      </div>
+      {/* Media Info Section */}
+      <LazyWrapper threshold={0.01} rootMargin="100px">
+        <Suspense fallback={<SectionSkeleton />}>
+          <MediaInfoSection media={data} />
+        </Suspense>
+      </LazyWrapper>
 
-      {/* 
-        ============================================
-        TRAILERS SECTION
-        - Heavy video content
-        - Only loads when scrolled into view
-        ============================================
-      */}
-      <div ref={trailersRef}>
-        {trailersVisible && videos.length > 0 && (
+      {/* Trailers Section */}
+      {videos.length > 0 && (
+        <LazyWrapper threshold={0.01} rootMargin="100px">
           <Suspense fallback={<SectionSkeleton />}>
             <TrailersSection videos={videos} />
           </Suspense>
-        )}
-      </div>
+        </LazyWrapper>
+      )}
 
-      {/* 
-        ============================================
-        BEHIND THE SCENES SECTION
-        - Image gallery with backdrops
-        - Lazy load to defer image loading
-        ============================================
-      */}
-      <div ref={behindScenesRef}>
-        {behindScenesVisible && (
-          <Suspense fallback={<SectionSkeleton />}>
-            <BehindTheScenesSection images={images} />
-          </Suspense>
-        )}
-      </div>
+      {/* Behind the Scenes Section */}
+      <LazyWrapper threshold={0.01} rootMargin="100px">
+        <Suspense fallback={<SectionSkeleton />}>
+          <BehindTheScenesSection images={images} />
+        </Suspense>
+      </LazyWrapper>
 
-      {/* 
-        ============================================
-        MORE LIKE THIS SECTION
-        - Recommendation carousel
-        - Loaded only when user scrolls down
-        ============================================
-      */}
-      <div ref={moreLikeThisRef}>
-        {moreLikeThisVisible && similar.length > 0 && (
+      {/* More Like This Section */}
+      {similar.length > 0 && (
+        <LazyWrapper threshold={0.01} rootMargin="100px">
           <Suspense fallback={<SectionSkeleton />}>
             <MoreLikeThisSection similar={similar} />
           </Suspense>
-        )}
-      </div>
+        </LazyWrapper>
+      )}
 
-      {/* 
-        ============================================
-        FULL CREDITS SECTION
-        - Large cast and crew list
-        - Heavy component, lazy loaded
-        ============================================
-      */}
-      <div ref={creditsRef}>
-        {creditsVisible && (credits.cast.length > 0 || credits.crew.length > 0) && (
+      {/* Full Credits Section */}
+      {(credits.cast.length > 0 || credits.crew.length > 0) && (
+        <LazyWrapper threshold={0.01} rootMargin="200px">
           <Suspense fallback={<SectionSkeleton />}>
             <FullCreditsSection cast={credits.cast || []} crew={credits.crew || []} />
           </Suspense>
-        )}
-      </div>
+        </LazyWrapper>
+      )}
     </motion.div>
   );
 });
