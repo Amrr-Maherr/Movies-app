@@ -2,6 +2,7 @@ import { memo, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import { motion } from "framer-motion";
+import { useLazyLoad } from "@/hooks/useLazyLoad";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
 import PersonHero from "@/components/shared/PersonHero";
@@ -51,6 +52,13 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
     return { cast, crew };
   }, [creditsData]);
 
+  // Lazy load hooks for each section
+  const { ref: heroRef, isVisible: heroVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: socialLinksRef, isVisible: socialLinksVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: knownForRef, isVisible: knownForVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: biographyRef, isVisible: biographyVisible } = useLazyLoad<HTMLDivElement>();
+  const { ref: creditsRef, isVisible: creditsVisible } = useLazyLoad<HTMLDivElement>();
+
   if (isLoading) {
     return <Loader fullscreen size="lg" />;
   }
@@ -60,7 +68,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       <Error
         fullscreen
         title="Failed to load person details"
-        message="We couldn't load the person information. Please try again."
+        message="We couldn&apos;t load the person information. Please try again."
         onRetry={() => {
           refetchPerson();
           refetchCredits();
@@ -78,37 +86,51 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       transition={{ duration: 0.5 }}
     >
       {/* Hero Section - Profile image, name, basic info */}
-      <PersonHero person={personData} />
+      <div ref={heroRef}>
+        {heroVisible && <PersonHero person={personData} />}
+      </div>
 
       {/* Social Links Section - IMDb, Twitter, Instagram, etc. */}
       {externalIdsData && (
-        <SocialLinksSection
-          imdbId={externalIdsData.imdb_id}
-          twitterId={externalIdsData.twitter_id}
-          instagramId={externalIdsData.instagram_id}
-          facebookId={externalIdsData.facebook_id}
-          wikidataId={externalIdsData.wikidata_id}
-          homepage={personData.homepage}
-        />
+        <div ref={socialLinksRef}>
+          {socialLinksVisible && (
+            <SocialLinksSection
+              imdbId={externalIdsData.imdb_id}
+              twitterId={externalIdsData.twitter_id}
+              instagramId={externalIdsData.instagram_id}
+              facebookId={externalIdsData.facebook_id}
+              wikidataId={externalIdsData.wikidata_id}
+              homepage={personData.homepage}
+            />
+          )}
+        </div>
       )}
 
       {/* Known For Section - Top movies/TV shows */}
       {(cast.length > 0 || crew.length > 0) && (
-        <KnownForSection cast={cast} crew={crew} />
+        <div ref={knownForRef}>
+          {knownForVisible && <KnownForSection cast={cast} crew={crew} />}
+        </div>
       )}
 
       {/* Biography Section - Full biography and personal info */}
-      <BiographySection
-        biography={personData.biography}
-        placeOfBirth={personData.place_of_birth}
-        birthday={personData.birthday}
-        deathday={personData.deathday}
-        knownForDepartment={personData.known_for_department}
-      />
+      <div ref={biographyRef}>
+        {biographyVisible && (
+          <BiographySection
+            biography={personData.biography}
+            placeOfBirth={personData.place_of_birth}
+            birthday={personData.birthday}
+            deathday={personData.deathday}
+            knownForDepartment={personData.known_for_department}
+          />
+        )}
+      </div>
 
       {/* Credits Section - Full filmography with filters */}
       {(cast.length > 0 || crew.length > 0) && (
-        <CreditsSection cast={cast} crew={crew} />
+        <div ref={creditsRef}>
+          {creditsVisible && <CreditsSection cast={cast} crew={crew} />}
+        </div>
       )}
     </motion.div>
   );
