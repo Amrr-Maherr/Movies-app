@@ -70,11 +70,24 @@ const ActorsPage = memo(function ActorsPage() {
 
   // ============================================
   // LAZY LOAD HOOKS FOR SECTION-LEVEL RENDERING
-  // Combined with React.lazy for optimal performance
+  // - Title section: No lazy loading (above the fold)
+  // - Filters: Short timeout since it's near the top
+  // - Grid: Standard lazy loading for main content
   // ============================================
-  const { ref: titleRef, isVisible: titleVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: filtersRef, isVisible: filtersVisible } = useLazyLoad<HTMLDivElement>();
-  const { ref: gridRef, isVisible: gridVisible } = useLazyLoad<HTMLDivElement>();
+  // Note: Title is always visible, no need for lazy load
+  const { ref: filtersRef, isVisible: filtersVisible, hasLoaded: filtersLoaded } = useLazyLoad<HTMLDivElement>({
+    threshold: 0.01,
+    rootMargin: "100px",
+    triggerOnce: true,
+    fallbackTimeout: 500, // Short timeout for near-fold content
+  });
+  
+  const { ref: gridRef, isVisible: gridVisible, hasLoaded: gridLoaded } = useLazyLoad<HTMLDivElement>({
+    threshold: 0.01,
+    rootMargin: "200px",
+    triggerOnce: true,
+    fallbackTimeout: 1000, // Standard timeout for main content
+  });
 
   return (
     <motion.div
@@ -84,35 +97,31 @@ const ActorsPage = memo(function ActorsPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* 
+      {/*
         ============================================
         HEADER SECTION
-        - Page title and description
-        - Lazy-loaded with viewport detection
+        - Always rendered (above the fold)
+        - No lazy loading needed for critical content
         ============================================
       */}
-      <div ref={titleRef} className="px-4 sm:px-8 mb-8">
-        {titleVisible && (
-          <>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
-              Popular Actors
-            </h1>
-            <p className="text-[var(--text-secondary)] text-sm md:text-lg max-w-3xl leading-relaxed">
-              Explore the most popular actors and celebrities in the industry today.
-            </p>
-          </>
-        )}
+      <div className="px-4 sm:px-8 mb-8">
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
+          Popular Actors
+        </h1>
+        <p className="text-[var(--text-secondary)] text-sm md:text-lg max-w-3xl leading-relaxed">
+          Explore the most popular actors and celebrities in the industry today.
+        </p>
       </div>
 
-      {/* 
+      {/*
         ============================================
         FILTERS SECTION
-        - Gender and alphabetical filters
-        - Lazy-loaded component with Suspense
+        - Lazy-loaded with short fallback timeout
+        - Uses Suspense for code splitting
         ============================================
       */}
       <div ref={filtersRef}>
-        {filtersVisible && (
+        {(filtersVisible || filtersLoaded) && (
           <Suspense fallback={<FiltersSkeleton />}>
             <PeopleFiltersLazy
               selectedGender={selectedGender}
@@ -139,7 +148,7 @@ const ActorsPage = memo(function ActorsPage() {
         </div>
       ) : (
         <div ref={gridRef} className="pb-20">
-          {gridVisible && (
+          {(gridVisible || gridLoaded) && (
             <AnimatePresence mode="wait">
               {isLoading ? (
                 <motion.div
