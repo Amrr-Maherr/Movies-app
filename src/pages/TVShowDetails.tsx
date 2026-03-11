@@ -103,6 +103,9 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       <HelmetMeta
         name={data.name || "TV Show Details"}
         description={data.overview || "Watch this TV show on Netflix"}
+        image={data.poster_path ? `https://image.tmdb.org/t/p/original${data.poster_path}` : undefined}
+        url={window.location.href}
+        type="video.tv_series"
       />
 
       {/* Hero Section */}

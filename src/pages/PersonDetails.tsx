@@ -80,6 +80,9 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       <HelmetMeta
         name={personData.name || "Person Details"}
         description={personData.biography?.substring(0, 160) || `Discover more about ${personData.name} on Netflix`}
+        image={personData.profile_path ? `https://image.tmdb.org/t/p/original${personData.profile_path}` : undefined}
+        url={window.location.href}
+        type="profile"
       />
 
       {/* Hero Section */}

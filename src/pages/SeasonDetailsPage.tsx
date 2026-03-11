@@ -113,6 +113,9 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
       <HelmetMeta
         name={season.name || "Season Details"}
         description={season.overview || `Watch Season ${seasonNumber} on Netflix`}
+        image={season.poster_path ? `https://image.tmdb.org/t/p/original${season.poster_path}` : undefined}
+        url={window.location.href}
+        type="video.tv_season"
       />
 
       {/* Header Section */}

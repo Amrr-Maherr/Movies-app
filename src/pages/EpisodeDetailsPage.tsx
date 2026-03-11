@@ -141,6 +141,9 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       <HelmetMeta
         name={episode.name || "Episode Details"}
         description={episode.overview?.substring(0, 160) || `Watch Episode ${episode.episode_number} of Season ${episode.season_number} on Netflix`}
+        image={episode.still_path ? `https://image.tmdb.org/t/p/original${episode.still_path}` : undefined}
+        url={window.location.href}
+        type="video.episode"
       />
 
       {/* Back Button */}

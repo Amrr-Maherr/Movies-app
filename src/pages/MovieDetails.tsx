@@ -72,6 +72,9 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       <HelmetMeta
         name={data.title || "Movie Details"}
         description={data.overview || "Watch this movie on Netflix"}
+        image={data.poster_path ? `https://image.tmdb.org/t/p/original${data.poster_path}` : undefined}
+        url={window.location.href}
+        type="video.movie"
       />
 
       {/* Hero Section */}
