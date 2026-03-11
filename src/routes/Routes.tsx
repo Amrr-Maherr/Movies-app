@@ -1,7 +1,18 @@
-import { lazy, Suspense, memo } from "react";
-import { Routes, Route } from "react-router-dom";
+import { lazy, Suspense, memo, useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { Loader } from "@/components/ui";
+
+// ScrollToTop component - scrolls to top on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 // Lazy-loaded page components
 const MovieDetails = lazy(() => import("@/pages/MovieDetails"));
@@ -57,6 +68,7 @@ const AppRoutes = memo(function AppRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Suspense fallback={<LoadingFallback />}>
+        <ScrollToTop />
         <Routes>
           {/* Main routes */}
           <Route path="/" element={<Home />} />

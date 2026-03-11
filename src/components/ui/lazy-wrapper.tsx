@@ -21,6 +21,15 @@ const LazyWrapper: React.FC<LazyWrapperProps> = ({
   useEffect(() => {
     if (!wrapperRef.current) return;
 
+    // Check if already visible on mount (in case user scrolled)
+    const rect = wrapperRef.current.getBoundingClientRect();
+    const alreadyVisible = rect.top < window.innerHeight && rect.bottom >= 0;
+    
+    if (alreadyVisible) {
+      setIsVisible(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
