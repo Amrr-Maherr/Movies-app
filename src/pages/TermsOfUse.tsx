@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
@@ -39,13 +38,7 @@ export default function TermsOfUse() {
   ];
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] page-transition">
       <HelmetMeta
         name="Terms of Use"
         description="Netflix Terms of Use and membership agreement."
@@ -89,6 +82,6 @@ export default function TermsOfUse() {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

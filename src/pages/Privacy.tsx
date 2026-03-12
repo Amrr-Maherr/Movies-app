@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Shield, Lock, Eye, Database } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -38,13 +37,7 @@ export default function Privacy() {
   ];
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] page-transition">
       <HelmetMeta
         name="Privacy Policy"
         description="Netflix Privacy Policy - Learn how we collect, use, and protect your personal information."
@@ -110,6 +103,6 @@ export default function Privacy() {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
