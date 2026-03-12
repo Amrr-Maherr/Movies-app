@@ -1,16 +1,9 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function NotFound() {
   return (
-    <motion.div
-      className="min-h-screen flex flex-col items-center justify-center bg-[var(--background-primary)] text-[var(--text-primary)] px-4"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background-primary)] text-[var(--text-primary)] px-4 page-transition">
       <HelmetMeta
         name="Page Not Found"
         description="The page you're looking for doesn't exist. Return to Netflix home."
@@ -29,6 +22,6 @@ export default function NotFound() {
       >
         Netflix Home
       </Link>
-    </motion.div>
+    </div>
   );
 }

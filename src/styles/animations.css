@@ -1,0 +1,351 @@
+/**
+ * CSS Animations - Replacement for framer-motion
+ * Provides page transitions, fade effects, and slide animations
+ */
+
+/* ============================================
+   PAGE TRANSITION ANIMATIONS
+   ============================================ */
+
+/* Fade in animation - replaces motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Fade in from left - replaces motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} */
+@keyframes fadeInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade in from right - replaces motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} */
+@keyframes fadeInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Fade in from bottom - replaces motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} */
+@keyframes fadeInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade out - for exit animations */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Slide up - replaces motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide down - for exit animations */
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* Scale in - replaces motion.div whileTap={{ scale: 0.95 }} */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Page transition wrapper - use instead of AnimatePresence */
+.page-transition {
+  animation: fadeInFromLeft 0.5s ease-out forwards;
+}
+
+/* Fade in element */
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+/* Fade in from left */
+.fade-in-left {
+  animation: fadeInFromLeft 0.5s ease-out forwards;
+}
+
+/* Fade in from right */
+.fade-in-right {
+  animation: fadeInFromRight 0.5s ease-out forwards;
+}
+
+/* Fade in from bottom */
+.fade-in-bottom {
+  animation: fadeInFromBottom 0.5s ease-out forwards;
+}
+
+/* Slide up */
+.slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+/* Scale in */
+.scale-in {
+  animation: scaleIn 0.2s ease-out forwards;
+}
+
+/* Pulse */
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   TRANSITION UTILITIES (for hover/focus states)
+   ============================================ */
+
+/* Smooth transition for transforms */
+.transition-transform {
+  transition: transform 0.3s ease-out;
+}
+
+/* Smooth transition for opacity */
+.transition-opacity {
+  transition: opacity 0.3s ease-out;
+}
+
+/* Smooth transition for all properties */
+.transition-all {
+  transition: all 0.3s ease-out;
+}
+
+/* Hover scale effect - replaces whileHover={{ scale: 1.05 }} */
+.hover-scale {
+  transition: transform 0.3s ease-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Tap scale effect - replaces whileTap={{ scale: 0.95 }} */
+.tap-scale:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   MODAL ANIMATIONS
+   ============================================ */
+
+/* Modal backdrop fade in */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal content slide up */
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-overlay {
+  animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+.modal-content {
+  animation: modalSlideUp 0.3s ease-out forwards;
+}
+
+/* ============================================
+   BUTTON ANIMATIONS
+   ============================================ */
+
+/* Button hover effect */
+.button-hover {
+  transition: transform 0.2s ease-out, background-color 0.2s ease-out;
+}
+
+.button-hover:hover {
+  transform: scale(1.05);
+}
+
+.button-hover:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   LOADING ANIMATIONS
+   ============================================ */
+
+/* Skeleton loading pulse */
+@keyframes skeleton-pulse {
+  0%, 100% {
+    background-color: rgb(39, 39, 42); /* zinc-800 */
+  }
+  50% {
+    background-color: rgb(63, 63, 70); /* zinc-700 */
+  }
+}
+
+.skeleton {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   FILTER BADGE ANIMATIONS
+   ============================================ */
+
+/* Layout transition for filter badges */
+@keyframes badgeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.filter-badge {
+  animation: badgeScale 0.2s ease-out forwards;
+}
+
+/* ============================================
+   HERO CONTENT ANIMATIONS
+   ============================================ */
+
+/* Hero title animation */
+@keyframes heroTitleSlide {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero description animation */
+@keyframes heroDescSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-title {
+  animation: heroTitleSlide 0.8s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+.hero-description {
+  animation: heroDescSlide 0.8s ease-out 0.5s forwards;
+  opacity: 0;
+}
+
+.hero-buttons {
+  animation: fadeIn 0.8s ease-out 0.7s forwards;
+  opacity: 0;
+}
+
+/* ============================================
+   IMAGE/BACKDROP ANIMATIONS
+   ============================================ */
+
+/* Image zoom on hover */
+@keyframes imageZoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
+}
+
+.image-zoom-hover:hover {
+  animation: imageZoom 0.5s ease-out forwards;
+}
+
+/* ============================================
+   ACCESSIBILITY - Reduced Motion
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

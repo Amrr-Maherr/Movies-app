@@ -1,6 +1,10 @@
 import { memo, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
+// FIX: Global image cache to track loaded images and avoid re-loading
+// This Map stores URLs of images that have been successfully loaded
+const loadedImageCache = new Set<string>();
+
 export interface OptimizedImageProps {
   src: string;
   alt: string;
@@ -16,7 +20,8 @@ export interface OptimizedImageProps {
 
 /**
  * OptimizedImage Component - Simple & Performant
- * Features: lazy loading, async decoding, skeleton loader, fallback support
+ * Features: lazy loading, async decoding, skeleton loader, fallback support,
+ *           global image cache to prevent re-loading same images
  */
 const OptimizedImage = memo(function OptimizedImage({
   src,
@@ -30,13 +35,17 @@ const OptimizedImage = memo(function OptimizedImage({
   objectFit = "cover",
   priority = false,
 }: OptimizedImageProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
+  // FIX: Check cache first - if image was already loaded, skip loading state
+  const isCached = loadedImageCache.has(src);
+  const [isLoaded, setIsLoaded] = useState(isCached);
   const [hasError, setHasError] = useState(false);
 
   const handleLoad = useCallback(() => {
+    // Add to cache on successful load
+    loadedImageCache.add(src);
     setIsLoaded(true);
     onLoad?.();
-  }, [onLoad]);
+  }, [src, onLoad]);
 
   const handleError = useCallback(() => {
     setHasError(true);
@@ -50,7 +59,7 @@ const OptimizedImage = memo(function OptimizedImage({
       className={cn("relative overflow-hidden", className)}
       style={{ width, height }}
     >
-      {/* Loading Skeleton */}
+      {/* Loading Skeleton - skip if cached */}
       {!isLoaded && (
         <div className="absolute inset-0 bg-zinc-800 animate-pulse" />
       )}

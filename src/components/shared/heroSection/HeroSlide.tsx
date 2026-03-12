@@ -10,8 +10,11 @@ interface ExtraHeroSlideProps extends HeroSlideProps {
 // COMPONENT
 // ============================================
 export default function HeroSlide({ movie, onMoreInfo }: ExtraHeroSlideProps) {
+  // FIX: Use aspect ratio instead of h-screen to prevent layout thrashing
+  // and reduce viewport calculation overhead. Using 16:9 aspect ratio
+  // which is standard for hero banners and provides consistent sizing.
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full aspect-video max-h-[85vh] min-h-[500px] overflow-hidden">
       {/* Background */}
       <HeroBackground movie={movie} />
 

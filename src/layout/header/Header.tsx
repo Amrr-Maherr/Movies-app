@@ -13,12 +13,26 @@ const Header = memo(function Header() {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isBrowseMenuOpen, setIsBrowseMenuOpen] = useState(false);
 
+  // FIX: Throttle scroll events using requestAnimationFrame to prevent excessive re-renders
   useEffect(() => {
+    let ticking = false;
+    let lastScrollY = 0;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
+      // Only update if scroll position changed significantly (prevents micro-updates)
+      if (Math.abs(window.scrollY - lastScrollY) < 5) return;
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 10); // Add small threshold to avoid flickering
+          lastScrollY = window.scrollY;
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

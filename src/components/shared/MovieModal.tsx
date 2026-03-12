@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from "react";
+import { memo, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Play, Plus, ThumbsUp } from "lucide-react";
 import { Dialog, DialogContent, DialogOverlay, DialogPortal } from "@/components/ui/dialog";
@@ -11,6 +11,19 @@ interface MovieModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+// FIX: Move URL helper functions outside component to prevent recreation on every render
+const getBackdropUrl = (backdropPath: string | null): string => {
+  return backdropPath
+    ? `https://image.tmdb.org/t/p/original${backdropPath}`
+    : "https://via.placeholder.com/1920x1080?text=No+Image";
+};
+
+const getPosterUrl = (posterPath: string | null): string => {
+  return posterPath
+    ? `https://image.tmdb.org/t/p/w500${posterPath}`
+    : "https://via.placeholder.com/500x750?text=No+Image";
+};
 
 const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieModalProps) {
   // Memoized: Pre-calculated values (moved before early return to follow hooks rules)
@@ -39,18 +52,6 @@ const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieMod
     [movie]
   );
 
-  const backdropUrl = useCallback((backdropPath: string | null) => {
-    return backdropPath
-      ? `https://image.tmdb.org/t/p/original${backdropPath}`
-      : "https://via.placeholder.com/1920x1080?text=No+Image";
-  }, []);
-
-  const posterUrl = useCallback((posterPath: string | null) => {
-    return posterPath
-      ? `https://image.tmdb.org/t/p/w500${posterPath}`
-      : "https://via.placeholder.com/500x750?text=No+Image";
-  }, []);
-
   // Early return after hooks
   if (!movie) return null;
   return (
@@ -73,7 +74,7 @@ const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieMod
                 {/* Background Image with Gradient */}
                 <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
                   <OptimizedImage
-                    src={backdropUrl(movie.backdrop_path)}
+                    src={getBackdropUrl(movie.backdrop_path)}
                     alt={title}
                     className="w-full h-full"
                     objectFit="cover"
@@ -96,7 +97,7 @@ const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieMod
                     {/* Poster */}
                     <div className="flex-shrink-0 mx-auto sm:mx-0">
                       <OptimizedImage
-                        src={posterUrl(movie.poster_path)}
+                        src={getPosterUrl(movie.poster_path)}
                         alt={title}
                         className="w-48 sm:w-56 rounded-lg shadow-2xl border border-white/10"
                         objectFit="cover"

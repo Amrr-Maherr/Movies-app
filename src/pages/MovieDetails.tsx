@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback, Error } from "@/components/ui";
+import { LoadingFallback, Error, SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchMovieDetails from "@/queries/FetchMovieDetails";
 
@@ -13,19 +13,6 @@ const TrailersSection = lazy(() => import("@/components/sections/TrailersSection
 const BehindTheScenesSection = lazy(() => import("@/components/sections/BehindTheScenesSection"));
 const MoreLikeThisSection = lazy(() => import("@/components/sections/MoreLikeThisSection"));
 const FullCreditsSection = lazy(() => import("@/components/sections/FullCreditsSection"));
-
-const SectionSkeleton = () => (
-  <div className="w-full py-12 bg-zinc-900/50 animate-pulse">
-    <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-      <div className="h-8 bg-zinc-800 rounded w-48 mb-6" />
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {[...Array(6)].map((_, i) => (
-          <div key={i} className="aspect-[2/3] bg-zinc-800 rounded" />
-        ))}
-      </div>
-    </div>
-  </div>
-);
 
 const MovieDetailsPage = memo(function MovieDetailsPage() {
   const { slugWithId } = useParams<{ slugWithId: string }>();

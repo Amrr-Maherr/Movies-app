@@ -1,5 +1,4 @@
 import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { LoadingFallback } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -56,13 +55,7 @@ const Movie = memo(function Movie() {
   }, []);
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)]"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)] page-transition">
       <HelmetMeta
         name="Movies"
         description="Movies move us like nothing else can, whether they're scary, funny, dramatic, romantic or anywhere in-between."
@@ -104,34 +97,20 @@ const Movie = memo(function Movie() {
         </div>
       ) : (
         <LazyWrapper height={500}>
-          <AnimatePresence mode="wait">
-            {isLoading ? (
-              <motion.div
-                key="skeleton"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <MediaGridSkeleton />
-              </motion.div>
-            ) : (
-              <Suspense fallback={<LoadingFallback />}>
-                <motion.div
-                  key={`grid-${activeFilter}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <MediaGrid items={moviesData} emptyMessage="No Movies found for this filter." />
-                </motion.div>
-              </Suspense>
-            )}
-          </AnimatePresence>
+          {isLoading ? (
+            <div className="fade-in">
+              <MediaGridSkeleton />
+            </div>
+          ) : (
+            <Suspense fallback={<LoadingFallback />}>
+              <div className="slide-up">
+                <MediaGrid items={moviesData} emptyMessage="No Movies found for this filter." />
+              </div>
+            </Suspense>
+          )}
         </LazyWrapper>
       )}
-    </motion.div>
+    </div>
   );
 });
 

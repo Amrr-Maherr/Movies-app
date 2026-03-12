@@ -3,12 +3,24 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 import viteImagemin from 'vite-plugin-imagemin'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    // =========================================================
+    // BUNDLE VISUALIZATION - Analyze bundle size and chunks
+    // Run 'npm run build' and open dist/stats.html to view
+    // =========================================================
+    visualizer({
+      open: false, // Set to true to auto-open in browser
+      gzipSize: true,
+      brotliSize: true,
+      filename: 'dist/stats.html',
+      template: 'treemap', // treemap, sunburst, or network
+    }),
     // =========================================================
     // IMAGE OPTIMIZATION PLUGIN
     // Compresses and optimizes all images during build

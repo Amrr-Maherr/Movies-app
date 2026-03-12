@@ -1,9 +1,9 @@
 import { memo, useMemo, useCallback, lazy, Suspense } from "react";
-import { motion } from "framer-motion";
 import { Loader, Error as ErrorComponent, LoadingFallback } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import HeroSection from "@/components/shared/heroSection/HeroSection";
+import "@/index.css";
 
 import usePopularMovies from "@/queries/FetchPopularMovies";
 import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
@@ -128,58 +128,33 @@ const Home = memo(function Home() {
     ],
   );
 
-  const isLoading = useMemo(
-    () =>
-      popularLoading ||
-      trendingWeekLoading ||
-      trendingDayLoading ||
-      upcomingLoading ||
-      nowPlayingLoading ||
-      popularTvLoading ||
-      trendingTvWeekLoading ||
-      trendingTvDayLoading ||
-      airingTodayLoading ||
-      onTheAirLoading,
-    [
-      popularLoading,
-      trendingWeekLoading,
-      trendingDayLoading,
-      upcomingLoading,
-      nowPlayingLoading,
-      popularTvLoading,
-      trendingTvWeekLoading,
-      trendingTvDayLoading,
-      airingTodayLoading,
-      onTheAirLoading,
-    ],
-  );
+  // FIX: Simplified loading state - direct boolean expression instead of useMemo
+  const isLoading =
+    popularLoading ||
+    trendingWeekLoading ||
+    trendingDayLoading ||
+    upcomingLoading ||
+    nowPlayingLoading ||
+    popularTvLoading ||
+    trendingTvWeekLoading ||
+    trendingTvDayLoading ||
+    airingTodayLoading ||
+    onTheAirLoading;
 
-  const error = useMemo(
-    () =>
-      popularError ||
-      trendingWeekError ||
-      trendingDayError ||
-      upcomingError ||
-      nowPlayingError ||
-      popularTvError ||
-      trendingTvWeekError ||
-      trendingTvDayError ||
-      airingTodayError ||
-      onTheAirError,
-    [
-      popularError,
-      trendingWeekError,
-      trendingDayError,
-      upcomingError,
-      nowPlayingError,
-      popularTvError,
-      trendingTvWeekError,
-      trendingTvDayError,
-      airingTodayError,
-      onTheAirError,
-    ],
-  );
+  // FIX: Simplified error state - direct boolean expression instead of useMemo
+  const error =
+    popularError ||
+    trendingWeekError ||
+    trendingDayError ||
+    upcomingError ||
+    nowPlayingError ||
+    popularTvError ||
+    trendingTvWeekError ||
+    trendingTvDayError ||
+    airingTodayError ||
+    onTheAirError;
 
+  // FIX: Simplified retry handler - empty functions defined inline where needed
   const handleRetry = useCallback(() => {
     popularRefetch();
     trendingWeekRefetch();
@@ -204,9 +179,6 @@ const Home = memo(function Home() {
     onTheAirRefetch,
   ]);
 
-  const handleEmptyRetry = useCallback(() => {}, []);
-  const handleEmptyHeroRetry = useCallback(() => {}, []);
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
@@ -227,13 +199,7 @@ const Home = memo(function Home() {
   }
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)]"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)] page-transition">
       <HelmetMeta
         name="Netflix Egypt - Watch TV Shows Online, Watch Movies Online"
         description="Watch unlimited movies and TV shows on Netflix. Stream anytime, anywhere on any device."
@@ -244,7 +210,7 @@ const Home = memo(function Home() {
         data={AllData}
         isLoading={false}
         error={null}
-        onRetry={handleEmptyHeroRetry}
+        onRetry={() => {}}
       />
 
       {/* Top 10 Movies Section */}
@@ -268,7 +234,7 @@ const Home = memo(function Home() {
               data={trendingMoviesWeek}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={() => {}}
             />
           </div>
         </LazyWrapper>
@@ -308,7 +274,7 @@ const Home = memo(function Home() {
               data={trendingTvWeek}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={() => {}}
             />
           </div>
         </LazyWrapper>
@@ -358,7 +324,7 @@ const Home = memo(function Home() {
               data={trendingMoviesDay}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={() => {}}
             />
           </div>
         </LazyWrapper>
@@ -395,14 +361,14 @@ const Home = memo(function Home() {
               data={trendingTvDay}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={() => {}}
             />
             <MediaSection
               title="Popular Movies"
               data={popularMovies}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={() => {}}
             />
           </div>
         </LazyWrapper>
@@ -447,14 +413,14 @@ const Home = memo(function Home() {
               data={popularTv}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={() => {}}
             />
             <MediaSection
               title="Coming Soon"
               data={upcomingMovies}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={() => {}}
             />
           </div>
         </LazyWrapper>
@@ -504,7 +470,7 @@ const Home = memo(function Home() {
               data={airingTodayTv}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={() => {}}
             />
           </div>
         </LazyWrapper>
@@ -531,7 +497,7 @@ const Home = memo(function Home() {
               data={nowPlayingMovies}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={() => {}}
             />
           </div>
         </LazyWrapper>
@@ -577,7 +543,7 @@ const Home = memo(function Home() {
               data={onTheAirTv}
               isLoading={false}
               error={null}
-              onRetry={handleEmptyRetry}
+              onRetry={() => {}}
             />
           </div>
         </LazyWrapper>
@@ -596,7 +562,7 @@ const Home = memo(function Home() {
           <AskedQuestions />
         </LazyWrapper>
       </Suspense>
-    </motion.div>
+    </div>
   );
 });
 

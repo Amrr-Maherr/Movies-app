@@ -1,14 +1,26 @@
-import { useState, useCallback, useMemo, memo, lazy, Suspense } from "react";
+import { useState, useCallback, useMemo, memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
 import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
-import { LoadingFallback } from "@/components/ui";
+import { useMovieModal } from "@/contexts/MovieModalContext";
 
-// FIX #7: Lazy load MovieModal since it's only shown on user interaction
-// This reduces initial bundle size by ~5-10KB per Card instance
-const MovieModal = lazy(() => import("@/components/shared/MovieModal"));
+// FIX: Move simple helper functions outside component to prevent recreation
+const getMovieTitle = (media: HeroMedia): string => {
+  return "title" in media ? media.title : media.name;
+};
+
+const getMovieReleaseDate = (media: HeroMedia): string | undefined => {
+  return "release_date" in media ? media.release_date : media.first_air_date;
+};
+
+const isTvShow = (movie: HeroMedia): boolean => {
+  if ("media_type" in movie && movie.media_type) {
+    return movie.media_type === "tv";
+  }
+  return "first_air_date" in movie;
+};
 
 // Sub-components
 import CardPoster from "./CardPoster";
@@ -47,19 +59,15 @@ const Card = memo(
     badgeType,
   }: CardProps) => {
     const navigate = useNavigate();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { openModal } = useMovieModal();
     const [isHovered, setIsHovered] = useState(false);
 
-    const getTitle = useCallback((media: HeroMedia) => {
-      return "title" in media ? media.title : media.name;
-    }, []);
+    // FIX: Use external helper functions instead of useCallback
+    const title = getMovieTitle(movie);
+    const releaseDate = getMovieReleaseDate(movie);
+    const tvShow = isTvShow(movie);
 
-    const getReleaseDate = useCallback((media: HeroMedia) => {
-      return "release_date" in media
-        ? media.release_date
-        : media.first_air_date;
-    }, []);
-
+    // Keep useMemo for derived values that depend on movie properties
     const posterUrl = useMemo(() => {
       return movie.poster_path
         ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -71,29 +79,20 @@ const Card = memo(
       [movie.vote_average],
     );
     const year = useMemo(
-      () => getYear(getReleaseDate(movie)),
-      [movie, getReleaseDate],
+      () => getYear(releaseDate || ""),
+      [releaseDate],
     );
     const ageRating = useMemo(
       () => getAgeRating(movie.vote_average),
       [movie.vote_average],
     );
-    const title = useMemo(() => getTitle(movie), [movie, getTitle]);
-
-    // Determine if it's a TV show using media_type or first_air_date
-    const isTvShow = useMemo(() => {
-      if ("media_type" in movie && movie.media_type) {
-        return movie.media_type === "tv";
-      }
-      return "first_air_date" in movie;
-    }, [movie]);
 
     // Generate Slug-based URL
     const detailsUrl = useMemo(() => {
       const slug = generateSlug(title);
       const slugWithId = formatSlugWithId(slug, movie.id);
-      return `/${isTvShow ? "tv" : "movie"}/${slugWithId}`;
-    }, [title, movie.id, isTvShow]);
+      return `/${tvShow ? "tv" : "movie"}/${slugWithId}`;
+    }, [title, movie.id, tvShow]);
 
     // Navigate to details page
     const handleNavigate = useCallback(() => {
@@ -107,8 +106,8 @@ const Card = memo(
     const handleMoreInfoClick = useCallback((e: React.MouseEvent) => {
       e.stopPropagation();
       e.preventDefault();
-      setIsModalOpen(true);
-    }, []);
+      openModal(movie);
+    }, [openModal, movie]);
 
     const handlePlayClick = useCallback(
       (e: React.MouseEvent) => {
@@ -119,19 +118,18 @@ const Card = memo(
       [handleNavigate],
     );
 
-    const handleCardMouseEnter = useCallback(() => setIsHovered(true), []);
-    const handleCardMouseLeave = useCallback(() => setIsHovered(false), []);
+    // FIX: Simple inline handlers for mouse events
+    const handleCardMouseEnter = () => setIsHovered(true);
+    const handleCardMouseLeave = () => setIsHovered(false);
 
     const formattedReleaseDate = useMemo(() => {
-      const releaseDate =
-        "release_date" in movie ? movie.release_date : movie.first_air_date;
       return releaseDate
         ? new Date(releaseDate).toLocaleDateString("en-US", {
             month: "short",
             year: "numeric",
           })
         : null;
-    }, [movie]);
+    }, [releaseDate]);
 
     const ratingValue = useMemo(() => {
       return movie.vote_average && movie.vote_average > 0
@@ -148,239 +146,179 @@ const Card = memo(
     // Compact variant for dense grids
     if (variant === "compact") {
       return (
-        <>
-          <Link
-            to={detailsUrl}
-            className="relative group cursor-pointer block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <div className="relative aspect-[2/3] rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]">
-              <OptimizedImage
-                src={posterUrl}
-                alt={title}
-                className="w-full h-full transition-transform duration-500 group-hover:scale-105"
-                objectFit="cover"
-              />
-              <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
-                <span className="text-[var(--success)] text-xs font-bold">
-                  {matchScore}%
-                </span>
-              </div>
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
-                style={{ pointerEvents: isHovered ? "auto" : "none" }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <button
-                    className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
-                    onClick={handlePlayClick}
-                  >
-                    <span className="sr-only">Play</span>
-                    <svg className="h-3 w-3 fill-black" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </button>
-                  <button
-                    className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
-                    onClick={handleMoreInfoClick}
-                  >
-                    <span className="sr-only">More info</span>
-                    <svg
-                      className="h-3 w-3"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 16v-4M12 8h.01" />
-                    </svg>
-                  </button>
-                </div>
-                <CardMetadata
-                  matchScore={matchScore}
-                  ageRating={ageRating}
-                  variant="compact"
-                />
-              </div>
-            </div>
-            <p className="mt-2 text-xs sm:text-sm text-[var(--text-primary)] font-medium text-center line-clamp-1 group-hover:text-white transition-colors">
-              {title}
-            </p>
-          </Link>
-          {/* FIX #7: MovieModal is now lazy loaded with Suspense */}
-          <Suspense fallback={<LoadingFallback />}>
-            <MovieModal
-              movie={movie}
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
+        <Link
+          to={detailsUrl}
+          className="relative group cursor-pointer block"
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
+        >
+          <div className="relative aspect-[2/3] rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]">
+            <OptimizedImage
+              src={posterUrl}
+              alt={title}
+              className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+              objectFit="cover"
             />
-          </Suspense>
-        </>
+            <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
+              <span className="text-[var(--success)] text-xs font-bold">
+                {matchScore}%
+              </span>
+            </div>
+            <div
+              className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
+              style={{ pointerEvents: isHovered ? "auto" : "none" }}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <button
+                  className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
+                  onClick={handlePlayClick}
+                >
+                  <span className="sr-only">Play</span>
+                  <svg className="h-3 w-3 fill-black" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
+                <button
+                  className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
+                  onClick={handleMoreInfoClick}
+                >
+                  <span className="sr-only">More info</span>
+                  <svg
+                    className="h-3 w-3"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4M12 8h.01" />
+                  </svg>
+                </button>
+              </div>
+              <CardMetadata
+                matchScore={matchScore}
+                ageRating={ageRating}
+                variant="compact"
+              />
+            </div>
+          </div>
+          <p className="mt-2 text-xs sm:text-sm text-[var(--text-primary)] font-medium text-center line-clamp-1 group-hover:text-white transition-colors">
+            {title}
+          </p>
+        </Link>
       );
     }
 
     // Top 10 variant with large gradient number badge
     if (variant === "top10" && rank) {
       return (
-        <>
-          <Link
-            to={detailsUrl}
-            className="relative group cursor-pointer block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <Top10Badge rank={rank} />
-            <div className="relative aspect-[2/3] overflow-hidden rounded">
-              <OptimizedImage
-                src={posterUrl}
-                alt={title}
-                className="w-full h-full transition-transform duration-500 group-hover:scale-105"
-                objectFit="cover"
-              />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
-            </div>
-          </Link>
-          {/* FIX #7: MovieModal is now lazy loaded with Suspense */}
-          <Suspense fallback={<LoadingFallback />}>
-            <MovieModal
-              movie={movie}
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
+        <Link
+          to={detailsUrl}
+          className="relative group cursor-pointer block"
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
+        >
+          <Top10Badge rank={rank} />
+          <div className="relative aspect-[2/3] overflow-hidden rounded">
+            <OptimizedImage
+              src={posterUrl}
+              alt={title}
+              className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+              objectFit="cover"
             />
-          </Suspense>
-        </>
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
+          </div>
+        </Link>
       );
     }
 
     // New Release variant with NEW badge and date
     if (variant === "newRelease") {
       return (
-        <>
-          <Link
-            to={detailsUrl}
-            className="group cursor-pointer block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <NewReleaseLayout
-              movie={movie}
-              title={title}
-              posterUrl={posterUrl}
-              ratingValue={ratingValue ?? undefined}
-              formattedReleaseDate={formattedReleaseDate ?? undefined}
-              isHovered={isHovered}
-            />
-          </Link>
-          {/* FIX #7: MovieModal is now lazy loaded with Suspense */}
-          <Suspense fallback={<LoadingFallback />}>
-            <MovieModal
-              movie={movie}
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-            />
-          </Suspense>
-        </>
+        <Link
+          to={detailsUrl}
+          className="group cursor-pointer block"
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
+        >
+          <NewReleaseLayout
+            movie={movie}
+            title={title}
+            posterUrl={posterUrl}
+            ratingValue={ratingValue ?? undefined}
+            formattedReleaseDate={formattedReleaseDate ?? undefined}
+            isHovered={isHovered}
+          />
+        </Link>
       );
     }
 
     // Award Winner variant with gold border and award badge
     if (variant === "awardWinner") {
       return (
-        <>
-          <Link
-            to={detailsUrl}
-            className="group cursor-pointer relative block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <AwardWinnerLayout
-              movie={movie}
-              title={title}
-              posterUrl={posterUrl}
-              ratingValue={ratingValue ?? undefined}
-              isHovered={isHovered}
-            />
-          </Link>
-          {/* FIX #7: MovieModal is now lazy loaded with Suspense */}
-          <Suspense fallback={<LoadingFallback />}>
-            <MovieModal
-              movie={movie}
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-            />
-          </Suspense>
-        </>
+        <Link
+          to={detailsUrl}
+          className="group cursor-pointer relative block"
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
+        >
+          <AwardWinnerLayout
+            movie={movie}
+            title={title}
+            posterUrl={posterUrl}
+            ratingValue={ratingValue ?? undefined}
+            isHovered={isHovered}
+          />
+        </Link>
       );
     }
 
     // Recommendation variant (Because You Watched)
     if (variant === "recommendation") {
       return (
-        <>
-          <Link
-            to={detailsUrl}
-            className="group cursor-pointer block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <RecommendationLayout
-              movie={movie}
-              title={title}
-              posterUrl={posterUrl}
-              matchPercentage={matchPercentage ?? undefined}
-              isHovered={isHovered}
-            />
-          </Link>
-          {/* FIX #7: MovieModal is now lazy loaded with Suspense */}
-          <Suspense fallback={<LoadingFallback />}>
-            <MovieModal
-              movie={movie}
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-            />
-          </Suspense>
-        </>
+        <Link
+          to={detailsUrl}
+          className="group cursor-pointer block"
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
+        >
+          <RecommendationLayout
+            movie={movie}
+            title={title}
+            posterUrl={posterUrl}
+            matchPercentage={matchPercentage ?? undefined}
+            isHovered={isHovered}
+          />
+        </Link>
       );
     }
 
     // Standard Netflix Card with optional badges
     return (
-      <>
-        <div
-          className="relative group cursor-pointer rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]"
-          onMouseEnter={handleCardMouseEnter}
-          onMouseLeave={handleCardMouseLeave}
-          onClick={handleNavigate}
-        >
-          <CardPoster movie={movie} title={title} rank={rank}>
-            <CardBadges
-              showBadge={showBadge}
-              badgeType={badgeType}
-              showMatchScore
-              matchScore={matchScore}
-            />
-            <CardHoverOverlay
-              title={title}
-              matchScore={matchScore}
-              year={year}
-              ageRating={ageRating}
-              isHovered={isHovered}
-              onPlay={handlePlayClick}
-              onMoreInfo={handleMoreInfoClick}
-            />
-          </CardPoster>
-        </div>
-        {/* FIX #7: MovieModal is now lazy loaded with Suspense */}
-        <Suspense fallback={<LoadingFallback />}>
-          <MovieModal
-            movie={movie}
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
+      <div
+        className="relative group cursor-pointer rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]"
+        onMouseEnter={handleCardMouseEnter}
+        onMouseLeave={handleCardMouseLeave}
+        onClick={handleNavigate}
+      >
+        <CardPoster movie={movie} title={title} rank={rank}>
+          <CardBadges
+            showBadge={showBadge}
+            badgeType={badgeType}
+            showMatchScore
+            matchScore={matchScore}
           />
-        </Suspense>
-      </>
+          <CardHoverOverlay
+            title={title}
+            matchScore={matchScore}
+            year={year}
+            ageRating={ageRating}
+            isHovered={isHovered}
+            onPlay={handlePlayClick}
+            onMoreInfo={handleMoreInfoClick}
+          />
+        </CardPoster>
+      </div>
     );
   },
 );

@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from "react-router-dom";
 import { ReactNode } from "react";
+import { MovieModalProvider } from "@/contexts/MovieModalContext";
 
 // FIX: Create QueryClient instance outside component to prevent recreation on every render
 // This ensures the query cache persists across re-renders and avoids unnecessary refetches
@@ -18,7 +19,11 @@ const queryClient = new QueryClient({
 export default function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>{children}</BrowserRouter>
+      <BrowserRouter>
+        <MovieModalProvider>
+          {children}
+        </MovieModalProvider>
+      </BrowserRouter>
       {/* React Query Devtools for debugging - only in development */}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
