@@ -138,16 +138,39 @@ export default defineConfig({
         manualChunks: {
           // Separate React core libraries
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          // Separate animation libraries
+          // Separate animation libraries - lazy loaded
           'animation-vendor': ['framer-motion'],
           // Separate UI libraries
           'ui-vendor': ['radix-ui', 'lucide-react', 'class-variance-authority'],
-          // Separate data/state libraries
-          'data-vendor': ['@reduxjs/toolkit', 'react-redux', '@tanstack/react-query', 'axios'],
+          // Separate data/state libraries - removed Redux, kept React Query
+          'data-vendor': ['@tanstack/react-query', 'axios'],
           // Separate utility libraries
           'utils-vendor': ['clsx', 'tailwind-merge', 'react-hook-form'],
-          // Separate swiper as its own chunk
+          // Separate swiper as its own chunk - consider replacing with embla
           'swiper-vendor': ['swiper'],
+          // Page chunks for route-based code splitting
+          'page-home': ['./src/pages/Home.tsx'],
+          'page-movie': ['./src/pages/Movie.tsx'],
+          'page-tvshow': ['./src/pages/TVShow.tsx'],
+          'page-details': ['./src/pages/MovieDetails.tsx', './src/pages/TVShowDetails.tsx'],
+          'page-auth': ['./src/pages/auth/Login.tsx', './src/pages/auth/Signup.tsx'],
+          'page-footer': [
+            './src/pages/FAQ.tsx',
+            './src/pages/HelpCenter.tsx',
+            './src/pages/Account.tsx',
+            './src/pages/MediaCenter.tsx',
+            './src/pages/InvestorRelations.tsx',
+            './src/pages/Jobs.tsx',
+            './src/pages/WaysToWatch.tsx',
+            './src/pages/TermsOfUse.tsx',
+            './src/pages/Privacy.tsx',
+            './src/pages/CookiePreferences.tsx',
+            './src/pages/CorporateInformation.tsx',
+            './src/pages/ContactUs.tsx',
+            './src/pages/SpeedTest.tsx',
+            './src/pages/LegalNotices.tsx',
+            './src/pages/OnlyOnNetflix.tsx',
+          ],
         },
       },
     },
