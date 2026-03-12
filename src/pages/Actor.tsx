@@ -1,14 +1,14 @@
 import { useState, memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { LoadingFallback } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import InfiniteScroll from "react-infinite-scroll-component";
-import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import usePopularPeople from "@/queries/FetchPopularPeople";
-import { Loader } from "@/components/ui";
 
 const PeopleFiltersLazy = lazy(() => import("@/components/Actors/PeopleFilters"));
+const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const FiltersSkeleton = () => (
   <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6 animate-pulse">
@@ -81,7 +81,7 @@ const ActorsPage = memo(function ActorsPage() {
       </div>
 
       {/* Filters Section */}
-      <LazyWrapper>
+      <LazyWrapper height={100}>
         <Suspense fallback={<FiltersSkeleton />}>
           <PeopleFiltersLazy
             selectedGender={selectedGender}
@@ -106,7 +106,7 @@ const ActorsPage = memo(function ActorsPage() {
           </button>
         </div>
       ) : (
-        <LazyWrapper>
+        <LazyWrapper height={600}>
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div
@@ -131,7 +131,7 @@ const ActorsPage = memo(function ActorsPage() {
                   loader={
                     isLoading ? (
                       <div className="py-10 flex items-center justify-center w-full">
-                        <Loader size="lg" />
+                        <LoadingFallback />
                       </div>
                     ) : null
                   }

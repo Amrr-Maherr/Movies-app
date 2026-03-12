@@ -1,14 +1,15 @@
-import { useState, memo, useMemo, useCallback } from "react";
+import { useState, memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { LoadingFallback } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import InfiniteScroll from "react-infinite-scroll-component";
-import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import type { HeroMedia } from "@/types";
 import useMediaByLanguage from "@/queries/FetchMediaByLanguage";
 import LanguagesFilter, { SUPPORTED_LANGUAGES } from "@/components/BrowseByLanguages/LanguagesFilter";
-import { Loader } from "@/components/ui";
+
+const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const BrowseByLanguages = memo(function BrowseByLanguages() {
   const [selectedLanguage, setSelectedLanguage] = useState<string>(SUPPORTED_LANGUAGES[0].code);
@@ -32,7 +33,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
 
   return (
     <motion.div
-      className="min-h-screen bg-[var(--background-primary)] pt-24"
+      className="min-h-screen bg-[var(--background-primary)] pt-24 container"
       initial={{ opacity: 0, x: -50 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 50 }}
@@ -43,17 +44,21 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
         description="Discover movies and TV shows based on their original language on Netflix."
       />
 
-      <LazyWrapper>
+      <LazyWrapper height={150}>
         <>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Browse by Languages</h1>
-          <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
-            Discover movies and TV shows based on their original language.
-          </p>
+          <div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+              Browse by Languages
+            </h1>
+            <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
+              Discover movies and TV shows based on their original language.
+            </p>
+          </div>
         </>
       </LazyWrapper>
 
       {/* Language Filter Tags */}
-      <LazyWrapper>
+      <LazyWrapper height={100}>
         <LanguagesFilter
           selectedLanguage={selectedLanguage}
           onLanguageSelect={handleLanguageSelect}
@@ -73,7 +78,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
           </button>
         </div>
       ) : (
-        <LazyWrapper>
+        <LazyWrapper height={600}>
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div
@@ -86,36 +91,38 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
                 <MediaGridSkeleton />
               </motion.div>
             ) : (
-              <motion.div
-                key={`grid-lang-${selectedLanguage}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <InfiniteScroll
-                  dataLength={allItems.length}
-                  next={fetchNextPage}
-                  hasMore={!!hasNextPage}
-                  loader={
-                    <div className="h-24 flex items-center justify-center w-full">
-                      <Loader />
-                    </div>
-                  }
-                  endMessage={
-                    <div className="py-10 text-center text-[var(--text-secondary)]">
-                      <p>You&apos;ve reached the end of the list.</p>
-                    </div>
-                  }
-                  style={{ overflow: "hidden" }}
-                  scrollThreshold={0.9}
+              <Suspense fallback={<LoadingFallback />}>
+                <motion.div
+                  key={`grid-lang-${selectedLanguage}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <MediaGrid
-                    items={allItems as unknown as HeroMedia[]}
-                    emptyMessage="No content available for this language."
-                  />
-                </InfiniteScroll>
-              </motion.div>
+                  <InfiniteScroll
+                    dataLength={allItems.length}
+                    next={fetchNextPage}
+                    hasMore={!!hasNextPage}
+                    loader={
+                      <div className="h-24 flex items-center justify-center w-full">
+                        <LoadingFallback />
+                      </div>
+                    }
+                    endMessage={
+                      <div className="py-10 text-center text-[var(--text-secondary)]">
+                        <p>You&apos;ve reached the end of the list.</p>
+                      </div>
+                    }
+                    style={{ overflow: "hidden" }}
+                    scrollThreshold={0.9}
+                  >
+                    <MediaGrid
+                      items={allItems as unknown as HeroMedia[]}
+                      emptyMessage="No content available for this language."
+                    />
+                  </InfiniteScroll>
+                </motion.div>
+              </Suspense>
             )}
           </AnimatePresence>
         </LazyWrapper>
