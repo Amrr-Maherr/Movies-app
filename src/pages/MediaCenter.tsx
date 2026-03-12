@@ -100,6 +100,6 @@ export default function MediaCenter() {
           </a>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
