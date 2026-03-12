@@ -1,5 +1,7 @@
-refactor: add lazy loading and height hints to Movie.tsx
+refactor: memoize Movie component and add lazy loading for HeroSection
 
-- Add lazy loading for MediaGrid component
-- Add LoadingFallback for better UX during lazy loading
-- Add height hints to LazyWrapper components
+- Wrap Movie component with memo() to prevent unnecessary re-renders
+- Add lazy loading for HeroSection component
+- Add useMemo for moviesData array to prevent recalculation
+- Add useCallback for handleRetry to stabilize function reference
+- Add Suspense fallback with LoadingFallback for better UX

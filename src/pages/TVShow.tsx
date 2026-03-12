@@ -1,11 +1,10 @@
-import { useState, useCallback } from "react";
+import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { LoadingFallback } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import TVShowFilters, { TVShowFilterOption } from "@/components/shared/TVShowFilters";
-import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
-import HeroSection from "@/components/shared/heroSection/HeroSection";
 import type { TvShow, HeroMedia } from "@/types";
 
 // Hooks
@@ -14,7 +13,10 @@ import useTopRatedTvShows from "@/queries/FetchTopRatedTvShows";
 import useAiringTodayTv from "@/queries/FetchAiringTodayTv";
 import useOnTheAirTv from "@/queries/FetchOnTheAirTv";
 
-export default function TVShow() {
+const HeroSection = lazy(() => import("@/components/shared/heroSection/HeroSection"));
+const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
+
+const TVShow = memo(function TVShow() {
   const [activeFilter, setActiveFilter] = useState<TVShowFilterOption>("popular");
 
   const popularQuery = usePopularTvShows(1);
@@ -36,7 +38,16 @@ export default function TVShow() {
     }
   }, [activeFilter, popularQuery, topRatedQuery, airingTodayQuery, onTheAirQuery]);
 
-  const { data: tvShows, isLoading, error, refetch } = getCurrentQuery();
+  const currentQuery = getCurrentQuery();
+  const { data: tvShows, isLoading, error, refetch } = currentQuery;
+
+  // Memoized: Pre-computed tvShows array
+  const tvShowsData = useMemo(() => (tvShows || []) as unknown as HeroMedia[], [tvShows]);
+
+  // Memoized: Error state handler
+  const handleRetry = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <motion.div
@@ -51,14 +62,16 @@ export default function TVShow() {
         description="Browse the most popular, highly-rated, and currently airing TV series on Netflix."
       />
 
-      <LazyWrapper>
-        <HeroSection
-          data={tvShows as TvShow[] | undefined}
-          isLoading={isLoading}
-          error={error}
-          onRetry={refetch}
-        />
-      </LazyWrapper>
+      <Suspense fallback={<LoadingFallback />}>
+        <LazyWrapper height={400}>
+          <HeroSection
+            data={tvShowsData as TvShow[] | undefined}
+            isLoading={isLoading}
+            error={error}
+            onRetry={handleRetry}
+          />
+        </LazyWrapper>
+      </Suspense>
 
       <div className="px-4 sm:px-8 mb-6 mt-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">TV Shows</h1>
@@ -67,7 +80,7 @@ export default function TVShow() {
         </p>
       </div>
 
-      <LazyWrapper>
+      <LazyWrapper height={250}>
         <TVShowFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
       </LazyWrapper>
 
@@ -77,14 +90,14 @@ export default function TVShow() {
             Failed to load TV Shows. Please try again.
           </p>
           <button
-            onClick={() => refetch()}
+            onClick={handleRetry}
             className="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-white/80 transition-colors"
           >
             Retry
           </button>
         </div>
       ) : (
-        <LazyWrapper>
+        <LazyWrapper height={500}>
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div
@@ -97,19 +110,23 @@ export default function TVShow() {
                 <MediaGridSkeleton />
               </motion.div>
             ) : (
-              <motion.div
-                key={`grid-${activeFilter}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <MediaGrid items={(tvShows || []) as unknown as HeroMedia[]} emptyMessage="No TV Shows found for this filter." />
-              </motion.div>
+              <Suspense fallback={<LoadingFallback />}>
+                <motion.div
+                  key={`grid-${activeFilter}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <MediaGrid items={tvShowsData} emptyMessage="No TV Shows found for this filter." />
+                </motion.div>
+              </Suspense>
             )}
           </AnimatePresence>
         </LazyWrapper>
       )}
     </motion.div>
   );
-}
+});
+
+export default TVShow;
