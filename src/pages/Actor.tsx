@@ -41,6 +41,11 @@ const ActorsPage = memo(function ActorsPage() {
     setSelectedLetter(letter);
   }, []);
 
+  // Memoized: Error state handler
+  const handleRetry = useCallback(() => {
+    refetch();
+  }, [refetch]);
+
   const allItems = useMemo(() => {
     let items = data?.pages.flatMap((page) => page.results) || [];
 
@@ -99,7 +104,7 @@ const ActorsPage = memo(function ActorsPage() {
             connection.
           </p>
           <button
-            onClick={() => refetch()}
+            onClick={handleRetry}
             className="px-8 py-3 bg-white text-black font-bold rounded-md hover:bg-gray-200 transition-all hover:scale-105 shadow-xl"
           >
             Try Again

@@ -1,8 +1,7 @@
-refactor: memoize NewPopular component and add lazy loading
+refactor: add lazy loading and height hints to Actor and BrowseByLanguages
 
-- Wrap NewPopular component with memo() to prevent unnecessary re-renders
-- Add lazy loading for HeroSection and MediaGrid components
-- Add useMemo for mediaData array to prevent recalculation
-- Add useCallback for handleRetry to stabilize function reference
+- Add lazy loading for MediaGrid in both components
+- Add LoadingFallback for better UX during lazy loading
 - Add height hints to LazyWrapper components
-- Add Suspense fallback with LoadingFallback for better UX
+- Replace Loader with LoadingFallback for consistency
+- Add Suspense boundaries for lazy-loaded components

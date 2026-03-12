@@ -50,7 +50,7 @@ const LanguagesFilter = memo(function LanguagesFilter({
 }: LanguagesFilterProps) {
   const handelUrl = useHandelUrl();
   return (
-    <div className="w-full relative py-2">
+    <div className="w-full relative py-5">
       <div className="px-4 sm:px-8">
         <Slider
           slidesPerView={8}

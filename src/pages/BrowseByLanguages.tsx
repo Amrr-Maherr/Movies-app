@@ -26,6 +26,11 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
     setSelectedLanguage(code);
   }, []);
 
+  // Memoized: Error state handler
+  const handleRetry = useCallback(() => {
+    refetch();
+  }, [refetch]);
+
   const allItems = useMemo(() =>
     data?.pages.flatMap((page) => page.results) || [],
     [data]
@@ -46,7 +51,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
 
       <LazyWrapper height={150}>
         <>
-          <div>
+          <div className="container my-2">
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
               Browse by Languages
             </h1>
@@ -71,7 +76,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
             Failed to load content for the selected language. Please try again.
           </p>
           <button
-            onClick={() => refetch()}
+            onClick={handleRetry}
             className="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-white/80 transition-colors"
           >
             Retry
