@@ -1,12 +1,11 @@
-import { memo, useMemo, lazy, Suspense } from "react";
+import { memo, useMemo, lazy, Suspense, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useParams, Link } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { LoadingFallback, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { ArrowLeft, Calendar, Film, Clock, Star } from "lucide-react";
-import { Loader } from "@/components/ui/loader";
-import { Error } from "@/components/ui/error";
 import FetchTvSeasonDetails from "@/queries/FetchTvSeasonDetails";
 import type { Episode } from "@/types";
 
@@ -53,6 +52,11 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
     Number(seasonNumber),
   );
 
+  // Memoized: Error state handler
+  const handleRetry = useCallback(() => {
+    refetch();
+  }, [refetch]);
+
   const formattedAirDate = useMemo(() => {
     if (!season?.air_date) return "TBA";
     return new Date(season.air_date).toLocaleDateString("en-US", {
@@ -87,17 +91,23 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
   );
 
   if (isLoading) {
-    return <Loader fullscreen size="lg" />;
+    return (
+      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
+        <LoadingFallback />
+      </div>
+    );
   }
 
   if (error || !season) {
     return (
-      <Error
-        fullscreen
-        title="Failed to load season details"
-        message="We couldn&apos;t load the season information. Please try again."
-        onRetry={() => refetch()}
-      />
+      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
+        <Error
+          fullscreen
+          title="Failed to load season details"
+          message="We couldn&apos;t load the season information. Please try again."
+          onRetry={handleRetry}
+        />
+      </div>
     );
   }
 
@@ -192,7 +202,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
       </LazyWrapper>
 
       {/* Episodes Section */}
-      <LazyWrapper>
+      <LazyWrapper height={600}>
         <Suspense fallback={<SectionSkeleton />}>
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8">
             <h2 className="text-2xl font-bold text-white mb-6">Episodes</h2>
