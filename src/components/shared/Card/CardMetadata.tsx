@@ -90,4 +90,7 @@ const CardMetadata = memo(({
   );
 });
 
+// Add displayName for better debugging in React DevTools
+CardMetadata.displayName = "CardMetadata";
+
 export default CardMetadata;

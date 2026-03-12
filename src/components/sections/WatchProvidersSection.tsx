@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { memo, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import Slider from "@/components/shared/Slider/slider";
 import type { Provider } from "@/types";
 
@@ -47,11 +48,11 @@ const WatchProviderCard = memo(function WatchProviderCard({
         )}
       >
         {hasLogo ? (
-          <img
+          <OptimizedImage
             src={`${TMDB_IMAGE_BASE_URL}${provider.logo_path}`}
             alt={provider.name}
-            loading="lazy"
             className="w-full h-full object-contain p-1"
+            objectFit="contain"
           />
         ) : (
           /* Placeholder for missing logo */

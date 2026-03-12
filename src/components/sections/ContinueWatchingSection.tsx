@@ -1,6 +1,7 @@
 import { memo, useMemo, useState } from "react";
 import { Play } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 
 interface ContinueWatchingSectionProps {
@@ -46,10 +47,11 @@ const ContinueWatchingSection = memo(function ContinueWatchingSection({
               <div className="group cursor-pointer bg-zinc-900 rounded overflow-hidden">
                 {/* Image with Progress Bar */}
                 <div className="relative aspect-video overflow-hidden">
-                  <img
+                  <OptimizedImage
                     src={imageUrl}
                     alt={movieTitle}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+                    objectFit="cover"
                   />
 
                   {/* Play Icon Overlay */}

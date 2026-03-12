@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { Play } from "lucide-react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 export interface TrailerCardProps {
   videoKey: string;
@@ -44,13 +45,13 @@ const TrailerCard = ({ videoKey, name, type, onClick }: TrailerCardProps) => {
           {/* Thumbnail Container - 16:9 aspect ratio for video */}
           <div className="relative aspect-video overflow-hidden">
             {/* YouTube Thumbnail */}
-            <img
+            <OptimizedImage
               src={`${YOUTUBE_THUMBNAIL_BASE}/${videoKey}/hqdefault.jpg`}
               alt={name}
-              className={`h-full w-full object-cover transition-all duration-300 ease-in-out group-hover:scale-110 ${
+              className={`h-full w-full transition-all duration-300 ease-in-out group-hover:scale-110 ${
                 imageLoaded ? "opacity-100" : "opacity-0"
               }`}
-              loading="lazy"
+              objectFit="cover"
               onLoad={() => setImageLoaded(true)}
             />
 

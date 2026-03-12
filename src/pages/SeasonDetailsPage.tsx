@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { LoadingFallback, Error } from "@/components/ui";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { ArrowLeft, Calendar, Film, Clock, Star } from "lucide-react";
 import FetchTvSeasonDetails from "@/queries/FetchTvSeasonDetails";
@@ -132,10 +133,15 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
       <LazyWrapper height={400}>
         <>
           {backdropUrl && (
-            <div
-              className="absolute inset-0 h-64 md:h-80 bg-cover bg-center"
-              style={{ backgroundImage: `url(${backdropUrl})` }}
-            />
+            <div className="absolute inset-0 h-64 md:h-80 overflow-hidden">
+              <OptimizedImage
+                src={backdropUrl}
+                alt={season.name}
+                className="w-full h-full"
+                objectFit="cover"
+                priority
+              />
+            </div>
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-primary)] via-[var(--background-primary)]/80 to-transparent" />
 
@@ -151,11 +157,12 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
             <div className="flex flex-col md:flex-row gap-6 md:gap-8">
               <div className="flex-shrink-0">
                 {season.poster_path ? (
-                  <img
+                  <OptimizedImage
                     src={`${IMAGE_BASE_URL}${season.poster_path}`}
                     alt={season.name}
                     className="w-40 md:w-52 rounded-lg shadow-2xl mx-auto md:mx-0"
-                    loading="lazy"
+                    objectFit="cover"
+                    priority
                   />
                 ) : (
                   <div className="w-40 md:w-52 aspect-[2/3] rounded-lg bg-zinc-800 flex items-center justify-center mx-auto md:mx-0 shadow-2xl">

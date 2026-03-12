@@ -7,8 +7,12 @@ import type { SwiperOptions } from "swiper/types";
 import { Pagination, Autoplay, Navigation, EffectFade } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// Import Swiper styles
-import "swiper/css/bundle";
+// FIX #8: Import only needed Swiper CSS modules instead of full bundle
+// This reduces CSS bundle size by ~30KB
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/effect-fade";
 
 interface SliderProps {
   children: ReactNode;

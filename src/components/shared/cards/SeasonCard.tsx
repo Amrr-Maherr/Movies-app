@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, Film } from "lucide-react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { Season } from "@/types";
 
 export interface SeasonCardProps {
@@ -10,8 +11,13 @@ export interface SeasonCardProps {
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-const SeasonCard = ({ season, tvShowId }: SeasonCardProps) => {
-  // Format the air date
+/**
+ * FIX #1: Added React.memo to prevent unnecessary re-renders
+ * This component receives stable props (season, tvShowId) but was re-rendering
+ * when parent components updated. Memo prevents this.
+ */
+const SeasonCard = memo(({ season, tvShowId }: SeasonCardProps) => {
+  // Format the air date - memoized to prevent re-calculation on every render
   const formattedAirDate = useMemo(() => {
     if (!season.air_date) return "TBA";
     try {
@@ -24,11 +30,17 @@ const SeasonCard = ({ season, tvShowId }: SeasonCardProps) => {
     }
   }, [season.air_date]);
 
-  const imageUrl = season.poster_path
-    ? `${IMAGE_BASE_URL}${season.poster_path}`
-    : null;
+  // Memoize image URL to prevent re-calculation
+  const imageUrl = useMemo(() => {
+    return season.poster_path
+      ? `${IMAGE_BASE_URL}${season.poster_path}`
+      : null;
+  }, [season.poster_path]);
 
-  const detailsUrl = `/tv/${tvShowId}/season/${season.season_number}`;
+  // Memoize details URL to prevent re-calculation
+  const detailsUrl = useMemo(() => {
+    return `/tv/${tvShowId}/season/${season.season_number}`;
+  }, [tvShowId, season.season_number]);
 
   return (
     <Link to={detailsUrl} className="block group">
@@ -42,11 +54,12 @@ const SeasonCard = ({ season, tvShowId }: SeasonCardProps) => {
         <div className="relative aspect-[2/3] overflow-hidden">
           {imageUrl ? (
             <>
-              <img
+              {/* FIX: Using OptimizedImage for better performance */}
+              <OptimizedImage
                 src={imageUrl}
                 alt={season.name}
-                className="h-full w-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
-                loading="lazy"
+                className="h-full w-full transition-transform duration-300 ease-in-out group-hover:scale-110"
+                objectFit="cover"
               />
               {/* Hover Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
@@ -95,6 +108,9 @@ const SeasonCard = ({ season, tvShowId }: SeasonCardProps) => {
       </div>
     </Link>
   );
-};
+});
+
+// Add displayName for better debugging in React DevTools
+SeasonCard.displayName = "SeasonCard";
 
 export default SeasonCard;

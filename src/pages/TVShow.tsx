@@ -49,6 +49,12 @@ const TVShow = memo(function TVShow() {
     refetch();
   }, [refetch]);
 
+  // FIX #6: Memoized filter change handler to prevent re-creation on every render
+  // This prevents TVShowFilters from re-rendering unnecessarily
+  const handleFilterChange = useCallback((filter: TVShowFilterOption) => {
+    setActiveFilter(filter);
+  }, []);
+
   return (
     <motion.div
       className="min-h-screen bg-[var(--background-primary)]"
@@ -81,7 +87,7 @@ const TVShow = memo(function TVShow() {
       </div>
 
       <LazyWrapper height={250}>
-        <TVShowFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+        <TVShowFilters activeFilter={activeFilter} onFilterChange={handleFilterChange} />
       </LazyWrapper>
 
       {error ? (

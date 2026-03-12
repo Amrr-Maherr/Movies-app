@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, memo } from "react";
 import { Play, Plus, Info } from "lucide-react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { MediaDetails, Video, Genre, CastMember, Keyword } from "@/types";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
@@ -99,11 +100,12 @@ const MediaHero = memo(function MediaHero({
     <div className="relative w-full h-[85vh] min-h-[600px]">
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full">
-        <img
+        <OptimizedImage
           src={backdropUrl}
           alt={title}
-          className="w-full h-full object-cover"
-          loading="lazy"
+          className="w-full h-full"
+          objectFit="cover"
+          priority
         />
       </div>
 
@@ -118,11 +120,12 @@ const MediaHero = memo(function MediaHero({
           {/* Poster (Hidden on mobile, visible on tablet+) */}
           {posterUrl && (
             <div className="hidden md:block flex-shrink-0">
-              <img
+              <OptimizedImage
                 src={posterUrl}
                 alt={title}
                 className="w-56 rounded-lg shadow-2xl border-2 border-white/20"
-                loading="lazy"
+                objectFit="cover"
+                priority
               />
             </div>
           )}

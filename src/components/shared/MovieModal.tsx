@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Play, Plus, ThumbsUp } from "lucide-react";
 import { Dialog, DialogContent, DialogOverlay, DialogPortal } from "@/components/ui/dialog";
 import { getMatchScore, getYear, getAgeRating, getGenres } from "@/utils/movieHelpers";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 
 interface MovieModalProps {
@@ -71,10 +72,12 @@ const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieMod
               >
                 {/* Background Image with Gradient */}
                 <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
-                  <img
+                  <OptimizedImage
                     src={backdropUrl(movie.backdrop_path)}
                     alt={title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full"
+                    objectFit="cover"
+                    priority
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-primary)] via-[var(--background-primary)]/50 to-transparent" />
                 </div>
@@ -92,10 +95,12 @@ const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieMod
                   <div className="flex flex-col sm:flex-row gap-6">
                     {/* Poster */}
                     <div className="flex-shrink-0 mx-auto sm:mx-0">
-                      <img
+                      <OptimizedImage
                         src={posterUrl(movie.poster_path)}
                         alt={title}
                         className="w-48 sm:w-56 rounded-lg shadow-2xl border border-white/10"
+                        objectFit="cover"
+                        priority
                       />
                     </div>
 

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ArrowLeft, Clock, Calendar, Star } from "lucide-react";
 import { Loader } from "@/components/ui/loader";
 import { Error } from "@/components/ui/error";
@@ -163,11 +164,12 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
           <div className="relative w-full h-[70vh] min-h-[500px]">
             <div className="absolute inset-0 w-full h-full">
               {stillImageUrl ? (
-                <img
+                <OptimizedImage
                   src={stillImageUrl}
                   alt={episode.name}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
+                  className="w-full h-full"
+                  objectFit="cover"
+                  priority
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
@@ -273,11 +275,11 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
                     className="bg-zinc-900/50 rounded-lg p-4 text-center hover:bg-zinc-800/50 transition-colors"
                   >
                     {member.profile_path ? (
-                      <img
+                      <OptimizedImage
                         src={`${POSTER_BASE_URL}${member.profile_path}`}
                         alt={member.name}
-                        className="w-full aspect-[2/3] object-cover rounded-md mb-3"
-                        loading="lazy"
+                        className="w-full aspect-[2/3] rounded-md mb-3"
+                        objectFit="cover"
                       />
                     ) : (
                       <div className="w-full aspect-[2/3] bg-zinc-800 rounded-md mb-3 flex items-center justify-center">

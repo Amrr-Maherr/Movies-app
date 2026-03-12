@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import { Popcorn, Star } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { getTitle } from "@/utils";
 import type { HeroMedia } from "@/types";
 
@@ -65,10 +66,11 @@ const WeekendWatchSection = memo(function WeekendWatchSection({
             className="lg:col-span-2"
           >
             <div className="relative aspect-video overflow-hidden rounded-lg group cursor-pointer">
-              <img
+              <OptimizedImage
                 src={featuredMovie.mainImageUrl}
                 alt={getTitle(featuredMovie)}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+                objectFit="cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
@@ -108,10 +110,11 @@ const WeekendWatchSection = memo(function WeekendWatchSection({
               <a href={detailsUrl} key={movie.id}>
                 <div className="group cursor-pointer bg-zinc-800 rounded-lg overflow-hidden flex gap-3 hover:bg-zinc-700 transition-colors">
                   <div className="relative w-20 md:w-24 aspect-[2/3] flex-shrink-0">
-                    <img
+                    <OptimizedImage
                       src={imageUrl}
                       alt={getTitle(movie)}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full"
+                      objectFit="cover"
                     />
                   </div>
                   <div className="flex-1 py-2 pr-2 flex flex-col justify-center">

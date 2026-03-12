@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import { Flame, Clock } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 
 interface BingeWorthySectionProps {
@@ -43,10 +44,11 @@ const BingeWorthySection = memo(function BingeWorthySection({
               <div className="group cursor-pointer relative overflow-hidden rounded-lg">
                 {/* Background Image */}
                 <div className="relative aspect-video">
-                  <img
+                  <OptimizedImage
                     src={imageUrl}
                     alt={movieTitle}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full transition-transform duration-500 group-hover:scale-110"
+                    objectFit="cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 

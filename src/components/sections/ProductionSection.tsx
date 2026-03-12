@@ -1,4 +1,5 @@
 import { memo, useMemo } from "react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import Slider from "@/components/shared/Slider/slider";
 
 interface Company {
@@ -44,11 +45,11 @@ const ProductionCard = memo(function ProductionCard({
         {/* Logo or Placeholder */}
         <div className="absolute inset-0 flex items-center justify-center p-4">
           {imageUrl ? (
-            <img
+            <OptimizedImage
               src={imageUrl}
               alt={name}
-              className="max-h-full max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
-              loading="lazy"
+              className="max-h-full max-w-full transition-transform duration-300 group-hover:scale-105"
+              objectFit="contain"
             />
           ) : (
             /* Placeholder with initials */

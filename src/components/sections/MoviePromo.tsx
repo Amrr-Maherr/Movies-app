@@ -1,6 +1,7 @@
 "use client";
 import { memo, useMemo } from "react";
 import { Play, Info, Star } from "lucide-react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 interface MoviePromoProps {
   movie: {
@@ -68,10 +69,12 @@ const MoviePromo = memo(function MoviePromo({
     <div className="relative w-full h-[50vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] overflow-hidden my-6 md:my-8">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img
+        <OptimizedImage
           src={imageUrl}
           alt={title}
           className="w-full h-full object-cover object-center"
+          objectFit="cover"
+          priority
         />
         <div className={`absolute inset-0 ${gradientDirection}`} />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />

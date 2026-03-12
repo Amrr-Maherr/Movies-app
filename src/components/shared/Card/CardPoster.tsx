@@ -1,4 +1,5 @@
 import { memo, useMemo } from "react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 
 export interface CardPosterProps {
@@ -29,11 +30,11 @@ const CardPoster = memo(
         )}
 
         {/* Poster Image */}
-        <img
+        <OptimizedImage
           src={posterUrl}
           alt={title}
-          className="w-full h-full object-cover"
-          loading="lazy"
+          className="w-full h-full"
+          objectFit="cover"
         />
 
         {/* Children (badges, overlays, etc.) */}
@@ -42,5 +43,8 @@ const CardPoster = memo(
     );
   },
 );
+
+// Add displayName for better debugging in React DevTools
+CardPoster.displayName = "CardPoster";
 
 export default CardPoster;

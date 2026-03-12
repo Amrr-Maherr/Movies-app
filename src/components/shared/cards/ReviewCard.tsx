@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 import { Star } from "lucide-react";
 
 export interface ReviewCardProps {
@@ -8,8 +8,13 @@ export interface ReviewCardProps {
   date: string;
 }
 
-const ReviewCard = ({ author, rating, content, date }: ReviewCardProps) => {
-  // Format the date nicely
+/**
+ * FIX #2: Added React.memo to prevent unnecessary re-renders
+ * This component is used inside Slider with mapped reviews.
+ * Memo prevents re-renders when parent state changes but props stay the same.
+ */
+const ReviewCard = memo(({ author, rating, content, date }: ReviewCardProps) => {
+  // FIX: Memoize date formatting to prevent re-calculation on every render
   const formattedDate = useMemo(() => {
     try {
       return new Date(date).toLocaleDateString("en-US", {
@@ -22,7 +27,7 @@ const ReviewCard = ({ author, rating, content, date }: ReviewCardProps) => {
     }
   }, [date]);
 
-  // Render star rating
+  // FIX: Memoize star rating rendering to prevent re-creation
   const renderStars = useMemo(() => {
     if (!rating || rating <= 0) return null;
 
@@ -49,7 +54,7 @@ const ReviewCard = ({ author, rating, content, date }: ReviewCardProps) => {
     );
   }, [rating]);
 
-  // Truncate content if too long (show first 150 chars)
+  // FIX: Memoize content truncation to prevent string operations on every render
   const truncatedContent = useMemo(() => {
     if (content.length <= 150) return content;
     return content.slice(0, 150) + "...";
@@ -82,6 +87,9 @@ const ReviewCard = ({ author, rating, content, date }: ReviewCardProps) => {
       </div>
     </div>
   );
-};
+});
+
+// Add displayName for better debugging in React DevTools
+ReviewCard.displayName = "ReviewCard";
 
 export default ReviewCard;

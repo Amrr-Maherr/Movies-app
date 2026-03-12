@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import { Sparkles } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 
 interface OnlyOnNetflixSectionProps {
@@ -46,10 +47,11 @@ const OnlyOnNetflixSection = memo(function OnlyOnNetflixSection({
                 <div className="flex flex-col md:flex-row">
                   {/* Image */}
                   <div className="relative w-full md:w-2/5 aspect-video md:aspect-auto">
-                    <img
+                    <OptimizedImage
                       src={imageUrl}
                       alt={movieTitle}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+                      objectFit="cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/50 md:to-zinc-900" />
                   </div>

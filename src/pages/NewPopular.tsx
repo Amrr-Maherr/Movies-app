@@ -49,6 +49,12 @@ const NewPopular = memo(function NewPopular() {
     refetch();
   }, [refetch]);
 
+  // FIX #6: Memoized filter change handler to prevent re-creation on every render
+  // This prevents NewPopularFilters from re-rendering unnecessarily
+  const handleFilterChange = useCallback((filter: NewPopularFilterOption) => {
+    setActiveFilter(filter);
+  }, []);
+
   return (
     <motion.div
       className="min-h-screen bg-[var(--background-primary)]"
@@ -81,7 +87,7 @@ const NewPopular = memo(function NewPopular() {
       </div>
 
       <LazyWrapper height={250}>
-        <NewPopularFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+        <NewPopularFilters activeFilter={activeFilter} onFilterChange={handleFilterChange} />
       </LazyWrapper>
 
       {error ? (

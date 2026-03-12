@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Play } from "lucide-react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { Episode } from "@/types";
 
 export interface EpisodeCardProps {
@@ -76,11 +77,11 @@ const EpisodeCard = ({
           <div className="relative aspect-video overflow-hidden">
             {imageUrl ? (
               <>
-                <img
+                <OptimizedImage
                   src={imageUrl}
                   alt={episode.name}
-                  className="h-full w-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
-                  loading="lazy"
+                  className="h-full w-full transition-transform duration-300 ease-in-out group-hover:scale-110"
+                  objectFit="cover"
                 />
                 {/* Hover Overlay */}
                 <div className="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />

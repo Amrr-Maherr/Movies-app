@@ -1,5 +1,6 @@
 import { memo, useMemo } from "react";
 import SectionHeader from "@/components/shared/SectionHeader";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { getTitle } from "@/utils";
 import type { HeroMedia } from "@/types";
 
@@ -67,10 +68,11 @@ const GenreShowcaseSection = memo(function GenreShowcaseSection({
             className="md:col-span-2"
           >
             <div className="relative aspect-video md:aspect-[10/9] overflow-hidden rounded group cursor-pointer">
-              <img
+              <OptimizedImage
                 src={showcaseMovie.mainImageUrl}
                 alt={getTitle(showcaseMovie)}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+                objectFit="cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -96,10 +98,11 @@ const GenreShowcaseSection = memo(function GenreShowcaseSection({
             {sideMovies.map(({ movie, imageUrl, detailsUrl }) => (
               <a href={detailsUrl} key={movie.id}>
                 <div className="relative aspect-[2/3] md:aspect-video overflow-hidden rounded group cursor-pointer">
-                  <img
+                  <OptimizedImage
                     src={imageUrl}
                     alt={getTitle(movie)}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    className="w-full h-full transition-transform duration-300 group-hover:scale-110"
+                    objectFit="cover"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300" />
                 </div>

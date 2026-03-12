@@ -49,6 +49,12 @@ const Movie = memo(function Movie() {
     refetch();
   }, [refetch]);
 
+  // FIX #6: Memoized filter change handler to prevent re-creation on every render
+  // This prevents MovieFilters from re-rendering unnecessarily
+  const handleFilterChange = useCallback((filter: MovieFilterOption) => {
+    setActiveFilter(filter);
+  }, []);
+
   return (
     <motion.div
       className="min-h-screen bg-[var(--background-primary)]"
@@ -81,7 +87,7 @@ const Movie = memo(function Movie() {
       </div>
 
       <LazyWrapper height={250}>
-        <MovieFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
+        <MovieFilters activeFilter={activeFilter} onFilterChange={handleFilterChange} />
       </LazyWrapper>
 
       {error ? (

@@ -1,6 +1,7 @@
 import { memo, useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { MediaImage } from "@/types/movieDetails";
 import Slider from "@/components/shared/Slider/slider";
 
@@ -117,11 +118,11 @@ const ImageCard = memo(function ImageCard({
       className="relative group cursor-pointer overflow-hidden rounded-lg bg-zinc-900 flex-shrink-0 w-[260px] sm:w-[300px] md:w-[340px]"
       style={{ aspectRatio: image.aspect_ratio || "16/9" }}
     >
-      <img
+      <OptimizedImage
         src={`${IMAGE_BASE_URL}${THUMB_SIZE}${image.file_path}`}
         alt={`Behind the scenes ${index + 1}`}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        loading="lazy"
+        className="w-full h-full transition-transform duration-500 group-hover:scale-110"
+        objectFit="cover"
       />
       {/* Hover overlay */}
       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300 flex items-center justify-center">

@@ -1,10 +1,13 @@
-import { memo, useMemo, useCallback, useState } from "react";
+import { memo, useMemo, useCallback, useState, lazy, Suspense } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import HeroSlide from "./HeroSlide";
 import { Autoplay } from "swiper/modules";
 import type { HeroMedia } from "@/types";
-import { Error, Loader } from "@/components/ui";
-import MovieModal from "@/components/shared/MovieModal";
+import { Error, Loader, LoadingFallback } from "@/components/ui";
+
+// FIX #7: Lazy load MovieModal since it's only shown on user interaction
+// This reduces initial bundle size by ~5-10KB
+const MovieModal = lazy(() => import("@/components/shared/MovieModal"));
 
 // ============================================
 // CONSTANTS
@@ -89,11 +92,14 @@ const HeroSection = memo(function HeroSection({ data, isLoading, error, onRetry 
         ))}
       </Slider>
 
-      <MovieModal
-        movie={selectedMovie}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
+      {/* FIX #7: MovieModal is now lazy loaded with Suspense */}
+      <Suspense fallback={<LoadingFallback />}>
+        <MovieModal
+          movie={selectedMovie}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      </Suspense>
 
       {/* Bottom gradient overlay for smooth content blend - Theme-aware */}
       <div className="absolute bottom-0 left-0 right-0 h-24 sm:h-32 bg-gradient-to-t from-[var(--background-primary)] to-transparent z-20 pointer-events-none" />

@@ -67,4 +67,7 @@ const CardHoverOverlay = memo(({
   );
 });
 
+// Add displayName for better debugging in React DevTools
+CardHoverOverlay.displayName = "CardHoverOverlay";
+
 export default CardHoverOverlay;

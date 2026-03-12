@@ -1,5 +1,6 @@
 import { useMemo, memo } from "react";
 import type { PersonDetails } from "@/api/PersonDetails";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { formatDate, calculateAge } from "@/utils";
 
 interface PersonHeroProps {
@@ -44,10 +45,15 @@ const PersonHero = memo(function PersonHero({ person }: PersonHeroProps) {
       {/* Background Blur Effect */}
       {profileUrl && (
         <>
-          <div
-            className="absolute inset-0 bg-cover bg-center opacity-20 blur-3xl"
-            style={{ backgroundImage: `url(${profileUrl})` }}
-          />
+          <div className="absolute inset-0 bg-cover bg-center opacity-20 blur-3xl overflow-hidden">
+            <OptimizedImage
+              src={profileUrl}
+              alt={person.name}
+              className="w-full h-full scale-110"
+              objectFit="cover"
+              priority
+            />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-zinc-900" />
         </>
       )}
@@ -59,11 +65,12 @@ const PersonHero = memo(function PersonHero({ person }: PersonHeroProps) {
           <div className="flex-shrink-0 mx-auto md:mx-0">
             <div className="relative">
               {profileUrl ? (
-                <img
+                <OptimizedImage
                   src={profileUrl}
                   alt={person.name}
                   className="w-64 md:w-80 rounded-lg shadow-2xl border-2 border-white/20"
-                  loading="lazy"
+                  objectFit="cover"
+                  priority
                 />
               ) : (
                 <div className="w-64 md:w-80 aspect-[2/3] bg-zinc-800 rounded-lg flex items-center justify-center border-2 border-white/10">

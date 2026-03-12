@@ -1,5 +1,6 @@
 import { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 
 export interface PersonCardProps {
@@ -33,11 +34,11 @@ const PersonCard = memo(({ id, name, profileImage, role }: PersonCardProps) => {
           {imageUrl ? (
             <>
               {/* Profile Image */}
-              <img
+              <OptimizedImage
                 src={imageUrl}
                 alt={name}
-                className="h-full w-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
-                loading="lazy"
+                className="h-full w-full transition-transform duration-300 ease-in-out group-hover:scale-110"
+                objectFit="cover"
               />
 
               {/* Hover Overlay - Gradient from bottom */}

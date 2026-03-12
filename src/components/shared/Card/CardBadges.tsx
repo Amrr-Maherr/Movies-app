@@ -81,4 +81,7 @@ const CardBadges = memo(({
   );
 });
 
+// Add displayName for better debugging in React DevTools
+CardBadges.displayName = "CardBadges";
+
 export default CardBadges;

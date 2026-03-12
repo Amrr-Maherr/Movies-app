@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { Award, Calendar, Star } from "lucide-react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 
 export interface Top10BadgeProps {
@@ -48,6 +49,9 @@ const Top10Badge = memo(({ rank }: Top10BadgeProps) => {
   );
 });
 
+// Add displayName for better debugging in React DevTools
+Top10Badge.displayName = "Top10Badge";
+
 // New Release Layout Component
 const NewReleaseLayout = memo(
   ({
@@ -60,11 +64,11 @@ const NewReleaseLayout = memo(
     return (
       <>
         <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
-          <img
+          <OptimizedImage
             src={posterUrl}
             alt={title}
-            className="w-full h-full object-cover"
-            loading="lazy"
+            className="w-full h-full"
+            objectFit="cover"
           />
           {/* NEW Badge */}
           <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded z-10">
@@ -102,6 +106,9 @@ const NewReleaseLayout = memo(
   },
 );
 
+// Add displayName for better debugging in React DevTools
+NewReleaseLayout.displayName = "NewReleaseLayout";
+
 // Award Winner Layout Component
 const AwardWinnerLayout = memo(
   ({ title, posterUrl, ratingValue, isHovered }: AwardWinnerLayoutProps) => {
@@ -113,11 +120,11 @@ const AwardWinnerLayout = memo(
         </div>
         {/* Poster */}
         <div className="relative aspect-[2/3] overflow-hidden rounded-lg border-2 border-yellow-500/30 group-hover:border-yellow-500 transition-colors duration-300">
-          <img
+          <OptimizedImage
             src={posterUrl}
             alt={title}
-            className="w-full h-full object-cover"
-            loading="lazy"
+            className="w-full h-full"
+            objectFit="cover"
           />
           {/* Overlay */}
           <div
@@ -144,6 +151,9 @@ const AwardWinnerLayout = memo(
   },
 );
 
+// Add displayName for better debugging in React DevTools
+AwardWinnerLayout.displayName = "AwardWinnerLayout";
+
 // Recommendation Layout Component
 const RecommendationLayout = memo(
   ({
@@ -155,11 +165,11 @@ const RecommendationLayout = memo(
     return (
       <>
         <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
-          <img
+          <OptimizedImage
             src={posterUrl}
             alt={title}
-            className="w-full h-full object-cover"
-            loading="lazy"
+            className="w-full h-full"
+            objectFit="cover"
           />
           {/* Hover Overlay */}
           <div
@@ -185,6 +195,9 @@ const RecommendationLayout = memo(
     );
   },
 );
+
+// Add displayName for better debugging in React DevTools
+RecommendationLayout.displayName = "RecommendationLayout";
 
 export {
   Top10Badge,

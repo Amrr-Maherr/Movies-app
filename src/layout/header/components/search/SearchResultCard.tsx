@@ -1,5 +1,6 @@
 import { Movie, TvShow } from "@/types/movies";
 import { cn } from "@/lib/utils";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { getPosterUrl, IMAGE_SIZES } from "@/utils/tmdb";
 
 interface SearchResultCardProps {
@@ -42,11 +43,11 @@ export default function SearchResultCard({
       {/* Poster Thumbnail */}
       <div className="relative w-12 h-16 flex-shrink-0 overflow-hidden rounded">
         {posterPath ? (
-          <img
+          <OptimizedImage
             src={getPosterUrl(posterPath, IMAGE_SIZES.POSTER_SMALL) || ""}
             alt={title}
-            className="w-full h-full object-cover"
-            loading="lazy"
+            className="w-full h-full"
+            objectFit="cover"
           />
         ) : (
           <div className="w-full h-full bg-gray-700 flex items-center justify-center">
