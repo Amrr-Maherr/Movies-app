@@ -1,1 +1,5 @@
-chore: trigger redeploy  
+refactor: extract LoadingFallback and add height hints to LazyWrapper
+
+- Create reusable LoadingFallback component to reduce code duplication
+- Add height prop to all LazyWrapper instances in Home.tsx for better UX
+- Export LoadingFallback from components/ui/index.ts

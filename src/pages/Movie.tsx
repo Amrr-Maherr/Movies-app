@@ -1,9 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { LoadingFallback } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import MovieFilters, { MovieFilterOption } from "@/components/shared/MovieFilters";
-import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import HeroSection from "@/components/shared/heroSection/HeroSection";
 import type { Movie, HeroMedia } from "@/types";
@@ -13,6 +13,8 @@ import usePopularMovies from "@/queries/FetchPopularMovies";
 import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
 import useNowPlayingMovies from "@/queries/FetchNowPlayingMovies";
 import useUpcomingMovies from "@/queries/FetchUpcomingMovies";
+
+const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 export default function Movie() {
   const [activeFilter, setActiveFilter] = useState<MovieFilterOption>("popular");
@@ -67,7 +69,7 @@ export default function Movie() {
         </p>
       </div>
 
-      <LazyWrapper>
+      <LazyWrapper height={250}>
         <MovieFilters activeFilter={activeFilter} onFilterChange={setActiveFilter} />
       </LazyWrapper>
 
@@ -84,7 +86,7 @@ export default function Movie() {
           </button>
         </div>
       ) : (
-        <LazyWrapper>
+        <LazyWrapper height={500}>
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div
@@ -97,15 +99,17 @@ export default function Movie() {
                 <MediaGridSkeleton />
               </motion.div>
             ) : (
-              <motion.div
-                key={`grid-${activeFilter}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <MediaGrid items={(movies || []) as unknown as HeroMedia[]} emptyMessage="No Movies found for this filter." />
-              </motion.div>
+              <Suspense fallback={<LoadingFallback />}>
+                <motion.div
+                  key={`grid-${activeFilter}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <MediaGrid items={(movies || []) as unknown as HeroMedia[]} emptyMessage="No Movies found for this filter." />
+                </motion.div>
+              </Suspense>
             )}
           </AnimatePresence>
         </LazyWrapper>
