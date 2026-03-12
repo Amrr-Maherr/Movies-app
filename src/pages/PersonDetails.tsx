@@ -1,18 +1,18 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import { motion } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { LoadingFallback, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import { Loader } from "@/components/ui/loader";
-import { Error } from "@/components/ui/error";
-import PersonHero from "@/components/shared/PersonHero";
-import BiographySection from "@/components/sections/BiographySection";
-import KnownForSection from "@/components/sections/KnownForSection";
-import CreditsSection from "@/components/sections/CreditsSection";
-import SocialLinksSection from "@/components/sections/SocialLinksSection";
 import FetchPersonDetails from "@/queries/FetchPersonDetails";
 import FetchPersonCredits from "@/queries/FetchPersonCredits";
+
+const PersonHero = lazy(() => import("@/components/shared/PersonHero"));
+const BiographySection = lazy(() => import("@/components/sections/BiographySection"));
+const KnownForSection = lazy(() => import("@/components/sections/KnownForSection"));
+const CreditsSection = lazy(() => import("@/components/sections/CreditsSection"));
+const SocialLinksSection = lazy(() => import("@/components/sections/SocialLinksSection"));
 
 const PersonDetailsPage = memo(function PersonDetailsPage() {
   const { slugWithId } = useParams<{ slugWithId: string }>();
@@ -34,6 +34,12 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
     isLoading: creditsLoading,
   } = FetchPersonCredits(personId);
 
+  // Memoized: Error state handler
+  const handleRetry = useCallback(() => {
+    refetchPerson();
+    refetchCredits();
+  }, [refetchPerson, refetchCredits]);
+
   const isLoading = useMemo(
     () => personLoading || creditsLoading,
     [personLoading, creditsLoading],
@@ -51,7 +57,11 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
   }, [creditsData]);
 
   if (isLoading) {
-    return <Loader fullscreen size="lg" />;
+    return (
+      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
+        <LoadingFallback />
+      </div>
+    );
   }
 
   if (error || !personData) {
@@ -60,10 +70,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
         fullscreen
         title="Failed to load person details"
         message="We couldn&apos;t load the person information. Please try again."
-        onRetry={() => {
-          refetchPerson();
-          refetchCredits();
-        }}
+        onRetry={handleRetry}
       />
     );
   }
@@ -92,40 +99,48 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
 
       {/* Social Links Section */}
       {externalIdsData && (
-        <LazyWrapper>
-          <SocialLinksSection
-            imdbId={externalIdsData.imdb_id}
-            twitterId={externalIdsData.twitter_id}
-            instagramId={externalIdsData.instagram_id}
-            facebookId={externalIdsData.facebook_id}
-            wikidataId={externalIdsData.wikidata_id}
-            homepage={personData.homepage}
-          />
+        <LazyWrapper height={150}>
+          <Suspense fallback={<LoadingFallback />}>
+            <SocialLinksSection
+              imdbId={externalIdsData.imdb_id}
+              twitterId={externalIdsData.twitter_id}
+              instagramId={externalIdsData.instagram_id}
+              facebookId={externalIdsData.facebook_id}
+              wikidataId={externalIdsData.wikidata_id}
+              homepage={personData.homepage}
+            />
+          </Suspense>
         </LazyWrapper>
       )}
 
       {/* Known For Section */}
       {(cast.length > 0 || crew.length > 0) && (
-        <LazyWrapper>
-          <KnownForSection cast={cast} crew={crew} />
+        <LazyWrapper height={400}>
+          <Suspense fallback={<LoadingFallback />}>
+            <KnownForSection cast={cast} crew={crew} />
+          </Suspense>
         </LazyWrapper>
       )}
 
       {/* Biography Section */}
-      <LazyWrapper>
-        <BiographySection
-          biography={personData.biography}
-          placeOfBirth={personData.place_of_birth}
-          birthday={personData.birthday}
-          deathday={personData.deathday}
-          knownForDepartment={personData.known_for_department}
-        />
+      <LazyWrapper height={400}>
+        <Suspense fallback={<LoadingFallback />}>
+          <BiographySection
+            biography={personData.biography}
+            placeOfBirth={personData.place_of_birth}
+            birthday={personData.birthday}
+            deathday={personData.deathday}
+            knownForDepartment={personData.known_for_department}
+          />
+        </Suspense>
       </LazyWrapper>
 
       {/* Credits Section */}
       {(cast.length > 0 || crew.length > 0) && (
-        <LazyWrapper>
-          <CreditsSection cast={cast} crew={crew} />
+        <LazyWrapper height={600}>
+          <Suspense fallback={<LoadingFallback />}>
+            <CreditsSection cast={cast} crew={crew} />
+          </Suspense>
         </LazyWrapper>
       )}
     </motion.div>

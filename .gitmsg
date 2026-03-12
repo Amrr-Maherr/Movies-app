@@ -1,4 +1,4 @@
-refactor: memoize and optimize MovieDetails
+refactor: memoize and optimize TVShowDetails
 
 - Add useCallback for handleRetry to stabilize function reference
 - Replace Loader with LoadingFallback for consistency
@@ -7,9 +7,12 @@ refactor: memoize and optimize MovieDetails
 - Import Error and LoadingFallback from @/components/ui
 
 Height hints added:
-- MediaHero: 500px
+- MediaHero: 500px (already present)
 - MediaInfoSection: 300px
+- EpisodesSection: 500px
 - TrailersSection: 400px
 - BehindTheScenesSection: 400px
+- ReviewsSection: 400px
+- KeywordsSection: 200px
+- WatchProvidersSection: 300px
 - MoreLikeThisSection: 500px
-- FullCreditsSection: 500px
