@@ -1,11 +1,10 @@
-import { useState, useCallback, lazy, Suspense } from "react";
+import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { LoadingFallback } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import MovieFilters, { MovieFilterOption } from "@/components/shared/MovieFilters";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
-import HeroSection from "@/components/shared/heroSection/HeroSection";
 import type { Movie, HeroMedia } from "@/types";
 
 // Hooks
@@ -14,9 +13,10 @@ import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
 import useNowPlayingMovies from "@/queries/FetchNowPlayingMovies";
 import useUpcomingMovies from "@/queries/FetchUpcomingMovies";
 
+const HeroSection = lazy(() => import("@/components/shared/heroSection/HeroSection"));
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
-export default function Movie() {
+const Movie = memo(function Movie() {
   const [activeFilter, setActiveFilter] = useState<MovieFilterOption>("popular");
 
   const popularQuery = usePopularMovies();
@@ -38,7 +38,16 @@ export default function Movie() {
     }
   }, [activeFilter, popularQuery, topRatedQuery, nowPlayingQuery, upcomingQuery]);
 
-  const { data: movies, isLoading, error, refetch } = getCurrentQuery();
+  const currentQuery = getCurrentQuery();
+  const { data: movies, isLoading, error, refetch } = currentQuery;
+
+  // Memoized: Pre-computed movies array
+  const moviesData = useMemo(() => (movies || []) as unknown as HeroMedia[], [movies]);
+
+  // Memoized: Error state handler
+  const handleRetry = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <motion.div
@@ -53,14 +62,16 @@ export default function Movie() {
         description="Movies move us like nothing else can, whether they're scary, funny, dramatic, romantic or anywhere in-between."
       />
 
-      <LazyWrapper height={400}>
-        <HeroSection
-          data={movies as Movie[] | undefined}
-          isLoading={isLoading}
-          error={error}
-          onRetry={refetch}
-        />
-      </LazyWrapper>
+      <Suspense fallback={<LoadingFallback />}>
+        <LazyWrapper height={400}>
+          <HeroSection
+            data={moviesData as Movie[] | undefined}
+            isLoading={isLoading}
+            error={error}
+            onRetry={handleRetry}
+          />
+        </LazyWrapper>
+      </Suspense>
 
       <div className="px-4 sm:px-8 mb-6 mt-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Movies</h1>
@@ -79,7 +90,7 @@ export default function Movie() {
             Failed to load Movies. Please try again.
           </p>
           <button
-            onClick={() => refetch()}
+            onClick={handleRetry}
             className="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-white/80 transition-colors"
           >
             Retry
@@ -107,7 +118,7 @@ export default function Movie() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <MediaGrid items={(movies || []) as unknown as HeroMedia[]} emptyMessage="No Movies found for this filter." />
+                  <MediaGrid items={moviesData} emptyMessage="No Movies found for this filter." />
                 </motion.div>
               </Suspense>
             )}
@@ -116,4 +127,6 @@ export default function Movie() {
       )}
     </motion.div>
   );
-}
+});
+
+export default Movie;
