@@ -1,8 +1,8 @@
-refactor: memoize TVShow component and add lazy loading
+refactor: memoize Kids component and add lazy loading
 
-- Wrap TVShow component with memo() to prevent unnecessary re-renders
+- Wrap Kids component with memo() to prevent unnecessary re-renders
 - Add lazy loading for HeroSection and MediaGrid components
-- Add useMemo for tvShowsData array to prevent recalculation
+- Add useMemo for moviesData array to prevent recalculation
 - Add useCallback for handleRetry to stabilize function reference
 - Add height hints to LazyWrapper components
 - Add Suspense fallback with LoadingFallback for better UX
