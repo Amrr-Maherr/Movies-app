@@ -1,5 +1,4 @@
 import { memo, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { X, Play, Plus, ThumbsUp } from "lucide-react";
 import { Dialog, DialogContent, DialogOverlay, DialogPortal } from "@/components/ui/dialog";
 import { getMatchScore, getYear, getAgeRating, getGenres } from "@/utils/movieHelpers";
@@ -55,22 +54,16 @@ const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieMod
   // Early return after hooks
   if (!movie) return null;
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
           <DialogPortal>
-            <DialogOverlay className="bg-black/80 backdrop-blur-sm" />
+            <DialogOverlay className="bg-black/80 backdrop-blur-sm modal-overlay" />
             <DialogContent
-              className="sm:max-w-4xl max-w-[95vw] p-0 bg-[var(--background-primary)] border-none overflow-hidden"
+              className="sm:max-w-4xl max-w-[95vw] p-0 bg-[var(--background-primary)] border-none overflow-hidden modal-content"
               showCloseButton={false}
             >
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 50 }}
-                transition={{ duration: 0.3 }}
-                className="relative"
-              >
+              <div className="relative">
                 {/* Background Image with Gradient */}
                 <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden">
                   <OptimizedImage
@@ -157,43 +150,37 @@ const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieMod
                       {/* Action Buttons */}
                       <div className="flex items-center justify-center sm:justify-start gap-3 flex-wrap">
                         {/* Play Button */}
-                        <motion.button
-                          className="bg-white text-black px-6 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-gray-200 transition-colors"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                        <button
+                          className="bg-white text-black px-6 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-gray-200 transition-all button-hover hover-scale tap-scale"
                         >
                           <Play className="h-4 w-4 fill-black" />
                           Play
-                        </motion.button>
+                        </button>
 
                         {/* Add to List Button */}
-                        <motion.button
-                          className="bg-[var(--background-secondary)]/80 backdrop-blur-sm text-white px-6 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                        <button
+                          className="bg-[var(--background-secondary)]/80 backdrop-blur-sm text-white px-6 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-[var(--background-tertiary)] transition-all border border-white/20 button-hover hover-scale tap-scale"
                         >
                           <Plus className="h-4 w-4" />
                           My List
-                        </motion.button>
+                        </button>
 
                         {/* Rate Button */}
-                        <motion.button
-                          className="bg-[var(--background-secondary)]/80 backdrop-blur-sm text-white px-4 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
+                        <button
+                          className="bg-[var(--background-secondary)]/80 backdrop-blur-sm text-white px-4 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-[var(--background-tertiary)] transition-all border border-white/20 button-hover hover-scale tap-scale"
                         >
                           <ThumbsUp className="h-4 w-4" />
-                        </motion.button>
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </DialogContent>
           </DialogPortal>
         </Dialog>
       )}
-    </AnimatePresence>
+    </>
   );
 });
 

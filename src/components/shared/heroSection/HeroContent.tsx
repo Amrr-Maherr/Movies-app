@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { getMatchScore, getAgeRating } from "@/utils/movieHelpers";
 import { getTitle, getReleaseYear } from "@/utils";
 import ActionButtons from "./ActionButtons";
@@ -23,23 +22,15 @@ export default function HeroContent({ movie, onMoreInfo }: ExtraHeroContentProps
         <div className="max-w-2xl">
           {/* Title - Big, dramatic, tight spacing (Netflix style) */}
           {/* Responsive: smaller on mobile, larger on desktop */}
-          <motion.h1
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-3 sm:mb-4 tracking-tight leading-none"
+          <h1
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-3 sm:mb-4 tracking-tight leading-none hero-title"
             style={{ textShadow: "2px 2px 12px rgba(0,0,0,0.9)" }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.7 }}
           >
             {title}
-          </motion.h1>
+          </h1>
 
           {/* Metadata Row - Responsive spacing and font sizes */}
-          <motion.div
-            className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 flex-wrap"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
+          <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 flex-wrap fade-in">
             {/* Match Score - Netflix green (theme-aware) */}
             <span className="text-[var(--success)] text-xs sm:text-sm font-bold tracking-tight">
               {matchScore}% Match
@@ -61,19 +52,16 @@ export default function HeroContent({ movie, onMoreInfo }: ExtraHeroContentProps
             <span className="border border-[var(--text-muted)] px-1.5 sm:px-2 py-0.5 text-[var(--text-secondary)] text-[10px] sm:text-xs font-medium">
               HD
             </span>
-          </motion.div>
+          </div>
 
           {/* Overview - Clean, readable, Netflix-style with width limit */}
           {/* Line clamped to 2 on mobile, 3 on desktop */}
-          <motion.p
-            className="text-[var(--text-primary)] text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 max-w-[90vw] sm:max-w-xl font-medium drop-shadow-lg"
+          <p
+            className="text-[var(--text-primary)] text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 max-w-[90vw] sm:max-w-xl font-medium drop-shadow-lg hero-description"
             style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
           >
             {movie.overview || "No description available."}
-          </motion.p>
+          </p>
 
           {/* Action Buttons */}
           <ActionButtons movie={movie} onMoreInfo={onMoreInfo} />

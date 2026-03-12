@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-
 export type NewPopularFilterOption =
   | "trendingMovies"
   | "trendingTv"
@@ -30,18 +28,16 @@ export default function NewPopularFilters({
           <button
             key={filter.id}
             onClick={() => onFilterChange(filter.id)}
-            className={`relative px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors duration-300 ${
+            className={`relative px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all duration-300 ${
               isActive
                 ? "text-black"
                 : "text-[var(--text-secondary)] hover:text-white bg-[var(--background-secondary)]/50 hover:bg-[var(--background-tertiary)]"
             }`}
           >
             {isActive && (
-              <motion.div
-                layoutId="activeNewPopularFilterBg"
-                className="absolute inset-0 bg-white rounded-full z-0"
-                initial={false}
-                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              <div
+                className="absolute inset-0 bg-white rounded-full z-0 filter-badge"
+                style={{ transition: "transform 0.3s ease, opacity 0.3s ease" }}
               />
             )}
             <span className="relative z-10">{filter.label}</span>

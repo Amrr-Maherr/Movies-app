@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { getBackdropUrl } from "@/utils/tmdb";
 import { getTitle } from "@/utils";
 import type { HeroBackgroundProps } from "@/types";
@@ -8,7 +7,6 @@ import { useMemo } from "react";
 // CONSTANTS
 // ============================================
 const SLIDE_INTERVAL = 8000;
-const ZOOM_SCALE = 1.05;
 
 // ============================================
 // COMPONENT
@@ -29,15 +27,13 @@ export default function HeroBackground({ movie }: HeroBackgroundProps) {
 
   return (
     <>
-      {/* Base Image with slow cinematic zoom */}
+      {/* Base Image with slow cinematic zoom using CSS */}
       <div className="absolute inset-0 overflow-hidden">
-        <motion.img
+        <img
           src={imageUrl}
           alt={title}
-          className="w-full h-full object-cover"
-          initial={{ scale: 1 }}
-          animate={{ scale: ZOOM_SCALE }}
-          transition={{ duration: SLIDE_INTERVAL / 1000, ease: "easeOut" }}
+          className="w-full h-full object-cover image-zoom-hover"
+          style={{ animation: `imageZoom ${SLIDE_INTERVAL / 1000}s ease-out forwards` }}
           loading="lazy"
         />
       </div>
