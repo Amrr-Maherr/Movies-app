@@ -1,5 +1,6 @@
 export { Loader } from "./loader"
 export { Error } from "./error"
+export { LoadingFallback } from "./LoadingFallback"
 export {
   Dialog,
   DialogClose,
