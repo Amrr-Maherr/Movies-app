@@ -1,16 +1,27 @@
+import { memo, lazy, Suspense, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { LoadingFallback } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import MediaGrid from "@/components/shared/MediaGrid";
 import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
-import HeroSection from "@/components/shared/heroSection/HeroSection";
 import type { Movie, HeroMedia } from "@/types";
 
 // Hooks
 import useKidsMovies from "@/queries/FetchKidsMovies";
 
-export default function Kids() {
+const HeroSection = lazy(() => import("@/components/shared/heroSection/HeroSection"));
+const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
+
+const Kids = memo(function Kids() {
   const { data: movies, isLoading, error, refetch } = useKidsMovies(1);
+
+  // Memoized: Pre-computed movies array
+  const moviesData = useMemo(() => (movies || []) as unknown as HeroMedia[], [movies]);
+
+  // Memoized: Error state handler
+  const handleRetry = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <motion.div
@@ -25,14 +36,16 @@ export default function Kids() {
         description="Discover movies that are perfect for the whole family on Netflix."
       />
 
-      <LazyWrapper height={400}>
-        <HeroSection
-          data={movies as Movie[] | undefined}
-          isLoading={isLoading}
-          error={error}
-          onRetry={refetch}
-        />
-      </LazyWrapper>
+      <Suspense fallback={<LoadingFallback />}>
+        <LazyWrapper height={400}>
+          <HeroSection
+            data={moviesData as Movie[] | undefined}
+            isLoading={isLoading}
+            error={error}
+            onRetry={handleRetry}
+          />
+        </LazyWrapper>
+      </Suspense>
 
       <div className="px-4 sm:px-8 mb-6 mt-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Kids & Family</h1>
@@ -47,14 +60,14 @@ export default function Kids() {
             Failed to load Kids Movies. Please try again.
           </p>
           <button
-            onClick={() => refetch()}
+            onClick={handleRetry}
             className="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-white/80 transition-colors"
           >
             Retry
           </button>
         </div>
       ) : (
-        <LazyWrapper>
+        <LazyWrapper height={500}>
           <AnimatePresence mode="wait">
             {isLoading ? (
               <motion.div
@@ -67,19 +80,23 @@ export default function Kids() {
                 <MediaGridSkeleton />
               </motion.div>
             ) : (
-              <motion.div
-                key="grid-kids"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <MediaGrid items={(movies || []) as unknown as HeroMedia[]} emptyMessage="No Kids Movies found." />
-              </motion.div>
+              <Suspense fallback={<LoadingFallback />}>
+                <motion.div
+                  key="grid-kids"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <MediaGrid items={moviesData} emptyMessage="No Kids Movies found." />
+                </motion.div>
+              </Suspense>
             )}
           </AnimatePresence>
         </LazyWrapper>
       )}
     </motion.div>
   );
-}
+});
+
+export default Kids;
