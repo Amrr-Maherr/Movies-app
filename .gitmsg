@@ -1,7 +1,7 @@
-refactor: add lazy loading and height hints to Actor and BrowseByLanguages
+refactor: memoize and optimize SeasonDetailsPage
 
-- Add lazy loading for MediaGrid in both components
-- Add LoadingFallback for better UX during lazy loading
-- Add height hints to LazyWrapper components
+- Add useCallback for handleRetry to stabilize function reference
 - Replace Loader with LoadingFallback for consistency
-- Add Suspense boundaries for lazy-loaded components
+- Use handleRetry instead of inline refetch() calls
+- Add height hint to LazyWrapper for Episodes section
+- Import Error from @/components/ui for consistency

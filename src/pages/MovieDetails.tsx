@@ -1,12 +1,11 @@
-import { memo, useMemo, lazy, Suspense } from "react";
+import { memo, useMemo, lazy, Suspense, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { LoadingFallback, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchMovieDetails from "@/queries/FetchMovieDetails";
-import { Loader } from "@/components/ui/loader";
-import { Error } from "@/components/ui/error";
 
 const MediaHero = lazy(() => import("@/components/shared/MediaHero"));
 const MediaInfoSection = lazy(() => import("@/components/sections/MediaInfoSection"));
@@ -33,6 +32,11 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
   const id = extractIdFromSlug(slugWithId);
   const { isLoading, data, error, refetch } = FetchMovieDetails(Number(id));
 
+  // Memoized: Error state handler
+  const handleRetry = useCallback(() => {
+    refetch();
+  }, [refetch]);
+
   const { videos, images, similar, credits } = useMemo(() => {
     if (!data) {
       return { videos: [], images: [], similar: [], credits: { cast: [], crew: [] } };
@@ -46,7 +50,11 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
   }, [data]);
 
   if (isLoading) {
-    return <Loader fullscreen size="lg" />;
+    return (
+      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
+        <LoadingFallback />
+      </div>
+    );
   }
 
   if (error || !data) {
@@ -55,7 +63,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
         fullscreen
         title="Failed to load movie details"
         message="We couldn&apos;t load the movie information. Please try again."
-        onRetry={() => refetch()}
+        onRetry={handleRetry}
       />
     );
   }
@@ -85,7 +93,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       </LazyWrapper>
 
       {/* Media Info Section */}
-      <LazyWrapper>
+      <LazyWrapper height={300}>
         <Suspense fallback={<SectionSkeleton />}>
           <MediaInfoSection media={data} />
         </Suspense>
@@ -93,7 +101,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
 
       {/* Trailers Section */}
       {videos.length > 0 && (
-        <LazyWrapper>
+        <LazyWrapper height={400}>
           <Suspense fallback={<SectionSkeleton />}>
             <TrailersSection videos={videos} />
           </Suspense>
@@ -101,7 +109,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       )}
 
       {/* Behind the Scenes Section */}
-      <LazyWrapper>
+      <LazyWrapper height={400}>
         <Suspense fallback={<SectionSkeleton />}>
           <BehindTheScenesSection images={images} />
         </Suspense>
@@ -109,7 +117,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
 
       {/* More Like This Section */}
       {similar.length > 0 && (
-        <LazyWrapper>
+        <LazyWrapper height={500}>
           <Suspense fallback={<SectionSkeleton />}>
             <MoreLikeThisSection similar={similar} />
           </Suspense>
@@ -118,7 +126,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
 
       {/* Full Credits Section */}
       {(credits.cast.length > 0 || credits.crew.length > 0) && (
-        <LazyWrapper>
+        <LazyWrapper height={500}>
           <Suspense fallback={<SectionSkeleton />}>
             <FullCreditsSection cast={credits.cast || []} crew={credits.crew || []} />
           </Suspense>
