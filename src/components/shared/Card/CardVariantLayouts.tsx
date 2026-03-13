@@ -1,5 +1,6 @@
 import { memo } from "react";
-import { Award, Calendar, Star, Play, Film, User, Info, Flame, Clock } from "lucide-react";
+import { motion } from "framer-motion";
+import { Award, Calendar, Star, Play, Film, User, Info, Flame } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia, Episode, Season } from "@/types";
 
@@ -633,47 +634,68 @@ export interface ShowcaseLayoutProps {
 }
 
 const ShowcaseLayout = memo(({ title, imageUrl, mediaType, isNew, isFeatured, rating, overview, detailsUrl, aspectRatio = "aspect-video md:aspect-[10/9]" }: ShowcaseLayoutProps) => (
-  <a href={detailsUrl} className="block w-full">
-    <div className={`relative ${aspectRatio} overflow-hidden rounded group cursor-pointer`}>
-      <OptimizedImage
-        src={imageUrl}
-        alt={title}
-        className="w-full h-full transition-transform duration-500 "
-        objectFit="cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
-        <div className="flex items-center gap-2 mb-2">
+  <a href={detailsUrl} className="block w-full group">
+    <motion.div
+      className={`relative ${aspectRatio} overflow-hidden rounded-xl cursor-pointer shadow-2xl`}
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
+      <motion.div
+        className="absolute inset-0"
+        whileHover={{ scale: 1.06 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <OptimizedImage
+          src={imageUrl}
+          alt={title}
+          className="w-full h-full"
+          objectFit="cover"
+        />
+      </motion.div>
+      {/* Multi-layer gradient for depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+      {/* Hover shine effect */}
+      <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-500" />
+      <div className="absolute bottom-0 left-0 right-0 p-5 md:p-7">
+        <div className="flex items-center gap-2 mb-3">
           {isFeatured && (
-            <span className="bg-yellow-400 text-black text-[10px] md:text-xs font-bold px-2 py-1 rounded uppercase">
-              Featured Pick
+            <span className="bg-yellow-400 text-black text-[10px] md:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shadow-lg">
+              ⭐ Featured Pick
             </span>
           )}
           {isNew && (
-            <span className="px-2 py-1 bg-red-600 text-white text-[10px] md:text-xs font-bold rounded">
+            <span className="px-2.5 py-1 bg-red-600 text-white text-[10px] md:text-xs font-bold rounded-full shadow-lg">
               NEW
             </span>
           )}
           {rating && rating > 0 && (
-            <div className="flex items-center gap-1 bg-black/60 backdrop-blur-sm px-2 py-1 rounded">
+            <div className="flex items-center gap-1 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
               <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
               <span className="text-[10px] md:text-xs font-bold text-white">{rating.toFixed(1)}</span>
             </div>
           )}
-          <span className="text-xs md:text-sm text-gray-300">
-            {mediaType === "movie" ? "Movie" : "Series"}
+          <span className="text-xs md:text-sm text-gray-400 font-medium">
+            {mediaType === "movie" ? "🎬 Movie" : "📺 Series"}
           </span>
         </div>
-        <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
+        <h3 className="text-xl md:text-3xl lg:text-4xl font-black text-white mb-2 group-hover:text-yellow-300 transition-colors duration-300 drop-shadow-2xl leading-tight">
           {title}
         </h3>
         {overview && (
-          <p className="hidden md:block text-sm text-gray-300 line-clamp-2 max-w-2xl">
+          <p className="hidden md:block text-sm text-gray-300/90 line-clamp-2 max-w-2xl leading-relaxed">
             {overview}
           </p>
         )}
+        {/* CTA hint */}
+        <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="flex items-center gap-1.5 bg-white text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+            <Play className="w-3 h-3 fill-current" />
+            Watch Now
+          </div>
+        </div>
       </div>
-    </div>
+    </motion.div>
   </a>
 ));
 ShowcaseLayout.displayName = "ShowcaseLayout";
@@ -691,46 +713,62 @@ export interface HorizontalLayoutProps {
 }
 
 const HorizontalLayout = memo(({ title, imageUrl, overview, mediaType, isOriginal, rating, detailsUrl, plainLayout }: HorizontalLayoutProps) => (
-  <a href={detailsUrl} className="block w-full">
-    <div className={`group cursor-pointer bg-zinc-900 rounded-lg overflow-hidden flex gap-3 ${!plainLayout ? "flex-col md:flex-row" : "hover:bg-zinc-700 transition-colors"}`}>
-      <div className={`relative ${plainLayout ? "w-20 md:w-24 aspect-[2/3]" : "w-full md:w-2/5 aspect-video md:aspect-auto"} flex-shrink-0`}>
-        <OptimizedImage
-          src={imageUrl}
-          alt={title}
-          className="w-full h-full transition-transform duration-500 "
-          objectFit="cover"
-        />
-        {!plainLayout && <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/50 md:to-zinc-900" />}
+  <a href={detailsUrl} className="block w-full group">
+    <motion.div
+      className={`cursor-pointer bg-zinc-900/80 rounded-xl overflow-hidden flex gap-3 border border-white/5 shadow-lg ${
+        !plainLayout ? "flex-col md:flex-row" : "hover:bg-zinc-700/80"
+      }`}
+      whileHover={{ y: -2, boxShadow: "0 20px 40px rgba(0,0,0,0.5)" }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+    >
+      <div className={`relative overflow-hidden flex-shrink-0 ${
+        plainLayout ? "w-20 md:w-24 aspect-[2/3]" : "w-full md:w-2/5 aspect-video md:aspect-auto"
+      }`}>
+        <motion.div
+          className="absolute inset-0"
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <OptimizedImage
+            src={imageUrl}
+            alt={title}
+            className="w-full h-full"
+            objectFit="cover"
+          />
+        </motion.div>
+        {!plainLayout && <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/60 md:to-zinc-900" />}
       </div>
-      <div className={`flex-1 p-3 md:p-4 flex flex-col justify-center`}>
+      <div className="flex-1 p-3 md:p-4 flex flex-col justify-center">
         {!plainLayout && (
           <div className="flex items-center gap-2 mb-2">
             {isOriginal && (
-              <span className="bg-red-600 text-white text-[10px] md:text-xs font-bold px-2 py-1 rounded uppercase">
+              <span className="bg-red-600 text-white text-[10px] md:text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide">
                 Netflix Original
               </span>
             )}
-            <span className="text-[10px] md:text-xs text-gray-400">
+            <span className="text-[10px] md:text-xs text-gray-500">
               {mediaType === "movie" ? "Film" : "Series"}
             </span>
           </div>
         )}
-        <h3 className={`font-bold text-white mb-1 group-hover:text-gray-300 transition-colors ${plainLayout ? "text-sm md:text-base line-clamp-2" : "text-lg md:text-2xl"}`}>
+        <h3 className={`font-bold text-white mb-1 group-hover:text-red-400 transition-colors duration-200 ${
+          plainLayout ? "text-sm md:text-base line-clamp-2" : "text-lg md:text-2xl"
+        }`}>
           {title}
         </h3>
         {rating && rating > 0 && (
           <div className="flex items-center gap-1 mt-1">
             <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
-            <span className="text-xs text-gray-400">{rating.toFixed(1)}</span>
+            <span className="text-xs text-gray-400 font-medium">{rating.toFixed(1)}</span>
           </div>
         )}
         {overview && !plainLayout && (
-          <p className="text-xs md:text-sm text-gray-400 line-clamp-2 md:line-clamp-3">
+          <p className="text-xs md:text-sm text-gray-400 line-clamp-2 md:line-clamp-3 leading-relaxed mt-1">
             {overview}
           </p>
         )}
       </div>
-    </div>
+    </motion.div>
   </a>
 ));
 HorizontalLayout.displayName = "HorizontalLayout";
@@ -746,42 +784,55 @@ export interface LandscapeLayoutProps {
 }
 
 const LandscapeLayout = memo(({ title, imageUrl, isHot, matchPercentage, mediaType, detailsUrl }: LandscapeLayoutProps) => (
-  <a href={detailsUrl} className="block w-full">
-    <div className="group cursor-pointer relative overflow-hidden rounded-lg w-full">
-      <div className="relative aspect-video">
-        <OptimizedImage
-          src={imageUrl}
-          alt={title}
-          className="w-full h-full transition-transform duration-500 "
-          objectFit="cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+  <a href={detailsUrl} className="block w-full group">
+    <motion.div
+      className="relative overflow-hidden rounded-xl w-full shadow-xl cursor-pointer"
+      whileHover={{ scale: 1.03 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+    >
+      <div className="relative aspect-video overflow-hidden">
+        <motion.div
+          className="absolute inset-0"
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          <OptimizedImage
+            src={imageUrl}
+            alt={title}
+            className="w-full h-full"
+            objectFit="cover"
+          />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+        {/* Hover vignette */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-400" />
         {isHot && (
-          <div className="absolute top-3 left-3 flex items-center gap-1 bg-orange-500 text-white text-[10px] font-bold px-2 py-1 rounded-full">
+          <div className="absolute top-2.5 left-2.5 flex items-center gap-1 bg-orange-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-lg backdrop-blur-sm">
             <Flame className="w-3 h-3" />
             HOT
           </div>
         )}
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <h3 className="text-base md:text-lg font-bold text-white mb-1 line-clamp-2 group-hover:text-orange-400 transition-colors">
+        {/* Play button on hover */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-2xl backdrop-blur-sm">
+            <Play className="w-4 h-4 fill-black text-black ml-0.5" />
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
+          <h3 className="text-sm md:text-base font-bold text-white mb-1 line-clamp-2 group-hover:text-orange-300 transition-colors duration-300 drop-shadow-lg">
             {title}
           </h3>
-          <div className="flex items-center gap-3 text-[10px] md:text-xs text-gray-300">
+          <div className="flex items-center gap-2 text-[10px] md:text-xs text-gray-300">
             {matchPercentage && matchPercentage > 0 && (
               <span className="font-semibold text-green-400">
                 {matchPercentage}% Match
               </span>
             )}
-            {mediaType === "tv" && (
-              <div className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                <span>Series</span>
-              </div>
-            )}
+            <span className="text-gray-400">{mediaType === "tv" ? "Series" : "Movie"}</span>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   </a>
 ));
 LandscapeLayout.displayName = "LandscapeLayout";
