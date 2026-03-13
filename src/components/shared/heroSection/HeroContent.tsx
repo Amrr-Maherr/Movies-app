@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { getMatchScore, getAgeRating } from "@/utils/movieHelpers";
 import { getTitle, getReleaseYear } from "@/utils";
 import ActionButtons from "./ActionButtons";
@@ -10,7 +11,7 @@ interface ExtraHeroContentProps extends HeroContentProps {
 // ============================================
 // COMPONENT
 // ============================================
-export default function HeroContent({ movie, onMoreInfo }: ExtraHeroContentProps) {
+const HeroContent = memo(function HeroContent({ movie, onMoreInfo }: ExtraHeroContentProps) {
   const matchScore = getMatchScore(movie.vote_average);
   const year = getReleaseYear(movie);
   const ageRating = getAgeRating(movie.vote_average);
@@ -69,4 +70,6 @@ export default function HeroContent({ movie, onMoreInfo }: ExtraHeroContentProps
       </div>
     </div>
   );
-}
+});
+
+export default HeroContent;

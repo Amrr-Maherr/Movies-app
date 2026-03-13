@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Play, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 import { generateSlug, formatSlugWithId } from "@/utils/slugify";
@@ -12,7 +13,7 @@ interface ActionButtonsProps {
 // ============================================
 // COMPONENT
 // ============================================
-export default function ActionButtons({ movie, onMoreInfo }: ActionButtonsProps) {
+const ActionButtons = memo(function ActionButtons({ movie, onMoreInfo }: ActionButtonsProps) {
   if (!movie) return null;
 
   const isTvShow = "first_air_date" in movie;
@@ -45,4 +46,6 @@ export default function ActionButtons({ movie, onMoreInfo }: ActionButtonsProps)
       </button>
     </div>
   );
-}
+});
+
+export default ActionButtons;

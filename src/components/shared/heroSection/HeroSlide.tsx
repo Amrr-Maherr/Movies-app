@@ -1,3 +1,4 @@
+import { memo } from "react";
 import HeroBackground from "./HeroBackground";
 import HeroContent from "./HeroContent";
 import type { HeroSlideProps, HeroMedia } from "@/types";
@@ -9,7 +10,7 @@ interface ExtraHeroSlideProps extends HeroSlideProps {
 // ============================================
 // COMPONENT
 // ============================================
-export default function HeroSlide({ movie, onMoreInfo }: ExtraHeroSlideProps) {
+const HeroSlide = memo(function HeroSlide({ movie, onMoreInfo }: ExtraHeroSlideProps) {
   // FIX: Use aspect ratio instead of h-screen to prevent layout thrashing
   // and reduce viewport calculation overhead. Using 16:9 aspect ratio
   // which is standard for hero banners and provides consistent sizing.
@@ -22,4 +23,6 @@ export default function HeroSlide({ movie, onMoreInfo }: ExtraHeroSlideProps) {
       <HeroContent movie={movie} onMoreInfo={onMoreInfo} />
     </div>
   );
-}
+});
+
+export default HeroSlide;

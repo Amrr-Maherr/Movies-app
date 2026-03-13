@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-import SearchPopup from "./SearchPopup";
+
+const SearchPopup = lazy(() => import("./SearchPopup"));
 
 interface SearchButtonProps {
   className?: string;
@@ -25,7 +26,11 @@ export default function SearchButton({ className }: SearchButtonProps) {
         <Search className="w-5 h-5" />
       </button>
 
-      <SearchPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
+      {isPopupOpen && (
+        <Suspense fallback={null}>
+          <SearchPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
+        </Suspense>
+      )}
     </>
   );
 }
