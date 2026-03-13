@@ -71,16 +71,25 @@ const NewPopular = memo(function NewPopular() {
           />
         </LazyWrapper>
       </Suspense>
-
-      <div className="px-4 sm:px-8 mb-6 mt-8">
-        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">New & Popular</h1>
-        <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
-          See what&apos;s trending, highly anticipated, and making waves right now.
-        </p>
-      </div>
+      <Suspense fallback={<LoadingFallback />}>
+        <LazyWrapper height={400}>
+          <div className="px-4 sm:px-8 mb-6 mt-8">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+              New & Popular
+            </h1>
+            <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
+              See what&apos;s trending, highly anticipated, and making waves
+              right now.
+            </p>
+          </div>
+        </LazyWrapper>
+      </Suspense>
 
       <LazyWrapper height={250}>
-        <NewPopularFilters activeFilter={activeFilter} onFilterChange={handleFilterChange} />
+        <NewPopularFilters
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+        />
       </LazyWrapper>
 
       {error ? (
@@ -104,7 +113,10 @@ const NewPopular = memo(function NewPopular() {
           ) : (
             <Suspense fallback={<LoadingFallback />}>
               <div className="slide-up">
-                <MediaGrid items={mediaData} emptyMessage="No titles found for this filter." />
+                <MediaGrid
+                  items={mediaData}
+                  emptyMessage="No titles found for this filter."
+                />
               </div>
             </Suspense>
           )}

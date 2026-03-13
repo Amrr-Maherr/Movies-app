@@ -2,6 +2,7 @@ import { getBackdropUrl } from "@/utils/tmdb";
 import { getTitle } from "@/utils";
 import type { HeroBackgroundProps } from "@/types";
 import { useMemo } from "react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 // ============================================
 // CONSTANTS
@@ -29,12 +30,11 @@ export default function HeroBackground({ movie }: HeroBackgroundProps) {
     <>
       {/* Base Image with slow cinematic zoom using CSS */}
       <div className="absolute inset-0 overflow-hidden">
-        <img
+        <OptimizedImage
           src={imageUrl}
           alt={title}
           className="w-full h-full object-cover image-zoom-hover"
-          style={{ animation: `imageZoom ${SLIDE_INTERVAL / 1000}s ease-out forwards` }}
-          loading="lazy"
+          objectFit="cover"
         />
       </div>
 

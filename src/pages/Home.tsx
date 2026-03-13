@@ -2,7 +2,6 @@ import { memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { Loader, Error as ErrorComponent, LoadingFallback } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import HeroSection from "@/components/shared/heroSection/HeroSection";
 import "@/index.css";
 
 import usePopularMovies from "@/queries/FetchPopularMovies";
@@ -18,6 +17,7 @@ import useTopRatedTvShows from "@/queries/FetchTopRatedTvShows";
 import useAiringTodayTv from "@/queries/FetchAiringTodayTv";
 import useOnTheAirTv from "@/queries/FetchOnTheAirTv";
 
+const HeroSection = lazy(() => import("@/components/shared/heroSection/HeroSection"));
 const MediaSection = lazy(() => import("@/components/shared/MediaSection"));
 const TopPicksSection = lazy(() => import("@/components/sections/TopPicksSection"));
 const MoviePromo = lazy(() => import("@/components/sections/MoviePromo"));
@@ -206,12 +206,18 @@ const Home = memo(function Home() {
       />
 
       {/* Hero Section - always visible, no lazy loading */}
-      <HeroSection
-        data={AllData}
-        isLoading={false}
-        error={null}
-        onRetry={() => {}}
-      />
+      {AllData && (
+        <Suspense fallback={<LoadingFallback />}>
+          <LazyWrapper height={300}>
+            <HeroSection
+              data={AllData}
+              isLoading={false}
+              error={null}
+              onRetry={() => {}}
+            />
+          </LazyWrapper>
+        </Suspense>
+      )}
 
       {/* Top 10 Movies Section */}
       {trendingMoviesWeek && (
