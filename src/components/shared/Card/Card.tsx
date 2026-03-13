@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useState, useCallback, useMemo, memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
@@ -332,6 +333,11 @@ const Card = memo(
     if (variant === "compact" && movie) {
       return (
         <LazyWrapper height={350}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <Link
             to={detailsUrl}
             className="relative group cursor-pointer block"
@@ -342,7 +348,7 @@ const Card = memo(
               <OptimizedImage
                 src={posterUrl}
                 alt={title}
-                className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full transition-transform duration-500 "
                 objectFit="cover"
               />
               <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
@@ -392,7 +398,8 @@ const Card = memo(
               {title}
             </p>
           </Link>
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -400,6 +407,11 @@ const Card = memo(
     if (variant === "top10" && rank && movie) {
       return (
         <LazyWrapper height={350}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <Link
             to={detailsUrl}
             className="relative group cursor-pointer block"
@@ -411,13 +423,14 @@ const Card = memo(
               <OptimizedImage
                 src={posterUrl}
                 alt={title}
-                className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full transition-transform duration-500 "
                 objectFit="cover"
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
             </div>
           </Link>
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -425,6 +438,11 @@ const Card = memo(
     if (variant === "newRelease" && movie) {
       return (
         <LazyWrapper height={350}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <Link
             to={detailsUrl}
             className="group cursor-pointer block"
@@ -440,7 +458,8 @@ const Card = memo(
               isHovered={isHovered}
             />
           </Link>
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -448,6 +467,11 @@ const Card = memo(
     if (variant === "awardWinner" && movie) {
       return (
         <LazyWrapper height={350}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <Link
             to={detailsUrl}
             className="group cursor-pointer relative block"
@@ -462,7 +486,8 @@ const Card = memo(
               isHovered={isHovered}
             />
           </Link>
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -470,12 +495,18 @@ const Card = memo(
     if (variant === "continueWatching") {
       return (
         <LazyWrapper height={200}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <ContinueWatchingLayout
             title={title}
             imageUrl={backdropUrl}
             progress={progress || 0}
           />
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -483,6 +514,11 @@ const Card = memo(
     if (variant === "showcase") {
       return (
         <LazyWrapper height={400}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <ShowcaseLayout
             title={title}
             imageUrl={promoImageUrl}
@@ -494,7 +530,8 @@ const Card = memo(
             overview={movie?.overview}
             aspectRatio={aspectRatio}
           />
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -502,6 +539,11 @@ const Card = memo(
     if (variant === "horizontal") {
       return (
         <LazyWrapper height={plainLayout ? 100 : 250}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <HorizontalLayout
             title={title}
             imageUrl={plainLayout ? posterUrl : backdropUrl}
@@ -512,7 +554,8 @@ const Card = memo(
             detailsUrl={detailsUrl}
             plainLayout={plainLayout}
           />
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -520,6 +563,11 @@ const Card = memo(
     if (variant === "landscape") {
       return (
         <LazyWrapper height={250}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <LandscapeLayout
             title={title}
             imageUrl={backdropUrl}
@@ -528,7 +576,8 @@ const Card = memo(
             mediaType={mediaType || (tvShow ? "tv" : "movie")}
             detailsUrl={detailsUrl}
           />
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -536,6 +585,11 @@ const Card = memo(
     if (variant === "promo" && movie) {
       return (
         <LazyWrapper height={500}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <PromoLayout
             movie={movie}
             title={title}
@@ -545,7 +599,8 @@ const Card = memo(
             mediaType={mediaType || (tvShow ? "tv" : "movie")}
             promoVariant={promoVariant}
           />
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -553,6 +608,11 @@ const Card = memo(
     if (variant === "trailer" && trailer) {
       return (
         <LazyWrapper height={250}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <div
             className="group relative cursor-pointer"
             onClick={onClick}
@@ -567,7 +627,8 @@ const Card = memo(
               onImageLoad={() => setTrailerImageLoaded(true)}
             />
           </div>
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -575,6 +636,11 @@ const Card = memo(
     if (variant === "recommendation" && movie) {
       return (
         <LazyWrapper height={350}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <Link
             to={detailsUrl}
             className="group cursor-pointer block"
@@ -589,7 +655,8 @@ const Card = memo(
               isHovered={isHovered}
             />
           </Link>
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -597,6 +664,11 @@ const Card = memo(
     if (variant === "season" && season) {
       return (
         <LazyWrapper height={400}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <Link
             to={seasonDetailsUrl}
             className="block group"
@@ -611,7 +683,8 @@ const Card = memo(
               isHovered={isHovered}
             />
           </Link>
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -619,6 +692,11 @@ const Card = memo(
     if (variant === "review" && review) {
       return (
         <LazyWrapper height={150}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <div className="h-full">
             <ReviewLayout
               author={review.author}
@@ -628,7 +706,8 @@ const Card = memo(
               content={review.content}
             />
           </div>
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -636,6 +715,11 @@ const Card = memo(
     if (variant === "person" && person) {
       return (
         <LazyWrapper height={350}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <Link
             to={personDetailsUrl}
             className="group relative cursor-pointer block"
@@ -649,7 +733,8 @@ const Card = memo(
               isHovered={isHovered}
             />
           </Link>
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -657,6 +742,11 @@ const Card = memo(
     if (variant === "episode" && episode) {
       return (
         <LazyWrapper height={250}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
           <Link
             to={episodeLink}
             className="block group"
@@ -673,7 +763,8 @@ const Card = memo(
               isHovered={isHovered}
             />
           </Link>
-        </LazyWrapper>
+        
+          </motion.div></LazyWrapper>
       );
     }
 
@@ -682,6 +773,11 @@ const Card = memo(
 
     return (
       <LazyWrapper height={350}>
+          <motion.div
+            
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="h-full w-full overflow-hidden"
+          >
         <div
           className="relative group cursor-pointer rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]"
           onMouseEnter={handleCardMouseEnter}
@@ -706,7 +802,8 @@ const Card = memo(
             />
           </CardPoster>
         </div>
-      </LazyWrapper>
+      
+          </motion.div></LazyWrapper>
     );
   },
 );

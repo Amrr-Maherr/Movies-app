@@ -226,7 +226,7 @@ const EpisodeLayout = memo(
                 <OptimizedImage
                   src={imageUrl}
                   alt={title}
-                  className="h-full w-full transition-transform duration-300 ease-in-out group-hover:scale-110"
+                  className="h-full w-full transition-transform duration-300 ease-in-out "
                   objectFit="cover"
                 />
                 <div className="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
@@ -238,7 +238,7 @@ const EpisodeLayout = memo(
             )}
 
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:scale-110 shadow-xl">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 opacity-0 transition-all duration-300 group-hover:opacity-100  shadow-xl">
                 <Play className="h-5 w-5 fill-black text-black ml-0.5" />
               </div>
             </div>
@@ -281,14 +281,14 @@ export interface PersonLayoutProps {
 const PersonLayout = memo(({ name, imageUrl, role }: PersonLayoutProps) => {
   return (
     <div className="relative">
-      <div className="relative overflow-hidden rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-2xl">
+      <div className="relative overflow-hidden rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out  group-hover:shadow-2xl">
         <div className="relative aspect-[2/3] overflow-hidden">
           {imageUrl ? (
             <>
               <OptimizedImage
                 src={imageUrl}
                 alt={name}
-                className="h-full w-full transition-transform duration-300 ease-in-out group-hover:scale-110"
+                className="h-full w-full transition-transform duration-300 ease-in-out "
                 objectFit="cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
@@ -375,7 +375,7 @@ const SeasonLayout = memo(
                 <OptimizedImage
                   src={imageUrl}
                   alt={title}
-                  className="h-full w-full transition-transform duration-300 ease-in-out group-hover:scale-110"
+                  className="h-full w-full transition-transform duration-300 ease-in-out "
                   objectFit="cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
@@ -435,12 +435,12 @@ const TrailerLayout = memo(
   }: TrailerLayoutProps) => {
     return (
       <div className="relative">
-        <div className="relative overflow-hidden rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-2xl">
+        <div className="relative overflow-hidden rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out  group-hover:shadow-2xl">
           <div className="relative aspect-video overflow-hidden">
             <OptimizedImage
               src={thumbnailUrl}
               alt={title}
-              className={`h-full w-full transition-all duration-300 ease-in-out group-hover:scale-110 ${
+              className={`h-full w-full transition-all duration-300 ease-in-out  ${
                 imageLoaded ? "opacity-100" : "opacity-0"
               }`}
               objectFit="cover"
@@ -453,7 +453,7 @@ const TrailerLayout = memo(
             )}
             <div className="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 transition-transform duration-300 group-hover:scale-110 group-hover:bg-white shadow-xl">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 transition-transform duration-300  group-hover:bg-white shadow-xl">
                 <Play className="h-6 w-6 fill-black text-black ml-1" />
               </div>
             </div>
@@ -517,7 +517,7 @@ const PromoLayout = memo(
           <OptimizedImage
             src={imageUrl}
             alt={title}
-            className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+            className="w-full h-full object-cover object-center transition-transform duration-700 "
             objectFit="cover"
             priority
           />
@@ -600,7 +600,7 @@ const ContinueWatchingLayout = memo(({ title, imageUrl, progress }: ContinueWatc
       <OptimizedImage
         src={imageUrl}
         alt={title}
-        className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+        className="w-full h-full transition-transform duration-300 "
         objectFit="cover"
       />
       <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/50 transition-colors duration-300">
@@ -638,7 +638,7 @@ const ShowcaseLayout = memo(({ title, imageUrl, mediaType, isNew, isFeatured, ra
       <OptimizedImage
         src={imageUrl}
         alt={title}
-        className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+        className="w-full h-full transition-transform duration-500 "
         objectFit="cover"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
@@ -697,7 +697,7 @@ const HorizontalLayout = memo(({ title, imageUrl, overview, mediaType, isOrigina
         <OptimizedImage
           src={imageUrl}
           alt={title}
-          className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full transition-transform duration-500 "
           objectFit="cover"
         />
         {!plainLayout && <div className="absolute inset-0 bg-gradient-to-r from-transparent to-zinc-900/50 md:to-zinc-900" />}
@@ -752,7 +752,7 @@ const LandscapeLayout = memo(({ title, imageUrl, isHot, matchPercentage, mediaTy
         <OptimizedImage
           src={imageUrl}
           alt={title}
-          className="w-full h-full transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full transition-transform duration-500 "
           objectFit="cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
