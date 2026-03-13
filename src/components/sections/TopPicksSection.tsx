@@ -13,8 +13,8 @@ const TopPicksSection = memo(function TopPicksSection({
   movies,
   title = "Top 10 in Egypt Today",
 }: TopPicksSectionProps) {
-  // Memoized: Get top 10 movies - avoids array slicing on every render
-  const topMovies = useMemo(() => movies.slice(0, 10), [movies]);
+  // Memoized: Get top 6 movies - reduced for better performance
+  const topMovies = useMemo(() => movies.slice(0, 5), [movies]);
 
   return (
     <div className="py-6 md:py-8">

@@ -13,8 +13,8 @@ const NewReleasesSection = memo(function NewReleasesSection({
   movies,
   title = "New Releases",
 }: NewReleasesSectionProps) {
-  // Memoized: Get first 8 items - avoids array slicing on every render
-  const items = useMemo(() => movies.slice(0, 8), [movies]);
+  // Memoized: Get first 4 items - reduced for better performance
+  const items = useMemo(() => movies.slice(0, 4), [movies]);
 
   return (
     <div className="py-6 md:py-8">

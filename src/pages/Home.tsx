@@ -34,9 +34,6 @@ const PricingSection = lazy(
 const AskedQuestions = lazy(
   () => import("@/components/sections/AskedQuestions"),
 );
-const CircularGallery = lazy(
-  () => import("@/components/shared/CircularGallery"),
-);
 const PlatformsSection = lazy(
   () => import("@/components/sections/PlatformsSection"),
 );
@@ -125,37 +122,16 @@ const Home = memo(function Home() {
         />
       </Suspense>
 
-      {/* Circular Gallery - Trending Movies */}
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={600}>
-          {trendingMoviesWeek ? (
-            <div style={{ height: "600px", position: "relative" }}>
-              <CircularGallery
-                movies={trendingMoviesWeek.slice(0, 20)}
-                bend={3}
-                textColor="#ffffff"
-                borderRadius={0.05}
-                scrollSpeed={2}
-                scrollEase={0.05}
-                font="bold 30px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-              />
-            </div>
-          ) : trendingWeekLoading ? (
-            <SectionSkeleton variant="hero" />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
       {/* Top 10 Movies Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={10} />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={300}>
           {trendingMoviesWeek ? (
             <TopPicksSection
               movies={trendingMoviesWeek}
-              title="Top 10 Movies in Egypt Today"
+              title="Top 6 Movies in Egypt Today"
             />
           ) : trendingWeekLoading ? (
-            <SectionSkeleton variant="grid" cardCount={10} />
+            <SectionSkeleton variant="grid" cardCount={6} />
           ) : null}
         </LazyWrapper>
       </Suspense>
@@ -176,7 +152,7 @@ const Home = memo(function Home() {
       </Suspense>
 
       {/* New Releases Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
         <LazyWrapper height={350}>
           {upcomingMovies ? (
             <NewReleasesSection
@@ -184,7 +160,7 @@ const Home = memo(function Home() {
               title="New Releases This Week"
             />
           ) : upcomingLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
+            <SectionSkeleton variant="grid" cardCount={4} />
           ) : null}
         </LazyWrapper>
       </Suspense>
