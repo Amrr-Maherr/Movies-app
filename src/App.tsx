@@ -5,9 +5,11 @@ import MainLayout from './layout/mainLayout/MainLayout'
 function App() {
   return (
     <>
-      <MainLayout/>
+      <main>
+        <MainLayout />
+      </main>
     </>
-  )
+  );
 }
 
 export default App
