@@ -1,7 +1,7 @@
 import { memo, useMemo, useCallback } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import Card from "@/components/shared/Card/Card";
-import { Error, Loader } from "@/components/ui";
+import { Error } from "@/components/ui";
 import type { HeroMedia } from "@/types";
 
 interface MediaSectionProps {
@@ -17,7 +17,6 @@ interface MediaSectionProps {
 const MediaSection = memo(function MediaSection({
   title,
   data,
-  isLoading,
   error,
   onRetry,
   slidesPerView = 5,

@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Award, Calendar, Star, Play, Film, User, Info, Sparkles, Flame, Clock, Popcorn } from "lucide-react";
+import { Award, Calendar, Star, Play, Film, User, Info, Flame, Clock } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia, Episode, Season } from "@/types";
 
