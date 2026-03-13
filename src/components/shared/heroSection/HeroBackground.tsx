@@ -7,7 +7,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 // ============================================
 // CONSTANTS
 // ============================================
-const SLIDE_INTERVAL = 8000;
+// const SLIDE_INTERVAL = 8000;
 
 // ============================================
 // COMPONENT
