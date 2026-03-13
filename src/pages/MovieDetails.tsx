@@ -2,7 +2,7 @@ import { memo, useMemo, lazy, Suspense, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback, Error, SectionSkeleton } from "@/components/ui";
+import { PageSkeleton, Error, SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchMovieDetails from "@/queries/FetchMovieDetails";
 
@@ -36,11 +36,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
   }, [data]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <LoadingFallback />
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   if (error || !data) {
@@ -67,14 +63,14 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
 
       {/* Hero Section */}
       <LazyWrapper height={500}>
-        <Suspense fallback={<SectionSkeleton />}>
+        <Suspense fallback={<SectionSkeleton variant="hero" />}>
           <MediaHero media={data} />
         </Suspense>
       </LazyWrapper>
 
       {/* Media Info Section */}
       <LazyWrapper height={300}>
-        <Suspense fallback={<SectionSkeleton />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" />}>
           <MediaInfoSection media={data} />
         </Suspense>
       </LazyWrapper>
@@ -82,7 +78,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       {/* Trailers Section */}
       {videos.length > 0 && (
         <LazyWrapper height={400}>
-          <Suspense fallback={<SectionSkeleton />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={3} />}>
             <TrailersSection videos={videos} />
           </Suspense>
         </LazyWrapper>
@@ -90,7 +86,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
 
       {/* Behind the Scenes Section */}
       <LazyWrapper height={400}>
-        <Suspense fallback={<SectionSkeleton />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <BehindTheScenesSection images={images} />
         </Suspense>
       </LazyWrapper>
@@ -98,7 +94,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       {/* More Like This Section */}
       {similar.length > 0 && (
         <LazyWrapper height={500}>
-          <Suspense fallback={<SectionSkeleton />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
             <MoreLikeThisSection similar={similar} />
           </Suspense>
         </LazyWrapper>
@@ -107,7 +103,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       {/* Full Credits Section */}
       {(credits.cast.length > 0 || credits.crew.length > 0) && (
         <LazyWrapper height={500}>
-          <Suspense fallback={<SectionSkeleton />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
             <FullCreditsSection cast={credits.cast || []} crew={credits.crew || []} />
           </Suspense>
         </LazyWrapper>

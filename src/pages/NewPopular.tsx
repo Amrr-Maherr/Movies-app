@@ -1,9 +1,8 @@
 import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import NewPopularFilters, { NewPopularFilterOption } from "@/components/shared/NewPopularFilters";
-import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import type { HeroMedia } from "@/types";
 
 // Hooks
@@ -61,7 +60,7 @@ const NewPopular = memo(function NewPopular() {
         description="See what's trending, highly anticipated, and making waves right now on Netflix."
       />
 
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="hero" />}>
         <LazyWrapper height={400}>
           <HeroSection
             data={mediaData as HeroMedia[] | undefined}
@@ -71,7 +70,7 @@ const NewPopular = memo(function NewPopular() {
           />
         </LazyWrapper>
       </Suspense>
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
         <LazyWrapper height={400}>
           <div className="px-4 sm:px-8 mb-6 mt-8">
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
@@ -107,11 +106,9 @@ const NewPopular = memo(function NewPopular() {
       ) : (
         <LazyWrapper height={500}>
           {isLoading ? (
-            <div className="fade-in">
-              <MediaGridSkeleton />
-            </div>
+            <SectionSkeleton variant="grid" cardCount={12} />
           ) : (
-            <Suspense fallback={<LoadingFallback />}>
+            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
               <div className="slide-up">
                 <MediaGrid
                   items={mediaData}

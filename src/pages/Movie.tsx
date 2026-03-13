@@ -1,9 +1,8 @@
 import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import MovieFilters, { MovieFilterOption } from "@/components/shared/MovieFilters";
-import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import type { Movie, HeroMedia } from "@/types";
 
 // Hooks
@@ -61,7 +60,7 @@ const Movie = memo(function Movie() {
         description="Movies move us like nothing else can, whether they're scary, funny, dramatic, romantic or anywhere in-between."
       />
 
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="hero" />}>
         <LazyWrapper height={400}>
           <HeroSection
             data={moviesData as Movie[] | undefined}
@@ -98,11 +97,9 @@ const Movie = memo(function Movie() {
       ) : (
         <LazyWrapper height={500}>
           {isLoading ? (
-            <div className="fade-in">
-              <MediaGridSkeleton />
-            </div>
+            <SectionSkeleton variant="grid" cardCount={12} />
           ) : (
-            <Suspense fallback={<LoadingFallback />}>
+            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
               <div className="slide-up">
                 <MediaGrid items={moviesData} emptyMessage="No Movies found for this filter." />
               </div>

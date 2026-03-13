@@ -2,7 +2,7 @@ import { memo, useMemo, lazy, Suspense, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback, Error } from "@/components/ui";
+import { SectionSkeleton, PageSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchTvShowDetails from "@/queries/FetchTvShowDetails";
 import { extractKeywords, extractWatchProviders } from "@/utils";
@@ -18,18 +18,7 @@ const KeywordsSection = lazy(() => import("@/components/sections/KeywordsSection
 const WatchProvidersSection = lazy(() => import("@/components/sections/WatchProvidersSection"));
 const MoreLikeThisSection = lazy(() => import("@/components/sections/MoreLikeThisSection"));
 
-const SectionSkeleton = () => (
-  <div className="w-full py-12 bg-zinc-900/50 animate-pulse">
-    <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-      <div className="h-8 bg-zinc-800 rounded w-48 mb-6" />
-      <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-24 bg-zinc-800 rounded" />
-        ))}
-      </div>
-    </div>
-  </div>
-);
+
 
 const TVShowDetailsPage = memo(function TVShowDetailsPage() {
   const { slugWithId } = useParams<{ slugWithId: string }>();
@@ -80,11 +69,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
     }, [data]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <LoadingFallback />
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   if (error || !data) {
@@ -111,14 +96,14 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 
       {/* Hero Section */}
       <LazyWrapper height={500}>
-        <Suspense fallback={<SectionSkeleton />}>
+        <Suspense fallback={<SectionSkeleton variant="hero" />}>
           <MediaHero media={data} />
         </Suspense>
       </LazyWrapper>
 
       {/* Media Info Section */}
       <LazyWrapper height={300}>
-        <Suspense fallback={<SectionSkeleton />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" />}>
           <MediaInfoSection media={data} />
         </Suspense>
       </LazyWrapper>
@@ -126,7 +111,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       {/* Episodes/Seasons Section */}
       {seasons.length > 0 && (
         <LazyWrapper height={500}>
-          <Suspense fallback={<SectionSkeleton />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
             <EpisodesSection seasons={seasons} tvShowId={data.id} />
           </Suspense>
         </LazyWrapper>
@@ -135,7 +120,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       {/* Trailers Section */}
       {trailers.length > 0 && (
         <LazyWrapper height={400}>
-          <Suspense fallback={<SectionSkeleton />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={3} />}>
             <TrailersSection videos={trailers} />
           </Suspense>
         </LazyWrapper>
@@ -143,7 +128,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 
       {/* Behind the Scenes Section */}
       <LazyWrapper height={400}>
-        <Suspense fallback={<SectionSkeleton />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <BehindTheScenesSection images={backdrops} />
         </Suspense>
       </LazyWrapper>
@@ -151,7 +136,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       {/* Reviews Section */}
       {reviews.length > 0 && (
         <LazyWrapper height={400}>
-          <Suspense fallback={<SectionSkeleton />}>
+          <Suspense fallback={<SectionSkeleton variant="list" cardCount={3} />}>
             <ReviewsSection reviews={reviews} />
           </Suspense>
         </LazyWrapper>
@@ -160,7 +145,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       {/* Keywords Section */}
       {keywords.length > 0 && (
         <LazyWrapper height={200}>
-          <Suspense fallback={<SectionSkeleton />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
             <section className="bg-black py-8 md:py-12">
               <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
                 <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
@@ -176,7 +161,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       {/* Watch Providers Section */}
       {watchProviders.length > 0 && (
         <LazyWrapper height={300}>
-          <Suspense fallback={<SectionSkeleton />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
             <WatchProvidersSection providers={watchProviders} />
           </Suspense>
         </LazyWrapper>
@@ -185,7 +170,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       {/* More Like This Section */}
       {similar.length > 0 && (
         <LazyWrapper height={500}>
-          <Suspense fallback={<SectionSkeleton />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
             <MoreLikeThisSection similar={similar} />
           </Suspense>
         </LazyWrapper>

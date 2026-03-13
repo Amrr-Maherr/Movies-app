@@ -2,7 +2,7 @@ import { memo, useMemo, lazy, Suspense, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback, Error } from "@/components/ui";
+import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchPersonDetails from "@/queries/FetchPersonDetails";
 import FetchPersonCredits from "@/queries/FetchPersonCredits";
@@ -56,11 +56,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
   }, [creditsData]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <LoadingFallback />
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   if (error || !personData) {
@@ -93,7 +89,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       {/* Social Links Section */}
       {externalIdsData && (
         <LazyWrapper height={150}>
-          <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
             <SocialLinksSection
               imdbId={externalIdsData.imdb_id}
               twitterId={externalIdsData.twitter_id}
@@ -109,7 +105,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       {/* Known For Section */}
       {(cast.length > 0 || crew.length > 0) && (
         <LazyWrapper height={400}>
-          <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
             <KnownForSection cast={cast} crew={crew} />
           </Suspense>
         </LazyWrapper>
@@ -117,7 +113,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
 
       {/* Biography Section */}
       <LazyWrapper height={400}>
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="list" cardCount={1} />}>
           <BiographySection
             biography={personData.biography}
             placeOfBirth={personData.place_of_birth}
@@ -131,7 +127,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       {/* Credits Section */}
       {(cast.length > 0 || crew.length > 0) && (
         <LazyWrapper height={600}>
-          <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
             <CreditsSection cast={cast} crew={crew} />
           </Suspense>
         </LazyWrapper>

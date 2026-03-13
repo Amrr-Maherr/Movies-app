@@ -2,7 +2,7 @@ import { memo, useMemo, lazy, Suspense, useCallback } from "react";
 import { useParams, Link } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback, Error } from "@/components/ui";
+import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { ArrowLeft, Calendar, Film, Clock, Star } from "lucide-react";
@@ -14,29 +14,7 @@ const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 const EpisodeCard = lazy(() => import("@/components/shared/cards/EpisodeCard"));
 
-const EpisodeCardSkeleton = () => (
-  <div className="bg-zinc-900/50 rounded-lg overflow-hidden animate-pulse">
-    <div className="aspect-video bg-zinc-800" />
-    <div className="p-4 space-y-3">
-      <div className="h-4 bg-zinc-800 rounded w-3/4" />
-      <div className="h-3 bg-zinc-800 rounded w-1/2" />
-      <div className="h-3 bg-zinc-800 rounded w-full" />
-    </div>
-  </div>
-);
 
-const SectionSkeleton = () => (
-  <div className="w-full py-12 bg-zinc-900/50 animate-pulse">
-    <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-      <div className="h-8 bg-zinc-800 rounded w-48 mb-6" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-        {[...Array(4)].map((_, i) => (
-          <EpisodeCardSkeleton key={i} />
-        ))}
-      </div>
-    </div>
-  </div>
-);
 
 const SeasonDetailsPage = memo(function SeasonDetailsPage() {
   const { tvId: tvIdParam, seasonNumber: seasonNumberParam } = useParams<{
@@ -91,11 +69,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
   );
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <LoadingFallback />
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   if (error || !season) {
@@ -203,14 +177,14 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
 
       {/* Episodes Section */}
       <LazyWrapper height={600}>
-        <Suspense fallback={<SectionSkeleton />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={8} />}>
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8">
             <h2 className="text-2xl font-bold text-white mb-6">Episodes</h2>
 
             {season.episodes && season.episodes.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                 {season.episodes.map((episode: Episode) => (
-                  <Suspense key={episode.id} fallback={<EpisodeCardSkeleton />}>
+                  <Suspense key={episode.id} fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
                     <EpisodeCard
                       episode={episode}
                       tvShowId={Number(tvId)}

@@ -2,8 +2,8 @@ import { lazy, Suspense, memo, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/shared/PageTransition";
-import { Loader } from "@/components/ui";
 import "@/index.css";
+import { PageSkeleton } from "@/components/ui";
 
 // ScrollToTop component - scrolls to top on route change
 const ScrollToTop = () => {
@@ -56,20 +56,12 @@ const SpeedTest = lazy(() => import("@/pages/SpeedTest"));
 const LegalNotices = lazy(() => import("@/pages/LegalNotices"));
 const OnlyOnNetflix = lazy(() => import("@/pages/OnlyOnNetflix"));
 
-// Memoized loading fallback to prevent re-renders on every render
-const LoadingFallback = memo(function LoadingFallback() {
-  return (
-    <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-      <Loader />
-    </div>
-  );
-});
 
 // Memoized AppRoutes component - avoids re-renders when parent updates
 const AppRoutes = memo(function AppRoutes() {
   const location = useLocation();
   return (
-    <Suspense fallback={<LoadingFallback />}>
+    <Suspense fallback={<PageSkeleton />}>
       <ScrollToTop />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>

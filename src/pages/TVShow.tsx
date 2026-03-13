@@ -1,9 +1,8 @@
 import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import TVShowFilters, { TVShowFilterOption } from "@/components/shared/TVShowFilters";
-import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import type { TvShow, HeroMedia } from "@/types";
 
 // Hooks
@@ -61,7 +60,7 @@ const TVShow = memo(function TVShow() {
         description="Browse the most popular, highly-rated, and currently airing TV series on Netflix."
       />
 
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="hero" />}>
         <LazyWrapper height={400}>
           <HeroSection
             data={tvShowsData as TvShow[] | undefined}
@@ -98,11 +97,9 @@ const TVShow = memo(function TVShow() {
       ) : (
         <LazyWrapper height={500}>
           {isLoading ? (
-            <div className="fade-in">
-              <MediaGridSkeleton />
-            </div>
+            <SectionSkeleton variant="grid" cardCount={12} />
           ) : (
-            <Suspense fallback={<LoadingFallback />}>
+            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
               <div className="slide-up">
                 <MediaGrid items={tvShowsData} emptyMessage="No TV Shows found for this filter." />
               </div>

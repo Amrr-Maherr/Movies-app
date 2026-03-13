@@ -1,5 +1,5 @@
 import { memo, useMemo, useCallback, lazy, Suspense } from "react";
-import { Loader, Error as ErrorComponent, LoadingFallback } from "@/components/ui";
+import { Error as ErrorComponent, SectionSkeleton, PageSkeleton } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import "@/index.css";
@@ -180,11 +180,7 @@ const Home = memo(function Home() {
   ]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <Loader />
-      </div>
-    );
+    return <PageSkeleton />;
   }
 
   if (error) {
@@ -207,13 +203,13 @@ const Home = memo(function Home() {
 
       {/* Hero Section - always visible, no lazy loading */}
       {AllData && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="hero" />}>
           <LazyWrapper height={300}>
             <HeroSection
               data={AllData}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
           </LazyWrapper>
         </Suspense>
@@ -221,7 +217,7 @@ const Home = memo(function Home() {
 
       {/* Top 10 Movies Section */}
       {trendingMoviesWeek && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={10} />}>
           <LazyWrapper height={300}>
             <TopPicksSection
               movies={trendingMoviesWeek}
@@ -232,7 +228,7 @@ const Home = memo(function Home() {
       )}
 
       {/* Trending Now */}
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={250}>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -240,7 +236,7 @@ const Home = memo(function Home() {
               data={trendingMoviesWeek}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
           </div>
         </LazyWrapper>
@@ -248,7 +244,7 @@ const Home = memo(function Home() {
 
       {/* New Releases Section */}
       {upcomingMovies && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={350}>
             <NewReleasesSection
               movies={upcomingMovies}
@@ -260,7 +256,7 @@ const Home = memo(function Home() {
 
       {/* Continue Watching Section */}
       {trendingTvWeek && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={350}>
             <ContinueWatchingSection
               movies={trendingTvWeek}
@@ -272,7 +268,7 @@ const Home = memo(function Home() {
       )}
 
       {/* Trending TV Shows */}
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={250}>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -280,7 +276,7 @@ const Home = memo(function Home() {
               data={trendingTvWeek}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
           </div>
         </LazyWrapper>
@@ -288,7 +284,7 @@ const Home = memo(function Home() {
 
       {/* First Promo - Left Aligned */}
       {popularMovies && popularMovies[0] && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="hero" />}>
           <LazyWrapper height={500}>
             <MoviePromo
               movie={popularMovies[0]}
@@ -301,7 +297,7 @@ const Home = memo(function Home() {
 
       {/* Only on Netflix Section */}
       {popularTv && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={400}>
             <OnlyOnNetflixSection movies={popularTv} mediaType="tv" />
           </LazyWrapper>
@@ -310,7 +306,7 @@ const Home = memo(function Home() {
 
       {/* Genre Showcase - Action */}
       {trendingMoviesDay && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={400}>
             <GenreShowcaseSection
               movies={trendingMoviesDay}
@@ -322,7 +318,7 @@ const Home = memo(function Home() {
       )}
 
       {/* Trending Today */}
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={250}>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -330,7 +326,7 @@ const Home = memo(function Home() {
               data={trendingMoviesDay}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
           </div>
         </LazyWrapper>
@@ -338,7 +334,7 @@ const Home = memo(function Home() {
 
       {/* Weekend Watch Section */}
       {popularMovies && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={400}>
             <WeekendWatchSection movies={popularMovies} mediaType="movie" />
           </LazyWrapper>
@@ -347,7 +343,7 @@ const Home = memo(function Home() {
 
       {/* Because You Watched Section */}
       {trendingTvDay && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={300}>
             <BecauseYouWatchedSection
               movies={trendingTvDay}
@@ -359,7 +355,7 @@ const Home = memo(function Home() {
       )}
 
       {/* Hot TV Shows Today & Popular Movies */}
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
         <LazyWrapper height={500}>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -367,14 +363,14 @@ const Home = memo(function Home() {
               data={trendingTvDay}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
             <MediaSection
               title="Popular Movies"
               data={popularMovies}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
           </div>
         </LazyWrapper>
@@ -382,16 +378,16 @@ const Home = memo(function Home() {
 
       {/* Second Promo - Right Aligned */}
       {popularTv && popularTv[1] && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="hero" />}>
           <LazyWrapper height={500}>
-            <MoviePromo movie={popularTv[1]} mediaType="tv" variant="right" />
+            <MoviePromo movie={popularTv[1]} mediaType="tv" variant="left" />
           </LazyWrapper>
         </Suspense>
       )}
 
       {/* Binge-Worthy Section */}
       {onTheAirTv && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={350}>
             <BingeWorthySection movies={onTheAirTv} mediaType="tv" />
           </LazyWrapper>
@@ -400,7 +396,7 @@ const Home = memo(function Home() {
 
       {/* Top 10 TV Shows */}
       {popularTv && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={10} />}>
           <LazyWrapper height={300}>
             <TopPicksSection
               movies={popularTv}
@@ -411,7 +407,7 @@ const Home = memo(function Home() {
       )}
 
       {/* Popular TV Shows & Coming Soon */}
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
         <LazyWrapper height={500}>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -419,14 +415,14 @@ const Home = memo(function Home() {
               data={popularTv}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
             <MediaSection
               title="Coming Soon"
               data={upcomingMovies}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
           </div>
         </LazyWrapper>
@@ -434,7 +430,7 @@ const Home = memo(function Home() {
 
       {/* Award Winners Section */}
       {topRatedMovies && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={350}>
             <AwardWinnersSection movies={topRatedMovies} mediaType="movie" />
           </LazyWrapper>
@@ -443,7 +439,7 @@ const Home = memo(function Home() {
 
       {/* Third Promo - Center Aligned */}
       {topRatedMovies && topRatedMovies[2] && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="hero" />}>
           <LazyWrapper height={500}>
             <MoviePromo
               movie={topRatedMovies[2]}
@@ -456,7 +452,7 @@ const Home = memo(function Home() {
 
       {/* Genre Showcase - Drama */}
       {airingTodayTv && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={400}>
             <GenreShowcaseSection
               movies={airingTodayTv}
@@ -468,7 +464,7 @@ const Home = memo(function Home() {
       )}
 
       {/* Airing Today */}
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={250}>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -476,7 +472,7 @@ const Home = memo(function Home() {
               data={airingTodayTv}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
           </div>
         </LazyWrapper>
@@ -484,7 +480,7 @@ const Home = memo(function Home() {
 
       {/* New Episodes This Week */}
       {airingTodayTv && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={350}>
             <NewReleasesSection
               movies={airingTodayTv}
@@ -495,7 +491,7 @@ const Home = memo(function Home() {
       )}
 
       {/* Now Playing in Theaters */}
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={250}>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -503,7 +499,7 @@ const Home = memo(function Home() {
               data={nowPlayingMovies}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
           </div>
         </LazyWrapper>
@@ -511,7 +507,7 @@ const Home = memo(function Home() {
 
       {/* Fourth Promo - Left Aligned */}
       {topRatedTv && topRatedTv[3] && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="hero" />}>
           <LazyWrapper height={500}>
             <MoviePromo movie={topRatedTv[3]} mediaType="tv" variant="left" />
           </LazyWrapper>
@@ -520,7 +516,7 @@ const Home = memo(function Home() {
 
       {/* Award Winners TV */}
       {topRatedTv && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={350}>
             <AwardWinnersSection movies={topRatedTv} mediaType="tv" />
           </LazyWrapper>
@@ -529,7 +525,7 @@ const Home = memo(function Home() {
 
       {/* Because You Watched Section 2 */}
       {nowPlayingMovies && (
-        <Suspense fallback={<LoadingFallback />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
           <LazyWrapper height={300}>
             <BecauseYouWatchedSection
               movies={nowPlayingMovies}
@@ -541,7 +537,7 @@ const Home = memo(function Home() {
       )}
 
       {/* Currently Airing */}
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={250}>
           <div className="py-6 md:py-8 container">
             <MediaSection
@@ -549,21 +545,21 @@ const Home = memo(function Home() {
               data={onTheAirTv}
               isLoading={false}
               error={null}
-              onRetry={() => {}}
+              onRetry={() => { }}
             />
           </div>
         </LazyWrapper>
       </Suspense>
 
       {/* Pricing Section */}
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={3} />}>
         <LazyWrapper height={550}>
           <PricingSection />
         </LazyWrapper>
       </Suspense>
 
       {/* FAQ Section */}
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="list" cardCount={6} />}>
         <LazyWrapper height={500}>
           <AskedQuestions />
         </LazyWrapper>

@@ -1,24 +1,15 @@
 import { useState, memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import InfiniteScroll from "react-infinite-scroll-component";
-import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import usePopularPeople from "@/queries/FetchPopularPeople";
 
 const PeopleFiltersLazy = lazy(() => import("@/components/Actors/PeopleFilters"));
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
-const FiltersSkeleton = () => (
-  <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6 animate-pulse">
-    <div className="flex flex-wrap gap-3">
-      {[...Array(8)].map((_, i) => (
-        <div key={i} className="h-10 w-24 bg-zinc-800 rounded-full" />
-      ))}
-    </div>
-  </div>
-);
+
 
 const ActorsPage = memo(function ActorsPage() {
   const [selectedGender, setSelectedGender] = useState<string>("all");
@@ -81,7 +72,7 @@ const ActorsPage = memo(function ActorsPage() {
 
       {/* Filters Section */}
       <LazyWrapper height={100}>
-        <Suspense fallback={<FiltersSkeleton />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
           <PeopleFiltersLazy
             selectedGender={selectedGender}
             onGenderSelect={handleGenderSelect}
@@ -108,14 +99,7 @@ const ActorsPage = memo(function ActorsPage() {
         <LazyWrapper height={600}>
           <AnimatePresence mode="wait">
             {isLoading ? (
-              <motion.div
-                key="skeleton"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <MediaGridSkeleton />
-              </motion.div>
+              <SectionSkeleton variant="grid" cardCount={12} />
             ) : (
               <motion.div
                 key={`grid-actors-${selectedGender}-${selectedLetter}`}
@@ -130,7 +114,7 @@ const ActorsPage = memo(function ActorsPage() {
                   loader={
                     isLoading ? (
                       <div className="py-10 flex items-center justify-center w-full">
-                        <LoadingFallback />
+                        <SectionSkeleton variant="grid" cardCount={6} />
                       </div>
                     ) : null
                   }
@@ -144,7 +128,7 @@ const ActorsPage = memo(function ActorsPage() {
                   style={{ overflow: "hidden" }}
                   scrollThreshold={0.8}
                 >
-                  <Suspense fallback={<MediaGridSkeleton />}>
+                  <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
                     <MediaGrid
                       items={allItems}
                       type="person"

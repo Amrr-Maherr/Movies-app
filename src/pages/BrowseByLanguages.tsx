@@ -1,10 +1,9 @@
 import { useState, memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import InfiniteScroll from "react-infinite-scroll-component";
-import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import type { HeroMedia } from "@/types";
 import useMediaByLanguage from "@/queries/FetchMediaByLanguage";
 import LanguagesFilter, { SUPPORTED_LANGUAGES } from "@/components/BrowseByLanguages/LanguagesFilter";
@@ -80,17 +79,9 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
         <LazyWrapper height={600}>
           <AnimatePresence mode="wait">
             {isLoading ? (
-              <motion.div
-                key="skeleton"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <MediaGridSkeleton />
-              </motion.div>
+              <SectionSkeleton variant="grid" cardCount={12} />
             ) : (
-              <Suspense fallback={<LoadingFallback />}>
+              <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
                 <motion.div
                   key={`grid-lang-${selectedLanguage}`}
                   initial={{ opacity: 0, y: 20 }}
@@ -104,7 +95,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
                     hasMore={!!hasNextPage}
                     loader={
                       <div className="h-24 flex items-center justify-center w-full">
-                        <LoadingFallback />
+                        <SectionSkeleton variant="grid" cardCount={6} />
                       </div>
                     }
                     endMessage={

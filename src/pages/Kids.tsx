@@ -1,9 +1,8 @@
 import { memo, lazy, Suspense, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { LoadingFallback } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import MediaGridSkeleton from "@/components/shared/MediaGridSkeleton";
 import type { Movie, HeroMedia } from "@/types";
 
 // Hooks
@@ -30,7 +29,7 @@ const Kids = memo(function Kids() {
         description="Discover movies that are perfect for the whole family on Netflix."
       />
 
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<SectionSkeleton variant="hero" />}>
         <LazyWrapper height={400}>
           <HeroSection
             data={moviesData as Movie[] | undefined}
@@ -64,17 +63,9 @@ const Kids = memo(function Kids() {
         <LazyWrapper height={500}>
           <AnimatePresence mode="wait">
             {isLoading ? (
-              <motion.div
-                key="skeleton"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-              >
-                <MediaGridSkeleton />
-              </motion.div>
+              <SectionSkeleton variant="grid" cardCount={12} />
             ) : (
-              <Suspense fallback={<LoadingFallback />}>
+              <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
                 <motion.div
                   key="grid-kids"
                   initial={{ opacity: 0, y: 20 }}

@@ -4,8 +4,7 @@ import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ArrowLeft, Clock, Calendar, Star } from "lucide-react";
-import { Loader } from "@/components/ui/loader";
-import { Error } from "@/components/ui/error";
+import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import FetchEpisodeDetails from "@/queries/FetchEpisodeDetails";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
@@ -13,26 +12,7 @@ const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const FullCreditsSection = lazy(() => import("@/components/sections/FullCreditsSection"));
 
-const CrewCardSkeleton = () => (
-  <div className="bg-zinc-900/50 rounded-lg p-4 text-center animate-pulse">
-    <div className="w-full aspect-[2/3] bg-zinc-800 rounded-md mb-3" />
-    <div className="h-4 bg-zinc-800 rounded w-3/4 mx-auto mb-2" />
-    <div className="h-3 bg-zinc-800 rounded w-1/2 mx-auto" />
-  </div>
-);
 
-const CreditsSectionSkeleton = () => (
-  <div className="w-full py-12 bg-zinc-900/50 animate-pulse">
-    <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-      <div className="h-8 bg-zinc-800 rounded w-48 mb-6" />
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {[...Array(6)].map((_, i) => (
-          <CrewCardSkeleton key={i} />
-        ))}
-      </div>
-    </div>
-  </div>
-);
 
 const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
   const { tvId, seasonNumber, episodeNumber } = useParams<{
@@ -115,7 +95,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
   }, [navigate, tvId, seasonNumber, episode]);
 
   if (isLoading) {
-    return <Loader fullscreen size="lg" />;
+    return <PageSkeleton />;
   }
 
   if (error || !episode) {
@@ -231,7 +211,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       {/* Guest Stars Section */}
       {guestStars.length > 0 && (
         <LazyWrapper>
-          <Suspense fallback={<CreditsSectionSkeleton />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
             <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
               <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
                 <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
