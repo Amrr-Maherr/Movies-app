@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetPersonMovieCredits, GetPersonTVCredits } from "@/api/PersonCreditsExtended";
-import type { PersonMovieCreditsResponse, PersonTVCreditsResponse } from "@/api/PersonCreditsExtended";
+import { getPersonMovieCredits, getPersonTVCredits, type PersonMovieCreditsResponse, type PersonTVCreditsResponse } from "@/services";
 
 /**
  * Hook for fetching person's movie credits
@@ -10,7 +9,7 @@ import type { PersonMovieCreditsResponse, PersonTVCreditsResponse } from "@/api/
 export function usePersonMovieCredits(personId: number) {
   return useQuery<PersonMovieCreditsResponse | null>({
     queryKey: ["person", "movie-credits", personId],
-    queryFn: () => GetPersonMovieCredits(personId),
+    queryFn: () => getPersonMovieCredits(personId),
     enabled: !!personId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,
@@ -25,7 +24,7 @@ export function usePersonMovieCredits(personId: number) {
 export function usePersonTVCredits(personId: number) {
   return useQuery<PersonTVCreditsResponse | null>({
     queryKey: ["person", "tv-credits", personId],
-    queryFn: () => GetPersonTVCredits(personId),
+    queryFn: () => getPersonTVCredits(personId),
     enabled: !!personId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,

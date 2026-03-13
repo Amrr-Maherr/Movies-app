@@ -1,11 +1,10 @@
-import { GetTvShowDetails } from "@/api/TvShowDetails";
-import type { TvShowDetails } from "@/types";
+import { getTVShowDetails } from "@/services";
 import { useQuery } from "@tanstack/react-query";
 
 export default function FetchTvShowDetails(id: number) {
-  const { data, error, refetch, isLoading } = useQuery<TvShowDetails>({
+  const { data, error, refetch, isLoading } = useQuery({
     queryKey: ["TvShowDetails", id],
-    queryFn: () => GetTvShowDetails(Number(id)) as Promise<TvShowDetails>,
+    queryFn: () => getTVShowDetails(Number(id)),
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,
   });

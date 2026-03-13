@@ -1,5 +1,5 @@
 import OptimizedImage from '@/components/ui/OptimizedImage';
-import logo from '@/assets/logos/Netflix_Logo_RGB.png'
+import logo from '@/assets/logos/vite.svg'
 import type { LogoProps } from '@/types/logo';
 
 export default function Logo({ className = "w-[50px] h-[50px]" }: LogoProps) {

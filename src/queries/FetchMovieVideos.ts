@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetMovieVideos } from "@/api/MovieVideos";
-import type { MovieVideosResponse } from "@/api/MovieVideos";
+import { getMovieVideos, type MovieVideosResponse } from "@/services";
 
 /**
  * Hook for fetching movie videos (trailers, teasers, clips)
@@ -11,7 +10,7 @@ import type { MovieVideosResponse } from "@/api/MovieVideos";
 export function useMovieVideos(movieId: number, page: number = 1) {
   return useQuery<MovieVideosResponse | null>({
     queryKey: ["movie", "videos", movieId, page],
-    queryFn: () => GetMovieVideos(movieId, page),
+    queryFn: () => getMovieVideos(movieId, page),
     enabled: !!movieId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,

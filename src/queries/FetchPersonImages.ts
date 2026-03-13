@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetPersonImages } from "@/api/PersonImages";
-import type { PersonImagesResponse } from "@/api/PersonImages";
+import { getPersonImages, type PersonImagesResponse } from "@/services";
 
 /**
  * Hook for fetching person's profile images
@@ -10,7 +9,7 @@ import type { PersonImagesResponse } from "@/api/PersonImages";
 export function usePersonImages(personId: number) {
   return useQuery<PersonImagesResponse | null>({
     queryKey: ["person", "images", personId],
-    queryFn: () => GetPersonImages(personId),
+    queryFn: () => getPersonImages(personId),
     enabled: !!personId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,

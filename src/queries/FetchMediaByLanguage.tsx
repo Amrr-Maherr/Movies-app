@@ -1,5 +1,4 @@
-import { GetMediaByLanguage } from "@/api/MediaByLanguage";
-import type { PopularMoviesResponse } from "@/types";
+import { getMediaByLanguage } from "@/services";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 export default function useMediaByLanguage(languageCode: string) {
@@ -11,9 +10,23 @@ export default function useMediaByLanguage(languageCode: string) {
     isFetchingNextPage,
     refetch,
     isLoading,
-  } = useInfiniteQuery<PopularMoviesResponse>({
+  } = useInfiniteQuery({
     queryKey: ["mediaByLanguage", languageCode],
-    queryFn: ({ pageParam = 1 }) => GetMediaByLanguage(languageCode, pageParam as number) as Promise<PopularMoviesResponse>,
+    queryFn: async ({ pageParam = 1 }) => {
+      const result = await getMediaByLanguage(
+        languageCode,
+        pageParam as number,
+      );
+      if (!result) {
+        throw new Error("Failed to fetch media by language");
+      }
+      return {
+        page: pageParam as number,
+        results: result,
+        total_pages: 100,
+        total_results: result.length,
+      };
+    },
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       if (lastPage.page < lastPage.total_pages) {
@@ -21,18 +34,18 @@ export default function useMediaByLanguage(languageCode: string) {
       }
       return undefined;
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
     retry: 2,
-    enabled: !!languageCode, // Only fetch if a language is specified
+    enabled: !!languageCode,
   });
 
-  return { 
-    data, 
-    error, 
-    fetchNextPage, 
-    hasNextPage, 
-    isFetchingNextPage, 
-    refetch, 
-    isLoading 
+  return {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+    isLoading,
   };
 }

@@ -1,11 +1,11 @@
-import { GetTrendingTvWeek } from "@/api/TrendingTvWeek";
+import { getTrendingTvShowsWeek } from "@/services";
 import type { TvShow } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useTrendingTvWeek(page: number = 1) {
   const { data, error, refetch, isLoading } = useQuery<TvShow[]>({
     queryKey: ["trendingTvWeek", page],
-    queryFn: () => GetTrendingTvWeek(page) as Promise<TvShow[]>,
+    queryFn: () => getTrendingTvShowsWeek(page) as Promise<TvShow[]>,
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,
   });

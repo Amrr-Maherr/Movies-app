@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetTVSimilar } from "@/api/TVSimilar";
-import type { TVSimilarResponse } from "@/api/TVSimilar";
+import { getTVSimilar, type TVSimilarResponse } from "@/services";
 
 /**
  * Hook for fetching similar TV shows
@@ -11,7 +10,7 @@ import type { TVSimilarResponse } from "@/api/TVSimilar";
 export function useTVSimilar(tvId: number, page: number = 1) {
   return useQuery<TVSimilarResponse | null>({
     queryKey: ["tv", "similar", tvId, page],
-    queryFn: () => GetTVSimilar(tvId, page),
+    queryFn: () => getTVSimilar(tvId, page),
     enabled: !!tvId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,

@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetMovieRecommendations } from "@/api/MovieRecommendations";
-import type { MovieRecommendationsResponse } from "@/api/MovieRecommendations";
+import { getMovieRecommendations, type MovieRecommendationsResponse } from "@/services";
 
 /**
  * Hook for fetching movie recommendations
@@ -11,7 +10,7 @@ import type { MovieRecommendationsResponse } from "@/api/MovieRecommendations";
 export function useMovieRecommendations(movieId: number, page: number = 1) {
   return useQuery<MovieRecommendationsResponse | null>({
     queryKey: ["movie", "recommendations", movieId, page],
-    queryFn: () => GetMovieRecommendations(movieId, page),
+    queryFn: () => getMovieRecommendations(movieId, page),
     enabled: !!movieId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,

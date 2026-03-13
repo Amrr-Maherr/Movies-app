@@ -1,11 +1,10 @@
-import { GetMovieDetails } from "@/api/MovieDetails";
-import type { MovieDetails } from "@/types";
+import { getMovieDetails } from "@/services";
 import { useQuery } from "@tanstack/react-query";
 
 export default function FetchMovieDetails(id: number) {
-  const { data, error, refetch, isLoading } = useQuery<MovieDetails>({
+  const { data, error, refetch, isLoading } = useQuery({
     queryKey: ["MovieDetails", id],
-    queryFn: () => GetMovieDetails(Number(id)) as Promise<MovieDetails>,
+    queryFn: () => getMovieDetails(Number(id)),
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,
   });

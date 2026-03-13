@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetTVVideos } from "@/api/TVVideos";
-import type { TVVideosResponse } from "@/api/TVVideos";
+import { getTVVideos, type TVVideosResponse } from "@/services";
 
 /**
  * Hook for fetching TV show videos (trailers, teasers, clips)
@@ -11,7 +10,7 @@ import type { TVVideosResponse } from "@/api/TVVideos";
 export function useTVVideos(tvId: number, page: number = 1) {
   return useQuery<TVVideosResponse | null>({
     queryKey: ["tv", "videos", tvId, page],
-    queryFn: () => GetTVVideos(tvId, page),
+    queryFn: () => getTVVideos(tvId, page),
     enabled: !!tvId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,

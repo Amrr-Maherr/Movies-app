@@ -1,14 +1,20 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getPopularPeople } from "@/api/PopularPeople";
-import type { PopularPeopleResponse } from "@/types/person";
+import { getPopularPeople } from "@/services";
+import type { PopularPeopleResponse } from "@/services/personService";
 
 const usePopularPeople = () => {
-  return useInfiniteQuery<PopularPeopleResponse>({
+  return useInfiniteQuery<PopularPeopleResponse, Error>({
     queryKey: ["popularPeople"],
-    queryFn: ({ pageParam = 1 }) => getPopularPeople(pageParam as number),
+    queryFn: async ({ pageParam = 1 }) => {
+      const result = await getPopularPeople(pageParam as number);
+      if (!result) {
+        throw new Error("Failed to fetch popular people");
+      }
+      return result;
+    },
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      if (lastPage.page < lastPage.total_pages) {
+      if (lastPage && lastPage.page < lastPage.total_pages) {
         return lastPage.page + 1;
       }
       return undefined;

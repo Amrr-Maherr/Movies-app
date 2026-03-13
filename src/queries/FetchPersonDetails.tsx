@@ -1,4 +1,9 @@
-import { GetPersonDetails, GetPersonExternalIds, type PersonDetails, type PersonExternalIds } from "@/api/PersonDetails";
+import {
+  getPersonDetails,
+  getPersonExternalIds,
+  type PersonDetails,
+  type PersonExternalIds,
+} from "@/services";
 import { useQuery } from "@tanstack/react-query";
 
 interface FetchPersonDetailsReturn {
@@ -9,7 +14,9 @@ interface FetchPersonDetailsReturn {
   isLoading: boolean;
 }
 
-export default function FetchPersonDetails(id: number): FetchPersonDetailsReturn {
+export default function FetchPersonDetails(
+  id: number,
+): FetchPersonDetailsReturn {
   const {
     data: personData,
     error: personError,
@@ -17,7 +24,7 @@ export default function FetchPersonDetails(id: number): FetchPersonDetailsReturn
     isLoading: personLoading,
   } = useQuery<PersonDetails | null>({
     queryKey: ["PersonDetails", id],
-    queryFn: () => GetPersonDetails(id) as Promise<PersonDetails | null>,
+    queryFn: () => getPersonDetails(id) as Promise<PersonDetails | null>,
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,
   });
@@ -29,7 +36,8 @@ export default function FetchPersonDetails(id: number): FetchPersonDetailsReturn
     isLoading: externalIdsLoading,
   } = useQuery<PersonExternalIds | null>({
     queryKey: ["PersonExternalIds", id],
-    queryFn: () => GetPersonExternalIds(id) as Promise<PersonExternalIds | null>,
+    queryFn: () =>
+      getPersonExternalIds(id) as Promise<PersonExternalIds | null>,
     staleTime: 5 * 60 * 1000,
     retry: 2,
   });

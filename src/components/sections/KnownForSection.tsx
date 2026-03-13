@@ -2,7 +2,7 @@ import { memo, useMemo } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import Card from "@/components/shared/Card/Card";
 import { getKnownForItems } from "@/utils";
-import type { CastCredit, CrewCredit } from "@/api/PersonCredits";
+import type { CastCredit, CrewCredit } from "@/services/personService";
 
 interface KnownForSectionProps {
   cast: CastCredit[];

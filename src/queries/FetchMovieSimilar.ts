@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetMovieSimilar } from "@/api/MovieSimilar";
-import type { MovieSimilarResponse } from "@/api/MovieSimilar";
+import { getMovieSimilar, type MovieSimilarResponse } from "@/services";
 
 /**
  * Hook for fetching similar movies
@@ -11,7 +10,7 @@ import type { MovieSimilarResponse } from "@/api/MovieSimilar";
 export function useMovieSimilar(movieId: number, page: number = 1) {
   return useQuery<MovieSimilarResponse | null>({
     queryKey: ["movie", "similar", movieId, page],
-    queryFn: () => GetMovieSimilar(movieId, page),
+    queryFn: () => getMovieSimilar(movieId, page),
     enabled: !!movieId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,

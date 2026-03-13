@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetTVReviews } from "@/api/TVReviews";
-import type { TVReviewsResponse } from "@/api/TVReviews";
+import { getTVReviews, type TVReviewsResponse } from "@/services";
 
 /**
  * Hook for fetching TV show reviews
@@ -11,7 +10,7 @@ import type { TVReviewsResponse } from "@/api/TVReviews";
 export function useTVReviews(tvId: number, page: number = 1) {
   return useQuery<TVReviewsResponse | null>({
     queryKey: ["tv", "reviews", tvId, page],
-    queryFn: () => GetTVReviews(tvId, page),
+    queryFn: () => getTVReviews(tvId, page),
     enabled: !!tvId,
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,

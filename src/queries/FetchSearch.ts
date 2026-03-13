@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { SearchMovies, SearchTvShows } from "@/api/Search";
+import { searchMovies, searchTvShows } from "@/services";
 import type { Movie, TvShow } from "@/types/movies";
 
 export interface SearchResult {
@@ -18,7 +18,7 @@ export function useSearch(query: string) {
     error: moviesError,
   } = useQuery({
     queryKey: ["search", "movies", query],
-    queryFn: () => SearchMovies(query) as Promise<Movie[]>,
+    queryFn: () => searchMovies(query) as Promise<Movie[]>,
     enabled: query.length >= 2,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -29,7 +29,7 @@ export function useSearch(query: string) {
     error: tvError,
   } = useQuery({
     queryKey: ["search", "tv", query],
-    queryFn: () => SearchTvShows(query) as Promise<TvShow[]>,
+    queryFn: () => searchTvShows(query) as Promise<TvShow[]>,
     enabled: query.length >= 2,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });

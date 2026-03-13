@@ -81,8 +81,8 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
           review.author && review.content?.trim(),
       ) || [];
 
-    const keywords = extractKeywords(data.keywords);
-    const watchProviders = extractWatchProviders(data);
+    const keywords = extractKeywords(data.keywords as any);
+    const watchProviders = extractWatchProviders(data as any);
     const similar = data.similar?.results || [];
     const seasons = data.seasons || [];
     const backdrops = data.images?.backdrops || [];
@@ -131,7 +131,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       {/* Hero Section */}
       <LazyWrapper height={500}>
         <Suspense fallback={<SectionSkeleton variant="hero" />}>
-          <MediaHero media={data} />
+          <MediaHero media={data as any} />
         </Suspense>
       </LazyWrapper>
 
@@ -141,7 +141,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       {/* Media Info Section */}
       <LazyWrapper height={300}>
         <Suspense fallback={<SectionSkeleton variant="grid" />}>
-          <MediaInfoSection media={data} />
+          <MediaInfoSection media={data as any} />
         </Suspense>
       </LazyWrapper>
 

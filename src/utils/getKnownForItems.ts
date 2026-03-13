@@ -1,4 +1,4 @@
-import type { CastCredit, CrewCredit } from "@/api/PersonCredits";
+import type { CastCredit, CrewCredit } from "@/services/personService";
 
 /**
  * Combines and sorts credits by popularity to show "known for" items.

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetTVCredits } from "@/api/TVCredits";
+import { getTVCredits } from "@/services";
 import type { Credits } from "@/types";
 
 /**
@@ -10,7 +10,7 @@ import type { Credits } from "@/types";
 export function useTVCredits(tvId: number) {
   return useQuery<Credits | null>({
     queryKey: ["tv", "credits", tvId],
-    queryFn: () => GetTVCredits(tvId),
+    queryFn: () => getTVCredits(tvId),
     enabled: !!tvId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,

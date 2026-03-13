@@ -19,9 +19,7 @@ const CardPoster = memo(
     }, [movie.poster_path]);
 
     return (
-      <div
-        className={`relative aspect-[2/3] w-full overflow-hidden ${className}`}
-      >
+      <div className={`relative aspect-[2/3] w-full ${className}`}>
         {/* Rank Badge (for trending top 10) */}
         {rank && (
           <div className="absolute top-0 left-0 z-30 bg-gradient-to-br from-orange-500 to-red-600 text-white w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center font-bold text-base sm:text-lg rounded-full shadow-lg border-2 border-[var(--background-primary)]">

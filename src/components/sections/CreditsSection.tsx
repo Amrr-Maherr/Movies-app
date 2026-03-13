@@ -1,7 +1,7 @@
 import { memo, useMemo, useState, useCallback } from "react";
 import Slider from "@/components/shared/Slider/slider";
 import Card from "@/components/shared/Card/Card";
-import type { CastCredit, CrewCredit } from "@/api/PersonCredits";
+import type { CastCredit, CrewCredit } from "@/services/personService";
 
 type FilterType = "all" | "movies" | "tv";
 
@@ -69,9 +69,7 @@ const CreditsSection = memo(function CreditsSection({
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         {/* Header with Filter */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-          <h2 className="text-xl md:text-2xl font-bold text-white">
-            Credits
-          </h2>
+          <h2 className="text-xl md:text-2xl font-bold text-white">Credits</h2>
 
           {/* Filter Buttons */}
           <div className="flex items-center gap-2">

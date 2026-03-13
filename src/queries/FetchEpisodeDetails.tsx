@@ -1,4 +1,4 @@
-import { GetEpisodeDetails } from "@/api/GetEpisodeDetails";
+import { getTVEpisodeDetails } from "@/services";
 import type { Episode } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
@@ -12,12 +12,16 @@ interface FetchEpisodeDetailsReturn {
 export default function FetchEpisodeDetails(
   tvShowId: number,
   seasonNumber: number,
-  episodeNumber: number
+  episodeNumber: number,
 ): FetchEpisodeDetailsReturn {
   const { data, error, refetch, isLoading } = useQuery<Episode>({
     queryKey: ["EpisodeDetails", tvShowId, seasonNumber, episodeNumber],
     queryFn: () =>
-      GetEpisodeDetails(tvShowId, seasonNumber, episodeNumber) as Promise<Episode>,
+      getTVEpisodeDetails(
+        tvShowId,
+        seasonNumber,
+        episodeNumber,
+      ) as Promise<Episode>,
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,
     enabled: tvShowId > 0 && seasonNumber > 0 && episodeNumber > 0,

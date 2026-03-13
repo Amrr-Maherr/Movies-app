@@ -1,5 +1,5 @@
 import { useMemo, memo } from "react";
-import type { PersonDetails } from "@/api/PersonDetails";
+import type { PersonDetails } from "@/services/personService";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { formatDate, calculateAge } from "@/utils";
 
@@ -14,9 +14,7 @@ const PersonHero = memo(function PersonHero({ person }: PersonHeroProps) {
   // Memoized: Profile URL - avoids string concatenation on every render
   const profileUrl = useMemo(
     () =>
-      person.profile_path
-        ? `${IMAGE_BASE_URL}${person.profile_path}`
-        : null,
+      person.profile_path ? `${IMAGE_BASE_URL}${person.profile_path}` : null,
     [person.profile_path],
   );
 

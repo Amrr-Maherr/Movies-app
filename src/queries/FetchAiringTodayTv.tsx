@@ -1,11 +1,11 @@
-import { GetAiringTodayTv } from "@/api/AiringTodayTv";
+import { getAiringTodayTvShows } from "@/services";
 import type { TvShow } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useAiringTodayTv(page: number = 1) {
   const { data, error, refetch, isLoading } = useQuery<TvShow[]>({
     queryKey: ["airingTodayTv", page],
-    queryFn: () => GetAiringTodayTv(page) as Promise<TvShow[]>,
+    queryFn: () => getAiringTodayTvShows(page) as Promise<TvShow[]>,
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,
   });

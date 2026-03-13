@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetTVImages } from "@/api/TVImages";
-import type { TVImagesResponse } from "@/api/TVImages";
+import { getTVImages, type TVImagesResponse } from "@/services";
 
 /**
  * Hook for fetching TV show images (posters, backdrops, logos)
@@ -10,7 +9,7 @@ import type { TVImagesResponse } from "@/api/TVImages";
 export function useTVImages(tvId: number) {
   return useQuery<TVImagesResponse | null>({
     queryKey: ["tv", "images", tvId],
-    queryFn: () => GetTVImages(tvId),
+    queryFn: () => getTVImages(tvId),
     enabled: !!tvId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,

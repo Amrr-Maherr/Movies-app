@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetTVWatchProviders } from "@/api/TVWatchProviders";
-import type { TVWatchProvidersResponse } from "@/api/TVWatchProviders";
+import { getTVWatchProviders, type TVWatchProvidersResponse } from "@/services";
 
 /**
  * Hook for fetching TV show watch providers
@@ -11,7 +10,7 @@ import type { TVWatchProvidersResponse } from "@/api/TVWatchProviders";
 export function useTVWatchProviders(tvId: number, region: string = "US") {
   return useQuery<TVWatchProvidersResponse | null>({
     queryKey: ["tv", "watch-providers", tvId, region],
-    queryFn: () => GetTVWatchProviders(tvId, region),
+    queryFn: () => getTVWatchProviders(tvId, region),
     enabled: !!tvId,
     staleTime: 15 * 60 * 1000, // 15 minutes
     retry: 2,

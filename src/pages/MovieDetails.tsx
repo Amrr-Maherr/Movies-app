@@ -84,7 +84,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       {/* Hero Section */}
       <LazyWrapper height={500}>
         <Suspense fallback={<SectionSkeleton variant="hero" />}>
-          <MediaHero media={data} />
+          <MediaHero media={data as any} />
         </Suspense>
       </LazyWrapper>
 
@@ -94,7 +94,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       {/* Media Info Section */}
       <LazyWrapper height={300}>
         <Suspense fallback={<SectionSkeleton variant="grid" />}>
-          <MediaInfoSection media={data} />
+          <MediaInfoSection media={data as any} />
         </Suspense>
       </LazyWrapper>
 

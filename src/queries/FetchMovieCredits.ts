@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetMovieCredits } from "@/api/MovieCredits";
+import { getMovieCredits } from "@/services";
 import type { Credits } from "@/types";
 
 /**
@@ -10,7 +10,7 @@ import type { Credits } from "@/types";
 export function useMovieCredits(movieId: number) {
   return useQuery<Credits | null>({
     queryKey: ["movie", "credits", movieId],
-    queryFn: () => GetMovieCredits(movieId),
+    queryFn: () => getMovieCredits(movieId),
     enabled: !!movieId,
     staleTime: 10 * 60 * 1000, // 10 minutes
     retry: 2,

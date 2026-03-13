@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetNowPlayingMovies } from "@/api/NowPlayingMovies";
+import { getNowPlayingMovies } from "@/services";
 import type { Movie } from "@/types";
 
 /**
@@ -11,7 +11,7 @@ export function useNowPlayingMoviesQuery(page: number = 1) {
   return useQuery<Movie[]>({
     queryKey: ["movies", "now-playing", page],
     queryFn: async () => {
-      const result = await GetNowPlayingMovies(page);
+      const result = await getNowPlayingMovies(page);
       return result || [];
     },
     staleTime: 5 * 60 * 1000, // 5 minutes

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link, Tv, DollarSign, Gift } from "lucide-react";
 import { cn } from "@/lib/utils";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import type { WatchProviderRegion } from "@/api/MovieWatchProviders";
+import type { WatchProviderRegion } from "@/services/moviesService";
 
 interface WatchProvidersDetailProps {
   providers?: WatchProviderRegion;

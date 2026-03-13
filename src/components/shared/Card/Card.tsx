@@ -51,8 +51,18 @@ export interface CardProps {
   movie?: HeroMedia;
   episode?: Episode;
   season?: Season;
-  person?: { id: number; name: string; profileImage: string | null; role: string };
-  review?: { author: string; rating?: number | null; content: string; date: string };
+  person?: {
+    id: number;
+    name: string;
+    profileImage: string | null;
+    role: string;
+  };
+  review?: {
+    author: string;
+    rating?: number | null;
+    content: string;
+    date: string;
+  };
   trailer?: { videoKey: string; name: string; type?: string };
   variant?:
     | "standard"
@@ -136,10 +146,7 @@ const Card = memo(
       () => (movie ? getMatchScore(movie.vote_average) : 98),
       [movie],
     );
-    const year = useMemo(
-      () => getYear(releaseDate || ""),
-      [releaseDate],
-    );
+    const year = useMemo(() => getYear(releaseDate || ""), [releaseDate]);
     const ageRating = useMemo(
       () => (movie ? getAgeRating(movie.vote_average) : "13+"),
       [movie],
@@ -160,11 +167,14 @@ const Card = memo(
       }
     }, [onClick, navigate, detailsUrl]);
 
-    const handleMoreInfoClick = useCallback((e: React.MouseEvent) => {
-      e.stopPropagation();
-      e.preventDefault();
-      if (movie) openModal(movie);
-    }, [openModal, movie]);
+    const handleMoreInfoClick = useCallback(
+      (e: React.MouseEvent) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (movie) openModal(movie);
+      },
+      [openModal, movie],
+    );
 
     const handlePlayClick = useCallback(
       (e: React.MouseEvent) => {
@@ -199,7 +209,8 @@ const Card = memo(
         : null;
     }, [movie]);
 
-    const finalMatchPercentage = matchPercentageProp ?? calculatedMatchPercentage;
+    const finalMatchPercentage =
+      matchPercentageProp ?? calculatedMatchPercentage;
 
     // Episode Variant logic
     const episodeImageUrl = useMemo(() => {
@@ -280,7 +291,9 @@ const Card = memo(
 
     const truncatedReview = useMemo(() => {
       if (!review?.content) return "";
-      return review.content.length <= 150 ? review.content : review.content.slice(0, 150) + "...";
+      return review.content.length <= 150
+        ? review.content
+        : review.content.slice(0, 150) + "...";
     }, [review]);
 
     // Season Variant logic
@@ -297,7 +310,10 @@ const Card = memo(
     const seasonAirDate = useMemo(() => {
       if (!season?.air_date) return "TBA";
       try {
-        return new Date(season.air_date).toLocaleDateString("en-US", { year: "numeric", month: "short" });
+        return new Date(season.air_date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+        });
       } catch {
         return season.air_date;
       }
@@ -334,72 +350,71 @@ const Card = memo(
       return (
         <LazyWrapper height={350}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <Link
-            to={detailsUrl}
-            className="relative group cursor-pointer block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <div className="relative aspect-[2/3] rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]">
-              <OptimizedImage
-                src={posterUrl}
-                alt={title}
-                className="w-full h-full transition-transform duration-500 "
-                objectFit="cover"
-              />
-              <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
-                <span className="text-[var(--success)] text-xs font-bold">
-                  {matchScore}%
-                </span>
-              </div>
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
-                style={{ pointerEvents: isHovered ? "auto" : "none" }}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <button
-                    className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
-                    onClick={handlePlayClick}
-                  >
-                    <span className="sr-only">Play</span>
-                    <svg className="h-3 w-3 fill-black" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </button>
-                  <button
-                    className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
-                    onClick={handleMoreInfoClick}
-                  >
-                    <span className="sr-only">More info</span>
-                    <svg
-                      className="h-3 w-3"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <circle cx="12" cy="12" r="10" />
-                      <path d="M12 16v-4M12 8h.01" />
-                    </svg>
-                  </button>
-                </div>
-                <CardMetadata
-                  matchScore={matchScore}
-                  ageRating={ageRating}
-                  variant="compact"
+            <Link
+              to={detailsUrl}
+              className="relative group cursor-pointer block"
+              onMouseEnter={handleCardMouseEnter}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <div className="relative aspect-[2/3] rounded-md shadow-lg bg-[var(--background-secondary)]">
+                <OptimizedImage
+                  src={posterUrl}
+                  alt={title}
+                  className="w-full h-full transition-transform duration-500 "
+                  objectFit="cover"
                 />
+                <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
+                  <span className="text-[var(--success)] text-xs font-bold">
+                    {matchScore}%
+                  </span>
+                </div>
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
+                  style={{ pointerEvents: isHovered ? "auto" : "none" }}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <button
+                      className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
+                      onClick={handlePlayClick}
+                    >
+                      <span className="sr-only">Play</span>
+                      <svg className="h-3 w-3 fill-black" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </button>
+                    <button
+                      className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
+                      onClick={handleMoreInfoClick}
+                    >
+                      <span className="sr-only">More info</span>
+                      <svg
+                        className="h-3 w-3"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 16v-4M12 8h.01" />
+                      </svg>
+                    </button>
+                  </div>
+                  <CardMetadata
+                    matchScore={matchScore}
+                    ageRating={ageRating}
+                    variant="compact"
+                  />
+                </div>
               </div>
-            </div>
-            <p className="mt-2 text-xs sm:text-sm text-[var(--text-primary)] font-medium text-center line-clamp-1 group-hover:text-white transition-colors">
-              {title}
-            </p>
-          </Link>
-        
-          </motion.div></LazyWrapper>
+              <p className="mt-2 text-xs sm:text-sm text-[var(--text-primary)] font-medium text-center line-clamp-1 group-hover:text-white transition-colors">
+                {title}
+              </p>
+            </Link>
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -408,29 +423,28 @@ const Card = memo(
       return (
         <LazyWrapper height={350}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <Link
-            to={detailsUrl}
-            className="relative group cursor-pointer block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <Top10Badge rank={rank} />
-            <div className="relative aspect-[2/3] overflow-hidden rounded">
-              <OptimizedImage
-                src={posterUrl}
-                alt={title}
-                className="w-full h-full transition-transform duration-500 "
-                objectFit="cover"
-              />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
-            </div>
-          </Link>
-        
-          </motion.div></LazyWrapper>
+            <Link
+              to={detailsUrl}
+              className="relative group cursor-pointer block"
+              onMouseEnter={handleCardMouseEnter}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <Top10Badge rank={rank} />
+              <div className="relative aspect-[2/3] rounded">
+                <OptimizedImage
+                  src={posterUrl}
+                  alt={title}
+                  className="w-full h-full transition-transform duration-500 "
+                  objectFit="cover"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
+              </div>
+            </Link>
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -439,27 +453,26 @@ const Card = memo(
       return (
         <LazyWrapper height={350}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <Link
-            to={detailsUrl}
-            className="group cursor-pointer block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <NewReleaseLayout
-              movie={movie}
-              title={title}
-              posterUrl={posterUrl}
-              ratingValue={ratingValue ?? undefined}
-              formattedReleaseDate={formattedReleaseDate ?? undefined}
-              isHovered={isHovered}
-            />
-          </Link>
-        
-          </motion.div></LazyWrapper>
+            <Link
+              to={detailsUrl}
+              className="group cursor-pointer block"
+              onMouseEnter={handleCardMouseEnter}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <NewReleaseLayout
+                movie={movie}
+                title={title}
+                posterUrl={posterUrl}
+                ratingValue={ratingValue ?? undefined}
+                formattedReleaseDate={formattedReleaseDate ?? undefined}
+                isHovered={isHovered}
+              />
+            </Link>
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -468,26 +481,25 @@ const Card = memo(
       return (
         <LazyWrapper height={350}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <Link
-            to={detailsUrl}
-            className="group cursor-pointer relative block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <AwardWinnerLayout
-              movie={movie}
-              title={title}
-              posterUrl={posterUrl}
-              ratingValue={ratingValue ?? undefined}
-              isHovered={isHovered}
-            />
-          </Link>
-        
-          </motion.div></LazyWrapper>
+            <Link
+              to={detailsUrl}
+              className="group cursor-pointer relative block"
+              onMouseEnter={handleCardMouseEnter}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <AwardWinnerLayout
+                movie={movie}
+                title={title}
+                posterUrl={posterUrl}
+                ratingValue={ratingValue ?? undefined}
+                isHovered={isHovered}
+              />
+            </Link>
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -496,17 +508,16 @@ const Card = memo(
       return (
         <LazyWrapper height={200}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <ContinueWatchingLayout
-            title={title}
-            imageUrl={backdropUrl}
-            progress={progress || 0}
-          />
-        
-          </motion.div></LazyWrapper>
+            <ContinueWatchingLayout
+              title={title}
+              imageUrl={backdropUrl}
+              progress={progress || 0}
+            />
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -515,23 +526,22 @@ const Card = memo(
       return (
         <LazyWrapper height={400}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <ShowcaseLayout
-            title={title}
-            imageUrl={promoImageUrl}
-            detailsUrl={detailsUrl}
-            mediaType={mediaType || (tvShow ? "tv" : "movie")}
-            isNew={isNew}
-            isFeatured={isFeatured}
-            rating={movie?.vote_average}
-            overview={movie?.overview}
-            aspectRatio={aspectRatio}
-          />
-        
-          </motion.div></LazyWrapper>
+            <ShowcaseLayout
+              title={title}
+              imageUrl={promoImageUrl}
+              detailsUrl={detailsUrl}
+              mediaType={mediaType || (tvShow ? "tv" : "movie")}
+              isNew={isNew}
+              isFeatured={isFeatured}
+              rating={movie?.vote_average}
+              overview={movie?.overview}
+              aspectRatio={aspectRatio}
+            />
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -540,22 +550,21 @@ const Card = memo(
       return (
         <LazyWrapper height={plainLayout ? 100 : 250}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <HorizontalLayout
-            title={title}
-            imageUrl={plainLayout ? posterUrl : backdropUrl}
-            overview={movie?.overview}
-            mediaType={mediaType || (tvShow ? "tv" : "movie")}
-            isOriginal={isOriginal}
-            rating={movie?.vote_average}
-            detailsUrl={detailsUrl}
-            plainLayout={plainLayout}
-          />
-        
-          </motion.div></LazyWrapper>
+            <HorizontalLayout
+              title={title}
+              imageUrl={plainLayout ? posterUrl : backdropUrl}
+              overview={movie?.overview}
+              mediaType={mediaType || (tvShow ? "tv" : "movie")}
+              isOriginal={isOriginal}
+              rating={movie?.vote_average}
+              detailsUrl={detailsUrl}
+              plainLayout={plainLayout}
+            />
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -564,20 +573,19 @@ const Card = memo(
       return (
         <LazyWrapper height={250}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <LandscapeLayout
-            title={title}
-            imageUrl={backdropUrl}
-            isHot={isHot}
-            matchPercentage={finalMatchPercentage || 0}
-            mediaType={mediaType || (tvShow ? "tv" : "movie")}
-            detailsUrl={detailsUrl}
-          />
-        
-          </motion.div></LazyWrapper>
+            <LandscapeLayout
+              title={title}
+              imageUrl={backdropUrl}
+              isHot={isHot}
+              matchPercentage={finalMatchPercentage || 0}
+              mediaType={mediaType || (tvShow ? "tv" : "movie")}
+              detailsUrl={detailsUrl}
+            />
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -586,21 +594,20 @@ const Card = memo(
       return (
         <LazyWrapper height={500}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <PromoLayout
-            movie={movie}
-            title={title}
-            imageUrl={promoImageUrl}
-            detailsUrl={detailsUrl}
-            year={year}
-            mediaType={mediaType || (tvShow ? "tv" : "movie")}
-            promoVariant={promoVariant}
-          />
-        
-          </motion.div></LazyWrapper>
+            <PromoLayout
+              movie={movie}
+              title={title}
+              imageUrl={promoImageUrl}
+              detailsUrl={detailsUrl}
+              year={year}
+              mediaType={mediaType || (tvShow ? "tv" : "movie")}
+              promoVariant={promoVariant}
+            />
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -609,26 +616,25 @@ const Card = memo(
       return (
         <LazyWrapper height={250}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <div
-            className="group relative cursor-pointer"
-            onClick={onClick}
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <TrailerLayout
-              title={trailer.name}
-              thumbnailUrl={trailerThumbUrl}
-              type={trailer.type}
-              imageLoaded={trailerImageLoaded}
-              onImageLoad={() => setTrailerImageLoaded(true)}
-            />
-          </div>
-        
-          </motion.div></LazyWrapper>
+            <div
+              className="group relative cursor-pointer"
+              onClick={onClick}
+              onMouseEnter={handleCardMouseEnter}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <TrailerLayout
+                title={trailer.name}
+                thumbnailUrl={trailerThumbUrl}
+                type={trailer.type}
+                imageLoaded={trailerImageLoaded}
+                onImageLoad={() => setTrailerImageLoaded(true)}
+              />
+            </div>
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -637,26 +643,25 @@ const Card = memo(
       return (
         <LazyWrapper height={350}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <Link
-            to={detailsUrl}
-            className="group cursor-pointer block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <RecommendationLayout
-              movie={movie}
-              title={title}
-              posterUrl={posterUrl}
-              matchPercentage={finalMatchPercentage ?? undefined}
-              isHovered={isHovered}
-            />
-          </Link>
-        
-          </motion.div></LazyWrapper>
+            <Link
+              to={detailsUrl}
+              className="group cursor-pointer block"
+              onMouseEnter={handleCardMouseEnter}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <RecommendationLayout
+                movie={movie}
+                title={title}
+                posterUrl={posterUrl}
+                matchPercentage={finalMatchPercentage ?? undefined}
+                isHovered={isHovered}
+              />
+            </Link>
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -665,26 +670,25 @@ const Card = memo(
       return (
         <LazyWrapper height={400}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <Link
-            to={seasonDetailsUrl}
-            className="block group"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <SeasonLayout
-              season={season}
-              title={season.name}
-              imageUrl={seasonImageUrl}
-              formattedAirDate={seasonAirDate}
-              isHovered={isHovered}
-            />
-          </Link>
-        
-          </motion.div></LazyWrapper>
+            <Link
+              to={seasonDetailsUrl}
+              className="block group"
+              onMouseEnter={handleCardMouseEnter}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <SeasonLayout
+                season={season}
+                title={season.name}
+                imageUrl={seasonImageUrl}
+                formattedAirDate={seasonAirDate}
+                isHovered={isHovered}
+              />
+            </Link>
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -693,21 +697,20 @@ const Card = memo(
       return (
         <LazyWrapper height={150}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <div className="h-full">
-            <ReviewLayout
-              author={review.author}
-              formattedDate={reviewDate}
-              ratingStars={reviewStars}
-              truncatedContent={truncatedReview}
-              content={review.content}
-            />
-          </div>
-        
-          </motion.div></LazyWrapper>
+            <div className="h-full">
+              <ReviewLayout
+                author={review.author}
+                formattedDate={reviewDate}
+                ratingStars={reviewStars}
+                truncatedContent={truncatedReview}
+                content={review.content}
+              />
+            </div>
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -716,25 +719,24 @@ const Card = memo(
       return (
         <LazyWrapper height={350}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <Link
-            to={personDetailsUrl}
-            className="group relative cursor-pointer block"
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <PersonLayout
-              name={person.name}
-              imageUrl={personImageUrl}
-              role={person.role}
-              isHovered={isHovered}
-            />
-          </Link>
-        
-          </motion.div></LazyWrapper>
+            <Link
+              to={personDetailsUrl}
+              className="group relative cursor-pointer block"
+              onMouseEnter={handleCardMouseEnter}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <PersonLayout
+                name={person.name}
+                imageUrl={personImageUrl}
+                role={person.role}
+                isHovered={isHovered}
+              />
+            </Link>
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -743,28 +745,27 @@ const Card = memo(
       return (
         <LazyWrapper height={250}>
           <motion.div
-            
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
+            className="h-full w-full"
           >
-          <Link
-            to={episodeLink}
-            className="block group"
-            onClick={onClick ? () => onClick() : undefined}
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <EpisodeLayout
-              episode={episode}
-              title={episode.name}
-              imageUrl={episodeImageUrl}
-              formattedRuntime={episodeRuntime}
-              formattedAirDate={episodeAirDate}
-              isHovered={isHovered}
-            />
-          </Link>
-        
-          </motion.div></LazyWrapper>
+            <Link
+              to={episodeLink}
+              className="block group"
+              onClick={onClick ? () => onClick() : undefined}
+              onMouseEnter={handleCardMouseEnter}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <EpisodeLayout
+                episode={episode}
+                title={episode.name}
+                imageUrl={episodeImageUrl}
+                formattedRuntime={episodeRuntime}
+                formattedAirDate={episodeAirDate}
+                isHovered={isHovered}
+              />
+            </Link>
+          </motion.div>
+        </LazyWrapper>
       );
     }
 
@@ -773,37 +774,36 @@ const Card = memo(
 
     return (
       <LazyWrapper height={350}>
-          <motion.div
-            
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="h-full w-full overflow-hidden"
-          >
-        <div
-          className="relative group cursor-pointer rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]"
-          onMouseEnter={handleCardMouseEnter}
-          onMouseLeave={handleCardMouseLeave}
-          onClick={handleNavigate}
+        <motion.div
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="h-full w-full"
         >
-          <CardPoster movie={movie} title={title} rank={rank}>
-            <CardBadges
-              showBadge={showBadge}
-              badgeType={badgeType}
-              showMatchScore
-              matchScore={matchScore}
-            />
-            <CardHoverOverlay
-              title={title}
-              matchScore={matchScore}
-              year={year}
-              ageRating={ageRating}
-              isHovered={isHovered}
-              onPlay={handlePlayClick}
-              onMoreInfo={handleMoreInfoClick}
-            />
-          </CardPoster>
-        </div>
-      
-          </motion.div></LazyWrapper>
+          <div
+            className="relative group cursor-pointer rounded-md shadow-lg bg-[var(--background-secondary)]"
+            onMouseEnter={handleCardMouseEnter}
+            onMouseLeave={handleCardMouseLeave}
+            onClick={handleNavigate}
+          >
+            <CardPoster movie={movie} title={title} rank={rank}>
+              <CardBadges
+                showBadge={showBadge}
+                badgeType={badgeType}
+                showMatchScore
+                matchScore={matchScore}
+              />
+              <CardHoverOverlay
+                title={title}
+                matchScore={matchScore}
+                year={year}
+                ageRating={ageRating}
+                isHovered={isHovered}
+                onPlay={handlePlayClick}
+                onMoreInfo={handleMoreInfoClick}
+              />
+            </CardPoster>
+          </div>
+        </motion.div>
+      </LazyWrapper>
     );
   },
 );

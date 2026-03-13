@@ -2,7 +2,7 @@ import { memo, useMemo, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import type { ImageFile } from "@/api/MovieImages";
+import type { ImageFile } from "@/services/moviesService";
 
 interface ImagesGalleryProps {
   images: ImageFile[];
