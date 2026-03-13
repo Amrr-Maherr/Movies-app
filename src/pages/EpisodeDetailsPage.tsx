@@ -1,6 +1,5 @@
 import { memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import OptimizedImage from "@/components/ui/OptimizedImage";
@@ -131,13 +130,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
   }
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)]"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)]">
       {/* SEO Meta Tags */}
       <HelmetMeta
         name={episode.name || "Episode Details"}
@@ -371,7 +364,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
           </div>
         </section>
       </LazyWrapper>
-    </motion.div>
+    </div>
   );
 });
 

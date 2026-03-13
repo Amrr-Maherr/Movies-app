@@ -63,13 +63,7 @@ const ActorsPage = memo(function ActorsPage() {
   }, [data, selectedGender, selectedLetter]);
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)] pt-24"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)] pt-24">
       <HelmetMeta
         name="Popular Actors"
         description="Explore the most popular actors and celebrities in the industry today on Netflix."
@@ -167,7 +161,7 @@ const ActorsPage = memo(function ActorsPage() {
           </AnimatePresence>
         </LazyWrapper>
       )}
-    </motion.div>
+    </div>
   );
 });
 

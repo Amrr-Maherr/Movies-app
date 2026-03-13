@@ -1,5 +1,4 @@
 import { memo, useMemo, lazy, Suspense, useCallback } from "react";
-import { motion } from "framer-motion";
 import { useParams, Link } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
@@ -113,13 +112,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
   }
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)]"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      transition={{ duration: 0.3 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)]">
       {/* SEO Meta Tags */}
       <HelmetMeta
         name={season.name || "Season Details"}
@@ -234,7 +227,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
           </div>
         </Suspense>
       </LazyWrapper>
-    </motion.div>
+    </div>
   );
 });
 

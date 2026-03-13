@@ -24,13 +24,7 @@ const Kids = memo(function Kids() {
   }, [refetch]);
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)]"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
         name="Kids & Family"
         description="Discover movies that are perfect for the whole family on Netflix."
@@ -95,7 +89,7 @@ const Kids = memo(function Kids() {
           </AnimatePresence>
         </LazyWrapper>
       )}
-    </motion.div>
+    </div>
   );
 });
 

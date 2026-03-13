@@ -199,7 +199,7 @@ const Home = memo(function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
         name="Netflix Egypt - Watch TV Shows Online, Watch Movies Online"
         description="Watch unlimited movies and TV shows on Netflix. Stream anytime, anywhere on any device."

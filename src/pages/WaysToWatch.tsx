@@ -31,7 +31,7 @@ export default function WaysToWatch() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Ways to Watch"
         description="Watch Netflix on your favorite devices - Smart TV, smartphone, tablet, laptop, and more."

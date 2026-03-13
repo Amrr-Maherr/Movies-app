@@ -1,7 +1,6 @@
 import { memo, useMemo, lazy, Suspense, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
-import { motion } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { LoadingFallback, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -76,13 +75,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
   }
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)]"
-      // initial={{ opacity: 0, x: -50 }}
-      // animate={{ opacity: 1, x: 0 }}
-      // exit={{ opacity: 0, x: 50 }}
-      // transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)]">
       {/* SEO Meta Tags */}
       <HelmetMeta
         name={personData.name || "Person Details"}
@@ -143,7 +136,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
           </Suspense>
         </LazyWrapper>
       )}
-    </motion.div>
+    </div>
   );
 });
 

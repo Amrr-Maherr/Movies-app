@@ -2,7 +2,7 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function Session() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--background-primary)] text-[var(--text-primary)] page-transition">
+    <div className="min-h-screen flex items-center justify-center bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Session"
         description="Manage your Netflix session settings."

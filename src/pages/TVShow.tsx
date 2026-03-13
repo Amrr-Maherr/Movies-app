@@ -55,7 +55,7 @@ const TVShow = memo(function TVShow() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
         name="TV Shows"
         description="Browse the most popular, highly-rated, and currently airing TV series on Netflix."

@@ -38,7 +38,7 @@ export default function TermsOfUse() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Terms of Use"
         description="Netflix Terms of Use and membership agreement."

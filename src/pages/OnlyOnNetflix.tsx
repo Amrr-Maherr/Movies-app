@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Star, Film, Tv, Award } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -39,13 +38,7 @@ export default function OnlyOnNetflix() {
   ];
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Only on Netflix"
         description="Discover exclusive Netflix Originals and content you can't find anywhere else."
@@ -141,6 +134,6 @@ export default function OnlyOnNetflix() {
           </Link>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

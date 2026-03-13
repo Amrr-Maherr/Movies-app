@@ -35,7 +35,7 @@ export default function HelpCenter() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Help Center"
         description="Get help with your Netflix account, streaming issues, and more."

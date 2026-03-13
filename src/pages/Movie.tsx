@@ -55,7 +55,7 @@ const Movie = memo(function Movie() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
         name="Movies"
         description="Movies move us like nothing else can, whether they're scary, funny, dramatic, romantic or anywhere in-between."

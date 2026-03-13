@@ -30,7 +30,7 @@ export default function FAQ() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Frequently Asked Questions"
         description="Find answers to common questions about Netflix streaming service."

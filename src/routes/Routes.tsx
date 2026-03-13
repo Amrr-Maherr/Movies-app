@@ -1,5 +1,7 @@
 import { lazy, Suspense, memo, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import PageTransition from "@/components/shared/PageTransition";
 import { Loader } from "@/components/ui";
 import "@/index.css";
 
@@ -65,57 +67,60 @@ const LoadingFallback = memo(function LoadingFallback() {
 
 // Memoized AppRoutes component - avoids re-renders when parent updates
 const AppRoutes = memo(function AppRoutes() {
+  const location = useLocation();
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ScrollToTop />
-      <Routes>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
           {/* Main routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/tv-shows" element={<TVShow />} />
-          <Route path="/movies" element={<Movie />} />
-          <Route path="/kids" element={<Kids />} />
-          <Route path="/new-popular" element={<NewPopular />} />
-          <Route path="/my-list" element={<MyList />} />
-          <Route path="/browse/languages" element={<BrowseByLanguages />} />
-          <Route path="/actors" element={<Actor />} />
-          <Route path="/actor/:slugWithId" element={<PersonDetailsPage />} />
-          <Route path="/session" element={<Session />} />
+          <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+          <Route path="/tv-shows" element={<PageTransition><TVShow /></PageTransition>} />
+          <Route path="/movies" element={<PageTransition><Movie /></PageTransition>} />
+          <Route path="/kids" element={<PageTransition><Kids /></PageTransition>} />
+          <Route path="/new-popular" element={<PageTransition><NewPopular /></PageTransition>} />
+          <Route path="/my-list" element={<PageTransition><MyList /></PageTransition>} />
+          <Route path="/browse/languages" element={<PageTransition><BrowseByLanguages /></PageTransition>} />
+          <Route path="/actors" element={<PageTransition><Actor /></PageTransition>} />
+          <Route path="/actor/:slugWithId" element={<PageTransition><PersonDetailsPage /></PageTransition>} />
+          <Route path="/session" element={<PageTransition><Session /></PageTransition>} />
 
           {/* Auth routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+          <Route path="/signup" element={<PageTransition><Signup /></PageTransition>} />
 
           {/* Details routes */}
-          <Route path="/movie/:slugWithId" element={<MovieDetails />} />
-          <Route path="/tv/:slugWithId" element={<TVShowDetailsPage />} />
-          <Route path="/tv/:tvId/season/:seasonNumber" element={<SeasonDetailsPage />} />
+          <Route path="/movie/:slugWithId" element={<PageTransition><MovieDetails /></PageTransition>} />
+          <Route path="/tv/:slugWithId" element={<PageTransition><TVShowDetailsPage /></PageTransition>} />
+          <Route path="/tv/:tvId/season/:seasonNumber" element={<PageTransition><SeasonDetailsPage /></PageTransition>} />
           <Route
             path="/tv/:tvId/season/:seasonNumber/episode/:episodeNumber"
-            element={<EpisodeDetailsPage />}
+            element={<PageTransition><EpisodeDetailsPage /></PageTransition>}
           />
-          <Route path="/person/:slugWithId" element={<PersonDetailsPage />} />
+          <Route path="/person/:slugWithId" element={<PageTransition><PersonDetailsPage /></PageTransition>} />
 
           {/* Footer routes */}
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/help-center" element={<HelpCenter />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/media-center" element={<MediaCenter />} />
-          <Route path="/investor-relations" element={<InvestorRelations />} />
-          <Route path="/jobs" element={<Jobs />} />
-          <Route path="/ways-to-watch" element={<WaysToWatch />} />
-          <Route path="/terms-of-use" element={<TermsOfUse />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/cookie-preferences" element={<CookiePreferences />} />
-          <Route path="/corporate-information" element={<CorporateInformation />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/speed-test" element={<SpeedTest />} />
-          <Route path="/legal-notices" element={<LegalNotices />} />
-          <Route path="/only-on-netflix" element={<OnlyOnNetflix />} />
+          <Route path="/faq" element={<PageTransition><FAQ /></PageTransition>} />
+          <Route path="/help-center" element={<PageTransition><HelpCenter /></PageTransition>} />
+          <Route path="/account" element={<PageTransition><Account /></PageTransition>} />
+          <Route path="/media-center" element={<PageTransition><MediaCenter /></PageTransition>} />
+          <Route path="/investor-relations" element={<PageTransition><InvestorRelations /></PageTransition>} />
+          <Route path="/jobs" element={<PageTransition><Jobs /></PageTransition>} />
+          <Route path="/ways-to-watch" element={<PageTransition><WaysToWatch /></PageTransition>} />
+          <Route path="/terms-of-use" element={<PageTransition><TermsOfUse /></PageTransition>} />
+          <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />
+          <Route path="/cookie-preferences" element={<PageTransition><CookiePreferences /></PageTransition>} />
+          <Route path="/corporate-information" element={<PageTransition><CorporateInformation /></PageTransition>} />
+          <Route path="/contact-us" element={<PageTransition><ContactUs /></PageTransition>} />
+          <Route path="/speed-test" element={<PageTransition><SpeedTest /></PageTransition>} />
+          <Route path="/legal-notices" element={<PageTransition><LegalNotices /></PageTransition>} />
+          <Route path="/only-on-netflix" element={<PageTransition><OnlyOnNetflix /></PageTransition>} />
 
           {/* 404 route */}
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
         </Routes>
-      </Suspense>
+      </AnimatePresence>
+    </Suspense>
   );
 });
 

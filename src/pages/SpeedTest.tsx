@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Gauge, Wifi, Download, Server } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
@@ -27,13 +26,7 @@ export default function SpeedTest() {
   ];
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Speed Test"
         description="Test your internet speed and optimize your Netflix streaming experience."
@@ -131,6 +124,6 @@ export default function SpeedTest() {
           </ul>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

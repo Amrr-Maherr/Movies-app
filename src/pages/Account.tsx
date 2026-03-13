@@ -29,7 +29,7 @@ export default function Account() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Account Settings"
         description="Manage your Netflix account settings and preferences."

@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { TrendingUp, DollarSign, Users, FileText } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
@@ -18,13 +17,7 @@ export default function InvestorRelations() {
   ];
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Investor Relations"
         description="Netflix investor information, financial data, and stock information."
@@ -94,6 +87,6 @@ export default function InvestorRelations() {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

@@ -55,7 +55,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)]">
       {/* SEO Meta Tags */}
       <HelmetMeta
         name={data.title || "Movie Details"}

@@ -37,13 +37,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
   );
 
   return (
-    <motion.div
-      className="min-h-screen bg-[var(--background-primary)] pt-24 container"
-      initial={{ opacity: 0, x: -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 50 }}
-      transition={{ duration: 0.5 }}
-    >
+    <div className="min-h-screen bg-[var(--background-primary)] pt-24 container">
       <HelmetMeta
         name="Browse by Languages"
         description="Discover movies and TV shows based on their original language on Netflix."
@@ -132,7 +126,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
           </AnimatePresence>
         </LazyWrapper>
       )}
-    </motion.div>
+    </div>
   );
 });
 

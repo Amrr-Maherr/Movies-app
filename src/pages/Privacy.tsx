@@ -37,7 +37,7 @@ export default function Privacy() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Privacy Policy"
         description="Netflix Privacy Policy - Learn how we collect, use, and protect your personal information."

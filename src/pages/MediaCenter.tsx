@@ -31,7 +31,7 @@ export default function MediaCenter() {
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
         name="Media Center"
         description="Latest news, press releases, and updates from Netflix."

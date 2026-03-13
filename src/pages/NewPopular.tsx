@@ -55,7 +55,7 @@ const NewPopular = memo(function NewPopular() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] page-transition">
+    <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
         name="New & Popular"
         description="See what's trending, highly anticipated, and making waves right now on Netflix."

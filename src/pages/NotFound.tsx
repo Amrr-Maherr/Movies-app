@@ -3,7 +3,7 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background-primary)] text-[var(--text-primary)] px-4 page-transition">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background-primary)] text-[var(--text-primary)] px-4">
       <HelmetMeta
         name="Page Not Found"
         description="The page you're looking for doesn't exist. Return to Netflix home."
