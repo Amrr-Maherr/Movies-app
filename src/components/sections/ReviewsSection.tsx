@@ -1,6 +1,6 @@
 import { memo, useMemo } from "react";
 import Slider from "@/components/shared/Slider/slider";
-import ReviewCard from "@/components/shared/cards/ReviewCard";
+import { Card } from "@/components/shared/Card";
 
 interface ReviewsSectionProps {
   reviews: {
@@ -40,12 +40,15 @@ const ReviewsSection = memo(function ReviewsSection({ reviews }: ReviewsSectionP
           hideNavigation={false}
         >
           {validReviews.map((review) => (
-            <ReviewCard
+            <Card
               key={review.id || review.author}
-              author={review.author}
-              rating={review.author_details?.rating ?? null}
-              content={review.content}
-              date={review.created_at}
+              variant="review"
+              review={{
+                author: review.author,
+                rating: review.author_details?.rating ?? null,
+                content: review.content,
+                date: review.created_at
+              }}
             />
           ))}
         </Slider>

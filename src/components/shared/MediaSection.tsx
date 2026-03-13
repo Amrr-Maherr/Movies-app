@@ -30,15 +30,6 @@ const MediaSection = memo(function MediaSection({
     onRetry();
   }, [onRetry]);
 
-  if (isLoading) {
-    return (
-      <section className="py-8">
-        <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
-          <Loader />
-        </div>
-      </section>
-    );
-  }
 
   if (error || media.length === 0) {
     return (

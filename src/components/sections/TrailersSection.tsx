@@ -1,7 +1,7 @@
 import { memo, useState, useMemo, useCallback } from "react";
 import type { Video } from "@/types";
 import Slider from "@/components/shared/Slider/slider";
-import TrailerCard from "@/components/shared/cards/TrailerCard";
+import { Card } from "@/components/shared/Card";
 import TrailerModal from "@/components/shared/TrailerModal";
 
 interface TrailersSectionProps {
@@ -54,11 +54,14 @@ const TrailersSection = memo(function TrailersSection({ videos }: TrailersSectio
             hideNavigation={false}
           >
             {youtubeTrailers.map((video) => (
-              <TrailerCard
+              <Card
                 key={video.id}
-                videoKey={video.key}
-                name={video.name}
-                type={video.type}
+                variant="trailer"
+                trailer={{
+                  videoKey: video.key,
+                  name: video.name,
+                  type: video.type
+                }}
                 onClick={() => handleTrailerClick(video)}
               />
             ))}

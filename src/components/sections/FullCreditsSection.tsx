@@ -1,6 +1,6 @@
 import { memo, useMemo } from "react";
 import type { CastMember } from "@/types";
-import PersonCard from "@/components/shared/cards/PersonCard";
+import { Card } from "@/components/shared/Card";
 import Slider from "@/components/shared/Slider/slider";
 import { filterKeyCrew, type CrewMember } from "@/utils";
 
@@ -41,13 +41,15 @@ const FullCreditsSection = memo(function FullCreditsSection({
               hideNavigation={false}
             >
               {topBilledCast.map((actor) => (
-                <PersonCard
+                <Card
                   key={actor.id}
-                  id={actor.id}
-                  name={actor.name}
-                  profileImage={actor.profile_path}
-                  role={actor.character || "Unknown role"}
-                  type="cast"
+                  variant="person"
+                  person={{
+                    id: actor.id,
+                    name: actor.name,
+                    profileImage: actor.profile_path,
+                    role: actor.character || "Unknown role"
+                  }}
                 />
               ))}
             </Slider>
@@ -67,13 +69,15 @@ const FullCreditsSection = memo(function FullCreditsSection({
               hideNavigation={false}
             >
               {keyCrew.map((member) => (
-                <PersonCard
+                <Card
                   key={member.id}
-                  id={member.id}
-                  name={member.name}
-                  profileImage={member.profile_path}
-                  role={member.job}
-                  type="crew"
+                  variant="person"
+                  person={{
+                    id: member.id,
+                    name: member.name,
+                    profileImage: member.profile_path,
+                    role: member.job
+                  }}
                 />
               ))}
             </Slider>

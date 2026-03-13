@@ -1,6 +1,5 @@
 import { memo, useMemo } from "react";
 import Card from "./Card/Card";
-import PersonCard from "./cards/PersonCard";
 
 /**
  * FIX: Optimized MediaGrid with conditional rendering
@@ -36,11 +35,14 @@ const StandardGrid = memo(({ items, type }: { items: any[]; type: "movie" | "tv"
         className="w-full transition-transform duration-300 hover:scale-105 hover:z-10"
       >
         {type === "person" ? (
-          <PersonCard
-            id={item.id}
-            name={item.name}
-            profileImage={item.profile_path}
-            role={item.known_for_department || "Actor"}
+          <Card
+            variant="person"
+            person={{
+              id: item.id,
+              name: item.name,
+              profileImage: item.profile_path,
+              role: item.known_for_department || "Actor"
+            }}
           />
         ) : (
           <Card movie={item} variant="standard" showBadge={false} />

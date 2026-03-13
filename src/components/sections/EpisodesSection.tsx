@@ -1,5 +1,5 @@
 import { memo, useMemo } from "react";
-import SeasonCard from "@/components/shared/cards/SeasonCard";
+import { Card } from "@/components/shared/Card";
 import type { Season } from "@/types";
 
 interface EpisodesSectionProps {
@@ -32,8 +32,9 @@ const EpisodesSection = memo(function EpisodesSection({
         {/* Responsive Grid: 1 column mobile, 2 tablet, 3-4 desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
           {sortedSeasons.map((season) => (
-            <SeasonCard
+            <Card
               key={season.id}
+              variant="season"
               season={season}
               tvShowId={tvShowId}
             />

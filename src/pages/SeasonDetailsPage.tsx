@@ -12,7 +12,7 @@ import type { Episode } from "@/types";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 
-const EpisodeCard = lazy(() => import("@/components/shared/cards/EpisodeCard"));
+const Card = lazy(() => import("@/components/shared/Card").then(m => ({ default: m.Card })));
 
 
 
@@ -185,7 +185,8 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                 {season.episodes.map((episode: Episode) => (
                   <Suspense key={episode.id} fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
-                    <EpisodeCard
+                    <Card
+                      variant="episode"
                       episode={episode}
                       tvShowId={Number(tvId)}
                       seasonNumber={Number(seasonNumber)}

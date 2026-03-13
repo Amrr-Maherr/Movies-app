@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import type { MediaDetails, Genre } from "@/types";
 import { formatRuntime, formatDate, getLanguageName, formatNumber, getReleaseDate, getTitle, getRuntime } from "@/utils";
-import PersonCard from "@/components/shared/cards/PersonCard";
+import { Card } from "@/components/shared/Card";
 import Slider from "@/components/shared/Slider/slider";
 import ProductionSection from "@/components/sections/ProductionSection";
 
@@ -105,13 +105,15 @@ const MediaInfoSection = memo(function MediaInfoSection({ media }: MediaInfoSect
                   hideNavigation={false}
                 >
                   {topCast.map((actor) => (
-                    <PersonCard
+                    <Card
                       key={actor.id}
-                      id={actor.id}
-                      name={actor.name}
-                      profileImage={actor.profile_path}
-                      role={actor.character || "Unknown role"}
-                      type="cast"
+                      variant="person"
+                      person={{
+                        id: actor.id,
+                        name: actor.name,
+                        profileImage: actor.profile_path,
+                        role: actor.character || "Unknown role"
+                      }}
                     />
                   ))}
                 </Slider>

@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
 import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import type { HeroMedia } from "@/types";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
+import type { HeroMedia, Episode, Season } from "@/types";
+import { Star } from "lucide-react";
 import { useMovieModal } from "@/contexts/MovieModalContext";
 
 // FIX: Move simple helper functions outside component to prevent recreation
@@ -32,73 +34,127 @@ import {
   NewReleaseLayout,
   AwardWinnerLayout,
   RecommendationLayout,
+  EpisodeLayout,
+  PersonLayout,
+  ReviewLayout,
+  SeasonLayout,
+  TrailerLayout,
+  PromoLayout,
+  ContinueWatchingLayout,
+  ShowcaseLayout,
+  HorizontalLayout,
+  LandscapeLayout,
 } from "./CardVariantLayouts";
 
 export interface CardProps {
-  movie: HeroMedia;
+  movie?: HeroMedia;
+  episode?: Episode;
+  season?: Season;
+  person?: { id: number; name: string; profileImage: string | null; role: string };
+  review?: { author: string; rating?: number | null; content: string; date: string };
+  trailer?: { videoKey: string; name: string; type?: string };
   variant?:
     | "standard"
     | "compact"
     | "top10"
     | "newRelease"
     | "awardWinner"
-    | "recommendation";
+    | "recommendation"
+    | "episode"
+    | "person"
+    | "review"
+    | "season"
+    | "trailer"
+    | "promo"
+    | "continueWatching"
+    | "showcase"
+    | "horizontal"
+    | "landscape";
   rank?: number;
+  promoVariant?: "left" | "right" | "center";
+  mediaType?: "movie" | "tv";
+  progress?: number;
+  isNew?: boolean;
+  isFeatured?: boolean;
+  isOriginal?: boolean;
+  isHot?: boolean;
+  matchPercentageProp?: number;
+  plainLayout?: boolean;
+  aspectRatio?: string;
   onClick?: () => void;
   showBadge?: boolean;
   badgeType?: "trending" | "award" | "live" | "onair" | "calendar";
+  tvShowId?: number;
+  seasonNumber?: number;
 }
 
 const Card = memo(
   ({
     movie,
+    episode,
+    season,
+    person,
+    review,
+    trailer,
     variant = "standard",
     rank,
     onClick,
     showBadge = false,
     badgeType,
+    tvShowId,
+    seasonNumber,
+    promoVariant,
+    mediaType,
+    progress,
+    isNew,
+    isFeatured,
+    isOriginal,
+    isHot,
+    matchPercentageProp,
+    plainLayout,
+    aspectRatio,
   }: CardProps) => {
     const navigate = useNavigate();
     const { openModal } = useMovieModal();
     const [isHovered, setIsHovered] = useState(false);
 
     // FIX: Use external helper functions instead of useCallback
-    const title = getMovieTitle(movie);
-    const releaseDate = getMovieReleaseDate(movie);
-    const tvShow = isTvShow(movie);
+    const title = movie ? getMovieTitle(movie) : "";
+    const releaseDate = movie ? getMovieReleaseDate(movie) : undefined;
+    const tvShow = movie ? isTvShow(movie) : false;
 
-    // Keep useMemo for derived values that depend on movie properties
+    // Standard card derived values
     const posterUrl = useMemo(() => {
+      if (!movie) return "";
       return movie.poster_path
         ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
         : "https://via.placeholder.com/500x750?text=No+Image";
-    }, [movie.poster_path]);
+    }, [movie]);
 
     const matchScore = useMemo(
-      () => getMatchScore(movie.vote_average),
-      [movie.vote_average],
+      () => (movie ? getMatchScore(movie.vote_average) : 98),
+      [movie],
     );
     const year = useMemo(
       () => getYear(releaseDate || ""),
       [releaseDate],
     );
     const ageRating = useMemo(
-      () => getAgeRating(movie.vote_average),
-      [movie.vote_average],
+      () => (movie ? getAgeRating(movie.vote_average) : "13+"),
+      [movie],
     );
 
-    // Generate Slug-based URL
     const detailsUrl = useMemo(() => {
+      if (!movie) return "";
       const slug = generateSlug(title);
       const slugWithId = formatSlugWithId(slug, movie.id);
       return `/${tvShow ? "tv" : "movie"}/${slugWithId}`;
-    }, [title, movie.id, tvShow]);
+    }, [movie, title, tvShow]);
 
-    // Navigate to details page
     const handleNavigate = useCallback(() => {
       if (onClick) {
         onClick();
-      } else {
+      } else if (detailsUrl) {
         navigate(detailsUrl);
       }
     }, [onClick, navigate, detailsUrl]);
@@ -106,7 +162,7 @@ const Card = memo(
     const handleMoreInfoClick = useCallback((e: React.MouseEvent) => {
       e.stopPropagation();
       e.preventDefault();
-      openModal(movie);
+      if (movie) openModal(movie);
     }, [openModal, movie]);
 
     const handlePlayClick = useCallback(
@@ -118,7 +174,6 @@ const Card = memo(
       [handleNavigate],
     );
 
-    // FIX: Simple inline handlers for mouse events
     const handleCardMouseEnter = () => setIsHovered(true);
     const handleCardMouseLeave = () => setIsHovered(false);
 
@@ -132,193 +187,526 @@ const Card = memo(
     }, [releaseDate]);
 
     const ratingValue = useMemo(() => {
-      return movie.vote_average && movie.vote_average > 0
+      return movie?.vote_average && movie.vote_average > 0
         ? movie.vote_average.toFixed(1)
         : null;
-    }, [movie.vote_average]);
+    }, [movie]);
 
-    const matchPercentage = useMemo(() => {
-      return movie.vote_average && movie.vote_average > 0
+    const calculatedMatchPercentage = useMemo(() => {
+      return movie?.vote_average && movie.vote_average > 0
         ? Math.round(movie.vote_average * 10)
         : null;
-    }, [movie.vote_average]);
+    }, [movie]);
+
+    const finalMatchPercentage = matchPercentageProp ?? calculatedMatchPercentage;
+
+    // Episode Variant logic
+    const episodeImageUrl = useMemo(() => {
+      if (!episode) return null;
+      return episode.still_path
+        ? `https://image.tmdb.org/t/p/w300${episode.still_path}`
+        : null;
+    }, [episode]);
+
+    const episodeLink = useMemo(() => {
+      if (!episode || !tvShowId || seasonNumber === undefined) return "#";
+      return `/tv/${tvShowId}/season/${seasonNumber}/episode/${episode.episode_number}`;
+    }, [episode, tvShowId, seasonNumber]);
+
+    const episodeAirDate = useMemo(() => {
+      if (!episode?.air_date) return "TBA";
+      try {
+        return new Date(episode.air_date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      } catch {
+        return episode.air_date;
+      }
+    }, [episode]);
+
+    const episodeRuntime = useMemo(() => {
+      if (!episode?.runtime) return "N/A";
+      const h = Math.floor(episode.runtime / 60);
+      const m = episode.runtime % 60;
+      return h > 0 ? `${h}h ${m}m` : `${m}m`;
+    }, [episode]);
+
+    // Person Variant logic
+    const personImageUrl = useMemo(() => {
+      if (!person?.profileImage) return null;
+      return `https://image.tmdb.org/t/p/w185${person.profileImage}`;
+    }, [person]);
+
+    const personDetailsUrl = useMemo(() => {
+      if (!person) return "#";
+      const slug = generateSlug(person.name);
+      return `/person/${formatSlugWithId(slug, person.id)}`;
+    }, [person]);
+
+    // Review Variant logic
+    const reviewDate = useMemo(() => {
+      if (!review?.date) return "";
+      try {
+        return new Date(review.date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      } catch {
+        return review.date;
+      }
+    }, [review]);
+
+    const reviewStars = useMemo(() => {
+      if (!review?.rating || review.rating <= 0) return null;
+      const starCount = Math.round(review.rating / 2);
+      return (
+        <div className="flex items-center gap-0.5">
+          {[1, 2, 3, 4, 5].map((s) => (
+            <Star
+              key={s}
+              className={`h-3 w-3 ${s <= starCount ? "fill-yellow-400 text-yellow-400" : "fill-zinc-700 text-zinc-700"}`}
+            />
+          ))}
+          <span className="ml-1 text-[10px] font-medium text-yellow-400">
+            {review.rating.toFixed(1)}
+          </span>
+        </div>
+      );
+    }, [review]);
+
+    const truncatedReview = useMemo(() => {
+      if (!review?.content) return "";
+      return review.content.length <= 150 ? review.content : review.content.slice(0, 150) + "...";
+    }, [review]);
+
+    // Season Variant logic
+    const seasonImageUrl = useMemo(() => {
+      if (!season?.poster_path) return null;
+      return `https://image.tmdb.org/t/p/w500${season.poster_path}`;
+    }, [season]);
+
+    const seasonDetailsUrl = useMemo(() => {
+      if (!season || !tvShowId) return "#";
+      return `/tv/${tvShowId}/season/${season.season_number}`;
+    }, [season, tvShowId]);
+
+    const seasonAirDate = useMemo(() => {
+      if (!season?.air_date) return "TBA";
+      try {
+        return new Date(season.air_date).toLocaleDateString("en-US", { year: "numeric", month: "short" });
+      } catch {
+        return season.air_date;
+      }
+    }, [season]);
+
+    // Trailer Variant logic
+    const [trailerImageLoaded, setTrailerImageLoaded] = useState(false);
+    const trailerThumbUrl = useMemo(() => {
+      if (!trailer?.videoKey) return "";
+      return `https://img.youtube.com/vi/${trailer.videoKey}/hqdefault.jpg`;
+    }, [trailer]);
+
+    // Promo Image logic
+    const promoImageUrl = useMemo(() => {
+      if (!movie) return "";
+      return movie.backdrop_path
+        ? `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+        : movie.poster_path
+          ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+          : "/Netflix_Symbol_RGB.png";
+    }, [movie]);
+
+    const backdropUrl = useMemo(() => {
+      if (!movie) return "";
+      return movie.backdrop_path
+        ? `https://image.tmdb.org/t/p/w780${movie.backdrop_path}`
+        : movie.poster_path
+          ? `https://image.tmdb.org/t/p/w780${movie.poster_path}`
+          : "/Netflix_Symbol_RGB.png";
+    }, [movie]);
 
     // Compact variant for dense grids
-    if (variant === "compact") {
+    if (variant === "compact" && movie) {
       return (
-        <Link
-          to={detailsUrl}
-          className="relative group cursor-pointer block"
-          onMouseEnter={handleCardMouseEnter}
-          onMouseLeave={handleCardMouseLeave}
-        >
-          <div className="relative aspect-[2/3] rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]">
-            <OptimizedImage
-              src={posterUrl}
-              alt={title}
-              className="w-full h-full transition-transform duration-500 group-hover:scale-105"
-              objectFit="cover"
-            />
-            <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
-              <span className="text-[var(--success)] text-xs font-bold">
-                {matchScore}%
-              </span>
-            </div>
-            <div
-              className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
-              style={{ pointerEvents: isHovered ? "auto" : "none" }}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <button
-                  className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
-                  onClick={handlePlayClick}
-                >
-                  <span className="sr-only">Play</span>
-                  <svg className="h-3 w-3 fill-black" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </button>
-                <button
-                  className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
-                  onClick={handleMoreInfoClick}
-                >
-                  <span className="sr-only">More info</span>
-                  <svg
-                    className="h-3 w-3"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M12 16v-4M12 8h.01" />
-                  </svg>
-                </button>
-              </div>
-              <CardMetadata
-                matchScore={matchScore}
-                ageRating={ageRating}
-                variant="compact"
+        <LazyWrapper height={350}>
+          <Link
+            to={detailsUrl}
+            className="relative group cursor-pointer block"
+            onMouseEnter={handleCardMouseEnter}
+            onMouseLeave={handleCardMouseLeave}
+          >
+            <div className="relative aspect-[2/3] rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]">
+              <OptimizedImage
+                src={posterUrl}
+                alt={title}
+                className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+                objectFit="cover"
               />
+              <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
+                <span className="text-[var(--success)] text-xs font-bold">
+                  {matchScore}%
+                </span>
+              </div>
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
+                style={{ pointerEvents: isHovered ? "auto" : "none" }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <button
+                    className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
+                    onClick={handlePlayClick}
+                  >
+                    <span className="sr-only">Play</span>
+                    <svg className="h-3 w-3 fill-black" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </button>
+                  <button
+                    className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
+                    onClick={handleMoreInfoClick}
+                  >
+                    <span className="sr-only">More info</span>
+                    <svg
+                      className="h-3 w-3"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 16v-4M12 8h.01" />
+                    </svg>
+                  </button>
+                </div>
+                <CardMetadata
+                  matchScore={matchScore}
+                  ageRating={ageRating}
+                  variant="compact"
+                />
+              </div>
             </div>
-          </div>
-          <p className="mt-2 text-xs sm:text-sm text-[var(--text-primary)] font-medium text-center line-clamp-1 group-hover:text-white transition-colors">
-            {title}
-          </p>
-        </Link>
+            <p className="mt-2 text-xs sm:text-sm text-[var(--text-primary)] font-medium text-center line-clamp-1 group-hover:text-white transition-colors">
+              {title}
+            </p>
+          </Link>
+        </LazyWrapper>
       );
     }
 
     // Top 10 variant with large gradient number badge
-    if (variant === "top10" && rank) {
+    if (variant === "top10" && rank && movie) {
       return (
-        <Link
-          to={detailsUrl}
-          className="relative group cursor-pointer block"
-          onMouseEnter={handleCardMouseEnter}
-          onMouseLeave={handleCardMouseLeave}
-        >
-          <Top10Badge rank={rank} />
-          <div className="relative aspect-[2/3] overflow-hidden rounded">
-            <OptimizedImage
-              src={posterUrl}
-              alt={title}
-              className="w-full h-full transition-transform duration-500 group-hover:scale-105"
-              objectFit="cover"
-            />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
-          </div>
-        </Link>
+        <LazyWrapper height={350}>
+          <Link
+            to={detailsUrl}
+            className="relative group cursor-pointer block"
+            onMouseEnter={handleCardMouseEnter}
+            onMouseLeave={handleCardMouseLeave}
+          >
+            <Top10Badge rank={rank} />
+            <div className="relative aspect-[2/3] overflow-hidden rounded">
+              <OptimizedImage
+                src={posterUrl}
+                alt={title}
+                className="w-full h-full transition-transform duration-500 group-hover:scale-105"
+                objectFit="cover"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300"></div>
+            </div>
+          </Link>
+        </LazyWrapper>
       );
     }
 
     // New Release variant with NEW badge and date
-    if (variant === "newRelease") {
+    if (variant === "newRelease" && movie) {
       return (
-        <Link
-          to={detailsUrl}
-          className="group cursor-pointer block"
-          onMouseEnter={handleCardMouseEnter}
-          onMouseLeave={handleCardMouseLeave}
-        >
-          <NewReleaseLayout
-            movie={movie}
-            title={title}
-            posterUrl={posterUrl}
-            ratingValue={ratingValue ?? undefined}
-            formattedReleaseDate={formattedReleaseDate ?? undefined}
-            isHovered={isHovered}
-          />
-        </Link>
+        <LazyWrapper height={350}>
+          <Link
+            to={detailsUrl}
+            className="group cursor-pointer block"
+            onMouseEnter={handleCardMouseEnter}
+            onMouseLeave={handleCardMouseLeave}
+          >
+            <NewReleaseLayout
+              movie={movie}
+              title={title}
+              posterUrl={posterUrl}
+              ratingValue={ratingValue ?? undefined}
+              formattedReleaseDate={formattedReleaseDate ?? undefined}
+              isHovered={isHovered}
+            />
+          </Link>
+        </LazyWrapper>
       );
     }
 
     // Award Winner variant with gold border and award badge
-    if (variant === "awardWinner") {
+    if (variant === "awardWinner" && movie) {
       return (
-        <Link
-          to={detailsUrl}
-          className="group cursor-pointer relative block"
-          onMouseEnter={handleCardMouseEnter}
-          onMouseLeave={handleCardMouseLeave}
-        >
-          <AwardWinnerLayout
+        <LazyWrapper height={350}>
+          <Link
+            to={detailsUrl}
+            className="group cursor-pointer relative block"
+            onMouseEnter={handleCardMouseEnter}
+            onMouseLeave={handleCardMouseLeave}
+          >
+            <AwardWinnerLayout
+              movie={movie}
+              title={title}
+              posterUrl={posterUrl}
+              ratingValue={ratingValue ?? undefined}
+              isHovered={isHovered}
+            />
+          </Link>
+        </LazyWrapper>
+      );
+    }
+
+    // Continue Watching Variant
+    if (variant === "continueWatching") {
+      return (
+        <LazyWrapper height={200}>
+          <ContinueWatchingLayout
+            title={title}
+            imageUrl={backdropUrl}
+            progress={progress || 0}
+          />
+        </LazyWrapper>
+      );
+    }
+
+    // Showcase Variant
+    if (variant === "showcase") {
+      return (
+        <LazyWrapper height={400}>
+          <ShowcaseLayout
+            title={title}
+            imageUrl={promoImageUrl}
+            detailsUrl={detailsUrl}
+            mediaType={mediaType || (tvShow ? "tv" : "movie")}
+            isNew={isNew}
+            isFeatured={isFeatured}
+            rating={movie?.vote_average}
+            overview={movie?.overview}
+            aspectRatio={aspectRatio}
+          />
+        </LazyWrapper>
+      );
+    }
+
+    // Horizontal Variant
+    if (variant === "horizontal") {
+      return (
+        <LazyWrapper height={plainLayout ? 100 : 250}>
+          <HorizontalLayout
+            title={title}
+            imageUrl={plainLayout ? posterUrl : backdropUrl}
+            overview={movie?.overview}
+            mediaType={mediaType || (tvShow ? "tv" : "movie")}
+            isOriginal={isOriginal}
+            rating={movie?.vote_average}
+            detailsUrl={detailsUrl}
+            plainLayout={plainLayout}
+          />
+        </LazyWrapper>
+      );
+    }
+
+    // Landscape Variant
+    if (variant === "landscape") {
+      return (
+        <LazyWrapper height={250}>
+          <LandscapeLayout
+            title={title}
+            imageUrl={backdropUrl}
+            isHot={isHot}
+            matchPercentage={finalMatchPercentage || 0}
+            mediaType={mediaType || (tvShow ? "tv" : "movie")}
+            detailsUrl={detailsUrl}
+          />
+        </LazyWrapper>
+      );
+    }
+
+    // Promo Variant
+    if (variant === "promo" && movie) {
+      return (
+        <LazyWrapper height={500}>
+          <PromoLayout
             movie={movie}
             title={title}
-            posterUrl={posterUrl}
-            ratingValue={ratingValue ?? undefined}
-            isHovered={isHovered}
+            imageUrl={promoImageUrl}
+            detailsUrl={detailsUrl}
+            year={year}
+            mediaType={mediaType || (tvShow ? "tv" : "movie")}
+            promoVariant={promoVariant}
           />
-        </Link>
+        </LazyWrapper>
+      );
+    }
+
+    // Trailer Variant
+    if (variant === "trailer" && trailer) {
+      return (
+        <LazyWrapper height={250}>
+          <div
+            className="group relative cursor-pointer"
+            onClick={onClick}
+            onMouseEnter={handleCardMouseEnter}
+            onMouseLeave={handleCardMouseLeave}
+          >
+            <TrailerLayout
+              title={trailer.name}
+              thumbnailUrl={trailerThumbUrl}
+              type={trailer.type}
+              imageLoaded={trailerImageLoaded}
+              onImageLoad={() => setTrailerImageLoaded(true)}
+            />
+          </div>
+        </LazyWrapper>
       );
     }
 
     // Recommendation variant (Because You Watched)
-    if (variant === "recommendation") {
+    if (variant === "recommendation" && movie) {
       return (
-        <Link
-          to={detailsUrl}
-          className="group cursor-pointer block"
-          onMouseEnter={handleCardMouseEnter}
-          onMouseLeave={handleCardMouseLeave}
-        >
-          <RecommendationLayout
-            movie={movie}
-            title={title}
-            posterUrl={posterUrl}
-            matchPercentage={matchPercentage ?? undefined}
-            isHovered={isHovered}
-          />
-        </Link>
+        <LazyWrapper height={350}>
+          <Link
+            to={detailsUrl}
+            className="group cursor-pointer block"
+            onMouseEnter={handleCardMouseEnter}
+            onMouseLeave={handleCardMouseLeave}
+          >
+            <RecommendationLayout
+              movie={movie}
+              title={title}
+              posterUrl={posterUrl}
+              matchPercentage={finalMatchPercentage ?? undefined}
+              isHovered={isHovered}
+            />
+          </Link>
+        </LazyWrapper>
       );
     }
 
-    // Standard Netflix Card with optional badges
+    // Season Variant
+    if (variant === "season" && season) {
+      return (
+        <LazyWrapper height={400}>
+          <Link
+            to={seasonDetailsUrl}
+            className="block group"
+            onMouseEnter={handleCardMouseEnter}
+            onMouseLeave={handleCardMouseLeave}
+          >
+            <SeasonLayout
+              season={season}
+              title={season.name}
+              imageUrl={seasonImageUrl}
+              formattedAirDate={seasonAirDate}
+              isHovered={isHovered}
+            />
+          </Link>
+        </LazyWrapper>
+      );
+    }
+
+    // Review Variant
+    if (variant === "review" && review) {
+      return (
+        <LazyWrapper height={150}>
+          <div className="h-full">
+            <ReviewLayout
+              author={review.author}
+              formattedDate={reviewDate}
+              ratingStars={reviewStars}
+              truncatedContent={truncatedReview}
+              content={review.content}
+            />
+          </div>
+        </LazyWrapper>
+      );
+    }
+
+    // Person Variant
+    if (variant === "person" && person) {
+      return (
+        <LazyWrapper height={350}>
+          <Link
+            to={personDetailsUrl}
+            className="group relative cursor-pointer block"
+            onMouseEnter={handleCardMouseEnter}
+            onMouseLeave={handleCardMouseLeave}
+          >
+            <PersonLayout
+              name={person.name}
+              imageUrl={personImageUrl}
+              role={person.role}
+              isHovered={isHovered}
+            />
+          </Link>
+        </LazyWrapper>
+      );
+    }
+
+    // Episode Variant
+    if (variant === "episode" && episode) {
+      return (
+        <LazyWrapper height={250}>
+          <Link
+            to={episodeLink}
+            className="block group"
+            onClick={onClick ? () => onClick() : undefined}
+            onMouseEnter={handleCardMouseEnter}
+            onMouseLeave={handleCardMouseLeave}
+          >
+            <EpisodeLayout
+              episode={episode}
+              title={episode.name}
+              imageUrl={episodeImageUrl}
+              formattedRuntime={episodeRuntime}
+              formattedAirDate={episodeAirDate}
+              isHovered={isHovered}
+            />
+          </Link>
+        </LazyWrapper>
+      );
+    }
+
+    // Standard Netflix Card with optional badges (requires movie)
+    if (!movie) return null;
+
     return (
-      <div
-        className="relative group cursor-pointer rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]"
-        onMouseEnter={handleCardMouseEnter}
-        onMouseLeave={handleCardMouseLeave}
-        onClick={handleNavigate}
-      >
-        <CardPoster movie={movie} title={title} rank={rank}>
-          <CardBadges
-            showBadge={showBadge}
-            badgeType={badgeType}
-            showMatchScore
-            matchScore={matchScore}
-          />
-          <CardHoverOverlay
-            title={title}
-            matchScore={matchScore}
-            year={year}
-            ageRating={ageRating}
-            isHovered={isHovered}
-            onPlay={handlePlayClick}
-            onMoreInfo={handleMoreInfoClick}
-          />
-        </CardPoster>
-      </div>
+      <LazyWrapper height={350}>
+        <div
+          className="relative group cursor-pointer rounded-md overflow-hidden shadow-lg bg-[var(--background-secondary)]"
+          onMouseEnter={handleCardMouseEnter}
+          onMouseLeave={handleCardMouseLeave}
+          onClick={handleNavigate}
+        >
+          <CardPoster movie={movie} title={title} rank={rank}>
+            <CardBadges
+              showBadge={showBadge}
+              badgeType={badgeType}
+              showMatchScore
+              matchScore={matchScore}
+            />
+            <CardHoverOverlay
+              title={title}
+              matchScore={matchScore}
+              year={year}
+              ageRating={ageRating}
+              isHovered={isHovered}
+              onPlay={handlePlayClick}
+              onMoreInfo={handleMoreInfoClick}
+            />
+          </CardPoster>
+        </div>
+      </LazyWrapper>
     );
   },
 );
