@@ -5,20 +5,35 @@ import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton, PageSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchTvShowDetails from "@/queries/FetchTvShowDetails";
+import DetailPageNav from "@/components/shared/DetailPageNav";
 import { extractKeywords, extractWatchProviders } from "@/utils";
 import type { Video } from "@/types";
 
 const MediaHero = lazy(() => import("@/components/shared/MediaHero"));
-const MediaInfoSection = lazy(() => import("@/components/sections/MediaInfoSection"));
-const EpisodesSection = lazy(() => import("@/components/sections/EpisodesSection"));
-const TrailersSection = lazy(() => import("@/components/sections/TrailersSection"));
-const BehindTheScenesSection = lazy(() => import("@/components/sections/BehindTheScenesSection"));
-const ReviewsSection = lazy(() => import("@/components/sections/ReviewsSection"));
-const KeywordsSection = lazy(() => import("@/components/sections/KeywordsSection"));
-const WatchProvidersSection = lazy(() => import("@/components/sections/WatchProvidersSection"));
-const MoreLikeThisSection = lazy(() => import("@/components/sections/MoreLikeThisSection"));
-
-
+const MediaInfoSection = lazy(
+  () => import("@/components/sections/MediaInfoSection"),
+);
+const EpisodesSection = lazy(
+  () => import("@/components/sections/EpisodesSection"),
+);
+const TrailersSection = lazy(
+  () => import("@/components/sections/TrailersSection"),
+);
+const BehindTheScenesSection = lazy(
+  () => import("@/components/sections/BehindTheScenesSection"),
+);
+const ReviewsSection = lazy(
+  () => import("@/components/sections/ReviewsSection"),
+);
+const KeywordsSection = lazy(
+  () => import("@/components/sections/KeywordsSection"),
+);
+const WatchProvidersSection = lazy(
+  () => import("@/components/sections/WatchProvidersSection"),
+);
+const MoreLikeThisSection = lazy(
+  () => import("@/components/sections/MoreLikeThisSection"),
+);
 
 const TVShowDetailsPage = memo(function TVShowDetailsPage() {
   const { slugWithId } = useParams<{ slugWithId: string }>();
@@ -30,43 +45,58 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
     refetch();
   }, [refetch]);
 
-  const { trailers, reviews, keywords, watchProviders, similar, seasons, backdrops } =
-    useMemo(() => {
-      if (!data) {
-        return {
-          trailers: [],
-          reviews: [],
-          keywords: [],
-          watchProviders: [],
-          similar: [],
-          seasons: [],
-          backdrops: [],
-        };
-      }
+  const {
+    trailers,
+    reviews,
+    keywords,
+    watchProviders,
+    similar,
+    seasons,
+    backdrops,
+  } = useMemo(() => {
+    if (!data) {
+      return {
+        trailers: [],
+        reviews: [],
+        keywords: [],
+        watchProviders: [],
+        similar: [],
+        seasons: [],
+        backdrops: [],
+      };
+    }
 
-      const trailers: Video[] =
-        data.videos?.results?.filter(
-          (video: Video) =>
-            video.site === "YouTube" &&
-            (video.type === "Trailer" ||
-              video.type === "Teaser" ||
-              video.type === "Clip"),
-        ) || [];
+    const trailers: Video[] =
+      data.videos?.results?.filter(
+        (video: Video) =>
+          video.site === "YouTube" &&
+          (video.type === "Trailer" ||
+            video.type === "Teaser" ||
+            video.type === "Clip"),
+      ) || [];
 
-      const reviews =
-        data.reviews?.results?.filter(
-          (review: { author: string; content: string }) =>
-            review.author && review.content?.trim(),
-        ) || [];
+    const reviews =
+      data.reviews?.results?.filter(
+        (review: { author: string; content: string }) =>
+          review.author && review.content?.trim(),
+      ) || [];
 
-      const keywords = extractKeywords(data.keywords);
-      const watchProviders = extractWatchProviders(data);
-      const similar = data.similar?.results || [];
-      const seasons = data.seasons || [];
-      const backdrops = data.images?.backdrops || [];
+    const keywords = extractKeywords(data.keywords);
+    const watchProviders = extractWatchProviders(data);
+    const similar = data.similar?.results || [];
+    const seasons = data.seasons || [];
+    const backdrops = data.images?.backdrops || [];
 
-      return { trailers, reviews, keywords, watchProviders, similar, seasons, backdrops };
-    }, [data]);
+    return {
+      trailers,
+      reviews,
+      keywords,
+      watchProviders,
+      similar,
+      seasons,
+      backdrops,
+    };
+  }, [data]);
 
   if (isLoading) {
     return <PageSkeleton />;
@@ -77,7 +107,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       <Error
         fullscreen
         title="Failed to load TV show details"
-        message="We couldn&apos;t load the TV show information. Please try again."
+        message="We couldn't load the TV show information. Please try again."
         onRetry={handleRetry}
       />
     );
@@ -89,7 +119,11 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       <HelmetMeta
         name={data.name || "TV Show Details"}
         description={data.overview || "Watch this TV show on Netflix"}
-        image={data.poster_path ? `https://image.tmdb.org/t/p/original${data.poster_path}` : undefined}
+        image={
+          data.poster_path
+            ? `https://image.tmdb.org/t/p/original${data.poster_path}`
+            : undefined
+        }
         url={window.location.href}
         type="video.tv_series"
       />
@@ -100,6 +134,9 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
           <MediaHero media={data} />
         </Suspense>
       </LazyWrapper>
+
+      {/* Navigation Tabs */}
+      <DetailPageNav type="tv" slugWithId={slugWithId || ""} />
 
       {/* Media Info Section */}
       <LazyWrapper height={300}>

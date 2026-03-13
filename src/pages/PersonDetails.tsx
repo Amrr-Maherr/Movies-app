@@ -6,12 +6,21 @@ import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchPersonDetails from "@/queries/FetchPersonDetails";
 import FetchPersonCredits from "@/queries/FetchPersonCredits";
+import DetailPageNav from "@/components/shared/DetailPageNav";
 
 const PersonHero = lazy(() => import("@/components/shared/PersonHero"));
-const BiographySection = lazy(() => import("@/components/sections/BiographySection"));
-const KnownForSection = lazy(() => import("@/components/sections/KnownForSection"));
-const CreditsSection = lazy(() => import("@/components/sections/CreditsSection"));
-const SocialLinksSection = lazy(() => import("@/components/sections/SocialLinksSection"));
+const BiographySection = lazy(
+  () => import("@/components/sections/BiographySection"),
+);
+const KnownForSection = lazy(
+  () => import("@/components/sections/KnownForSection"),
+);
+const CreditsSection = lazy(
+  () => import("@/components/sections/CreditsSection"),
+);
+const SocialLinksSection = lazy(
+  () => import("@/components/sections/SocialLinksSection"),
+);
 
 const PersonDetailsPage = memo(function PersonDetailsPage() {
   const { slugWithId } = useParams<{ slugWithId: string }>();
@@ -64,7 +73,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       <Error
         fullscreen
         title="Failed to load person details"
-        message="We couldn&apos;t load the person information. Please try again."
+        message="We couldn't load the person information. Please try again."
         onRetry={handleRetry}
       />
     );
@@ -75,8 +84,15 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       {/* SEO Meta Tags */}
       <HelmetMeta
         name={personData.name || "Person Details"}
-        description={personData.biography?.substring(0, 160) || `Discover more about ${personData.name} on Netflix`}
-        image={personData.profile_path ? `https://image.tmdb.org/t/p/original${personData.profile_path}` : undefined}
+        description={
+          personData.biography?.substring(0, 160) ||
+          `Discover more about ${personData.name} on Netflix`
+        }
+        image={
+          personData.profile_path
+            ? `https://image.tmdb.org/t/p/original${personData.profile_path}`
+            : undefined
+        }
         url={window.location.href}
         type="profile"
       />
@@ -86,10 +102,13 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
         <PersonHero person={personData} />
       </LazyWrapper>
 
+      {/* Navigation Tabs */}
+      <DetailPageNav type="person" slugWithId={slugWithId || ""} />
+
       {/* Social Links Section */}
       {externalIdsData && (
         <LazyWrapper height={150}>
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
             <SocialLinksSection
               imdbId={externalIdsData.imdb_id}
               twitterId={externalIdsData.twitter_id}
@@ -105,7 +124,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       {/* Known For Section */}
       {(cast.length > 0 || crew.length > 0) && (
         <LazyWrapper height={400}>
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
             <KnownForSection cast={cast} crew={crew} />
           </Suspense>
         </LazyWrapper>
@@ -127,7 +146,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       {/* Credits Section */}
       {(cast.length > 0 || crew.length > 0) && (
         <LazyWrapper height={600}>
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
             <CreditsSection cast={cast} crew={crew} />
           </Suspense>
         </LazyWrapper>

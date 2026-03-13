@@ -5,13 +5,24 @@ import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, Error, SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchMovieDetails from "@/queries/FetchMovieDetails";
+import DetailPageNav from "@/components/shared/DetailPageNav";
 
 const MediaHero = lazy(() => import("@/components/shared/MediaHero"));
-const MediaInfoSection = lazy(() => import("@/components/sections/MediaInfoSection"));
-const TrailersSection = lazy(() => import("@/components/sections/TrailersSection"));
-const BehindTheScenesSection = lazy(() => import("@/components/sections/BehindTheScenesSection"));
-const MoreLikeThisSection = lazy(() => import("@/components/sections/MoreLikeThisSection"));
-const FullCreditsSection = lazy(() => import("@/components/sections/FullCreditsSection"));
+const MediaInfoSection = lazy(
+  () => import("@/components/sections/MediaInfoSection"),
+);
+const TrailersSection = lazy(
+  () => import("@/components/sections/TrailersSection"),
+);
+const BehindTheScenesSection = lazy(
+  () => import("@/components/sections/BehindTheScenesSection"),
+);
+const MoreLikeThisSection = lazy(
+  () => import("@/components/sections/MoreLikeThisSection"),
+);
+const FullCreditsSection = lazy(
+  () => import("@/components/sections/FullCreditsSection"),
+);
 
 const MovieDetailsPage = memo(function MovieDetailsPage() {
   const { slugWithId } = useParams<{ slugWithId: string }>();
@@ -25,7 +36,12 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
 
   const { videos, images, similar, credits } = useMemo(() => {
     if (!data) {
-      return { videos: [], images: [], similar: [], credits: { cast: [], crew: [] } };
+      return {
+        videos: [],
+        images: [],
+        similar: [],
+        credits: { cast: [], crew: [] },
+      };
     }
     return {
       videos: data.videos?.results || [],
@@ -44,7 +60,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       <Error
         fullscreen
         title="Failed to load movie details"
-        message="We couldn&apos;t load the movie information. Please try again."
+        message="We couldn't load the movie information. Please try again."
         onRetry={handleRetry}
       />
     );
@@ -56,7 +72,11 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       <HelmetMeta
         name={data.title || "Movie Details"}
         description={data.overview || "Watch this movie on Netflix"}
-        image={data.poster_path ? `https://image.tmdb.org/t/p/original${data.poster_path}` : undefined}
+        image={
+          data.poster_path
+            ? `https://image.tmdb.org/t/p/original${data.poster_path}`
+            : undefined
+        }
         url={window.location.href}
         type="video.movie"
       />
@@ -67,6 +87,9 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
           <MediaHero media={data} />
         </Suspense>
       </LazyWrapper>
+
+      {/* Navigation Tabs */}
+      <DetailPageNav type="movie" slugWithId={slugWithId || ""} />
 
       {/* Media Info Section */}
       <LazyWrapper height={300}>
@@ -104,7 +127,10 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       {(credits.cast.length > 0 || credits.crew.length > 0) && (
         <LazyWrapper height={500}>
           <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <FullCreditsSection cast={credits.cast || []} crew={credits.crew || []} />
+            <FullCreditsSection
+              cast={credits.cast || []}
+              crew={credits.crew || []}
+            />
           </Suspense>
         </LazyWrapper>
       )}
