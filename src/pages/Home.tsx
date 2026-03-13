@@ -16,21 +16,52 @@ import useTrendingTvDay from "@/queries/FetchTrendingTvDay";
 import useTopRatedTvShows from "@/queries/FetchTopRatedTvShows";
 import useAiringTodayTv from "@/queries/FetchAiringTodayTv";
 import useOnTheAirTv from "@/queries/FetchOnTheAirTv";
+import useStreamingPlatforms from "@/queries/FetchStreamingPlatforms";
 
-const HeroSection = lazy(() => import("@/components/shared/heroSection/HeroSection"));
+const HeroSection = lazy(
+  () => import("@/components/shared/heroSection/HeroSection"),
+);
 const MediaSection = lazy(() => import("@/components/shared/MediaSection"));
-const TopPicksSection = lazy(() => import("@/components/sections/TopPicksSection"));
+const TopPicksSection = lazy(
+  () => import("@/components/sections/TopPicksSection"),
+);
 const MoviePromo = lazy(() => import("@/components/sections/MoviePromo"));
-const ContinueWatchingSection = lazy(() => import("@/components/sections/ContinueWatchingSection"));
-const GenreShowcaseSection = lazy(() => import("@/components/sections/GenreShowcaseSection"));
-const BecauseYouWatchedSection = lazy(() => import("@/components/sections/BecauseYouWatchedSection"));
-const NewReleasesSection = lazy(() => import("@/components/sections/NewReleasesSection"));
-const OnlyOnNetflixSection = lazy(() => import("@/components/sections/OnlyOnNetflixSection"));
-const AwardWinnersSection = lazy(() => import("@/components/sections/AwardWinnersSection"));
-const BingeWorthySection = lazy(() => import("@/components/sections/BingeWorthySection"));
-const WeekendWatchSection = lazy(() => import("@/components/sections/WeekendWatchSection"));
-const PricingSection = lazy(() => import("@/components/sections/PricingSection"));
-const AskedQuestions = lazy(() => import("@/components/sections/AskedQuestions"));
+const ContinueWatchingSection = lazy(
+  () => import("@/components/sections/ContinueWatchingSection"),
+);
+const GenreShowcaseSection = lazy(
+  () => import("@/components/sections/GenreShowcaseSection"),
+);
+const BecauseYouWatchedSection = lazy(
+  () => import("@/components/sections/BecauseYouWatchedSection"),
+);
+const NewReleasesSection = lazy(
+  () => import("@/components/sections/NewReleasesSection"),
+);
+const OnlyOnNetflixSection = lazy(
+  () => import("@/components/sections/OnlyOnNetflixSection"),
+);
+const AwardWinnersSection = lazy(
+  () => import("@/components/sections/AwardWinnersSection"),
+);
+const BingeWorthySection = lazy(
+  () => import("@/components/sections/BingeWorthySection"),
+);
+const WeekendWatchSection = lazy(
+  () => import("@/components/sections/WeekendWatchSection"),
+);
+const PricingSection = lazy(
+  () => import("@/components/sections/PricingSection"),
+);
+const AskedQuestions = lazy(
+  () => import("@/components/sections/AskedQuestions"),
+);
+const CircularGallery = lazy(
+  () => import("@/components/shared/CircularGallery"),
+);
+const PlatformsSection = lazy(
+  () => import("@/components/sections/PlatformsSection"),
+);
 
 const Home = memo(function Home() {
   const {
@@ -39,7 +70,8 @@ const Home = memo(function Home() {
     error: popularError,
     refetch: popularRefetch,
   } = usePopularMovies();
-  const { data: topRatedMovies, isLoading: topRatedLoading } = useTopRatedMovies();
+  const { data: topRatedMovies, isLoading: topRatedLoading } =
+    useTopRatedMovies();
   const {
     data: nowPlayingMovies,
     isLoading: nowPlayingLoading,
@@ -83,7 +115,8 @@ const Home = memo(function Home() {
     error: trendingTvDayError,
     refetch: trendingTvDayRefetch,
   } = useTrendingTvDay();
-  const { data: topRatedTv, isLoading: topRatedTvLoading } = useTopRatedTvShows();
+  const { data: topRatedTv, isLoading: topRatedTvLoading } =
+    useTopRatedTvShows();
   const {
     data: airingTodayTv,
     isLoading: airingTodayLoading,
@@ -96,6 +129,12 @@ const Home = memo(function Home() {
     error: onTheAirError,
     refetch: onTheAirRefetch,
   } = useOnTheAirTv();
+  const {
+    data: platforms,
+    isLoading: platformsLoading,
+    error: platformsError,
+    refetch: platformsRefetch,
+  } = useStreamingPlatforms();
 
   // FIX: Only take a few items for hero section to prevent swiper from overworking
   const heroData = useMemo(
@@ -117,6 +156,7 @@ const Home = memo(function Home() {
     trendingTvDayRefetch();
     airingTodayRefetch();
     onTheAirRefetch();
+    platformsRefetch();
   }, [
     popularRefetch,
     trendingWeekRefetch,
@@ -128,16 +168,17 @@ const Home = memo(function Home() {
     trendingTvDayRefetch,
     airingTodayRefetch,
     onTheAirRefetch,
+    platformsRefetch,
   ]);
 
   // Only show full page error if absolutely no critical data is available
-  if (!popularMovies && (popularError || trendingWeekError || trendingDayError)) {
+  if (
+    !popularMovies &&
+    (popularError || trendingWeekError || trendingDayError)
+  ) {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <ErrorComponent
-          retryButtonText="Try Again"
-          onRetry={handleRetry}
-        />
+        <ErrorComponent retryButtonText="Try Again" onRetry={handleRetry} />
       </div>
     );
   }
@@ -153,20 +194,44 @@ const Home = memo(function Home() {
       <Suspense fallback={<SectionSkeleton variant="hero" />}>
         <HeroSection
           data={heroData}
-          isLoading={heroData.length === 0 && (trendingWeekLoading || trendingTvWeekLoading)}
+          isLoading={
+            heroData.length === 0 &&
+            (trendingWeekLoading || trendingTvWeekLoading)
+          }
           error={null}
-          onRetry={() => { }}
+          onRetry={() => {}}
         />
+      </Suspense>
+
+      {/* Circular Gallery - Trending Movies */}
+      <Suspense fallback={<SectionSkeleton variant="hero" />}>
+        <LazyWrapper height={600}>
+          {trendingMoviesWeek ? (
+            <div style={{ height: "600px", position: "relative" }}>
+              <CircularGallery
+                movies={trendingMoviesWeek.slice(0, 20)}
+                bend={3}
+                textColor="#ffffff"
+                borderRadius={0.05}
+                scrollSpeed={2}
+                scrollEase={0.05}
+                font="bold 30px system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+              />
+            </div>
+          ) : trendingWeekLoading ? (
+            <SectionSkeleton variant="hero" />
+          ) : null}
+        </LazyWrapper>
       </Suspense>
 
       {/* Top 10 Movies Section */}
       <Suspense fallback={<SectionSkeleton variant="grid" cardCount={10} />}>
         <LazyWrapper height={300}>
           {trendingMoviesWeek ? (
-             <TopPicksSection
-             movies={trendingMoviesWeek}
-             title="Top 10 Movies in Egypt Today"
-           />
+            <TopPicksSection
+              movies={trendingMoviesWeek}
+              title="Top 10 Movies in Egypt Today"
+            />
           ) : trendingWeekLoading ? (
             <SectionSkeleton variant="grid" cardCount={10} />
           ) : null}
@@ -235,13 +300,13 @@ const Home = memo(function Home() {
       {/* First Promo - Left Aligned */}
       <Suspense fallback={<SectionSkeleton variant="hero" />}>
         <LazyWrapper height={500}>
-           {popularMovies && popularMovies[0] ? (
-             <MoviePromo
-               movie={popularMovies[0]}
-               mediaType="movie"
-               variant="left"
-             />
-           ) : null}
+          {popularMovies && popularMovies[0] ? (
+            <MoviePromo
+              movie={popularMovies[0]}
+              mediaType="movie"
+              variant="left"
+            />
+          ) : null}
         </LazyWrapper>
       </Suspense>
 
@@ -251,6 +316,21 @@ const Home = memo(function Home() {
           {popularTv ? (
             <OnlyOnNetflixSection movies={popularTv} mediaType="tv" />
           ) : popularTvLoading ? (
+            <SectionSkeleton variant="grid" cardCount={6} />
+          ) : null}
+        </LazyWrapper>
+      </Suspense>
+
+      {/* Platforms Section */}
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+        <LazyWrapper height={350}>
+          {platforms ? (
+            <PlatformsSection
+              platforms={platforms}
+              isLoading={platformsLoading}
+              error={platformsError}
+            />
+          ) : platformsLoading ? (
             <SectionSkeleton variant="grid" cardCount={6} />
           ) : null}
         </LazyWrapper>
@@ -306,7 +386,7 @@ const Home = memo(function Home() {
               basedOn="Stranger Things"
               mediaType="tv"
             />
-          ) : trendingTvDayLoading? (
+          ) : trendingTvDayLoading ? (
             <SectionSkeleton variant="grid" cardCount={6} />
           ) : null}
         </LazyWrapper>

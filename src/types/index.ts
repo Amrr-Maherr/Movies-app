@@ -11,6 +11,7 @@ export type {
   MovieActionButtonsProps,
   TvShow,
   PopularTvShowsResponse,
+  StreamingPlatform,
 } from "./movies";
 
 // Hero types

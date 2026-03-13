@@ -76,3 +76,13 @@ export interface PopularTvShowsResponse {
   total_pages: number;
   total_results: number;
 }
+
+/**
+ * Streaming Platform data structure (Watch Providers)
+ */
+export interface StreamingPlatform {
+  id: number;
+  name: string;
+  logo_path: string | null;
+  display_priority: number;
+}

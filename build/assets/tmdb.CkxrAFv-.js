@@ -1,0 +1,1 @@
+const n={BACKDROP_ORIGINAL:"original",BACKDROP_LARGE:"w1280",POSTER_MEDIUM:"w342",POSTER_SMALL:"w185"};function t(t,R=n.BACKDROP_ORIGINAL){return t?`https://image.tmdb.org/t/p/${R}${t}`:null}function R(R){return t(R,n.BACKDROP_ORIGINAL)}function O(R,O=n.POSTER_MEDIUM){return t(R,O)}export{n as I,R as a,t as b,O as g};
