@@ -1,9 +1,9 @@
-import { memo, useMemo, useCallback, lazy, Suspense } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { memo, useMemo, lazy, Suspense } from "react";
+import { useParams } from "react-router-dom";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { ArrowLeft, Clock, Calendar, Star } from "lucide-react";
+import { Clock, Calendar, Star } from "lucide-react";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import FetchEpisodeDetails from "@/queries/FetchEpisodeDetails";
 
@@ -21,7 +21,6 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
     episodeNumber: string;
   }>();
 
-  const navigate = useNavigate();
 
   const {
     isLoading,
@@ -74,25 +73,6 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
     [episode?.crew],
   );
 
-  const handleBack = useCallback(() => {
-    navigate(-1);
-  }, [navigate]);
-
-  const handlePreviousEpisode = useCallback(() => {
-    if (episode && episode.episode_number > 1) {
-      navigate(
-        `/tv/${tvId}/season/${seasonNumber}/episode/${episode.episode_number - 1}`,
-      );
-    }
-  }, [navigate, tvId, seasonNumber, episode]);
-
-  const handleNextEpisode = useCallback(() => {
-    if (episode) {
-      navigate(
-        `/tv/${tvId}/season/${seasonNumber}/episode/${episode.episode_number + 1}`,
-      );
-    }
-  }, [navigate, tvId, seasonNumber, episode]);
 
   if (isLoading) {
     return <PageSkeleton />;
@@ -120,16 +100,6 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
         type="video.episode"
       />
 
-      {/* Back Button */}
-      <div className="absolute top-4 left-4 z-50">
-        <button
-          onClick={handleBack}
-          className="flex items-center gap-2 bg-black/60 backdrop-blur-sm text-white px-4 py-2 rounded-full hover:bg-black/80 transition-all transform hover:scale-105"
-        >
-          <ArrowLeft className="h-5 w-5" />
-          <span className="hidden md:inline">Back to Series</span>
-        </button>
-      </div>
 
       {/* Hero Section with Episode Still */}
       <LazyWrapper height={500}>
@@ -275,7 +245,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       <LazyWrapper>
         <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-1 gap-8">
               <div className="bg-zinc-900/50 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-white mb-4">
                   Episode Details
@@ -310,35 +280,6 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
                     </div>
                   )}
                 </dl>
-              </div>
-
-              <div className="bg-zinc-900/50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  Navigation
-                </h3>
-                <div className="space-y-3">
-                  <button
-                    onClick={handlePreviousEpisode}
-                    disabled={episode.episode_number <= 1}
-                    className="w-full flex items-center justify-between bg-zinc-800 hover:bg-zinc-700 disabled:bg-zinc-800/50 disabled:cursor-not-allowed text-white px-4 py-3 rounded-lg transition-colors"
-                  >
-                    <ArrowLeft className="h-5 w-5" />
-                    <span>Previous Episode</span>
-                    <span className="text-gray-400 text-sm">
-                      Episode {episode.episode_number - 1}
-                    </span>
-                  </button>
-                  <button
-                    onClick={handleNextEpisode}
-                    className="w-full flex items-center justify-between bg-zinc-800 hover:bg-zinc-700 text-white px-4 py-3 rounded-lg transition-colors"
-                  >
-                    <span>Next Episode</span>
-                    <span className="text-gray-400 text-sm">
-                      Episode {episode.episode_number + 1}
-                    </span>
-                    <ArrowLeft className="h-5 w-5 rotate-180" />
-                  </button>
-                </div>
               </div>
             </div>
           </div>
