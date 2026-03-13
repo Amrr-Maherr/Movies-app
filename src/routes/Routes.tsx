@@ -20,8 +20,44 @@ const ScrollToTop = () => {
 const MovieDetails = lazy(() => import("@/pages/MovieDetails"));
 const TVShowDetailsPage = lazy(() => import("@/pages/TVShowDetails"));
 const PersonDetailsPage = lazy(() => import("@/pages/PersonDetails"));
-const EpisodeDetailsPage = lazy(() => import("@/pages/EpisodeDetailsPage"));
-const SeasonDetailsPage = lazy(() => import("@/pages/SeasonDetailsPage"));
+
+// Movie detail sub-pages
+const MovieReviewsPage = lazy(() => import("@/pages/movie/MovieReviewsPage"));
+const MovieVideosPage = lazy(() => import("@/pages/movie/MovieVideosPage"));
+const MovieImagesPage = lazy(() => import("@/pages/movie/MovieImagesPage"));
+const MovieWatchProvidersPage = lazy(
+  () => import("@/pages/movie/MovieWatchProvidersPage"),
+);
+const MovieCreditsPage = lazy(() => import("@/pages/movie/MovieCreditsPage"));
+const MovieRecommendationsPage = lazy(
+  () => import("@/pages/movie/MovieRecommendationsPage"),
+);
+
+// TV detail sub-pages
+const TVReviewsPage = lazy(() => import("@/pages/tv/TVReviewsPage"));
+const TVVideosPage = lazy(() => import("@/pages/tv/TVVideosPage"));
+const TVImagesPage = lazy(() => import("@/pages/tv/TVImagesPage"));
+const TVWatchProvidersPage = lazy(
+  () => import("@/pages/tv/TVWatchProvidersPage"),
+);
+const TVCreditsPage = lazy(() => import("@/pages/tv/TVCreditsPage"));
+const TVRecommendationsPage = lazy(
+  () => import("@/pages/tv/TVRecommendationsPage"),
+);
+
+// Person detail sub-pages
+const PersonMovieCreditsPage = lazy(
+  () => import("@/pages/person/PersonMovieCreditsPage"),
+);
+const PersonTVCreditsPage = lazy(
+  () => import("@/pages/person/PersonTVCreditsPage"),
+);
+const PersonImagesPage = lazy(() => import("@/pages/person/PersonImagesPage"));
+
+// Movies list pages
+const NowPlayingMoviesPage = lazy(
+  () => import("@/pages/movies/NowPlayingMoviesPage"),
+);
 
 // Main pages
 const Home = lazy(() => import("../pages/Home"));
@@ -56,7 +92,6 @@ const SpeedTest = lazy(() => import("@/pages/SpeedTest"));
 const LegalNotices = lazy(() => import("@/pages/LegalNotices"));
 const OnlyOnNetflix = lazy(() => import("@/pages/OnlyOnNetflix"));
 
-
 // Memoized AppRoutes component - avoids re-renders when parent updates
 const AppRoutes = memo(function AppRoutes() {
   const location = useLocation();
@@ -66,50 +101,394 @@ const AppRoutes = memo(function AppRoutes() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           {/* Main routes */}
-          <Route path="/" element={<PageTransition><Home /></PageTransition>} />
-          <Route path="/tv-shows" element={<PageTransition><TVShow /></PageTransition>} />
-          <Route path="/movies" element={<PageTransition><Movie /></PageTransition>} />
-          <Route path="/kids" element={<PageTransition><Kids /></PageTransition>} />
-          <Route path="/new-popular" element={<PageTransition><NewPopular /></PageTransition>} />
-          <Route path="/my-list" element={<PageTransition><MyList /></PageTransition>} />
-          <Route path="/browse/languages" element={<PageTransition><BrowseByLanguages /></PageTransition>} />
-          <Route path="/actors" element={<PageTransition><Actor /></PageTransition>} />
-          <Route path="/actor/:slugWithId" element={<PageTransition><PersonDetailsPage /></PageTransition>} />
-          <Route path="/session" element={<PageTransition><Session /></PageTransition>} />
+          <Route
+            path="/"
+            element={
+              <PageTransition>
+                <Home />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tv-shows"
+            element={
+              <PageTransition>
+                <TVShow />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/movies"
+            element={
+              <PageTransition>
+                <Movie />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/kids"
+            element={
+              <PageTransition>
+                <Kids />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/new-popular"
+            element={
+              <PageTransition>
+                <NewPopular />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/my-list"
+            element={
+              <PageTransition>
+                <MyList />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/browse/languages"
+            element={
+              <PageTransition>
+                <BrowseByLanguages />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/actors"
+            element={
+              <PageTransition>
+                <Actor />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/actor/:slugWithId"
+            element={
+              <PageTransition>
+                <PersonDetailsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/session"
+            element={
+              <PageTransition>
+                <Session />
+              </PageTransition>
+            }
+          />
 
           {/* Auth routes */}
-          <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
-          <Route path="/signup" element={<PageTransition><Signup /></PageTransition>} />
+          <Route
+            path="/login"
+            element={
+              <PageTransition>
+                <Login />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <PageTransition>
+                <Signup />
+              </PageTransition>
+            }
+          />
 
           {/* Details routes */}
-          <Route path="/movie/:slugWithId" element={<PageTransition><MovieDetails /></PageTransition>} />
-          <Route path="/tv/:slugWithId" element={<PageTransition><TVShowDetailsPage /></PageTransition>} />
-          <Route path="/tv/:tvId/season/:seasonNumber" element={<PageTransition><SeasonDetailsPage /></PageTransition>} />
           <Route
-            path="/tv/:tvId/season/:seasonNumber/episode/:episodeNumber"
-            element={<PageTransition><EpisodeDetailsPage /></PageTransition>}
+            path="/movie/:slugWithId"
+            element={
+              <PageTransition>
+                <MovieDetails />
+              </PageTransition>
+            }
           />
-          <Route path="/person/:slugWithId" element={<PageTransition><PersonDetailsPage /></PageTransition>} />
+          <Route
+            path="/movie/:slugWithId/reviews"
+            element={
+              <PageTransition>
+                <MovieReviewsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/movie/:slugWithId/videos"
+            element={
+              <PageTransition>
+                <MovieVideosPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/movie/:slugWithId/images"
+            element={
+              <PageTransition>
+                <MovieImagesPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/movie/:slugWithId/watch"
+            element={
+              <PageTransition>
+                <MovieWatchProvidersPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/movie/:slugWithId/credits"
+            element={
+              <PageTransition>
+                <MovieCreditsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/movie/:slugWithId/recommendations"
+            element={
+              <PageTransition>
+                <MovieRecommendationsPage />
+              </PageTransition>
+            }
+          />
+
+          <Route
+            path="/tv/:slugWithId"
+            element={
+              <PageTransition>
+                <TVShowDetailsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tv/:slugWithId/reviews"
+            element={
+              <PageTransition>
+                <TVReviewsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tv/:slugWithId/videos"
+            element={
+              <PageTransition>
+                <TVVideosPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tv/:slugWithId/images"
+            element={
+              <PageTransition>
+                <TVImagesPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tv/:slugWithId/watch"
+            element={
+              <PageTransition>
+                <TVWatchProvidersPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tv/:slugWithId/credits"
+            element={
+              <PageTransition>
+                <TVCreditsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tv/:slugWithId/recommendations"
+            element={
+              <PageTransition>
+                <TVRecommendationsPage />
+              </PageTransition>
+            }
+          />
+
+          <Route
+            path="/person/:slugWithId"
+            element={
+              <PageTransition>
+                <PersonDetailsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/person/:slugWithId/movies"
+            element={
+              <PageTransition>
+                <PersonMovieCreditsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/person/:slugWithId/tv"
+            element={
+              <PageTransition>
+                <PersonTVCreditsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/person/:slugWithId/images"
+            element={
+              <PageTransition>
+                <PersonImagesPage />
+              </PageTransition>
+            }
+          />
+
+          {/* Movies list routes */}
+          <Route
+            path="/now-playing"
+            element={
+              <PageTransition>
+                <NowPlayingMoviesPage />
+              </PageTransition>
+            }
+          />
 
           {/* Footer routes */}
-          <Route path="/faq" element={<PageTransition><FAQ /></PageTransition>} />
-          <Route path="/help-center" element={<PageTransition><HelpCenter /></PageTransition>} />
-          <Route path="/account" element={<PageTransition><Account /></PageTransition>} />
-          <Route path="/media-center" element={<PageTransition><MediaCenter /></PageTransition>} />
-          <Route path="/investor-relations" element={<PageTransition><InvestorRelations /></PageTransition>} />
-          <Route path="/jobs" element={<PageTransition><Jobs /></PageTransition>} />
-          <Route path="/ways-to-watch" element={<PageTransition><WaysToWatch /></PageTransition>} />
-          <Route path="/terms-of-use" element={<PageTransition><TermsOfUse /></PageTransition>} />
-          <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />
-          <Route path="/cookie-preferences" element={<PageTransition><CookiePreferences /></PageTransition>} />
-          <Route path="/corporate-information" element={<PageTransition><CorporateInformation /></PageTransition>} />
-          <Route path="/contact-us" element={<PageTransition><ContactUs /></PageTransition>} />
-          <Route path="/speed-test" element={<PageTransition><SpeedTest /></PageTransition>} />
-          <Route path="/legal-notices" element={<PageTransition><LegalNotices /></PageTransition>} />
-          <Route path="/only-on-netflix" element={<PageTransition><OnlyOnNetflix /></PageTransition>} />
+          <Route
+            path="/faq"
+            element={
+              <PageTransition>
+                <FAQ />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/help-center"
+            element={
+              <PageTransition>
+                <HelpCenter />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <PageTransition>
+                <Account />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/media-center"
+            element={
+              <PageTransition>
+                <MediaCenter />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/investor-relations"
+            element={
+              <PageTransition>
+                <InvestorRelations />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/jobs"
+            element={
+              <PageTransition>
+                <Jobs />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/ways-to-watch"
+            element={
+              <PageTransition>
+                <WaysToWatch />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/terms-of-use"
+            element={
+              <PageTransition>
+                <TermsOfUse />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/privacy"
+            element={
+              <PageTransition>
+                <Privacy />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/cookie-preferences"
+            element={
+              <PageTransition>
+                <CookiePreferences />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/corporate-information"
+            element={
+              <PageTransition>
+                <CorporateInformation />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/contact-us"
+            element={
+              <PageTransition>
+                <ContactUs />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/speed-test"
+            element={
+              <PageTransition>
+                <SpeedTest />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/legal-notices"
+            element={
+              <PageTransition>
+                <LegalNotices />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/only-on-netflix"
+            element={
+              <PageTransition>
+                <OnlyOnNetflix />
+              </PageTransition>
+            }
+          />
 
           {/* 404 route */}
-          <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+          <Route
+            path="*"
+            element={
+              <PageTransition>
+                <NotFound />
+              </PageTransition>
+            }
+          />
         </Routes>
       </AnimatePresence>
     </Suspense>

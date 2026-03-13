@@ -6,6 +6,23 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================
+   CUSTOM UTILITIES
+   ============================================ */
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari and Opera */
+}
+
+/* ============================================
    NETFLIX COLOR SYSTEM
    ============================================
    A complete dark/light mode color system
@@ -21,28 +38,28 @@
   --netflix-red: #e50914;
   --netflix-red-hover: #f40612;
   --netflix-red-dark: #b20710;
-  
+
   /* Backgrounds - Light mode uses white/light gray */
   --background-primary: #ffffff;
   --background-secondary: #f5f5f5;
   --background-tertiary: #e5e5e5;
-  
+
   /* Text Colors */
   --text-primary: #141414;
   --text-secondary: #4d4d4d;
   --text-muted: #808080;
   --text-inverse: #ffffff;
-  
+
   /* UI Elements */
   --card-background: #ffffff;
   --card-border: #e5e5e5;
   --separator: #e5e5e5;
-  
+
   /* Interactive States */
   --hover-overlay: rgba(0, 0, 0, 0.05);
   --active-overlay: rgba(0, 0, 0, 0.1);
   --focus-ring: rgba(229, 9, 20, 0.4);
-  
+
   /* Buttons */
   --button-primary-bg: #e50914;
   --button-primary-text: #ffffff;
@@ -50,21 +67,21 @@
   --button-secondary-bg: rgba(255, 255, 255, 0.7);
   --button-secondary-text: #141414;
   --button-secondary-hover: rgba(255, 255, 255, 0.9);
-  
+
   /* Header/Navigation */
   --header-bg: transparent;
   --header-bg-scrolled: #141414;
   --header-text: #141414;
-  
+
   /* Content Cards */
   --content-card-bg: #ffffff;
   --content-card-shadow: rgba(0, 0, 0, 0.1);
-  
+
   /* Input Fields */
   --input-bg: #ffffff;
   --input-border: #8c8c8c;
   --input-focus-border: #141414;
-  
+
   /* Status Colors */
   --success: #46d369;
   --warning: #f5c518;
@@ -116,28 +133,28 @@
   --netflix-red: #e50914;
   --netflix-red-hover: #f40612;
   --netflix-red-dark: #b20710;
-  
+
   /* Backgrounds - Dark mode uses Netflix's signature dark theme */
   --background-primary: black;
   --background-secondary: #181818;
   --background-tertiary: #1f1f1f;
-  
+
   /* Text Colors */
   --text-primary: #ffffff;
   --text-secondary: #b3b3b3;
   --text-muted: #808080;
   --text-inverse: #141414;
-  
+
   /* UI Elements */
   --card-background: #181818;
   --card-border: #404040;
   --separator: #404040;
-  
+
   /* Interactive States */
   --hover-overlay: rgba(255, 255, 255, 0.1);
   --active-overlay: rgba(255, 255, 255, 0.15);
   --focus-ring: rgba(229, 9, 20, 0.6);
-  
+
   /* Buttons */
   --button-primary-bg: #e50914;
   --button-primary-text: #ffffff;
@@ -145,21 +162,21 @@
   --button-secondary-bg: rgba(255, 255, 255, 0.2);
   --button-secondary-text: #ffffff;
   --button-secondary-hover: rgba(255, 255, 255, 0.3);
-  
+
   /* Header/Navigation */
   --header-bg: transparent;
   --header-bg-scrolled: #141414;
   --header-text: #ffffff;
-  
+
   /* Content Cards */
   --content-card-bg: #181818;
   --content-card-shadow: rgba(0, 0, 0, 0.5);
-  
+
   /* Input Fields */
   --input-bg: #1f1f1f;
   --input-border: #404040;
   --input-focus-border: #ffffff;
-  
+
   /* Status Colors */
   --success: #46d369;
   --warning: #f5c518;
@@ -245,13 +262,13 @@
   * {
     @apply border-border outline-ring/50;
   }
-  
+
   /* Body with smooth color transitions */
   body {
     @apply bg-background text-foreground;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
@@ -314,11 +331,9 @@
 
 /* Header/Navigation */
 .header {
-  background: linear-gradient(
-    to bottom,
-    var(--header-bg-scrolled) 0%,
-    var(--header-bg) 100%
-  );
+  background: linear-gradient(to bottom,
+      var(--header-bg-scrolled) 0%,
+      var(--header-bg) 100%);
   transition: background-color 0.3s ease;
 }
 
@@ -392,12 +407,10 @@
 
 /* Gradient Background (Netflix Hero Style) */
 .hero-gradient {
-  background: linear-gradient(
-    to top,
-    var(--background-primary) 0%,
-    transparent 50%,
-    rgba(0, 0, 0, 0.4) 100%
-  );
+  background: linear-gradient(to top,
+      var(--background-primary) 0%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.4) 100%);
 }
 
 /* Content Fade Transition */
