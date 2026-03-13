@@ -4,51 +4,29 @@ import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import "@/index.css";
 
-import usePopularMovies from "@/queries/FetchPopularMovies";
-import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
-import useNowPlayingMovies from "@/queries/FetchNowPlayingMovies";
 import useTrendingMoviesWeek from "@/queries/FetchTrendingMoviesWeek";
-import useTrendingMoviesDay from "@/queries/FetchTrendingMoviesDay";
+import useTrendingTvWeek from "@/queries/FetchTrendingTvWeek";
 import useUpcomingMovies from "@/queries/FetchUpcomingMovies";
 import usePopularTvShows from "@/queries/FetchPopularTvShows";
-import useTrendingTvWeek from "@/queries/FetchTrendingTvWeek";
-import useTrendingTvDay from "@/queries/FetchTrendingTvDay";
-import useTopRatedTvShows from "@/queries/FetchTopRatedTvShows";
-import useAiringTodayTv from "@/queries/FetchAiringTodayTv";
-import useOnTheAirTv from "@/queries/FetchOnTheAirTv";
+import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
 import useStreamingPlatforms from "@/queries/FetchStreamingPlatforms";
 
 const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),
 );
-const MediaSection = lazy(() => import("@/components/shared/MediaSection"));
 const TopPicksSection = lazy(
   () => import("@/components/sections/TopPicksSection"),
 );
-const MoviePromo = lazy(() => import("@/components/sections/MoviePromo"));
-const ContinueWatchingSection = lazy(
-  () => import("@/components/sections/ContinueWatchingSection"),
-);
-const GenreShowcaseSection = lazy(
-  () => import("@/components/sections/GenreShowcaseSection"),
-);
-const BecauseYouWatchedSection = lazy(
-  () => import("@/components/sections/BecauseYouWatchedSection"),
-);
+const MediaSection = lazy(() => import("@/components/shared/MediaSection"));
 const NewReleasesSection = lazy(
   () => import("@/components/sections/NewReleasesSection"),
 );
+const MoviePromo = lazy(() => import("@/components/sections/MoviePromo"));
 const OnlyOnNetflixSection = lazy(
   () => import("@/components/sections/OnlyOnNetflixSection"),
 );
 const AwardWinnersSection = lazy(
   () => import("@/components/sections/AwardWinnersSection"),
-);
-const BingeWorthySection = lazy(
-  () => import("@/components/sections/BingeWorthySection"),
-);
-const WeekendWatchSection = lazy(
-  () => import("@/components/sections/WeekendWatchSection"),
 );
 const PricingSection = lazy(
   () => import("@/components/sections/PricingSection"),
@@ -65,44 +43,11 @@ const PlatformsSection = lazy(
 
 const Home = memo(function Home() {
   const {
-    data: popularMovies,
-    isLoading: popularLoading,
-    error: popularError,
-    refetch: popularRefetch,
-  } = usePopularMovies();
-  const { data: topRatedMovies, isLoading: topRatedLoading } =
-    useTopRatedMovies();
-  const {
-    data: nowPlayingMovies,
-    isLoading: nowPlayingLoading,
-    error: nowPlayingError,
-    refetch: nowPlayingRefetch,
-  } = useNowPlayingMovies();
-  const {
     data: trendingMoviesWeek,
     isLoading: trendingWeekLoading,
     error: trendingWeekError,
     refetch: trendingWeekRefetch,
   } = useTrendingMoviesWeek();
-  const {
-    data: trendingMoviesDay,
-    isLoading: trendingDayLoading,
-    error: trendingDayError,
-    refetch: trendingDayRefetch,
-  } = useTrendingMoviesDay();
-  const {
-    data: upcomingMovies,
-    isLoading: upcomingLoading,
-    error: upcomingError,
-    refetch: upcomingRefetch,
-  } = useUpcomingMovies();
-
-  const {
-    data: popularTv,
-    isLoading: popularTvLoading,
-    error: popularTvError,
-    refetch: popularTvRefetch,
-  } = usePopularTvShows();
   const {
     data: trendingTvWeek,
     isLoading: trendingTvWeekLoading,
@@ -110,25 +55,17 @@ const Home = memo(function Home() {
     refetch: trendingTvWeekRefetch,
   } = useTrendingTvWeek();
   const {
-    data: trendingTvDay,
-    isLoading: trendingTvDayLoading,
-    error: trendingTvDayError,
-    refetch: trendingTvDayRefetch,
-  } = useTrendingTvDay();
-  const { data: topRatedTv, isLoading: topRatedTvLoading } =
-    useTopRatedTvShows();
+    data: upcomingMovies,
+    isLoading: upcomingLoading,
+    refetch: upcomingRefetch,
+  } = useUpcomingMovies();
   const {
-    data: airingTodayTv,
-    isLoading: airingTodayLoading,
-    error: airingTodayError,
-    refetch: airingTodayRefetch,
-  } = useAiringTodayTv();
-  const {
-    data: onTheAirTv,
-    isLoading: onTheAirLoading,
-    error: onTheAirError,
-    refetch: onTheAirRefetch,
-  } = useOnTheAirTv();
+    data: popularTv,
+    isLoading: popularTvLoading,
+    refetch: popularTvRefetch,
+  } = usePopularTvShows();
+  const { data: topRatedMovies, isLoading: topRatedLoading } =
+    useTopRatedMovies();
   const {
     data: platforms,
     isLoading: platformsLoading,
@@ -146,36 +83,21 @@ const Home = memo(function Home() {
   );
 
   const handleRetry = useCallback(() => {
-    popularRefetch();
     trendingWeekRefetch();
-    trendingDayRefetch();
     upcomingRefetch();
-    nowPlayingRefetch();
-    popularTvRefetch();
     trendingTvWeekRefetch();
-    trendingTvDayRefetch();
-    airingTodayRefetch();
-    onTheAirRefetch();
+    popularTvRefetch();
     platformsRefetch();
   }, [
-    popularRefetch,
     trendingWeekRefetch,
-    trendingDayRefetch,
     upcomingRefetch,
-    nowPlayingRefetch,
-    popularTvRefetch,
     trendingTvWeekRefetch,
-    trendingTvDayRefetch,
-    airingTodayRefetch,
-    onTheAirRefetch,
+    popularTvRefetch,
     platformsRefetch,
   ]);
 
   // Only show full page error if absolutely no critical data is available
-  if (
-    !popularMovies &&
-    (popularError || trendingWeekError || trendingDayError)
-  ) {
+  if (!trendingMoviesWeek && trendingWeekError) {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
         <ErrorComponent retryButtonText="Try Again" onRetry={handleRetry} />
@@ -190,7 +112,7 @@ const Home = memo(function Home() {
         description="Watch unlimited movies and TV shows on Netflix. Stream anytime, anywhere on any device."
       />
 
-      {/* Hero Section - prioritized */}
+      {/* Hero Section */}
       <Suspense fallback={<SectionSkeleton variant="hero" />}>
         <HeroSection
           data={heroData}
@@ -267,21 +189,6 @@ const Home = memo(function Home() {
         </LazyWrapper>
       </Suspense>
 
-      {/* Continue Watching Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={350}>
-          {trendingTvWeek ? (
-            <ContinueWatchingSection
-              movies={trendingTvWeek}
-              title="Continue Watching"
-              mediaType="tv"
-            />
-          ) : trendingTvWeekLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
       {/* Trending TV Shows */}
       <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={250}>
@@ -297,12 +204,12 @@ const Home = memo(function Home() {
         </LazyWrapper>
       </Suspense>
 
-      {/* First Promo - Left Aligned */}
+      {/* Featured Movie */}
       <Suspense fallback={<SectionSkeleton variant="hero" />}>
         <LazyWrapper height={500}>
-          {popularMovies && popularMovies[0] ? (
+          {upcomingMovies && upcomingMovies[0] ? (
             <MoviePromo
-              movie={popularMovies[0]}
+              movie={upcomingMovies[0]}
               mediaType="movie"
               variant="left"
             />
@@ -336,140 +243,6 @@ const Home = memo(function Home() {
         </LazyWrapper>
       </Suspense>
 
-      {/* Genre Showcase - Action */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={400}>
-          {trendingMoviesDay ? (
-            <GenreShowcaseSection
-              movies={trendingMoviesDay}
-              genre="Action & Adventure"
-              mediaType="movie"
-            />
-          ) : trendingDayLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Trending Today */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={250}>
-          <div className="py-6 md:py-8 container">
-            <MediaSection
-              title="Trending Today"
-              data={trendingMoviesDay}
-              isLoading={trendingDayLoading}
-              error={trendingDayError}
-              onRetry={trendingDayRefetch}
-            />
-          </div>
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Weekend Watch Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={400}>
-          {popularMovies ? (
-            <WeekendWatchSection movies={popularMovies} mediaType="movie" />
-          ) : popularLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Because You Watched Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={300}>
-          {trendingTvDay ? (
-            <BecauseYouWatchedSection
-              movies={trendingTvDay}
-              basedOn="Stranger Things"
-              mediaType="tv"
-            />
-          ) : trendingTvDayLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Hot TV Shows Today & Popular Movies */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-        <LazyWrapper height={500}>
-          <div className="py-6 md:py-8 container">
-            <MediaSection
-              title="Hot TV Shows Today"
-              data={trendingTvDay}
-              isLoading={trendingTvDayLoading}
-              error={trendingTvDayError}
-              onRetry={trendingTvDayRefetch}
-            />
-            <MediaSection
-              title="Popular Movies"
-              data={popularMovies}
-              isLoading={popularLoading}
-              error={popularError}
-              onRetry={popularRefetch}
-            />
-          </div>
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Second Promo - Right Aligned */}
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={500}>
-          {popularTv && popularTv[1] ? (
-            <MoviePromo movie={popularTv[1]} mediaType="tv" variant="left" />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Binge-Worthy Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={350}>
-          {onTheAirTv ? (
-            <BingeWorthySection movies={onTheAirTv} mediaType="tv" />
-          ) : onTheAirLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Top 10 TV Shows */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={10} />}>
-        <LazyWrapper height={300}>
-          {popularTv ? (
-            <TopPicksSection
-              movies={popularTv}
-              title="Top 10 TV Shows in Egypt Today"
-            />
-          ) : popularTvLoading ? (
-            <SectionSkeleton variant="grid" cardCount={10} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Popular TV Shows & Coming Soon */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-        <LazyWrapper height={500}>
-          <div className="py-6 md:py-8 container">
-            <MediaSection
-              title="Popular TV Shows"
-              data={popularTv}
-              isLoading={popularTvLoading}
-              error={popularTvError}
-              onRetry={popularTvRefetch}
-            />
-            <MediaSection
-              title="Coming Soon"
-              data={upcomingMovies}
-              isLoading={upcomingLoading}
-              error={upcomingError}
-              onRetry={upcomingRefetch}
-            />
-          </div>
-        </LazyWrapper>
-      </Suspense>
-
       {/* Award Winners Section */}
       <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={350}>
@@ -478,128 +251,6 @@ const Home = memo(function Home() {
           ) : topRatedLoading ? (
             <SectionSkeleton variant="grid" cardCount={6} />
           ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Third Promo - Center Aligned */}
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={500}>
-          {topRatedMovies && topRatedMovies[2] ? (
-            <MoviePromo
-              movie={topRatedMovies[2]}
-              mediaType="movie"
-              variant="center"
-            />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Genre Showcase - Drama */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={400}>
-          {airingTodayTv ? (
-            <GenreShowcaseSection
-              movies={airingTodayTv}
-              genre="Drama Series"
-              mediaType="tv"
-            />
-          ) : airingTodayLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Airing Today */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={250}>
-          <div className="py-6 md:py-8 container">
-            <MediaSection
-              title="Airing Today"
-              data={airingTodayTv}
-              isLoading={airingTodayLoading}
-              error={airingTodayError}
-              onRetry={airingTodayRefetch}
-            />
-          </div>
-        </LazyWrapper>
-      </Suspense>
-
-      {/* New Episodes This Week */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={350}>
-          {airingTodayTv ? (
-            <NewReleasesSection
-              movies={airingTodayTv}
-              title="New Episodes This Week"
-            />
-          ) : airingTodayLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Now Playing in Theaters */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={250}>
-          <div className="py-6 md:py-8 container">
-            <MediaSection
-              title="Now Playing in Theaters"
-              data={nowPlayingMovies}
-              isLoading={nowPlayingLoading}
-              error={nowPlayingError}
-              onRetry={nowPlayingRefetch}
-            />
-          </div>
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Fourth Promo - Left Aligned */}
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={500}>
-          {topRatedTv && topRatedTv[3] ? (
-            <MoviePromo movie={topRatedTv[3]} mediaType="tv" variant="left" />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Award Winners TV */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={350}>
-          {topRatedTv ? (
-            <AwardWinnersSection movies={topRatedTv} mediaType="tv" />
-          ) : topRatedTvLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Because You Watched Section 2 */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={300}>
-          {nowPlayingMovies ? (
-            <BecauseYouWatchedSection
-              movies={nowPlayingMovies}
-              basedOn="The Dark Knight"
-              mediaType="movie"
-            />
-          ) : nowPlayingLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
-
-      {/* Currently Airing */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={250}>
-          <div className="py-6 md:py-8 container">
-            <MediaSection
-              title="Currently Airing"
-              data={onTheAirTv}
-              isLoading={onTheAirLoading}
-              error={onTheAirError}
-              onRetry={onTheAirRefetch}
-            />
-          </div>
         </LazyWrapper>
       </Suspense>
 
