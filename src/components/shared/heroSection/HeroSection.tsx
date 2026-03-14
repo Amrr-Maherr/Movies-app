@@ -3,7 +3,7 @@ import Slider from "@/components/shared/Slider/slider";
 import HeroSlide from "./HeroSlide";
 import { Autoplay } from "swiper/modules";
 import type { HeroMedia } from "@/types";
-import { Error, Loader } from "@/components/ui";
+import { Error, SectionSkeleton } from "@/components/ui";
 import { useMovieModal } from "@/contexts/MovieModalContext";
 
 // ============================================
@@ -46,7 +46,7 @@ const HeroSection = memo(function HeroSection({ data, isLoading, error, onRetry 
   // Loading state - Theme-aware background
   if (isLoading || featuredMedia.length === 0) {
     return (
-      <Loader/>
+      <SectionSkeleton variant="hero" />
     );
   }
   if (error || featuredMedia.length == 0) {
