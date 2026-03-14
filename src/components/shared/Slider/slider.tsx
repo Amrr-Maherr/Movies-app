@@ -4,7 +4,13 @@ import { useRef, useMemo, memo, useCallback } from "react";
 import * as React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { SwiperOptions } from "swiper/types";
-import { Pagination, Autoplay, Navigation, EffectFade } from "swiper/modules";
+import {
+  Pagination,
+  Autoplay,
+  Navigation,
+  EffectFade,
+  Virtual,
+} from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 // Import Swiper CSS modules
@@ -25,6 +31,7 @@ interface SliderProps {
     | typeof Autoplay
     | typeof Navigation
     | typeof EffectFade
+    | typeof Virtual
   )[];
   useFadeEffect?: boolean;
   hideNavigation?: boolean;
@@ -69,7 +76,7 @@ const Slider = memo(function Slider({
   useFadeEffect = false,
   hideNavigation = true,
 }: SliderProps) {
-  const swiperRef = useRef(null);
+  const swiperRef = useRef<any>(null);
   const effect = useMemo(
     () => (useFadeEffect ? "fade" : "slide"),
     [useFadeEffect],
@@ -77,8 +84,8 @@ const Slider = memo(function Slider({
   const activeModules = useMemo(
     () =>
       useFadeEffect
-        ? [...modules, EffectFade, Navigation]
-        : [...modules, Navigation],
+        ? [...modules, EffectFade, Navigation, Virtual]
+        : [...modules, Navigation, Virtual],
     [modules, useFadeEffect],
   );
 
@@ -134,11 +141,14 @@ const Slider = memo(function Slider({
         grabCursor={true}
         allowSlideNext={true}
         allowSlidePrev={true}
+        virtual={true}
         className={`mySwiper ${className || ""}`}
         {...swiperOptions}
       >
         {React.Children.map(children, (child, index) => (
-          <SwiperSlide key={index}>{child}</SwiperSlide>
+          <SwiperSlide key={index} virtualIndex={index}>
+            {child}
+          </SwiperSlide>
         ))}
       </Swiper>
 
