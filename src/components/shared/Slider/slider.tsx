@@ -7,8 +7,7 @@ import type { SwiperOptions } from "swiper/types";
 import { Pagination, Autoplay, Navigation, EffectFade } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// FIX #8: Import only needed Swiper CSS modules instead of full bundle
-// This reduces CSS bundle size by ~30KB
+// Import Swiper CSS modules
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -21,7 +20,12 @@ interface SliderProps {
   spaceBetween?: number;
   className?: string;
   swiperOptions?: SwiperOptions;
-  modules?: (typeof Pagination | typeof Autoplay | typeof Navigation | typeof EffectFade)[];
+  modules?: (
+    | typeof Pagination
+    | typeof Autoplay
+    | typeof Navigation
+    | typeof EffectFade
+  )[];
   useFadeEffect?: boolean;
   hideNavigation?: boolean;
 }
@@ -40,7 +44,7 @@ const NavigationButton = memo(function NavigationButton({
     <button
       className={cn(
         "absolute top-1/2 z-10 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full opacity-100 transition-all duration-300 backdrop-blur-sm border border-white/20 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50 flex items-center justify-center",
-        direction === "prev" ? "left-4" : "right-4"
+        direction === "prev" ? "left-4" : "right-4",
       )}
       onClick={onClick}
       aria-label={ariaLabel}
@@ -66,13 +70,16 @@ const Slider = memo(function Slider({
   hideNavigation = true,
 }: SliderProps) {
   const swiperRef = useRef(null);
-  const effect = useMemo(() => (useFadeEffect ? "fade" : "slide"), [useFadeEffect]);
+  const effect = useMemo(
+    () => (useFadeEffect ? "fade" : "slide"),
+    [useFadeEffect],
+  );
   const activeModules = useMemo(
     () =>
       useFadeEffect
         ? [...modules, EffectFade, Navigation]
         : [...modules, Navigation],
-    [modules, useFadeEffect]
+    [modules, useFadeEffect],
   );
 
   // Memoized autoplay configuration to prevent re-renders
@@ -92,7 +99,7 @@ const Slider = memo(function Slider({
       1024: { slidesPerView, spaceBetween },
       ...swiperOptions.breakpoints,
     }),
-    [slidesPerView, spaceBetween, swiperOptions.breakpoints]
+    [slidesPerView, spaceBetween, swiperOptions.breakpoints],
   );
 
   // Memoized slide navigation handlers

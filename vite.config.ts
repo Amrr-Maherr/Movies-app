@@ -4,12 +4,82 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 import viteImagemin from 'vite-plugin-imagemin'
 import { visualizer } from 'rollup-plugin-visualizer'
+import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    // =========================================================
+    // PWA PLUGIN - Progressive Web App Support
+    // =========================================================
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      manifest: {
+        name: 'Netflix Egypt',
+        short_name: 'Netflix',
+        description: 'Watch TV Shows Online, Watch Movies Online',
+        theme_color: '#141414',
+        background_color: '#141414',
+        display: 'standalone',
+        orientation: 'portrait',
+        scope: '/',
+        start_url: '/',
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable'
+          }
+        ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/image\.tmdb\.org\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'tmdb-images',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            urlPattern: /^https:\/\/api\.themoviedb\.org\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'tmdb-api',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 // 1 day
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          }
+        ]
+      }
+    }),
     // =========================================================
     // BUNDLE VISUALIZATION - Analyze bundle size and chunks
     // Run 'npm run build' and open dist/stats.html to view
@@ -28,7 +98,7 @@ export default defineConfig({
     viteImagemin({
       // Enable verbose logging to see compression results
       verbose: true,
-      
+
       // =========================================================
       // JPEG OPTIMIZATION - Uses mozjpeg for better compression
       // =========================================================
@@ -38,14 +108,14 @@ export default defineConfig({
         // @ts-ignore - mozjpeg options
         progressive: true, // Progressive JPEG for better perceived loading
       },
-      
+
       // =========================================================
       // PNG OPTIMIZATION - Uses optipng for lossless compression
       // =========================================================
       optipng: {
         optimizationLevel: 5, // Compression level (0-7, higher = more compression)
       },
-      
+
       // =========================================================
       // PNG QUANTIZATION - Uses pngquant for lossy PNG compression
       // Converts PNG to smaller file sizes with quality control
@@ -56,7 +126,7 @@ export default defineConfig({
         // @ts-ignore - pngquant options
         speed: 4, // Compression speed (1-11, lower = better quality)
       },
-      
+
       // =========================================================
       // GIF OPTIMIZATION
       // =========================================================
@@ -65,7 +135,7 @@ export default defineConfig({
         colors: 128, // Reduce color palette (2-256)
         interlaced: false,
       },
-      
+
       // =========================================================
       // SVG OPTIMIZATION - Uses svgo
       // =========================================================
@@ -83,7 +153,7 @@ export default defineConfig({
           },
         ],
       },
-      
+
       // =========================================================
       // WEBP OPTIMIZATION (if WebP images are present)
       // =========================================================
@@ -93,7 +163,7 @@ export default defineConfig({
         // @ts-ignore - webp options
         method: 6, // Compression method (0-6, higher = better compression)
       },
-      
+
       // =========================================================
       // JPEG TRANSCOMPRESSION - Additional JPEG optimization
       // =========================================================
@@ -115,14 +185,14 @@ export default defineConfig({
     sourcemap: false,
     minify: 'terser',
     chunkSizeWarningLimit: 1500,
-    
+
     // =========================================================
     // ASSET HANDLING - IMAGE OPTIMIZATION
     // =========================================================
     // Inline small images as Base64 to reduce HTTP requests
     // Images smaller than 4KB will be converted to inline data URIs
     assetsInlineLimit: 4096, // 4KB threshold
-    
+
     // =========================================================
     // CODE SPLITTING - PERFORMANCE OPTIMIZATION
     // Reduces initial bundle size by splitting vendor chunks
@@ -133,7 +203,7 @@ export default defineConfig({
         entryFileNames: 'assets/[name].[hash].js',
         chunkFileNames: 'assets/[name].[hash].js',
         assetFileNames: 'assets/[name].[hash].[ext]',
-        
+
         // Manual chunks for better code splitting
         manualChunks: {
           // Separate React core libraries
@@ -174,7 +244,7 @@ export default defineConfig({
         },
       },
     },
-    
+
     // Terser options for JS minification
     terserOptions: {
       compress: {
@@ -191,14 +261,14 @@ export default defineConfig({
         safari10: true, // Safari 10 compatibility
       },
     },
-    
+
     // Target modern browsers for smaller bundles
     target: 'esnext',
-    
+
     // Enable CSS code splitting
     cssCodeSplit: true,
   },
-  
+
   // =========================================================
   // DEPENDENCY OPTIMIZATION - PERFORMANCE
   // Pre-bundle dependencies for faster dev startup and caching
@@ -208,18 +278,18 @@ export default defineConfig({
     // Exclude large dependencies that don't need pre-bundling
     exclude: ['swiper'],
   },
-  
+
   css: {
     devSourcemap: false,
   },
-  
+
   server: {
     port: 5173,
     open: true,
     strictPort: true,
     fs: { strict: true },
   },
-  
+
   // =========================================================
   // WORKER CONFIGURATION
   // =========================================================

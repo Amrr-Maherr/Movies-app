@@ -1,0 +1,35 @@
+{
+  "name": "Netflix Egypt",
+  "short_name": "Netflix",
+  "description": "Watch TV Shows Online, Watch Movies Online",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#141414",
+  "background_color": "#141414",
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["entertainment", "movies", "tv"],
+  "lang": "en-US",
+  "dir": "ltr",
+  "prefer_related_applications": false
+}

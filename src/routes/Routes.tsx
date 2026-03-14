@@ -70,6 +70,7 @@ const NewPopular = lazy(() => import("@/pages/NewPopular"));
 const MyList = lazy(() => import("@/pages/MyList"));
 const BrowseByLanguages = lazy(() => import("@/pages/BrowseByLanguages"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const Offline = lazy(() => import("@/pages/Offline"));
 
 // Auth pages
 const Login = lazy(() => import("@/pages/auth/Login"));
@@ -486,6 +487,16 @@ const AppRoutes = memo(function AppRoutes() {
             element={
               <PageTransition>
                 <NotFound />
+              </PageTransition>
+            }
+          />
+
+          {/* Offline route */}
+          <Route
+            path="/offline"
+            element={
+              <PageTransition>
+                <Offline />
               </PageTransition>
             }
           />

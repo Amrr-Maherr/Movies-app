@@ -1,12 +1,17 @@
 /// <reference types="vite/client" />
+/// <reference types="vite-plugin-pwa/client" />
 
-declare module "*.css" {
-  const content: Record<string, string>;
-  export default content;
+interface RegisterSWOptions {
+  onNeedRefresh?: () => void;
+  onOfflineReady?: () => void;
+  onRegistered?: (registration: ServiceWorkerRegistration | undefined) => void;
+  onRegisterError?: (error: Error) => void;
 }
 
-declare module "swiper/css" {}
-declare module "swiper/css/bundle" {}
-declare module "swiper/css/pagination" {}
-declare module "swiper/css/navigation" {}
-declare module "swiper/css/effect-fade" {}
+declare module 'virtual:pwa-register' {
+  export function registerSW(options?: RegisterSWOptions): (reloadPage?: boolean) => Promise<void>;
+}
+
+declare module 'virtual:pwa-register/update' {
+  export function registerSW(options?: RegisterSWOptions): (reloadPage?: boolean) => Promise<void>;
+}
