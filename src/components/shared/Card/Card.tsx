@@ -8,6 +8,8 @@ import LazyWrapper from "@/components/ui/lazy-wrapper";
 import type { HeroMedia, Episode, Season } from "@/types";
 import { Star } from "lucide-react";
 import { useMovieModal } from "@/contexts/MovieModalContext";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { addToList, removeFromList, selectIsInList } from "@/store/ListReucer";
 
 // FIX: Move simple helper functions outside component to prevent recreation
 const getMovieTitle = (media: HeroMedia): string => {
@@ -127,7 +129,13 @@ const Card = memo(
   }: CardProps) => {
     const navigate = useNavigate();
     const { openModal } = useMovieModal();
+    const dispatch = useAppDispatch();
     const [isHovered, setIsHovered] = useState(false);
+
+    // Redux: Check if item is in list
+    const isInList = useAppSelector((state) =>
+      movie ? selectIsInList(state, movie.id) : false,
+    );
 
     // FIX: Use external helper functions instead of useCallback
     const title = movie ? getMovieTitle(movie) : "";
@@ -183,6 +191,21 @@ const Card = memo(
         handleNavigate();
       },
       [handleNavigate],
+    );
+
+    const handleAddToList = useCallback(
+      (e: React.MouseEvent) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (movie) {
+          if (isInList) {
+            dispatch(removeFromList(movie.id));
+          } else {
+            dispatch(addToList(movie));
+          }
+        }
+      },
+      [dispatch, movie, isInList],
     );
 
     const handleCardMouseEnter = () => setIsHovered(true);
@@ -799,6 +822,8 @@ const Card = memo(
                 isHovered={isHovered}
                 onPlay={handlePlayClick}
                 onMoreInfo={handleMoreInfoClick}
+                onAddToList={handleAddToList}
+                isInList={isInList}
               />
             </CardPoster>
           </div>

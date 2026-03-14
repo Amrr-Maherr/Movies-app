@@ -1,9 +1,21 @@
 import { memo, useMemo } from "react";
-import { X, Play, Plus, ThumbsUp } from "lucide-react";
-import { Dialog, DialogContent, DialogOverlay, DialogPortal } from "@/components/ui/dialog";
-import { getMatchScore, getYear, getAgeRating, getGenres } from "@/utils/movieHelpers";
+import { X, Play, Plus, Check, ThumbsUp } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogPortal,
+} from "@/components/ui/dialog";
+import {
+  getMatchScore,
+  getYear,
+  getAgeRating,
+  getGenres,
+} from "@/utils/movieHelpers";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { addToList, removeFromList, selectIsInList } from "@/store/ListReucer";
 
 interface MovieModalProps {
   movie: HeroMedia | null;
@@ -24,32 +36,57 @@ const getPosterUrl = (posterPath: string | null): string => {
     : "https://via.placeholder.com/500x750?text=No+Image";
 };
 
-const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieModalProps) {
+const MovieModal = memo(function MovieModal({
+  movie,
+  isOpen,
+  onClose,
+}: MovieModalProps) {
   // Memoized: Pre-calculated values (moved before early return to follow hooks rules)
   const matchScore = useMemo(
     () => (movie ? getMatchScore(movie.vote_average) : 0),
-    [movie]
+    [movie],
   );
 
   const year = useMemo(
-    () => movie ? getYear("release_date" in movie ? movie.release_date : movie.first_air_date) : "",
-    [movie]
+    () =>
+      movie
+        ? getYear(
+            "release_date" in movie ? movie.release_date : movie.first_air_date,
+          )
+        : "",
+    [movie],
   );
 
   const ageRating = useMemo(
-    () => movie ? getAgeRating(movie.vote_average) : "",
-    [movie]
+    () => (movie ? getAgeRating(movie.vote_average) : ""),
+    [movie],
   );
 
   const title = useMemo(
-    () => movie ? ("title" in movie ? movie.title : movie.name) : "",
-    [movie]
+    () => (movie ? ("title" in movie ? movie.title : movie.name) : ""),
+    [movie],
   );
 
   const genres = useMemo(
-    () => movie ? getGenres(movie.genre_ids) : [],
-    [movie]
+    () => (movie ? getGenres(movie.genre_ids) : []),
+    [movie],
   );
+
+  // Redux: Check if item is in list
+  const dispatch = useAppDispatch();
+  const isInList = useAppSelector((state) =>
+    movie ? selectIsInList(state, movie.id) : false,
+  );
+
+  const handleAddToList = () => {
+    if (movie) {
+      if (isInList) {
+        dispatch(removeFromList(movie.id));
+      } else {
+        dispatch(addToList(movie));
+      }
+    }
+  };
 
   // Early return after hooks
   if (!movie) return null;
@@ -150,25 +187,38 @@ const MovieModal = memo(function MovieModal({ movie, isOpen, onClose }: MovieMod
                       {/* Action Buttons */}
                       <div className="flex items-center justify-center sm:justify-start gap-3 flex-wrap">
                         {/* Play Button */}
-                        <button
-                          className="bg-white text-black px-6 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-gray-200 transition-all button-hover hover-scale tap-scale"
-                        >
+                        <button className="bg-white text-black px-6 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-gray-200 transition-all button-hover hover-scale tap-scale">
                           <Play className="h-4 w-4 fill-black" />
                           Play
                         </button>
 
                         {/* Add to List Button */}
                         <button
-                          className="bg-[var(--background-secondary)]/80 backdrop-blur-sm text-white px-6 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-[var(--background-tertiary)] transition-all border border-white/20 button-hover hover-scale tap-scale"
+                          onClick={handleAddToList}
+                          className={`px-6 py-3 rounded-md font-semibold text-sm flex items-center gap-2 transition-all border border-white/20 button-hover hover-scale tap-scale ${
+                            isInList
+                              ? "bg-[var(--success)]/80 hover:bg-[var(--success)] text-white"
+                              : "bg-[var(--background-secondary)]/80 backdrop-blur-sm text-white hover:bg-[var(--background-tertiary)]"
+                          }`}
+                          title={
+                            isInList ? "Remove from My List" : "Add to My List"
+                          }
                         >
-                          <Plus className="h-4 w-4" />
-                          My List
+                          {isInList ? (
+                            <>
+                              <Check className="h-4 w-4" />
+                              In List
+                            </>
+                          ) : (
+                            <>
+                              <Plus className="h-4 w-4" />
+                              My List
+                            </>
+                          )}
                         </button>
 
                         {/* Rate Button */}
-                        <button
-                          className="bg-[var(--background-secondary)]/80 backdrop-blur-sm text-white px-4 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-[var(--background-tertiary)] transition-all border border-white/20 button-hover hover-scale tap-scale"
-                        >
+                        <button className="bg-[var(--background-secondary)]/80 backdrop-blur-sm text-white px-4 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-[var(--background-tertiary)] transition-all border border-white/20 button-hover hover-scale tap-scale">
                           <ThumbsUp className="h-4 w-4" />
                         </button>
                       </div>
