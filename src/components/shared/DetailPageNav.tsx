@@ -11,8 +11,12 @@ import {
   Heart,
   Film,
   Clapperboard,
+  Home,
 } from "lucide-react";
 
+// ============================================
+// TYPES
+// ============================================
 interface NavItem {
   label: string;
   href: string;
@@ -24,11 +28,120 @@ interface DetailPageNavProps {
   slugWithId: string;
 }
 
+// ============================================
+// CONSTANTS - Navigation Icon Components
+// ============================================
+const ICONS = {
+  overview: <Home className="w-4 h-4" />,
+  film: <Film className="w-4 h-4" />,
+  tv: <Tv className="w-4 h-4" />,
+  star: <Star className="w-4 h-4" />,
+  video: <Video className="w-4 h-4" />,
+  image: <Image className="w-4 h-4" />,
+  users: <Users className="w-4 h-4" />,
+  heart: <Heart className="w-4 h-4" />,
+  clapperboard: <Clapperboard className="w-4 h-4" />,
+} as const;
+
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+/**
+ * Generate navigation items based on content type
+ */
+function getNavigationItems(
+  type: "movie" | "tv" | "person",
+  basePath: string,
+): NavItem[] {
+  const commonItems: NavItem[] = [
+    { label: "Overview", href: basePath, icon: ICONS.overview },
+    { label: "Reviews", href: `${basePath}/reviews`, icon: ICONS.star },
+    { label: "Videos", href: `${basePath}/videos`, icon: ICONS.video },
+    { label: "Images", href: `${basePath}/images`, icon: ICONS.image },
+    { label: "Watch", href: `${basePath}/watch`, icon: ICONS.tv },
+    { label: "Credits", href: `${basePath}/credits`, icon: ICONS.users },
+    { label: "More", href: `${basePath}/recommendations`, icon: ICONS.heart },
+  ];
+
+  const personItems: NavItem[] = [
+    { label: "Overview", href: basePath, icon: ICONS.overview },
+    { label: "Movies", href: `${basePath}/movies`, icon: ICONS.film },
+    { label: "TV Shows", href: `${basePath}/tv`, icon: ICONS.tv },
+    { label: "Photos", href: `${basePath}/images`, icon: ICONS.image },
+  ];
+
+  if (type === "person") {
+    return personItems;
+  }
+
+  // For movies and TV shows
+  return commonItems;
+}
+
+/**
+ * Get the appropriate overview icon based on type
+ */
+function getOverviewIcon(type: "movie" | "tv" | "person"): React.ReactNode {
+  if (type === "tv") {
+    return ICONS.clapperboard;
+  }
+  return ICONS.overview;
+}
+
+// ============================================
+// SUB-COMPONENTS
+// ============================================
+interface NavButtonProps {
+  item: NavItem;
+  isActive: boolean;
+  isMobile?: boolean;
+}
+
+/**
+ * Individual navigation button component
+ */
+const NavButton = memo(function NavButton({
+  item,
+  isActive,
+  isMobile = false,
+}: NavButtonProps) {
+  return (
+    <Link to={item.href} className="flex-shrink-0">
+      <motion.button
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className={cn(
+          "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200",
+          isActive
+            ? "bg-red-600 text-white shadow-md shadow-red-600/30"
+            : "text-white/70 hover:text-white hover:bg-white/10",
+        )}
+        aria-current={isActive ? "page" : undefined}
+        aria-label={`Navigate to ${item.label} page`}
+      >
+        {item.icon}
+        {!isMobile && <span>{item.label}</span>}
+      </motion.button>
+    </Link>
+  );
+});
+
+// ============================================
+// MAIN COMPONENT
+// ============================================
 /**
  * DetailPageNav Component
- * Navigation tabs for movie/TV/person detail sub-pages
+ *
+ * Navigation tabs for movie/TV/person detail sub-pages.
  * Provides easy access to reviews, videos, images, credits, etc.
- * Fully responsive with mobile-friendly horizontal scroll
+ *
+ * Features:
+ * - Responsive design with mobile-friendly horizontal scroll
+ * - Active state indicator with smooth animation
+ * - Type-specific navigation items
+ * - Accessibility support with ARIA labels
  */
 const DetailPageNav = memo(function DetailPageNav({
   type,
@@ -38,152 +151,65 @@ const DetailPageNav = memo(function DetailPageNav({
   const currentPath = location.pathname;
 
   // Memoized: Generate navigation items based on type
-  const navItems: NavItem[] = useMemo(() => {
+  const navItems = useMemo(() => {
     const basePath = `/${type}/${slugWithId}`;
+    const items = getNavigationItems(type, basePath);
 
-    if (type === "movie") {
-      return [
-        {
-          label: "Overview",
-          href: basePath,
-          icon: <Film className="w-4 h-4" />,
-        },
-        {
-          label: "Reviews",
-          href: `${basePath}/reviews`,
-          icon: <Star className="w-4 h-4" />,
-        },
-        {
-          label: "Videos",
-          href: `${basePath}/videos`,
-          icon: <Video className="w-4 h-4" />,
-        },
-        {
-          label: "Images",
-          href: `${basePath}/images`,
-          icon: <Image className="w-4 h-4" />,
-        },
-        {
-          label: "Watch",
-          href: `${basePath}/watch`,
-          icon: <Tv className="w-4 h-4" />,
-        },
-        {
-          label: "Credits",
-          href: `${basePath}/credits`,
-          icon: <Users className="w-4 h-4" />,
-        },
-        {
-          label: "More",
-          href: `${basePath}/recommendations`,
-          icon: <Heart className="w-4 h-4" />,
-        },
-      ];
-    }
-
+    // Override overview icon for TV shows
     if (type === "tv") {
-      return [
-        {
-          label: "Overview",
-          href: basePath,
-          icon: <Clapperboard className="w-4 h-4" />,
-        },
-        {
-          label: "Reviews",
-          href: `${basePath}/reviews`,
-          icon: <Star className="w-4 h-4" />,
-        },
-        {
-          label: "Videos",
-          href: `${basePath}/videos`,
-          icon: <Video className="w-4 h-4" />,
-        },
-        {
-          label: "Images",
-          href: `${basePath}/images`,
-          icon: <Image className="w-4 h-4" />,
-        },
-        {
-          label: "Watch",
-          href: `${basePath}/watch`,
-          icon: <Tv className="w-4 h-4" />,
-        },
-        {
-          label: "Credits",
-          href: `${basePath}/credits`,
-          icon: <Users className="w-4 h-4" />,
-        },
-        {
-          label: "More",
-          href: `${basePath}/recommendations`,
-          icon: <Heart className="w-4 h-4" />,
-        },
-      ];
+      items[0] = {
+        ...items[0],
+        icon: getOverviewIcon(type),
+      };
     }
 
-    // Person type
-    return [
-      { label: "Overview", href: basePath, icon: <Star className="w-4 h-4" /> },
-      {
-        label: "Movies",
-        href: `${basePath}/movies`,
-        icon: <Film className="w-4 h-4" />,
-      },
-      {
-        label: "TV Shows",
-        href: `${basePath}/tv`,
-        icon: <Tv className="w-4 h-4" />,
-      },
-      {
-        label: "Photos",
-        href: `${basePath}/images`,
-        icon: <Image className="w-4 h-4" />,
-      },
-    ];
+    return items;
   }, [type, slugWithId]);
+
+  // Memoized: Find active index
+  const activeIndex = useMemo(
+    () => navItems.findIndex((item) => currentPath === item.href),
+    [navItems, currentPath],
+  );
 
   return (
     <nav
-      className="sticky top-[64px] z-40 bg-black/95 backdrop-blur-md border-b border-white/10 shadow-lg"
+      className="sticky top-[64px] z-40 bg-black/95 backdrop-blur-md border-white/10 shadow-lg"
       role="navigation"
       aria-label="Detail page navigation"
     >
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-        {/* Mobile: Horizontal scrollable navigation */}
-        <div className="flex items-center gap-1 overflow-x-auto py-2 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
-          {navItems.map((item) => {
-            const isActive = currentPath === item.href;
-            return (
-              <Link key={item.href} to={item.href} className="flex-shrink-0">
-                <motion.button
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={cn(
-                    "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200",
-                    isActive
-                      ? "bg-red-600 text-white shadow-md shadow-red-600/30"
-                      : "text-white/70 hover:text-white hover:bg-white/10",
-                  )}
-                  aria-current={isActive ? "page" : undefined}
-                >
-                  {item.icon}
-                  <span className="hidden xs:inline">{item.label}</span>
-                </motion.button>
-              </Link>
-            );
-          })}
+        {/* Desktop/Tablet: Full navigation with labels */}
+        <div className="hidden md:flex items-center gap-1 overflow-x-auto py-2 scrollbar-hide">
+          {navItems.map((item) => (
+            <NavButton
+              key={item.href}
+              item={item}
+              isActive={currentPath === item.href}
+            />
+          ))}
         </div>
 
-        {/* Mobile indicator bar showing active section */}
+        {/* Mobile: Icon-only horizontal scrollable navigation */}
+        <div className="flex md:hidden items-center gap-1 overflow-x-auto py-2 scrollbar-hide -mx-4 px-4">
+          {navItems.map((item) => (
+            <NavButton
+              key={item.href}
+              item={item}
+              isActive={currentPath === item.href}
+              isMobile
+            />
+          ))}
+        </div>
+
+        {/* Mobile: Animated active indicator bar */}
         <div className="h-0.5 bg-white/10 md:hidden">
           <motion.div
             className="h-full bg-red-600"
-            initial={{ width: 0 }}
+            initial={{ width: 0, x: 0 }}
             animate={{
               width: `${100 / navItems.length}%`,
-              x: `${navItems.findIndex((item) => currentPath === item.href) * 100}%`,
+              x: `${activeIndex * 100}%`,
             }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />
