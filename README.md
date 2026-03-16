@@ -681,21 +681,90 @@ Swiper-based carousel:
 Auto-rotating hero carousel:
 
 ```tsx
-<HeroSection 
-  data={heroData} 
-  isLoading={false} 
-  error={null} 
-  onRetry={() => {}} 
+<HeroSection
+  data={heroData}
+  isLoading={false}
+  error={null}
+  onRetry={() => {}}
 />
 ```
 
 **Features:**
 - 8-second auto-rotation
 - Fade transitions
-- Full-width backdrop
+- Full-width backdrop with YouTube trailer background
 - Gradient overlays
-- Play & More Info buttons
+- Play, More Info buttons
 - Responsive content
+
+#### MediaHero
+**File:** `src/components/shared/MediaHero.tsx`
+
+Detail page hero with video controls:
+
+```tsx
+<MediaHero
+  media={mediaData}
+  onPlayTrailer={() => {}}
+  onAddToList={() => {}}
+/>
+```
+
+**Features:**
+- Background video with autoplay, loop, mute
+- Inline video controls (Play/Pause, Mute/Unmute, Fullscreen)
+- Action buttons (Play, My List, More Info)
+- Match score, rating, age rating badges
+- Responsive layout
+- Fullscreen API support
+- ESC key to exit fullscreen
+
+#### ActionButtons
+**File:** `src/components/shared/ActionButtons.tsx`
+
+Reusable action buttons component:
+
+```tsx
+<ActionButtons
+  title={title}
+  isAddedToList={isAddedToList}
+  showTrailer={showTrailer}
+  onPlay={handlePlay}
+  onAddToList={handleAddToList}
+  onMoreInfo={handleMoreInfo}
+/>
+```
+
+**Features:**
+- Play button with icon
+- My List button with dynamic state
+- More Info button
+- Responsive sizing (smaller on mobile)
+- Text hidden on mobile, visible on desktop
+
+#### VideoControls
+**File:** `src/components/shared/VideoControls.tsx`
+
+Inline video control buttons:
+
+```tsx
+<VideoControls
+  isMuted={isMuted}
+  isPlaying={isPlaying}
+  isFullscreen={isFullscreen}
+  onToggleMute={toggleMute}
+  onTogglePlay={togglePlay}
+  onToggleFullscreen={toggleFullscreen}
+/>
+```
+
+**Features:**
+- Play/Pause toggle (blue when paused)
+- Mute/Unmute toggle (red when muted)
+- Fullscreen toggle (purple when active)
+- Backdrop blur effect
+- Hover animations
+- Accessible with aria-labels
 
 #### MovieModal
 **File:** `src/components/shared/MovieModal.tsx`
