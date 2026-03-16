@@ -55,50 +55,12 @@ const BackgroundVideo = memo(function BackgroundVideo({
   }, []);
 
   /**
-   * Toggle mute/unmute for YouTube iframe
-   * Uses YouTube's postMessage API to control volume
+   * Toggle mute/unmute - updates state which changes iframe URL
+   * Similar to Next.js HeroSection approach
    */
   const toggleMute = useCallback(() => {
-    const newMutedState = !isMuted;
-    setIsMuted(newMutedState);
-
-    // Send message to YouTube iframe to set volume
-    if (videoRef.current && videoRef.current.contentWindow) {
-      // Always unmute first (required by YouTube API)
-      videoRef.current.contentWindow.postMessage(
-        JSON.stringify({
-          event: "command",
-          func: "unMute",
-          args: [],
-        }),
-        "*",
-      );
-
-      // Then set volume if unmuting
-      if (!newMutedState) {
-        setTimeout(() => {
-          videoRef.current?.contentWindow?.postMessage(
-            JSON.stringify({
-              event: "command",
-              func: "setVolume",
-              args: [100],
-            }),
-            "*",
-          );
-        }, 100);
-      } else {
-        // Mute the video
-        videoRef.current.contentWindow.postMessage(
-          JSON.stringify({
-            event: "command",
-            func: "mute",
-            args: [],
-          }),
-          "*",
-        );
-      }
-    }
-  }, [isMuted]);
+    setIsMuted((prev) => !prev);
+  }, []);
 
   // Don't render if no video URL or video failed to load
   if (!backgroundVideoUrl || videoError) {
@@ -112,7 +74,7 @@ const BackgroundVideo = memo(function BackgroundVideo({
     >
       <iframe
         ref={videoRef}
-        src={`${backgroundVideoUrl}&enablejsapi=1&origin=${typeof window !== "undefined" ? encodeURIComponent(window.location.origin) : "*"}`}
+        src={`${backgroundVideoUrl}&enablejsapi=1&mute=${isMuted ? 1 : 0}&origin=${typeof window !== "undefined" ? encodeURIComponent(window.location.origin) : "*"}`}
         title="Background Video"
         className="w-full h-full object-cover scale-125"
         onError={handleVideoError}
@@ -125,7 +87,7 @@ const BackgroundVideo = memo(function BackgroundVideo({
       {/* ========================================
           AUDIO CONTROL BUTTON
           ======================================== */}
-      {showControls && (
+      {/* {showControls && ( */}
         <div className="absolute bottom-4 right-4 z-100 cursor-pointer">
           <button
             onClick={toggleMute}
@@ -145,7 +107,7 @@ const BackgroundVideo = memo(function BackgroundVideo({
             )}
           </button>
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 });
