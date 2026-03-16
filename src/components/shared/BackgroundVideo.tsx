@@ -17,7 +17,7 @@ interface BackgroundVideoProps {
  * - Smooth fade-in transition when video loads
  * - Fallback handling when video fails to load
  * - Netflix-style background video with scale for full coverage
- * - Mute/Unmute toggle button with visual feedback using YouTube Player API
+ * - Mute/Unmute toggle button - reloads iframe to change audio state
  * - Accessibility support with aria-hidden
  */
 const BackgroundVideo = memo(function BackgroundVideo({
@@ -29,108 +29,52 @@ const BackgroundVideo = memo(function BackgroundVideo({
   const [videoError, setVideoError] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [showControls, setShowControls] = useState(false);
-  const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   // Get background video URL from utility function
-  const backgroundVideoUrl = getTrailerEmbedUrl(videos);
+  const baseVideoUrl = getTrailerEmbedUrl(videos);
 
   // Reset video states when media changes
   useEffect(() => {
     setVideoError(false);
     setIsMuted(true); // Reset to muted on media change
     setShowControls(false);
-    setIsPlayerReady(false);
+    setReloadKey(0);
   }, [mediaId]);
 
   // Show controls when video loads
   useEffect(() => {
-    if (backgroundVideoUrl && !videoError) {
+    if (baseVideoUrl && !videoError) {
       const timer = setTimeout(() => {
         setShowControls(true);
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [backgroundVideoUrl, videoError]);
+  }, [baseVideoUrl, videoError]);
 
   const handleVideoError = useCallback(() => {
     setVideoError(true);
   }, []);
 
   /**
-   * Send command to YouTube iframe using postMessage API
-   */
-  const sendYouTubeCommand = useCallback((func: string, args: any[] = []) => {
-    if (videoRef.current && videoRef.current.contentWindow) {
-      videoRef.current.contentWindow.postMessage(
-        JSON.stringify({
-          event: "command",
-          func: func,
-          args: args,
-        }),
-        "*",
-      );
-    }
-  }, []);
-
-  /**
-   * Toggle mute/unmute using YouTube Player API
+   * Toggle mute/unmute by reloading iframe with new mute parameter
    */
   const toggleMute = useCallback(() => {
-    const newMutedState = !isMuted;
-    setIsMuted(newMutedState);
-
-    // Wait for player to be ready before sending commands
-    if (isPlayerReady) {
-      if (newMutedState) {
-        // Mute the video
-        sendYouTubeCommand("mute");
-      } else {
-        // Unmute and set volume to 100
-        sendYouTubeCommand("unMute");
-        setTimeout(() => {
-          sendYouTubeCommand("setVolume", [100]);
-        }, 100);
-      }
-    }
-  }, [isMuted, isPlayerReady, sendYouTubeCommand]);
-
-  // Listen for YouTube Player API events
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // Only handle messages from YouTube iframe
-      if (
-        !videoRef.current ||
-        event.source !== videoRef.current.contentWindow
-      ) {
-        return;
-      }
-
-      try {
-        const data = JSON.parse(event.data);
-
-        // Player is ready
-        if (data.event === "onReady") {
-          setIsPlayerReady(true);
-        }
-
-        // Player state changed (playing, paused, etc.)
-        if (data.event === "onStateChange") {
-          // Player is ready when state changes
-          setIsPlayerReady(true);
-        }
-      } catch (e) {
-        // Ignore non-JSON messages
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
+    setIsMuted((prev) => {
+      const newMutedState = !prev;
+      // Force reload iframe with new mute state
+      setReloadKey((k) => k + 1);
+      return newMutedState;
+    });
   }, []);
 
   // Don't render if no video URL or video failed to load
-  if (!backgroundVideoUrl || videoError) {
+  if (!baseVideoUrl || videoError) {
     return null;
   }
+
+  // Build URL with current mute state
+  const videoUrl = `${baseVideoUrl}&enablejsapi=1&mute=${isMuted ? 1 : 0}&origin=${typeof window !== "undefined" ? encodeURIComponent(window.location.origin) : "*"}`;
 
   return (
     <div
@@ -138,15 +82,16 @@ const BackgroundVideo = memo(function BackgroundVideo({
       aria-hidden="true"
     >
       <iframe
+        key={reloadKey}
         ref={videoRef}
-        src={`${backgroundVideoUrl}&enablejsapi=1&origin=${typeof window !== "undefined" ? encodeURIComponent(window.location.origin) : "*"}`}
+        src={videoUrl}
         title="Background Video"
         className="w-full h-full object-cover scale-125"
         onError={handleVideoError}
         allow="autoplay; encrypted-media; picture-in-picture"
         allowFullScreen
         loading="eager"
-        sandbox="allow-same-origin allow-scripts allow-presentation allow-popups"
+        sandbox="allow-same-origin allow-scripts allow-presentation allow-popups allow-forms"
       />
 
       {/* ========================================
