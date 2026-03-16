@@ -1,4 +1,5 @@
-import { memo, useRef, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
+import YouTube from "react-youtube";
 import { Volume2, VolumeX } from "lucide-react";
 import { getTrailerEmbedUrl } from "@/utils";
 import type { Video } from "@/types";
@@ -10,95 +11,106 @@ interface BackgroundVideoProps {
 }
 
 /**
- * BackgroundVideo Component with Audio Controls
- *
- * Displays an autoplaying, looping YouTube trailer as a background video.
- * Features:
- * - Smooth fade-in transition when video loads
- * - Fallback handling when video fails to load
- * - Netflix-style background video with scale for full coverage
- * - Mute/Unmute toggle button - reloads iframe to change audio state
- * - Accessibility support with aria-hidden
+ * BackgroundVideo Component with Audio Controls using react-youtube
  */
 const BackgroundVideo = memo(function BackgroundVideo({
   videos,
   mediaId,
   className = "",
 }: BackgroundVideoProps) {
-  const videoRef = useRef<HTMLIFrameElement>(null);
   const [videoError, setVideoError] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [showControls, setShowControls] = useState(false);
-  const [reloadKey, setReloadKey] = useState(0);
+  const [player, setPlayer] = useState<any>(null);
 
-  // Get background video URL from utility function
-  const baseVideoUrl = getTrailerEmbedUrl(videos);
+  // Get YouTube video ID
+  const videoId = getTrailerEmbedUrl(videos)
+    ?.split("/embed/")[1]
+    ?.split("?")[0];
 
-  // Reset video states when media changes
+  // Reset when media changes
   useEffect(() => {
     setVideoError(false);
-    setIsMuted(true); // Reset to muted on media change
+    setIsMuted(true);
     setShowControls(false);
-    setReloadKey(0);
+    setPlayer(null);
   }, [mediaId]);
 
-  // Show controls when video loads
+  // Show controls after delay
   useEffect(() => {
-    if (baseVideoUrl && !videoError) {
-      const timer = setTimeout(() => {
-        setShowControls(true);
-      }, 1500);
+    if (videoId && !videoError) {
+      const timer = setTimeout(() => setShowControls(true), 1500);
       return () => clearTimeout(timer);
     }
-  }, [baseVideoUrl, videoError]);
+  }, [videoId, videoError]);
 
-  const handleVideoError = useCallback(() => {
-    setVideoError(true);
+  const handleVideoError = useCallback(() => setVideoError(true), []);
+
+  /**
+   * Handle YouTube player ready
+   */
+  const onPlayerReady = useCallback((event: any) => {
+    const p = event.target;
+    setPlayer(p);
+    p.mute();
+    p.playVideo();
   }, []);
 
   /**
-   * Toggle mute/unmute by reloading iframe with new mute parameter
+   * Toggle mute/unmute
    */
   const toggleMute = useCallback(() => {
-    setIsMuted((prev) => {
-      const newMutedState = !prev;
-      // Force reload iframe with new mute state
-      setReloadKey((k) => k + 1);
-      return newMutedState;
-    });
-  }, []);
+    if (!player) return;
 
-  // Don't render if no video URL or video failed to load
-  if (!baseVideoUrl || videoError) {
+    const newMuted = !isMuted;
+    setIsMuted(newMuted);
+
+    if (newMuted) {
+      player.mute();
+    } else {
+      player.unMute();
+    }
+  }, [isMuted, player]);
+
+  // Don't render if no video
+  if (!videoId || videoError) {
     return null;
   }
 
-  // Build URL with current mute state
-  const videoUrl = `${baseVideoUrl}&enablejsapi=1&mute=${isMuted ? 1 : 0}&origin=${typeof window !== "undefined" ? encodeURIComponent(window.location.origin) : "*"}`;
+  const opts = {
+    height: "100%",
+    width: "100%",
+    playerVars: {
+      autoplay: 1,
+      controls: 0,
+      loop: 1,
+      mute: 1,
+      playlist: videoId,
+      modestbranding: 1,
+    },
+  };
 
   return (
     <div
-      className={`relative  inset-0 w-full h-full ${className}`}
+      className={`relative inset-0 w-full h-full ${className}`}
       aria-hidden="true"
     >
-      <iframe
-        key={reloadKey}
-        ref={videoRef}
-        src={videoUrl}
-        title="Background Video"
-        className="w-full h-full object-cover scale-125"
-        onError={handleVideoError}
-        allow="autoplay; encrypted-media; picture-in-picture"
-        allowFullScreen
-        loading="eager"
-        sandbox="allow-same-origin allow-scripts allow-presentation allow-popups allow-forms"
-      />
+      {/* YouTube Player */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <YouTube
+          videoId={videoId}
+          opts={opts}
+          onReady={onPlayerReady}
+          onError={handleVideoError}
+          className="w-full h-full scale-125"
+          iframeClassName="w-full h-full object-cover"
+          title="Background Video"
+        />
+      </div>
 
-      {/* ========================================
-          AUDIO CONTROL BUTTON - Fixed position on top layer
-          ======================================== */}
+      {/* Mute/Unmute Button */}
       {showControls && (
-        <div className="fixed bottom-2 right-4 !z-[99999]">
+        <div className="fixed bottom-4 right-4 z-[99999]">
           <button
             onClick={toggleMute}
             className={`flex items-center justify-center w-12 h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 shadow-2xl ${
@@ -106,9 +118,8 @@ const BackgroundVideo = memo(function BackgroundVideo({
                 ? "bg-red-600/80 hover:bg-red-600 text-white"
                 : "bg-white/20 hover:bg-white/30 text-white"
             }`}
-            aria-label={isMuted ? "Unmute video" : "Mute video"}
-            aria-pressed={!isMuted}
-            title={isMuted ? "Click to unmute" : "Click to mute"}
+            aria-label={isMuted ? "Unmute" : "Mute"}
+            title={isMuted ? "Unmute" : "Mute"}
           >
             {isMuted ? (
               <VolumeX className="w-6 h-6" />
