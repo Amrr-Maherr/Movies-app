@@ -4,6 +4,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import DetailHeader from "@/components/shared/DetailHeader";
 import FetchMovieDetails from "@/queries/FetchMovieDetails";
 import { useMovieWatchProviders } from "@/queries";
 import DetailPageNav from "@/components/shared/DetailPageNav";
@@ -80,33 +81,19 @@ const MovieWatchProvidersPage = memo(function MovieWatchProvidersPage() {
       />
 
       {/* Header Section */}
-      <section className="bg-black py-8 border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-          {/* Page Title */}
-          <div className="flex items-center gap-4">
-            <img
-              src={`https://image.tmdb.org/t/p/w92${movieData.poster_path}`}
-              alt={movieData.title}
-              className="w-20 h-28 object-cover rounded-lg shadow-lg"
-            />
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                {movieData.title}
-              </h1>
-              <p className="text-white/60 text-sm mb-2">
-                {movieData.release_date?.substring(0, 4)} • {movieData.runtime}{" "}
-                min
-              </p>
-              <div className="flex items-center gap-2">
-                <span className="text-green-500 font-bold">
-                  Streaming Options
-                </span>
-                <span className="text-white/60 text-sm">United States</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <DetailHeader
+        media={movieData}
+        providerCount={
+          usProviders
+            ? (usProviders.flatrate?.length || 0) +
+              (usProviders.rent?.length || 0) +
+              (usProviders.buy?.length || 0) +
+              (usProviders.free?.length || 0)
+            : 0
+        }
+        providers={usProviders}
+        type="movie"
+      />
 
       {/* Navigation Tabs */}
       <DetailPageNav type="movie" slugWithId={slugWithId || ""} />
