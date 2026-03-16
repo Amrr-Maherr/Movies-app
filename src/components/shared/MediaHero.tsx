@@ -10,7 +10,7 @@ import {
 } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import VideoControls from "@/components/shared/VideoControls";
-import ActionButtons from "@/components/shared/ActionButtons";
+// import ActionButtons from "@/components/shared/ActionButtons";
 import {
   getTrailerWatchUrl,
   getMatchScore,
@@ -39,7 +39,7 @@ const MediaHero = memo(function MediaHero({
   onPlayTrailer,
   onAddToList,
 }: MediaHeroProps) {
-  const [isAddedToList, setIsAddedToList] = useState(false);
+  // const [isAddedToList, setIsAddedToList] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
 
   // Video controls state
@@ -73,21 +73,21 @@ const MediaHero = memo(function MediaHero({
     [media.vote_average],
   );
 
-  const handlePlayTrailer = useCallback(() => {
-    if (onPlayTrailer) {
-      onPlayTrailer();
-    } else if (trailerUrl) {
-      window.open(trailerUrl, "_blank");
-    }
-  }, [onPlayTrailer, trailerUrl]);
+  // const handlePlayTrailer = useCallback(() => {
+  //   if (onPlayTrailer) {
+  //     onPlayTrailer();
+  //   } else if (trailerUrl) {
+  //     window.open(trailerUrl, "_blank");
+  //   }
+  // }, [onPlayTrailer, trailerUrl]);
 
-  const handleAddToList = useCallback(() => {
-    if (onAddToList) {
-      onAddToList();
-    } else {
-      setIsAddedToList((prev) => !prev);
-    }
-  }, [onAddToList]);
+  // const handleAddToList = useCallback(() => {
+  //   if (onAddToList) {
+  //     onAddToList();
+  //   } else {
+  //     setIsAddedToList((prev) => !prev);
+  //   }
+  // }, [onAddToList]);
 
   // Video control handlers
   const toggleMute = useCallback(() => {
@@ -269,17 +269,17 @@ const MediaHero = memo(function MediaHero({
             {/* Action Buttons - Netflix style */}
             <div className="flex md:flex-nowrap flex-wrap items-center gap-3 pt-4 hero-buttons">
               {/* Action Buttons Component */}
-              <ActionButtons
+              {/* <ActionButtons
                 title={title}
                 isAddedToList={isAddedToList}
                 showTrailer={showTrailer}
                 onPlay={handlePlayTrailer}
                 onAddToList={handleAddToList}
                 onMoreInfo={() => setShowTrailer(true)}
-              />
+              /> */}
 
               {/* Divider */}
-              <div className="w-px h-8 bg-white/30 mx-2 hidden sm:block"></div>
+              {/* <div className="w-px h-8 bg-white/30 mx-2 hidden sm:block"></div> */}
 
               {/* Video Controls Component */}
               <VideoControls

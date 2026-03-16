@@ -55,7 +55,7 @@ A full-featured, production-ready Netflix clone built with React 19, TypeScript,
 ### UI/UX Features
 - 🎨 **Netflix Design System** - Authentic dark theme with custom properties
 - 🎭 **Smooth Animations** - Framer Motion page transitions
-- 🎪 **Hero Carousel** - Auto-rotating featured content
+- 🎪 **Hero Carousel** - Auto-rotating featured content with background video
 - 🃏 **Card Variants** - 6 different card layouts (Standard, Compact, Top 10, New Release, Award Winner, Recommendation)
 - 📱 **Fully Responsive** - Mobile-first design (320px - 1920px+)
 - ⌨️ **Keyboard Navigation** - Full accessibility support
@@ -65,6 +65,9 @@ A full-featured, production-ready Netflix clone built with React 19, TypeScript,
 - 📲 **Mobile Sidebar** - Drawer navigation for mobile devices
 - 🔔 **Profile Menu** - User account dropdown
 - 🎬 **Modal Dialogs** - Movie info and trailer modals
+- 🎮 **Video Controls** - Inline Play/Pause, Mute/Unmute, and Fullscreen buttons
+- 🔊 **Audio Controls** - Background video mute/unmute with visual feedback
+- ⛶ **Fullscreen Mode** - Enter/exit fullscreen with one click
 
 ---
 
