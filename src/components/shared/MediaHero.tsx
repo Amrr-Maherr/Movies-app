@@ -45,7 +45,9 @@ const MediaHero = memo(function MediaHero({
   // Video controls state
   const [isMuted, setIsMuted] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const playerRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Memoized: Get trailer URLs using utility functions
   const trailerUrl = useMemo(
@@ -109,6 +111,42 @@ const MediaHero = memo(function MediaHero({
     setIsPlaying(!isPlaying);
   }, [isPlaying]);
 
+  const toggleFullscreen = useCallback(() => {
+    if (!containerRef.current) return;
+
+    if (!document.fullscreenElement) {
+      containerRef.current
+        .requestFullscreen()
+        .then(() => {
+          setIsFullscreen(true);
+        })
+        .catch((err) => {
+          console.error("Error attempting to enable fullscreen:", err);
+        });
+    } else {
+      document
+        .exitFullscreen()
+        .then(() => {
+          setIsFullscreen(false);
+        })
+        .catch((err) => {
+          console.error("Error attempting to exit fullscreen:", err);
+        });
+    }
+  }, []);
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
   // Memoized: Image URLs
   const backdropUrl = useMemo(
     () =>
@@ -127,7 +165,10 @@ const MediaHero = memo(function MediaHero({
   const title = "title" in media ? media.title : media.name;
 
   return (
-    <div className="relative w-full aspect-video max-h-[85vh] min-h-[500px] overflow-hidden">
+    <div
+      ref={containerRef}
+      className="relative w-full aspect-video max-h-[85vh] min-h-[500px] overflow-hidden"
+    >
       {/* ========================================
           BACKGROUND IMAGE - Fallback
           ======================================== */}
@@ -226,7 +267,7 @@ const MediaHero = memo(function MediaHero({
             </p>
 
             {/* Action Buttons - Netflix style */}
-            <div className="flex flex-wrap items-center gap-3 pt-4 hero-buttons">
+            <div className="flex md:flex-nowrap flex-wrap items-center gap-3 pt-4 hero-buttons">
               {/* Play Button - White bg, black text */}
               <button
                 onClick={handlePlayTrailer}
@@ -271,8 +312,10 @@ const MediaHero = memo(function MediaHero({
               <VideoControls
                 isMuted={isMuted}
                 isPlaying={isPlaying}
+                isFullscreen={isFullscreen}
                 onToggleMute={toggleMute}
                 onTogglePlay={togglePlay}
+                onToggleFullscreen={toggleFullscreen}
               />
             </div>
           </div>

@@ -1,1 +1,0 @@
-import{u as e}from"./data-vendor.BdddFvDL.js";import{I as r,J as t}from"./page-details.Bq7kLkNc.js";function a(t){return e({queryKey:["person","movie-credits",t],queryFn:()=>r(t),enabled:!!t,staleTime:6e5,retry:2})}function s(r){return e({queryKey:["person","tv-credits",r],queryFn:()=>t(r),enabled:!!r,staleTime:6e5,retry:2})}export{s as a,a as u};
