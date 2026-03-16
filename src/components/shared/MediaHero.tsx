@@ -1,5 +1,14 @@
-import { useState, useMemo, useCallback, memo, Suspense, lazy } from "react";
-import { Play, Plus, Info } from "lucide-react";
+import {
+  useState,
+  useMemo,
+  useCallback,
+  memo,
+  Suspense,
+  lazy,
+  useRef,
+  useEffect,
+} from "react";
+import { Play, Plus, Info, Volume2, VolumeX, Pause } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import {
   getTrailerWatchUrl,
@@ -31,6 +40,11 @@ const MediaHero = memo(function MediaHero({
 }: MediaHeroProps) {
   const [isAddedToList, setIsAddedToList] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
+
+  // Video controls state
+  const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const playerRef = useRef<any>(null);
 
   // Memoized: Get trailer URLs using utility functions
   const trailerUrl = useMemo(
@@ -72,6 +86,28 @@ const MediaHero = memo(function MediaHero({
     }
   }, [onAddToList]);
 
+  // Video control handlers
+  const toggleMute = useCallback(() => {
+    if (!playerRef.current) return;
+    const newMuted = !isMuted;
+    setIsMuted(newMuted);
+    if (newMuted) {
+      playerRef.current.mute();
+    } else {
+      playerRef.current.unMute();
+    }
+  }, [isMuted]);
+
+  const togglePlay = useCallback(() => {
+    if (!playerRef.current) return;
+    if (isPlaying) {
+      playerRef.current.pauseVideo();
+    } else {
+      playerRef.current.playVideo();
+    }
+    setIsPlaying(!isPlaying);
+  }, [isPlaying]);
+
   // Memoized: Image URLs
   const backdropUrl = useMemo(
     () =>
@@ -112,6 +148,11 @@ const MediaHero = memo(function MediaHero({
           videos={media.videos}
           mediaId={media.id}
           className="z-10"
+          playerRef={playerRef}
+          isMuted={isMuted}
+          isPlaying={isPlaying}
+          onToggleMute={toggleMute}
+          onTogglePlay={togglePlay}
         />
       </Suspense>
 
@@ -184,7 +225,7 @@ const MediaHero = memo(function MediaHero({
             </p>
 
             {/* Action Buttons - Netflix style */}
-            <div className="flex flex-wrap gap-3 pt-4 hero-buttons">
+            <div className="flex flex-wrap items-center gap-3 pt-4 hero-buttons">
               {/* Play Button - White bg, black text */}
               <button
                 onClick={handlePlayTrailer}
@@ -221,6 +262,50 @@ const MediaHero = memo(function MediaHero({
                 <Info className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 More Info
               </button>
+
+              {/* Divider */}
+              <div className="w-px h-8 bg-white/30 mx-2 hidden sm:block"></div>
+
+              {/* Video Controls - Play/Pause & Mute */}
+              <div className="flex gap-2">
+                {/* Play/Pause Button */}
+                <button
+                  onClick={togglePlay}
+                  type="button"
+                  className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg ${
+                    isPlaying
+                      ? "bg-white/20 hover:bg-white/30 text-white"
+                      : "bg-blue-600/80 hover:bg-blue-600 text-white"
+                  }`}
+                  aria-label={isPlaying ? "Pause video" : "Play video"}
+                  title={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? (
+                    <Pause className="w-5 h-5 sm:w-6 sm:h-6" />
+                  ) : (
+                    <Play className="w-5 h-5 sm:w-6 sm:h-6" />
+                  )}
+                </button>
+
+                {/* Mute/Unmute Button */}
+                <button
+                  onClick={toggleMute}
+                  type="button"
+                  className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg ${
+                    isMuted
+                      ? "bg-red-600/80 hover:bg-red-600 text-white"
+                      : "bg-white/20 hover:bg-white/30 text-white"
+                  }`}
+                  aria-label={isMuted ? "Unmute video" : "Mute video"}
+                  title={isMuted ? "Unmute" : "Mute"}
+                >
+                  {isMuted ? (
+                    <VolumeX className="w-5 h-5 sm:w-6 sm:h-6" />
+                  ) : (
+                    <Volume2 className="w-5 h-5 sm:w-6 sm:h-6" />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import YouTube from "react-youtube";
-import VideoControls from "./VideoControls";
 import { getTrailerEmbedUrl } from "@/utils";
 import type { Video } from "@/types";
 
@@ -8,21 +7,28 @@ interface BackgroundVideoProps {
   videos?: { results: Video[] } | null;
   mediaId: number;
   className?: string;
+  playerRef?: React.MutableRefObject<any>;
+  isMuted?: boolean;
+  isPlaying?: boolean;
+  onToggleMute?: () => void;
+  onTogglePlay?: () => void;
 }
 
 /**
- * BackgroundVideo Component with Play/Pause and Mute Controls
+ * BackgroundVideo Component - YouTube trailer background
  */
 const BackgroundVideo = memo(function BackgroundVideo({
   videos,
   mediaId,
   className = "",
+  playerRef,
+  isMuted = true,
+  isPlaying = true,
+  onToggleMute,
+  onTogglePlay,
 }: BackgroundVideoProps) {
   const [videoError, setVideoError] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(true);
   const [showControls, setShowControls] = useState(false);
-  const [player, setPlayer] = useState<any>(null);
 
   // Get YouTube video ID
   const videoId = getTrailerEmbedUrl(videos)
@@ -32,10 +38,7 @@ const BackgroundVideo = memo(function BackgroundVideo({
   // Reset when media changes
   useEffect(() => {
     setVideoError(false);
-    setIsMuted(true);
-    setIsPlaying(true);
     setShowControls(false);
-    setPlayer(null);
   }, [mediaId]);
 
   // Show controls after delay
@@ -51,50 +54,31 @@ const BackgroundVideo = memo(function BackgroundVideo({
   /**
    * Handle YouTube player ready
    */
-  const onPlayerReady = useCallback((event: any) => {
-    const p = event.target;
-    setPlayer(p);
-    p.mute();
-    p.playVideo();
-  }, []);
+  const onPlayerReady = useCallback(
+    (event: any) => {
+      const p = event.target;
+      if (playerRef) {
+        playerRef.current = p;
+      }
+      p.mute();
+      p.playVideo();
+    },
+    [playerRef],
+  );
 
   /**
-   * Handle player state change (play/pause)
+   * Handle player state change
    */
-  const onPlayerStateChange = useCallback((event: any) => {
-    // YouTube.PlayerState.PLAYING = 1
-    // YouTube.PlayerState.PAUSED = 2
-    setIsPlaying(event.data === 1);
-  }, []);
-
-  /**
-   * Toggle mute/unmute
-   */
-  const toggleMute = useCallback(() => {
-    if (!player) return;
-
-    const newMuted = !isMuted;
-    setIsMuted(newMuted);
-
-    if (newMuted) {
-      player.mute();
-    } else {
-      player.unMute();
-    }
-  }, [isMuted, player]);
-
-  /**
-   * Toggle play/pause
-   */
-  const togglePlay = useCallback(() => {
-    if (!player) return;
-
-    if (isPlaying) {
-      player.pauseVideo();
-    } else {
-      player.playVideo();
-    }
-  }, [isPlaying, player]);
+  const onPlayerStateChange = useCallback(
+    (event: any) => {
+      // YouTube.PlayerState.PLAYING = 1
+      // YouTube.PlayerState.PAUSED = 2
+      if (onTogglePlay) {
+        // State change handled by parent
+      }
+    },
+    [onTogglePlay],
+  );
 
   // Don't render if no video
   if (!videoId || videoError) {
@@ -132,15 +116,6 @@ const BackgroundVideo = memo(function BackgroundVideo({
           title="Background Video"
         />
       </div>
-
-      {/* Control Buttons */}
-      <VideoControls
-        isMuted={isMuted}
-        isPlaying={isPlaying}
-        showControls={showControls}
-        onToggleMute={toggleMute}
-        onTogglePlay={togglePlay}
-      />
     </div>
   );
 });
