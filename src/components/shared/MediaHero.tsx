@@ -120,19 +120,19 @@ const MediaHero = memo(function MediaHero({
           ======================================== */}
       {/* Vignette - Strong left gradient */}
       <div
-        className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent sm:via-black/50"
+        className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent sm:via-black/50 pointer-events-none"
         aria-hidden="true"
       />
 
       {/* Bottom fade to background */}
       <div
-        className="absolute inset-0 bg-gradient-to-t from-[var(--background-primary)] via-[var(--background-primary)]/20 to-transparent sm:via-transparent"
+        className="absolute inset-0 bg-gradient-to-t from-[var(--background-primary)] via-[var(--background-primary)]/20 to-transparent sm:via-transparent pointer-events-none"
         aria-hidden="true"
       />
 
       {/* Top fade for smooth blend */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent"
+        className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent pointer-events-none"
         aria-hidden="true"
       />
 

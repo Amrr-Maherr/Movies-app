@@ -85,13 +85,13 @@ const BackgroundVideo = memo(function BackgroundVideo({
       />
 
       {/* ========================================
-          AUDIO CONTROL BUTTON
+          AUDIO CONTROL BUTTON - Fixed position on top layer
           ======================================== */}
       {showControls && (
-        <div className="absolute bottom-4 right-4 z-[9999]">
+        <div className="fixed bottom-4 right-4 z-[99999]">
           <button
             onClick={toggleMute}
-            className={`flex items-center justify-center w-12 h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 ${
+            className={`flex items-center justify-center w-12 h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 shadow-2xl ${
               isMuted
                 ? "bg-red-600/80 hover:bg-red-600 text-white"
                 : "bg-white/20 hover:bg-white/30 text-white"
