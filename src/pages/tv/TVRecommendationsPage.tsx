@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import RecommendationHeader from "@/components/shared/RecommendationHeader";
 import FetchTvShowDetails from "@/queries/FetchTvShowDetails";
 import { useTVRecommendations } from "@/queries";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 import RecommendationsSection from "@/components/sections/RecommendationsSection";
-import { Heart, TrendingUp, Star } from "lucide-react";
+import { Heart } from "lucide-react";
 
 /**
  * TVRecommendationsPage Component
@@ -80,65 +81,11 @@ const TVRecommendationsPage = memo(function TVRecommendationsPage() {
       />
 
       {/* Header Section */}
-      <section className="bg-gradient-to-b from-black to-neutral-900 py-8 border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-          <div className="flex flex-col md:flex-row items-start gap-6">
-            {/* TV Show Poster */}
-            <img
-              src={`https://image.tmdb.org/t/p/w342${tvData.poster_path}`}
-              alt={tvData.name}
-              className="w-32 h-48 object-cover rounded-lg shadow-2xl"
-            />
-
-            {/* TV Show Info */}
-            <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                {tvData.name}
-              </h1>
-              <p className="text-white/60 text-sm mb-4">
-                {tvData.first_air_date?.substring(0, 4)} •{" "}
-                {tvData.number_of_seasons}{" "}
-                {tvData.number_of_seasons === 1 ? "Season" : "Seasons"} •{" "}
-                {tvData.genres
-                  ?.slice(0, 3)
-                  .map((g) => g.name)
-                  .join(", ")}
-              </p>
-
-              {/* Stats */}
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 bg-gradient-to-r from-red-600/20 to-red-600/10 px-4 py-2 rounded-lg border border-red-600/30">
-                  <Heart className="w-5 h-5 text-red-500" />
-                  <div>
-                    <p className="text-white font-bold">
-                      {recommendations.length}
-                    </p>
-                    <p className="text-white/60 text-xs">Recommendations</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
-                  <Star className="w-5 h-5 text-yellow-500" />
-                  <div>
-                    <p className="text-white font-bold">
-                      {tvData.vote_average.toFixed(1)}
-                    </p>
-                    <p className="text-white/60 text-xs">Rating</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
-                  <TrendingUp className="w-5 h-5 text-blue-500" />
-                  <div>
-                    <p className="text-white font-bold">
-                      {Math.round(tvData.popularity)}
-                    </p>
-                    <p className="text-white/60 text-xs">Popularity</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <RecommendationHeader
+        media={tvData}
+        recommendationsCount={recommendations.length}
+        type="tv"
+      />
 
       {/* Navigation Tabs */}
       <DetailPageNav type="tv" slugWithId={slugWithId || ""} />

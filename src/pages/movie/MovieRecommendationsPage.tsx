@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import RecommendationHeader from "@/components/shared/RecommendationHeader";
 import FetchMovieDetails from "@/queries/FetchMovieDetails";
 import { useMovieRecommendations } from "@/queries";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 import RecommendationsSection from "@/components/sections/RecommendationsSection";
-import { Heart, TrendingUp, Star } from "lucide-react";
+import { Heart } from "lucide-react";
 
 /**
  * MovieRecommendationsPage Component
@@ -80,64 +81,11 @@ const MovieRecommendationsPage = memo(function MovieRecommendationsPage() {
       />
 
       {/* Header Section */}
-      <section className="bg-gradient-to-b from-black to-neutral-900 py-8 border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-          <div className="flex flex-col md:flex-row items-start gap-6">
-            {/* Movie Poster */}
-            <img
-              src={`https://image.tmdb.org/t/p/w342${movieData.poster_path}`}
-              alt={movieData.title}
-              className="w-32 h-48 object-cover rounded-lg shadow-2xl"
-            />
-
-            {/* Movie Info */}
-            <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                {movieData.title}
-              </h1>
-              <p className="text-white/60 text-sm mb-4">
-                {movieData.release_date?.substring(0, 4)} • {movieData.runtime}{" "}
-                min •{" "}
-                {movieData.genres
-                  ?.slice(0, 3)
-                  .map((g) => g.name)
-                  .join(", ")}
-              </p>
-
-              {/* Stats */}
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 bg-gradient-to-r from-red-600/20 to-red-600/10 px-4 py-2 rounded-lg border border-red-600/30">
-                  <Heart className="w-5 h-5 text-red-500" />
-                  <div>
-                    <p className="text-white font-bold">
-                      {recommendations.length}
-                    </p>
-                    <p className="text-white/60 text-xs">Recommendations</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
-                  <Star className="w-5 h-5 text-yellow-500" />
-                  <div>
-                    <p className="text-white font-bold">
-                      {movieData.vote_average.toFixed(1)}
-                    </p>
-                    <p className="text-white/60 text-xs">Rating</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
-                  <TrendingUp className="w-5 h-5 text-blue-500" />
-                  <div>
-                    <p className="text-white font-bold">
-                      {Math.round(movieData.popularity)}
-                    </p>
-                    <p className="text-white/60 text-xs">Popularity</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <RecommendationHeader
+        media={movieData}
+        recommendationsCount={recommendations.length}
+        type="movie"
+      />
 
       {/* Navigation Tabs */}
       <DetailPageNav type="movie" slugWithId={slugWithId || ""} />

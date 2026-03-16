@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import { PageSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import DetailHeader from "@/components/shared/DetailHeader";
 import FetchMovieDetails from "@/queries/FetchMovieDetails";
 import { useMovieWatchProviders } from "@/queries";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 import WatchProvidersDetail from "@/components/sections/WatchProvidersDetail";
-import { Tv, DollarSign, Gift, Link as LinkIcon } from "lucide-react";
+import { Link as LinkIcon, Tv } from "lucide-react";
 
 /**
  * MovieWatchPage Component
@@ -91,77 +92,12 @@ const MovieWatchPage = memo(function MovieWatchPage() {
       />
 
       {/* Header Section */}
-      <section className="bg-gradient-to-b from-black to-neutral-900 py-8 border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-          <div className="flex flex-col md:flex-row items-start gap-6">
-            {/* Movie Poster */}
-            <img
-              src={`https://image.tmdb.org/t/p/w342${movieData.poster_path}`}
-              alt={movieData.title}
-              className="w-32 h-48 object-cover rounded-lg shadow-2xl"
-            />
-
-            {/* Movie Info */}
-            <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
-                {movieData.title}
-              </h1>
-              <p className="text-white/60 text-sm mb-4">
-                {movieData.release_date?.substring(0, 4)} • {movieData.runtime}{" "}
-                min •{" "}
-                {movieData.genres
-                  ?.slice(0, 3)
-                  .map((g) => g.name)
-                  .join(", ")}
-              </p>
-
-              {/* Stats */}
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
-                  <Tv className="w-5 h-5 text-red-500" />
-                  <div>
-                    <p className="text-white font-bold">{providerCount}</p>
-                    <p className="text-white/60 text-xs">Providers</p>
-                  </div>
-                </div>
-                {usProviders?.flatrate && (
-                  <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
-                    <Tv className="w-5 h-5 text-green-500" />
-                    <div>
-                      <p className="text-white font-bold">
-                        {usProviders.flatrate.length}
-                      </p>
-                      <p className="text-white/60 text-xs">Subscription</p>
-                    </div>
-                  </div>
-                )}
-                {usProviders?.rent && (
-                  <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
-                    <DollarSign className="w-5 h-5 text-blue-500" />
-                    <div>
-                      <p className="text-white font-bold">
-                        {usProviders.rent.length}
-                      </p>
-                      <p className="text-white/60 text-xs">Rent</p>
-                    </div>
-                  </div>
-                )}
-                {usProviders?.buy && (
-                  <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg">
-                    <DollarSign className="w-5 h-5 text-yellow-500" />
-                    <div>
-                      <p className="text-white font-bold">
-                        {usProviders.buy.length}
-                      </p>
-                      <p className="text-white/60 text-xs">Buy</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <DetailHeader
+        media={movieData}
+        providerCount={providerCount}
+        providers={usProviders}
+        type="movie"
+      />
 
       {/* Navigation Tabs */}
       <DetailPageNav type="movie" slugWithId={slugWithId || ""} />
