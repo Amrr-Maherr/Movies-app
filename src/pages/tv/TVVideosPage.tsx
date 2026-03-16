@@ -4,6 +4,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import DetailHeader from "@/components/shared/DetailHeader";
 import FetchTvShowDetails from "@/queries/FetchTvShowDetails";
 import { useTVVideos } from "@/queries";
 import DetailPageNav from "@/components/shared/DetailPageNav";
@@ -80,33 +81,7 @@ const TVVideosPage = memo(function TVVideosPage() {
       />
 
       {/* Header Section */}
-      <section className="bg-black py-8 border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-          {/* Page Title */}
-          <div className="flex items-center gap-4">
-            <img
-              src={`https://image.tmdb.org/t/p/w92${tvData.poster_path}`}
-              alt={tvData.name}
-              className="w-20 h-28 object-cover rounded-lg shadow-lg"
-            />
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-                {tvData.name}
-              </h1>
-              <p className="text-white/60 text-sm mb-2">
-                {tvData.first_air_date?.substring(0, 4)} •{" "}
-                {tvData.number_of_seasons} Seasons
-              </p>
-              <div className="flex items-center gap-2">
-                <span className="text-blue-500 font-bold">{videos.length}</span>
-                <span className="text-white/60 text-sm">
-                  {videos.length === 1 ? "Video" : "Videos"} Available
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <DetailHeader media={tvData} type="tv" />
 
       {/* Navigation Tabs */}
       <DetailPageNav type="tv" slugWithId={slugWithId || ""} />
