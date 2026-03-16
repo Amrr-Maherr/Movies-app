@@ -8,8 +8,9 @@ import {
   useRef,
   useEffect,
 } from "react";
-import { Play, Plus, Info, Volume2, VolumeX, Pause } from "lucide-react";
+import { Play, Plus, Info } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import VideoControls from "@/components/shared/VideoControls";
 import {
   getTrailerWatchUrl,
   getMatchScore,
@@ -266,46 +267,13 @@ const MediaHero = memo(function MediaHero({
               {/* Divider */}
               <div className="w-px h-8 bg-white/30 mx-2 hidden sm:block"></div>
 
-              {/* Video Controls - Play/Pause & Mute */}
-              <div className="flex gap-2">
-                {/* Play/Pause Button */}
-                <button
-                  onClick={togglePlay}
-                  type="button"
-                  className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg ${
-                    isPlaying
-                      ? "bg-white/20 hover:bg-white/30 text-white"
-                      : "bg-blue-600/80 hover:bg-blue-600 text-white"
-                  }`}
-                  aria-label={isPlaying ? "Pause video" : "Play video"}
-                  title={isPlaying ? "Pause" : "Play"}
-                >
-                  {isPlaying ? (
-                    <Pause className="w-5 h-5 sm:w-6 sm:h-6" />
-                  ) : (
-                    <Play className="w-5 h-5 sm:w-6 sm:h-6" />
-                  )}
-                </button>
-
-                {/* Mute/Unmute Button */}
-                <button
-                  onClick={toggleMute}
-                  type="button"
-                  className={`flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg ${
-                    isMuted
-                      ? "bg-red-600/80 hover:bg-red-600 text-white"
-                      : "bg-white/20 hover:bg-white/30 text-white"
-                  }`}
-                  aria-label={isMuted ? "Unmute video" : "Mute video"}
-                  title={isMuted ? "Unmute" : "Mute"}
-                >
-                  {isMuted ? (
-                    <VolumeX className="w-5 h-5 sm:w-6 sm:h-6" />
-                  ) : (
-                    <Volume2 className="w-5 h-5 sm:w-6 sm:h-6" />
-                  )}
-                </button>
-              </div>
+              {/* Video Controls Component */}
+              <VideoControls
+                isMuted={isMuted}
+                isPlaying={isPlaying}
+                onToggleMute={toggleMute}
+                onTogglePlay={togglePlay}
+              />
             </div>
           </div>
         </div>
