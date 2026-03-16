@@ -6,6 +6,7 @@
  * - Format helpers: formatRuntime, formatNumber, getLanguageName
  * - Media helpers: getTitle, getReleaseDate, getRuntime
  * - Data processing: getKnownForItems, filterKeyCrew, extractKeywords, extractWatchProviders
+ * - Movie helpers: getMatchScore, getAgeRating, getGenres, getTrailerEmbedUrl, getTrailerWatchUrl
  * - Hooks: useDebounce
  *
  * Note: movieHelpers.ts and tmdb.ts contain additional specialized utilities.
@@ -32,6 +33,9 @@ export { getKnownForItems } from "./getKnownForItems";
 export { filterKeyCrew, type CrewMember } from "./filterKeyCrew";
 export { extractKeywords } from "./extractKeywords";
 export { extractWatchProviders } from "./extractWatchProviders";
+
+// Movie helpers
+export { getMatchScore, getAgeRating, getGenres, getTrailerEmbedUrl, getTrailerWatchUrl } from "./movieHelpers";
 
 // Hooks
 export { useDebounce } from "./useDebounce";

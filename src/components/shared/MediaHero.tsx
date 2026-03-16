@@ -1,11 +1,21 @@
-import { useState, useMemo, useCallback, memo } from "react";
+import { useState, useMemo, useCallback, memo, Suspense, lazy } from "react";
 import { Play, Plus, Info } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import type { MediaDetails, Video, Genre, CastMember, Keyword } from "@/types";
+import {
+  getTrailerWatchUrl,
+  getMatchScore,
+  getAgeRating,
+  getYear,
+} from "@/utils";
+import type { MediaDetails } from "@/types";
+
+// Lazy load BackgroundVideo component for better performance
+const BackgroundVideo = lazy(
+  () => import("@/components/shared/BackgroundVideo"),
+);
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
-const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
-const YOUTUBE_BASE_URL = "https://www.youtube.com/watch?v=";
+// const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 interface MediaHeroProps {
   media: MediaDetails;
@@ -13,7 +23,7 @@ interface MediaHeroProps {
   onAddToList?: () => void;
 }
 
-// Memoized MediaHero component - avoids re-renders when parent updates
+// Memoized MediaHero component
 const MediaHero = memo(function MediaHero({
   media,
   onPlayTrailer,
@@ -22,43 +32,30 @@ const MediaHero = memo(function MediaHero({
   const [isAddedToList, setIsAddedToList] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
 
-  // Memoized: Get first YouTube trailer - avoids recalculation on every render
-  const trailerUrl = useMemo(() => {
-    if (!media?.videos?.results) return null;
-    const trailer = media.videos.results.find(
-      (video: Video) => video.type === "Trailer" && video.site === "YouTube",
-    );
-    return trailer ? `${YOUTUBE_BASE_URL}${trailer.key}` : null;
-  }, [media]);
+  // Memoized: Get trailer URLs using utility functions
+  const trailerUrl = useMemo(
+    () => getTrailerWatchUrl(media.videos),
+    [media.videos],
+  );
 
-  // Memoized: Get first 3 cast members - avoids array slicing on every render
-  const topCast = useMemo(() => {
-    if (!media?.credits?.cast) return [];
-    return media.credits.cast.slice(0, 3);
-  }, [media]);
-
-  // Memoized: Get release year - avoids date parsing on every render
+  // Memoized: Get release year using utility function
   const releaseYear = useMemo(() => {
     const date =
       "release_date" in media ? media.release_date : media.first_air_date;
-    if (!date) return "";
-    return new Date(date).getFullYear().toString();
+    return getYear(date || "");
   }, [media]);
 
-  // Memoized: Truncate overview to 150 characters - avoids string operations on every render
-  const truncatedOverview = useMemo(() => {
-    if (!media?.overview) return "";
-    if (media.overview.length <= 150) return media.overview;
-    return media.overview.slice(0, 150) + "...";
-  }, [media]);
+  // Memoized: Get match score and age rating using utility functions
+  const matchScore = useMemo(
+    () => getMatchScore(media.vote_average || 0),
+    [media.vote_average],
+  );
 
-  // Memoized: Format rating to one decimal place
-  const formattedRating = useMemo(() => {
-    if (!media?.vote_average) return "N/A";
-    return media.vote_average.toFixed(1);
-  }, [media]);
+  const ageRating = useMemo(
+    () => getAgeRating(media.vote_average || 0),
+    [media.vote_average],
+  );
 
-  // Memoized: Handle play trailer callback
   const handlePlayTrailer = useCallback(() => {
     if (onPlayTrailer) {
       onPlayTrailer();
@@ -67,7 +64,6 @@ const MediaHero = memo(function MediaHero({
     }
   }, [onPlayTrailer, trailerUrl]);
 
-  // Memoized: Handle add to list callback
   const handleAddToList = useCallback(() => {
     if (onAddToList) {
       onAddToList();
@@ -85,20 +81,19 @@ const MediaHero = memo(function MediaHero({
     [media.backdrop_path],
   );
 
-  const posterUrl = useMemo(
-    () =>
-      media.poster_path
-        ? `${POSTER_BASE_URL}${media.poster_path}`
-        : null,
-    [media.poster_path],
-  );
+  // const posterUrl = useMemo(
+  //   () => (media.poster_path ? `${POSTER_BASE_URL}${media.poster_path}` : null),
+  //   [media.poster_path],
+  // );
 
   // Get title (supports both movie.title and tv.name)
   const title = "title" in media ? media.title : media.name;
 
   return (
-    <div className="relative w-full h-[85vh] min-h-[600px]">
-      {/* Background Image */}
+    <div className="relative w-full aspect-video max-h-[85vh] min-h-[500px] overflow-hidden">
+      {/* ========================================
+          BACKGROUND IMAGE - Fallback
+          ======================================== */}
       <div className="absolute inset-0 w-full h-full">
         <OptimizedImage
           src={backdropUrl}
@@ -109,145 +104,121 @@ const MediaHero = memo(function MediaHero({
         />
       </div>
 
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-primary)] via-[var(--background-primary)]/40 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[var(--background-primary)] to-transparent" />
+      {/* ========================================
+          BACKGROUND VIDEO - Autoplay, Loop, Muted (above image)
+          ======================================== */}
+      <Suspense fallback={null}>
+        <BackgroundVideo
+          videos={media.videos}
+          mediaId={media.id}
+          className="z-10"
+        />
+      </Suspense>
 
-      {/* Content Container */}
-      <div className="relative h-full container mx-auto px-4 md:px-8 lg:px-16 flex items-end pb-20 md:pb-24">
-        <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start md:items-end w-full">
-          {/* Poster (Hidden on mobile, visible on tablet+) */}
-          {posterUrl && (
-            <div className="hidden md:block flex-shrink-0">
-              <OptimizedImage
-                src={posterUrl}
-                alt={title}
-                className="w-56 rounded-lg shadow-2xl border-2 border-white/20"
-                objectFit="cover"
-                priority
-              />
-            </div>
-          )}
+      {/* ========================================
+          GRADIENT OVERLAYS - Netflix style (above video)
+          ======================================== */}
+      {/* Vignette - Strong left gradient */}
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent sm:via-black/50"
+        aria-hidden="true"
+      />
 
-          {/* Media Info */}
-          <div className="flex-1 space-y-4 md:space-y-5">
-            {/* Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg leading-tight max-w-4xl">
+      {/* Bottom fade to background */}
+      <div
+        className="absolute inset-0 bg-gradient-to-t from-[var(--background-primary)] via-[var(--background-primary)]/20 to-transparent sm:via-transparent"
+        aria-hidden="true"
+      />
+
+      {/* Top fade for smooth blend */}
+      <div
+        className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent"
+        aria-hidden="true"
+      />
+
+      {/* ========================================
+          CONTENT - Netflix style layout
+          ======================================== */}
+      <div className="absolute inset-0 z-10 flex items-center">
+        <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+          <div className="max-w-2xl">
+            {/* Title - Big, dramatic, Netflix style */}
+            <h1
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-3 sm:mb-4 tracking-tight leading-none hero-title"
+              style={{ textShadow: "2px 2px 12px rgba(0,0,0,0.9)" }}
+            >
               {title}
             </h1>
 
-            {/* Meta Row - Release Year, Rating, Genres */}
-            <div className="flex items-center gap-3 flex-wrap">
-              {/* Release Year */}
+            {/* Metadata Row */}
+            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 flex-wrap fade-in">
+              {/* Match Score - Netflix green */}
+              <span className="text-[var(--success)] text-xs sm:text-sm font-bold tracking-tight">
+                {matchScore}% Match
+              </span>
+
+              {/* Year */}
               {releaseYear && (
-                <span className="text-[var(--text-secondary)] text-base font-medium">
+                <span className="text-[var(--text-secondary)] text-xs sm:text-sm font-medium">
                   {releaseYear}
                 </span>
               )}
 
-              {/* Rating Badge */}
-              <div className="flex items-center gap-1.5">
-                <svg
-                  className="w-5 h-5 text-[var(--netflix-red)] fill-current"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                </svg>
-                <span className="text-white font-semibold">
-                  {formattedRating}
-                </span>
-              </div>
+              {/* Age Rating Badge */}
+              <span className="border border-[var(--text-muted)] px-1.5 sm:px-2 py-0.5 text-[var(--text-secondary)] text-[10px] sm:text-xs font-medium uppercase tracking-wider">
+                {ageRating}
+              </span>
 
-              {/* Separator */}
-              <span className="text-[var(--text-muted)]">•</span>
-
-              {/* Genres */}
-              {media.genres && media.genres.length > 0 && (
-                <div className="flex items-center gap-2 flex-wrap">
-                  {media.genres.slice(0, 4).map((genre: Genre) => (
-                    <span
-                      key={genre.id}
-                      className="bg-white/10 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-white/20 transition-colors cursor-default"
-                    >
-                      {genre.name}
-                    </span>
-                  ))}
-                </div>
-              )}
+              {/* Quality Badge */}
+              <span className="border border-[var(--text-muted)] px-1.5 sm:px-2 py-0.5 text-[var(--text-secondary)] text-[10px] sm:text-xs font-medium">
+                HD
+              </span>
             </div>
 
-            {/* Overview */}
-            <p className="text-[var(--text-primary)] text-base md:text-lg leading-relaxed max-w-3xl">
-              {truncatedOverview || "No description available."}
+            {/* Overview - Line clamped, Netflix style */}
+            <p
+              className="text-[var(--text-primary)] text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 max-w-[90vw] sm:max-w-xl font-medium drop-shadow-lg hero-description"
+              style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
+            >
+              {media.overview || "No description available."}
             </p>
 
-            {/* Cast (Optional) */}
-            {topCast.length > 0 && (
-              <div className="flex items-center gap-3 flex-wrap">
-                <span className="text-[var(--text-muted)] text-sm">
-                  Starring:
-                </span>
-                {topCast.map((actor: CastMember) => (
-                  <span
-                    key={actor.id}
-                    className="text-[var(--text-secondary)] text-sm hover:text-[var(--text-primary)] transition-colors cursor-default"
-                  >
-                    {actor.name}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Keywords/Tags (Optional) */}
-            {media.keywords &&
-              "keywords" in media.keywords &&
-              media.keywords.keywords &&
-              media.keywords.keywords.length > 0 && (
-                <div className="flex items-center gap-2 flex-wrap pt-2">
-                  {media.keywords.keywords
-                    .slice(0, 5)
-                    .map((keyword: Keyword) => (
-                      <span
-                        key={keyword.id}
-                        className="text-[var(--text-muted)] text-xs bg-[var(--background-secondary)] px-2 py-1 rounded hover:bg-[var(--background-tertiary)] transition-colors cursor-default"
-                      >
-                        #{keyword.name.replace(/\s/g, "")}
-                      </span>
-                    ))}
-                </div>
-              )}
-
-            {/* Action Buttons */}
-            <div className="flex items-center gap-3 pt-4 flex-wrap">
-              {/* Play Trailer Button */}
+            {/* Action Buttons - Netflix style */}
+            <div className="flex flex-wrap gap-3 pt-4 hero-buttons">
+              {/* Play Button - White bg, black text */}
               <button
                 onClick={handlePlayTrailer}
-                className="flex items-center gap-2 bg-white text-black px-6 md:px-8 py-3 md:py-3.5 rounded font-bold text-sm md:text-base hover:bg-gray-200 transition-all transform hover:scale-105 active:scale-95 shadow-lg"
+                className="flex items-center gap-2 bg-white text-[var(--text-inverse)] px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded font-bold text-sm sm:text-base md:text-lg transition-all duration-200 hover:bg-white/90 active:scale-95 min-w-[120px] sm:min-w-[140px] justify-center touch-manipulation button-hover hover-scale tap-scale"
+                aria-label={`Play trailer for ${title}`}
               >
-                <Play className="w-5 h-5 fill-black" />
-                Play Trailer
+                <Play className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 fill-current" />
+                Play
               </button>
 
               {/* Add to List Button */}
               <button
                 onClick={handleAddToList}
-                className={`flex items-center gap-2 px-6 md:px-8 py-3 md:py-3.5 rounded font-bold text-sm md:text-base transition-all transform hover:scale-105 active:scale-95 border-2 ${
+                className={`flex items-center gap-2 px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded font-bold text-sm sm:text-base md:text-lg transition-all duration-200 active:scale-95 backdrop-blur-sm min-w-[120px] sm:min-w-[140px] justify-center touch-manipulation button-hover hover-scale tap-scale border border-white/20 ${
                   isAddedToList
-                    ? "bg-[var(--netflix-red)] border-[var(--netflix-red)] text-white hover:bg-[var(--netflix-red-hover)]"
-                    : "bg-[var(--background-secondary)]/80 backdrop-blur-sm border-white/40 text-white hover:bg-white/20"
+                    ? "bg-[var(--success)]/80 hover:bg-[var(--success)] text-white"
+                    : "bg-[var(--background-secondary)]/80 hover:bg-[var(--background-tertiary)] text-white"
                 }`}
+                aria-pressed={isAddedToList}
+                aria-label={
+                  isAddedToList ? "Remove from My List" : "Add to My List"
+                }
               >
-                <Plus className="w-5 h-5" />
-                {isAddedToList ? "Added to List" : "Add to List"}
+                <Plus className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                {isAddedToList ? "In List" : "My List"}
               </button>
 
               {/* More Info Button */}
               <button
                 onClick={() => setShowTrailer(true)}
-                className="flex items-center gap-2 bg-[var(--background-secondary)]/50 backdrop-blur-sm text-white px-4 md:px-6 py-3 md:py-3.5 rounded font-bold text-sm md:text-base hover:bg-[var(--background-secondary)]/70 transition-all transform hover:scale-105 active:scale-95 border-2 border-white/20"
+                className="flex items-center gap-2 bg-white/20 text-white px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded font-bold text-sm sm:text-base md:text-lg transition-all duration-200 hover:bg-white/30 active:scale-95 backdrop-blur-sm min-w-[120px] sm:min-w-[140px] justify-center touch-manipulation button-hover hover-scale tap-scale"
+                aria-label="More information"
               >
-                <Info className="w-5 h-5" />
+                <Info className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
                 More Info
               </button>
             </div>
@@ -255,22 +226,29 @@ const MediaHero = memo(function MediaHero({
         </div>
       </div>
 
-      {/* Trailer Modal */}
+      {/* ========================================
+          TRAILER MODAL
+          ======================================== */}
       {showTrailer && trailerUrl && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
           onClick={() => setShowTrailer(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Trailer player"
         >
           <div className="relative w-full max-w-5xl aspect-video mx-4">
             <button
               onClick={() => setShowTrailer(false)}
               className="absolute -top-10 right-0 text-white hover:text-[var(--netflix-red)] transition-colors"
+              aria-label="Close trailer"
             >
               <svg
                 className="w-8 h-8"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"

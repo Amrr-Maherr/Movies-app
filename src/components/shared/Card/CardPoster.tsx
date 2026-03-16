@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
+import logo from "@/assets/logos/vite.svg";
 
 export interface CardPosterProps {
   movie: HeroMedia;
@@ -34,6 +35,16 @@ const CardPoster = memo(
           className="w-full h-full"
           objectFit="cover"
         />
+
+        {/* Netflix Logo Overlay - Top Left Corner */}
+        <div className="absolute top-2 left-2 z-20 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+          <OptimizedImage
+            src={logo}
+            alt="Netflix"
+            className="w-8 h-8 sm:w-10 sm:h-10"
+            objectFit="contain"
+          />
+        </div>
 
         {/* Children (badges, overlays, etc.) */}
         {children}

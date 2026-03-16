@@ -4,6 +4,8 @@
  * Utility functions for movie data transformation and formatting.
  */
 
+import type { Video } from "@/types";
+
 /**
  * TMDB Genre ID to Name mapping
  */
@@ -72,4 +74,38 @@ export function getAgeRating(voteAverage: number): string {
  */
 export function getGenres(genreIds: number[]): string[] {
   return genreIds.slice(0, 3).map((id) => GENRE_MAP[id] || "Unknown");
+}
+
+/**
+ * Get YouTube trailer embed URL for background video.
+ * Returns URL with autoplay, loop, and muted parameters for Netflix-style hero.
+ *
+ * @param videos - Object containing videos results array
+ * @returns YouTube embed URL string or null if no trailer found
+ */
+export function getTrailerEmbedUrl(
+  videos?: { results: Video[] } | null
+): string | null {
+  if (!videos?.results) return null;
+  const trailer = videos.results.find(
+    (video) => video.type === "Trailer" && video.site === "YouTube"
+  );
+  if (!trailer?.key) return null;
+  return `https://www.youtube.com/embed/${trailer.key}?autoplay=1&mute=1&loop=1&playlist=${trailer.key}&controls=0&showinfo=0&rel=0&modestbranding=1&enablejsapi=1&playsinline=1`;
+}
+
+/**
+ * Get YouTube trailer watch URL.
+ *
+ * @param videos - Object containing videos results array
+ * @returns YouTube watch URL string or null if no trailer found
+ */
+export function getTrailerWatchUrl(
+  videos?: { results: Video[] } | null
+): string | null {
+  if (!videos?.results) return null;
+  const trailer = videos.results.find(
+    (video) => video.type === "Trailer" && video.site === "YouTube"
+  );
+  return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
 }

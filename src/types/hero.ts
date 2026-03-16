@@ -4,24 +4,27 @@
  */
 
 import type { Movie, TvShow } from "./movies";
+import type { Video } from "./movieDetails";
 
 /**
- * Movie with media_type for person credits
+ * Movie with media_type for person credits and videos for hero background
  */
 export interface MovieWithMediaType extends Movie {
   media_type?: "movie" | "tv";
+  videos?: { results: Video[] };
 }
 
 /**
- * TV Show with media_type for person credits
+ * TV Show with media_type for person credits and videos for hero background
  */
 export interface TvShowWithMediaType extends TvShow {
   media_type?: "movie" | "tv";
+  videos?: { results: Video[] };
 }
 
 /**
  * Union type for media that can be displayed in hero
- * Extended to support media_type for person credits
+ * Extended to support media_type for person credits and videos for background
  */
 export type HeroMedia = Movie | TvShow | MovieWithMediaType | TvShowWithMediaType;
 

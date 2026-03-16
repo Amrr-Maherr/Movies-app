@@ -16,8 +16,8 @@ const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24
 
 /**
  * Fetch trending movies for the day from TMDB API.
- * These are movies that are currently trending based on user activity.
- * 
+ * These movies that are currently trending based on user activity.
+ *
  * @param page - Page number for pagination (default: 1)
  * @returns Array of trending movies or null on error
  */
@@ -28,6 +28,7 @@ export async function getTrendingMoviesDay(page: number = 1): Promise<Movie[] | 
         api_key: API_KEY,
         language: "en-US",
         page,
+        append_to_response: "videos",
       },
     });
     return response.data.results;
@@ -39,8 +40,8 @@ export async function getTrendingMoviesDay(page: number = 1): Promise<Movie[] | 
 
 /**
  * Fetch trending movies for the week from TMDB API.
- * These are movies that have been trending over the past week.
- * 
+ * These movies that have been trending over the past week.
+ *
  * @param page - Page number for pagination (default: 1)
  * @returns Array of trending movies or null on error
  */
@@ -51,6 +52,7 @@ export async function getTrendingMoviesWeek(page: number = 1): Promise<Movie[] |
         api_key: API_KEY,
         language: "en-US",
         page,
+        append_to_response: "videos",
       },
     });
     return response.data.results;
@@ -65,7 +67,7 @@ export async function getTrendingMoviesWeek(page: number = 1): Promise<Movie[] |
 /**
  * Fetch trending TV shows for the day from TMDB API.
  * These are TV shows that are currently trending based on user activity.
- * 
+ *
  * @param page - Page number for pagination (default: 1)
  * @returns Array of trending TV shows or null on error
  */
@@ -76,6 +78,7 @@ export async function getTrendingTvShowsDay(page: number = 1): Promise<TvShow[] 
         api_key: API_KEY,
         language: "en-US",
         page,
+        append_to_response: "videos",
       },
     });
     return response.data.results;
@@ -88,7 +91,7 @@ export async function getTrendingTvShowsDay(page: number = 1): Promise<TvShow[] 
 /**
  * Fetch trending TV shows for the week from TMDB API.
  * These are TV shows that have been trending over the past week.
- * 
+ *
  * @param page - Page number for pagination (default: 1)
  * @returns Array of trending TV shows or null on error
  */
@@ -99,6 +102,7 @@ export async function getTrendingTvShowsWeek(page: number = 1): Promise<TvShow[]
         api_key: API_KEY,
         language: "en-US",
         page,
+        append_to_response: "videos",
       },
     });
     return response.data.results;

@@ -14,8 +14,15 @@ const ActorsPage = memo(function ActorsPage() {
   const [selectedGender, setSelectedGender] = useState<string>("all");
   const [selectedLetter, setSelectedLetter] = useState<string>("all");
 
-  const { data, isLoading, error, refetch, fetchNextPage, hasNextPage } =
-    usePopularPeople();
+  const {
+    data,
+    isLoading,
+    isFetching,
+    error,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+  } = usePopularPeople();
 
   const handleGenderSelect = useCallback((gender: string) => {
     setSelectedGender(gender);
@@ -88,22 +95,25 @@ const ActorsPage = memo(function ActorsPage() {
             Try Again
           </button>
         </div>
-      ) : isLoading ? (
-        <SectionSkeleton variant="grid" cardCount={20} />
+      ) : isLoading && allItems.length === 0 ? (
+        <SectionSkeleton variant="grid" cardCount={6} />
       ) : (
         <div className="px-4 sm:px-8 pb-16">
           <InfiniteScroll
             dataLength={allItems.length}
             next={fetchNextPage}
             hasMore={!!hasNextPage}
-            loader={<SectionSkeleton variant="grid" cardCount={20} />}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4"
+            loader={null}
+            className=""
           >
             <Suspense
-              fallback={<SectionSkeleton variant="grid" cardCount={20} />}
+              fallback={<SectionSkeleton variant="grid" cardCount={6} />}
             >
               <MediaGrid items={allItems} type="person" />
             </Suspense>
+            {isFetching && hasNextPage && (
+              <SectionSkeleton variant="grid" cardCount={6} />
+            )}
           </InfiniteScroll>
         </div>
       )}

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { getMatchScore, getYear, getAgeRating, getGenres } from './movieHelpers';
+import { getMatchScore, getYear, getAgeRating, getGenres, getTrailerEmbedUrl, getTrailerWatchUrl } from './movieHelpers';
+import type { Video } from '@/types';
 
 describe('Movie Helpers', () => {
   describe('getMatchScore', () => {
@@ -80,6 +81,129 @@ describe('Movie Helpers', () => {
 
     it('should handle mixed known and unknown IDs', () => {
       expect(getGenres([28, 99999, 12])).toEqual(['Action', 'Unknown', 'Adventure']);
+    });
+  });
+
+  describe('getTrailerEmbedUrl', () => {
+    const createVideo = (key: string, type: string = 'Trailer', site: string = 'YouTube'): Video => ({
+      id: 'video-1',
+      key,
+      name: 'Test Trailer',
+      site,
+      type,
+      published_at: '2023-01-01',
+      official: true,
+    });
+
+    it('should return embed URL for YouTube trailer', () => {
+      const videos = { results: [createVideo('abc123')] };
+      const result = getTrailerEmbedUrl(videos);
+      expect(result).toContain('https://www.youtube.com/embed/abc123');
+      expect(result).toContain('autoplay=1');
+      expect(result).toContain('mute=1');
+      expect(result).toContain('loop=1');
+      expect(result).toContain('playlist=abc123');
+    });
+
+    it('should return null for undefined videos', () => {
+      expect(getTrailerEmbedUrl(undefined)).toBeNull();
+      expect(getTrailerEmbedUrl(null)).toBeNull();
+    });
+
+    it('should return null for empty results', () => {
+      expect(getTrailerEmbedUrl({ results: [] })).toBeNull();
+    });
+
+    it('should return null if no YouTube trailer found', () => {
+      const videos = {
+        results: [
+          createVideo('xyz789', 'Trailer', 'Vimeo'),
+          createVideo('def456', 'Teaser', 'YouTube'),
+        ],
+      };
+      expect(getTrailerEmbedUrl(videos)).toBeNull();
+    });
+
+    it('should find trailer among other video types', () => {
+      const videos = {
+        results: [
+          createVideo('clip1', 'Clip'),
+          createVideo('teaser1', 'Teaser'),
+          createVideo('trailer1', 'Trailer'),
+          createVideo('behind1', 'Behind the Scenes'),
+        ],
+      };
+      expect(getTrailerEmbedUrl(videos)).toContain('https://www.youtube.com/embed/trailer1');
+    });
+
+    it('should return first YouTube trailer when multiple exist', () => {
+      const videos = {
+        results: [
+          createVideo('trailer1'),
+          createVideo('trailer2'),
+          createVideo('trailer3'),
+        ],
+      };
+      expect(getTrailerEmbedUrl(videos)).toContain('https://www.youtube.com/embed/trailer1');
+    });
+
+    it('should include all required URL parameters', () => {
+      const videos = { results: [createVideo('test123')] };
+      const result = getTrailerEmbedUrl(videos)!;
+
+      expect(result).toContain('controls=0');
+      expect(result).toContain('showinfo=0');
+      expect(result).toContain('rel=0');
+      expect(result).toContain('modestbranding=1');
+      expect(result).toContain('enablejsapi=1');
+      expect(result).toContain('playsinline=1');
+    });
+  });
+
+  describe('getTrailerWatchUrl', () => {
+    const createVideo = (key: string, type: string = 'Trailer', site: string = 'YouTube'): Video => ({
+      id: 'video-1',
+      key,
+      name: 'Test Trailer',
+      site,
+      type,
+      published_at: '2023-01-01',
+      official: true,
+    });
+
+    it('should return watch URL for YouTube trailer', () => {
+      const videos = { results: [createVideo('abc123')] };
+      const result = getTrailerWatchUrl(videos);
+      expect(result).toBe('https://www.youtube.com/watch?v=abc123');
+    });
+
+    it('should return null for undefined videos', () => {
+      expect(getTrailerWatchUrl(undefined)).toBeNull();
+      expect(getTrailerWatchUrl(null)).toBeNull();
+    });
+
+    it('should return null for empty results', () => {
+      expect(getTrailerWatchUrl({ results: [] })).toBeNull();
+    });
+
+    it('should return null if no YouTube trailer found', () => {
+      const videos = {
+        results: [
+          createVideo('xyz789', 'Trailer', 'Vimeo'),
+          createVideo('def456', 'Teaser', 'YouTube'),
+        ],
+      };
+      expect(getTrailerWatchUrl(videos)).toBeNull();
+    });
+
+    it('should return first YouTube trailer when multiple exist', () => {
+      const videos = {
+        results: [
+          createVideo('trailer1'),
+          createVideo('trailer2'),
+        ],
+      };
+      expect(getTrailerWatchUrl(videos)).toBe('https://www.youtube.com/watch?v=trailer1');
     });
   });
 });

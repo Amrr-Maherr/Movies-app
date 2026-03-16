@@ -3,6 +3,8 @@
  * Used across the application for movie data structures
  */
 
+import type { Video } from "./movieDetails";
+
 /**
  * Movie data structure from TMDB API
  */
@@ -21,6 +23,7 @@ export interface Movie {
   popularity: number;
   video: boolean;
   vote_count: number;
+  videos?: { results: Video[] };
 }
 
 /**
@@ -65,6 +68,7 @@ export interface TvShow {
   popularity: number;
   origin_country?: string[];
   vote_count: number;
+  videos?: { results: Video[] };
 }
 
 /**
