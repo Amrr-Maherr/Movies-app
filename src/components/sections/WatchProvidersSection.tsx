@@ -138,7 +138,7 @@ const WatchProvidersSection = memo(function WatchProvidersSection({
         className,
       )}
     >
-      <div className="max-w-7xl mx-auto">
+      <div>
         {/* Section Title */}
         {title && (
           <h2

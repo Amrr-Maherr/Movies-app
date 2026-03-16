@@ -212,7 +212,7 @@ const WatchProvidersDetail = memo(function WatchProvidersDetail({
         "border-y border-white/5",
       )}
     >
-      <div className="max-w-7xl mx-auto">
+      <div>
         {/* Section Title */}
         <div className="mb-8 text-center md:text-left">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
