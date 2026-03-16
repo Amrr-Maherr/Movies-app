@@ -27,7 +27,7 @@ const BackgroundVideo = memo(function BackgroundVideo({
 }: BackgroundVideoProps) {
   const videoRef = useRef<HTMLIFrameElement>(null);
   const [videoError, setVideoError] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
   const [showControls, setShowControls] = useState(false);
 
   // Get background video URL from utility function
@@ -69,7 +69,7 @@ const BackgroundVideo = memo(function BackgroundVideo({
 
   return (
     <div
-      className={`relative absolute inset-0 w-full h-full ${className}`}
+      className={`relative  inset-0 w-full h-full ${className}`}
       aria-hidden="true"
     >
       <iframe
@@ -87,11 +87,11 @@ const BackgroundVideo = memo(function BackgroundVideo({
       {/* ========================================
           AUDIO CONTROL BUTTON
           ======================================== */}
-      {/* {showControls && ( */}
-        <div className="absolute bottom-4 right-4 z-100 cursor-pointer">
+      {showControls && (
+        <div className="absolute bottom-4 right-4 z-[9999]">
           <button
             onClick={toggleMute}
-            className={`flex cursor-pointer items-center justify-center w-12 h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 ${
+            className={`flex items-center justify-center w-12 h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 ${
               isMuted
                 ? "bg-red-600/80 hover:bg-red-600 text-white"
                 : "bg-white/20 hover:bg-white/30 text-white"
@@ -107,7 +107,7 @@ const BackgroundVideo = memo(function BackgroundVideo({
             )}
           </button>
         </div>
-      {/* )} */}
+      )}
     </div>
   );
 });
