@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import YouTube from "react-youtube";
-import { Volume2, VolumeX } from "lucide-react";
+import VideoControls from "./VideoControls";
 import { getTrailerEmbedUrl } from "@/utils";
 import type { Video } from "@/types";
 
@@ -11,7 +11,7 @@ interface BackgroundVideoProps {
 }
 
 /**
- * BackgroundVideo Component with Audio Controls using react-youtube
+ * BackgroundVideo Component with Play/Pause and Mute Controls
  */
 const BackgroundVideo = memo(function BackgroundVideo({
   videos,
@@ -20,6 +20,7 @@ const BackgroundVideo = memo(function BackgroundVideo({
 }: BackgroundVideoProps) {
   const [videoError, setVideoError] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [showControls, setShowControls] = useState(false);
   const [player, setPlayer] = useState<any>(null);
 
@@ -32,6 +33,7 @@ const BackgroundVideo = memo(function BackgroundVideo({
   useEffect(() => {
     setVideoError(false);
     setIsMuted(true);
+    setIsPlaying(true);
     setShowControls(false);
     setPlayer(null);
   }, [mediaId]);
@@ -57,6 +59,15 @@ const BackgroundVideo = memo(function BackgroundVideo({
   }, []);
 
   /**
+   * Handle player state change (play/pause)
+   */
+  const onPlayerStateChange = useCallback((event: any) => {
+    // YouTube.PlayerState.PLAYING = 1
+    // YouTube.PlayerState.PAUSED = 2
+    setIsPlaying(event.data === 1);
+  }, []);
+
+  /**
    * Toggle mute/unmute
    */
   const toggleMute = useCallback(() => {
@@ -71,6 +82,19 @@ const BackgroundVideo = memo(function BackgroundVideo({
       player.unMute();
     }
   }, [isMuted, player]);
+
+  /**
+   * Toggle play/pause
+   */
+  const togglePlay = useCallback(() => {
+    if (!player) return;
+
+    if (isPlaying) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
+  }, [isPlaying, player]);
 
   // Don't render if no video
   if (!videoId || videoError) {
@@ -101,6 +125,7 @@ const BackgroundVideo = memo(function BackgroundVideo({
           videoId={videoId}
           opts={opts}
           onReady={onPlayerReady}
+          onStateChange={onPlayerStateChange}
           onError={handleVideoError}
           className="w-full h-full scale-125"
           iframeClassName="w-full h-full object-cover"
@@ -108,27 +133,14 @@ const BackgroundVideo = memo(function BackgroundVideo({
         />
       </div>
 
-      {/* Mute/Unmute Button */}
-      {showControls && (
-        <div className="fixed bottom-4 right-4 z-[99999]">
-          <button
-            onClick={toggleMute}
-            className={`flex items-center justify-center w-12 h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 shadow-2xl ${
-              isMuted
-                ? "bg-red-600/80 hover:bg-red-600 text-white"
-                : "bg-white/20 hover:bg-white/30 text-white"
-            }`}
-            aria-label={isMuted ? "Unmute" : "Mute"}
-            title={isMuted ? "Unmute" : "Mute"}
-          >
-            {isMuted ? (
-              <VolumeX className="w-6 h-6" />
-            ) : (
-              <Volume2 className="w-6 h-6" />
-            )}
-          </button>
-        </div>
-      )}
+      {/* Control Buttons */}
+      <VideoControls
+        isMuted={isMuted}
+        isPlaying={isPlaying}
+        showControls={showControls}
+        onToggleMute={toggleMute}
+        onTogglePlay={togglePlay}
+      />
     </div>
   );
 });
