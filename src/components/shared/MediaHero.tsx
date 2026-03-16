@@ -8,9 +8,9 @@ import {
   useRef,
   useEffect,
 } from "react";
-import { Play, Plus, Info } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import VideoControls from "@/components/shared/VideoControls";
+import ActionButtons from "@/components/shared/ActionButtons";
 import {
   getTrailerWatchUrl,
   getMatchScore,
@@ -268,42 +268,15 @@ const MediaHero = memo(function MediaHero({
 
             {/* Action Buttons - Netflix style */}
             <div className="flex md:flex-nowrap flex-wrap items-center gap-3 pt-4 hero-buttons">
-              {/* Play Button - White bg, black text */}
-              <button
-                onClick={handlePlayTrailer}
-                className="flex items-center gap-2 bg-white text-[var(--text-inverse)] px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded font-bold text-sm sm:text-base md:text-lg transition-all duration-200 hover:bg-white/90 active:scale-95 min-w-[120px] sm:min-w-[140px] justify-center touch-manipulation button-hover hover-scale tap-scale"
-                aria-label={`Play trailer for ${title}`}
-              >
-                <Play className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 fill-current" />
-                Play
-              </button>
-
-              {/* Add to List Button */}
-              <button
-                onClick={handleAddToList}
-                className={`flex items-center gap-2 px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded font-bold text-sm sm:text-base md:text-lg transition-all duration-200 active:scale-95 backdrop-blur-sm min-w-[120px] sm:min-w-[140px] justify-center touch-manipulation button-hover hover-scale tap-scale border border-white/20 ${
-                  isAddedToList
-                    ? "bg-[var(--success)]/80 hover:bg-[var(--success)] text-white"
-                    : "bg-[var(--background-secondary)]/80 hover:bg-[var(--background-tertiary)] text-white"
-                }`}
-                aria-pressed={isAddedToList}
-                aria-label={
-                  isAddedToList ? "Remove from My List" : "Add to My List"
-                }
-              >
-                <Plus className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-                {isAddedToList ? "In List" : "My List"}
-              </button>
-
-              {/* More Info Button */}
-              <button
-                onClick={() => setShowTrailer(true)}
-                className="flex items-center gap-2 bg-white/20 text-white px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 rounded font-bold text-sm sm:text-base md:text-lg transition-all duration-200 hover:bg-white/30 active:scale-95 backdrop-blur-sm min-w-[120px] sm:min-w-[140px] justify-center touch-manipulation button-hover hover-scale tap-scale"
-                aria-label="More information"
-              >
-                <Info className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
-                More Info
-              </button>
+              {/* Action Buttons Component */}
+              <ActionButtons
+                title={title}
+                isAddedToList={isAddedToList}
+                showTrailer={showTrailer}
+                onPlay={handlePlayTrailer}
+                onAddToList={handleAddToList}
+                onMoreInfo={() => setShowTrailer(true)}
+              />
 
               {/* Divider */}
               <div className="w-px h-8 bg-white/30 mx-2 hidden sm:block"></div>
