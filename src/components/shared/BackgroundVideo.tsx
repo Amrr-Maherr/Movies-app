@@ -63,15 +63,40 @@ const BackgroundVideo = memo(function BackgroundVideo({
     setIsMuted(newMutedState);
 
     // Send message to YouTube iframe to set volume
-    if (videoRef.current) {
-      videoRef.current.contentWindow?.postMessage(
+    if (videoRef.current && videoRef.current.contentWindow) {
+      // Always unmute first (required by YouTube API)
+      videoRef.current.contentWindow.postMessage(
         JSON.stringify({
           event: "command",
-          func: newMutedState ? "mute" : "unMute",
+          func: "unMute",
           args: [],
         }),
         "*",
       );
+
+      // Then set volume if unmuting
+      if (!newMutedState) {
+        setTimeout(() => {
+          videoRef.current?.contentWindow?.postMessage(
+            JSON.stringify({
+              event: "command",
+              func: "setVolume",
+              args: [100],
+            }),
+            "*",
+          );
+        }, 100);
+      } else {
+        // Mute the video
+        videoRef.current.contentWindow.postMessage(
+          JSON.stringify({
+            event: "command",
+            func: "mute",
+            args: [],
+          }),
+          "*",
+        );
+      }
     }
   }, [isMuted]);
 
@@ -87,23 +112,24 @@ const BackgroundVideo = memo(function BackgroundVideo({
     >
       <iframe
         ref={videoRef}
-        src={`${backgroundVideoUrl}&enablejsapi=1`}
+        src={`${backgroundVideoUrl}&enablejsapi=1&origin=${typeof window !== "undefined" ? encodeURIComponent(window.location.origin) : "*"}`}
         title="Background Video"
         className="w-full h-full object-cover scale-125"
         onError={handleVideoError}
         allow="autoplay; encrypted-media; picture-in-picture"
         allowFullScreen
         loading="eager"
+        sandbox="allow-same-origin allow-scripts allow-presentation allow-popups"
       />
 
       {/* ========================================
           AUDIO CONTROL BUTTON
           ======================================== */}
       {showControls && (
-        <div className="absolute bottom-4 right-4 z-100">
+        <div className="absolute bottom-4 right-4 z-100 cursor-pointer">
           <button
             onClick={toggleMute}
-            className={`flex items-center justify-center w-12 h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 ${
+            className={`flex cursor-pointer items-center justify-center w-12 h-12 rounded-full backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 ${
               isMuted
                 ? "bg-red-600/80 hover:bg-red-600 text-white"
                 : "bg-white/20 hover:bg-white/30 text-white"
