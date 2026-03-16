@@ -27,7 +27,7 @@ export default function Providers({ children }: { children: ReactNode }) {
         </MovieModalProvider>
       </BrowserRouter>
       {/* React Query Devtools for debugging - only in development */}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
     </Provider>
   );
