@@ -7,6 +7,7 @@ import {
 } from "@/queries";
 import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
 import { Film, Tv, Globe } from "lucide-react";
+import type { StreamingPlatform, PlatformContentResponse } from "@/services";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const LOGO_BASE_URL = "https://image.tmdb.org/t/p/w200";
@@ -50,7 +51,7 @@ const Platform = memo(function Platform() {
 
   // Get platform info from API or fallback to hardcoded info
   const platformData = useMemo(() => {
-    return allPlatforms?.find((p) => p.id === platformId);
+    return allPlatforms?.find((p: StreamingPlatform) => p.id === platformId);
   }, [allPlatforms, platformId]);
 
   const platformInfo = PLATFORM_INFO[platformId];
@@ -181,65 +182,62 @@ const Platform = memo(function Platform() {
         {content.length > 0 ? (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
-              {content.map((item: any) => (
-                <Link
-                  key={item.id}
-                  to={`/${activeTab === "movies" ? "movie" : "tv"}/${item.id}`}
-                  className="group cursor-pointer block"
-                >
-                  <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
-                    {item.poster_path ? (
-                      <OptimizedImage
-                        src={`${IMAGE_BASE_URL}${item.poster_path}`}
-                        alt={item.title || item.name}
-                        className="w-full h-full"
-                        objectFit="cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-[#333]">
-                        {activeTab === "movies" ? (
-                          <Film className="w-12 h-12 text-[#555]" />
-                        ) : (
-                          <Tv className="w-12 h-12 text-[#555]" />
-                        )}
+              {content.map((item: any) => {
+                const title = "title" in item ? item.title : item.name;
+                const date =
+                  "release_date" in item
+                    ? item.release_date
+                    : item.first_air_date;
+                const year = date ? new Date(date).getFullYear() : "TBA";
+
+                return (
+                  <Link
+                    key={item.id}
+                    to={`/${activeTab === "movies" ? "movie" : "tv"}/${item.id}`}
+                    className="group cursor-pointer block"
+                  >
+                    <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
+                      {item.poster_path ? (
+                        <OptimizedImage
+                          src={`${IMAGE_BASE_URL}${item.poster_path}`}
+                          alt={title}
+                          className="w-full h-full"
+                          objectFit="cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-[#333]">
+                          {activeTab === "movies" ? (
+                            <Film className="w-12 h-12 text-[#555]" />
+                          ) : (
+                            <Tv className="w-12 h-12 text-[#555]" />
+                          )}
+                        </div>
+                      )}
+
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span className="text-white text-sm font-medium px-2 text-center">
+                          View Details
+                        </span>
                       </div>
-                    )}
-
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <span className="text-white text-sm font-medium px-2 text-center">
-                        View Details
-                      </span>
                     </div>
-                  </div>
 
-                  {/* Item Info */}
-                  <div className="mt-2 md:mt-3">
-                    <h3 className="text-xs md:text-sm text-white font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
-                      {item.title || item.name}
-                    </h3>
-                    <div className="flex items-center justify-between mt-1 text-[#737373] text-xs">
-                      <span>
-                        {(
-                          activeTab === "movies"
-                            ? item.release_date
-                            : item.first_air_date
-                        )
-                          ? new Date(
-                              activeTab === "movies"
-                                ? item.release_date
-                                : item.first_air_date,
-                            ).getFullYear()
-                          : "TBA"}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <span className="text-yellow-400">★</span>
-                        {item.vote_average?.toFixed(1) || "N/A"}
-                      </span>
+                    {/* Item Info */}
+                    <div className="mt-2 md:mt-3">
+                      <h3 className="text-xs md:text-sm text-white font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
+                        {title}
+                      </h3>
+                      <div className="flex items-center justify-between mt-1 text-[#737373] text-xs">
+                        <span>{year}</span>
+                        <span className="flex items-center gap-1">
+                          <span className="text-yellow-400">★</span>
+                          {item.vote_average?.toFixed(1) || "N/A"}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Pagination */}
