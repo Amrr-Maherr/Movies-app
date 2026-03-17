@@ -206,3 +206,14 @@ export {
   type DiscoverTvParams,
   type DiscoverResponse,
 } from "./genreService";
+
+// ============= Platform Service =============
+export {
+  // Platform Functions
+  getStreamingPlatforms,
+  getPlatformMovies,
+  getPlatformTVShows,
+  // Types
+  type StreamingPlatform,
+  type PlatformContentResponse,
+} from "./platformService";

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { memo, useMemo } from "react";
 import type { StreamingPlatform } from "@/types";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import { Link } from "react-router-dom";
 
 export interface PlatformCardProps {
   platform: StreamingPlatform;
@@ -23,7 +24,7 @@ const PlatformCard = memo(function PlatformCard({
   }, [platform]);
 
   return (
-    <div className="relative w-full h-full">
+    <Link to={`/platform/${platform.id}`} className="relative w-full h-full">
       <div className="relative h-full w-full rounded-xl overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 border border-neutral-700/50 shadow-lg hover:shadow-2xl hover:shadow-red-500/10 hover:border-red-500/30 transition-all duration-300">
         {/* Background gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60" />
@@ -73,7 +74,7 @@ const PlatformCard = memo(function PlatformCard({
           <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-red-500/5" />
         </div>
       </div>
-    </div>
+    </Link>
   );
 });
 
