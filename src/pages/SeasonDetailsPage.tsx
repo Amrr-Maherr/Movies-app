@@ -12,23 +12,25 @@ import type { Episode } from "@/types";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 
-const Card = lazy(() => import("@/components/shared/Card").then(m => ({ default: m.Card })));
-
-
+const Card = lazy(() =>
+  import("@/components/shared/Card").then((m) => ({ default: m.Card })),
+);
 
 const SeasonDetailsPage = memo(function SeasonDetailsPage() {
-  const { tvId: tvIdParam, seasonNumber: seasonNumberParam } = useParams<{
-    tvId: string;
+  const { slugWithId, seasonNumber } = useParams<{
+    slugWithId: string;
     seasonNumber: string;
   }>();
 
-  const tvId = extractIdFromSlug(tvIdParam);
-  const seasonNumber = seasonNumberParam;
+  const tvId = extractIdFromSlug(slugWithId);
+  const seasonNum = seasonNumber;
 
-  const { isLoading, data: season, error, refetch } = FetchTvSeasonDetails(
-    Number(tvId),
-    Number(seasonNumber),
-  );
+  const {
+    isLoading,
+    data: season,
+    error,
+    refetch,
+  } = FetchTvSeasonDetails(Number(tvId), Number(seasonNum));
 
   // Memoized: Error state handler
   const handleRetry = useCallback(() => {
@@ -62,9 +64,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
 
   const backdropUrl = useMemo(
     () =>
-      season?.poster_path
-        ? `${BACKDROP_BASE_URL}${season.poster_path}`
-        : null,
+      season?.poster_path ? `${BACKDROP_BASE_URL}${season.poster_path}` : null,
     [season?.poster_path],
   );
 
@@ -78,7 +78,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
         <Error
           fullscreen
           title="Failed to load season details"
-          message="We couldn&apos;t load the season information. Please try again."
+          message="We couldn't load the season information. Please try again."
           onRetry={handleRetry}
         />
       </div>
@@ -90,8 +90,14 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
       {/* SEO Meta Tags */}
       <HelmetMeta
         name={season.name || "Season Details"}
-        description={season.overview || `Watch Season ${seasonNumber} on Netflix`}
-        image={season.poster_path ? `https://image.tmdb.org/t/p/original${season.poster_path}` : undefined}
+        description={
+          season.overview || `Watch Season ${seasonNumber} on Netflix`
+        }
+        image={
+          season.poster_path
+            ? `https://image.tmdb.org/t/p/original${season.poster_path}`
+            : undefined
+        }
         url={window.location.href}
         type="video.tv_season"
       />
@@ -184,7 +190,10 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
             {season.episodes && season.episodes.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                 {season.episodes.map((episode: Episode) => (
-                  <Suspense key={episode.id} fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
+                  <Suspense
+                    key={episode.id}
+                    fallback={<SectionSkeleton variant="grid" cardCount={1} />}
+                  >
                     <Card
                       variant="episode"
                       episode={episode}

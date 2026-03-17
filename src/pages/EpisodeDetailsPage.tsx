@@ -1,5 +1,6 @@
 import { memo, useMemo, lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
+import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import OptimizedImage from "@/components/ui/OptimizedImage";
@@ -10,17 +11,18 @@ import FetchEpisodeDetails from "@/queries/FetchEpisodeDetails";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-const FullCreditsSection = lazy(() => import("@/components/sections/FullCreditsSection"));
-
-
+const FullCreditsSection = lazy(
+  () => import("@/components/sections/FullCreditsSection"),
+);
 
 const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
-  const { tvId, seasonNumber, episodeNumber } = useParams<{
-    tvId: string;
+  const { slugWithId, seasonNumber, episodeNumber } = useParams<{
+    slugWithId: string;
     seasonNumber: string;
     episodeNumber: string;
   }>();
 
+  const tvId = extractIdFromSlug(slugWithId);
 
   const {
     isLoading,
@@ -54,9 +56,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
 
   const stillImageUrl = useMemo(
     () =>
-      episode?.still_path
-        ? `${IMAGE_BASE_URL}${episode.still_path}`
-        : null,
+      episode?.still_path ? `${IMAGE_BASE_URL}${episode.still_path}` : null,
     [episode?.still_path],
   );
 
@@ -73,7 +73,6 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
     [episode?.crew],
   );
 
-
   if (isLoading) {
     return <PageSkeleton />;
   }
@@ -83,7 +82,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       <Error
         fullscreen
         title="Failed to load episode details"
-        message="We couldn&apos;t load the episode information. Please try again."
+        message="We couldn't load the episode information. Please try again."
         onRetry={() => refetch()}
       />
     );
@@ -94,12 +93,18 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       {/* SEO Meta Tags */}
       <HelmetMeta
         name={episode.name || "Episode Details"}
-        description={episode.overview?.substring(0, 160) || `Watch Episode ${episode.episode_number} of Season ${episode.season_number} on Netflix`}
-        image={episode.still_path ? `https://image.tmdb.org/t/p/original${episode.still_path}` : undefined}
+        description={
+          episode.overview?.substring(0, 160) ||
+          `Watch Episode ${episode.episode_number} of Season ${episode.season_number} on Netflix`
+        }
+        image={
+          episode.still_path
+            ? `https://image.tmdb.org/t/p/original${episode.still_path}`
+            : undefined
+        }
         url={window.location.href}
         type="video.episode"
       />
-
 
       {/* Hero Section with Episode Still */}
       <LazyWrapper height={500}>
@@ -265,11 +270,15 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-gray-400">Air Date</dt>
-                    <dd className="text-white font-medium">{formattedAirDate}</dd>
+                    <dd className="text-white font-medium">
+                      {formattedAirDate}
+                    </dd>
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-gray-400">Runtime</dt>
-                    <dd className="text-white font-medium">{formattedRuntime}</dd>
+                    <dd className="text-white font-medium">
+                      {formattedRuntime}
+                    </dd>
                   </div>
                   {episode.production_code && (
                     <div className="flex justify-between">
