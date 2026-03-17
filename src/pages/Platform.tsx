@@ -1,10 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
-import {
-  usePlatformMovies,
-  usePlatformTVShows,
-  useStreamingPlatforms,
-} from "@/queries";
+import { usePlatformMovies, usePlatformTVShows } from "@/queries";
+import { useStreamingPlatforms } from "@/queries/FetchStreamingPlatforms";
 import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
 import { Film, Tv, Globe } from "lucide-react";
 

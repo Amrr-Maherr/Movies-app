@@ -65,4 +65,5 @@ export { useNetworkDetails, useNetworkTVSeries } from "./useNetwork";
 export { useMovieGenres, useTvGenres, useMoviesByGenre, useTvShowsByGenre } from "./useGenre";
 
 // Platform hooks
-export { useStreamingPlatforms, usePlatformMovies, usePlatformTVShows } from "./usePlatform";
+// Note: useStreamingPlatforms is exported from FetchStreamingPlatforms
+export { usePlatformMovies, usePlatformTVShows } from "./usePlatform";
