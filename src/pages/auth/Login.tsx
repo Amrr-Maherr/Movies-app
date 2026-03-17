@@ -1,19 +1,52 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "@/layout/AuthLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { login, type ApiError } from "@/services";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // UI Only - no real authentication
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const response = await login({
+        email,
+        password,
+      });
+
+      // Store token in localStorage
+      if (rememberMe) {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
+      } else {
+        // Session storage for temporary login
+        sessionStorage.setItem("token", response.token);
+        sessionStorage.setItem("user", JSON.stringify(response.user));
+      }
+
+      // Redirect to home page
+      navigate("/");
+    } catch (err) {
+      const apiError = err as ApiError;
+      setError(
+        apiError.message || "Login failed. Please check your credentials.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -23,6 +56,12 @@ export default function Login() {
           <CardTitle>Sign In</CardTitle>
         </CardHeader>
         <CardContent>
+          {error && (
+            <div className="mb-4 p-3 rounded-md bg-red-500/20 border border-red-500 text-red-400 text-sm">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <Input
               type="text"
@@ -30,6 +69,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={isLoading}
             />
             <Input
               type="password"
@@ -37,18 +77,29 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={isLoading}
             />
-            <Button 
-              type="submit" 
-              className="mt-6 w-full bg-[var(--netflix-red)] hover:bg-[#c11119] text-white font-semibold py-6 text-base"
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="mt-6 w-full bg-[var(--netflix-red)] hover:bg-[#c11119] text-white font-semibold py-6 text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign In
+              {isLoading ? "Signing In..." : "Sign In"}
             </Button>
-            
+
             <div className="flex items-center justify-between text-sm text-[#b3b3b3] mt-2 group">
               <div className="flex items-center space-x-2">
-                <Checkbox id="remember" />
-                <Label htmlFor="remember" className="text-[#b3b3b3] cursor-pointer group-hover:text-white transition-colors">
+                <Checkbox
+                  id="remember"
+                  checked={rememberMe}
+                  onCheckedChange={(checked) =>
+                    setRememberMe(checked as boolean)
+                  }
+                />
+                <Label
+                  htmlFor="remember"
+                  className="text-[#b3b3b3] cursor-pointer group-hover:text-white transition-colors"
+                >
                   Remember me
                 </Label>
               </div>
@@ -61,12 +112,16 @@ export default function Login() {
           <div className="mt-16 text-[#b3b3b3] flex flex-col gap-4">
             <p className="text-base">
               New to Netflix?{" "}
-              <Link to="/signup" className="text-white hover:underline font-medium">
+              <Link
+                to="/signup"
+                className="text-white hover:underline font-medium"
+              >
                 Sign up now.
               </Link>
             </p>
             <p className="text-xs">
-              This page is protected by Google reCAPTCHA to ensure you're not a bot.{" "}
+              This page is protected by Google reCAPTCHA to ensure you're not a
+              bot.{" "}
               <Link to="#" className="text-blue-500 hover:underline">
                 Learn more.
               </Link>
