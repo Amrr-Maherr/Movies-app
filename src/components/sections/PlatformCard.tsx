@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { memo, useMemo } from "react";
 import type { StreamingPlatform } from "@/types";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { Link } from "react-router-dom";
 
 export interface PlatformCardProps {
   platform: StreamingPlatform;
@@ -12,22 +11,19 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w200";
 
 /**
  * PlatformCard Component
- * 
+ *
  * Displays a streaming platform as a large, visually prominent card
  * with smooth hover animations using Framer Motion.
  */
-const PlatformCard = memo(function PlatformCard({ platform }: PlatformCardProps) {
+const PlatformCard = memo(function PlatformCard({
+  platform,
+}: PlatformCardProps) {
   const logoUrl = useMemo(() => {
-    return platform.logo_path
-      ? `${IMAGE_BASE_URL}${platform.logo_path}`
-      : null;
+    return platform.logo_path ? `${IMAGE_BASE_URL}${platform.logo_path}` : null;
   }, [platform]);
 
   return (
-    <Link
-      // to={`/network/${platform?.parent_organization.id}`}
-      className="relative w-full h-full"
-    >
+    <div className="relative w-full h-full">
       <div className="relative h-full w-full rounded-xl overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 border border-neutral-700/50 shadow-lg hover:shadow-2xl hover:shadow-red-500/10 hover:border-red-500/30 transition-all duration-300">
         {/* Background gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60" />
@@ -77,7 +73,7 @@ const PlatformCard = memo(function PlatformCard({ platform }: PlatformCardProps)
           <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-red-500/5" />
         </div>
       </div>
-    </Link>
+    </div>
   );
 });
 
