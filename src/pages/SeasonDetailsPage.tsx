@@ -120,7 +120,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
 
           <div className="relative z-10 container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl pt-8">
             <Link
-              to={`/tv/${tvIdParam}`}
+              to={`/tv/${tvId}`}
               className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-6"
             >
               <ArrowLeft className="h-5 w-5" />
