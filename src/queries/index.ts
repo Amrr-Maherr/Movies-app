@@ -51,3 +51,6 @@ export { useSearch } from "./FetchSearch";
 
 // Auth hooks
 export { useSignup, useLogin } from "./useAuth";
+
+// Company hooks
+export { useCompanyDetails, useCompanyMovies } from "./useCompany";

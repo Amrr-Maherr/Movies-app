@@ -69,6 +69,7 @@ const Kids = lazy(() => import("@/pages/Kids"));
 const NewPopular = lazy(() => import("@/pages/NewPopular"));
 const MyList = lazy(() => import("@/pages/MyList"));
 const BrowseByLanguages = lazy(() => import("@/pages/BrowseByLanguages"));
+const Company = lazy(() => import("@/pages/Company"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Offline = lazy(() => import("@/pages/Offline"));
 
@@ -155,6 +156,14 @@ const AppRoutes = memo(function AppRoutes() {
             element={
               <PageTransition>
                 <BrowseByLanguages />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/company/:id"
+            element={
+              <PageTransition>
+                <Company />
               </PageTransition>
             }
           />

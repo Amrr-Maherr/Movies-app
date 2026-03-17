@@ -162,3 +162,13 @@ export {
   type AuthResponse,
   type ApiError,
 } from "./authService";
+
+// ============= Company Service =============
+export {
+  // Company Functions
+  getCompanyDetails,
+  getCompanyMovies,
+  // Types
+  type Company,
+  type CompanyMoviesResponse,
+} from "./companyService";

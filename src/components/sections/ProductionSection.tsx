@@ -1,4 +1,5 @@
 import { memo, useMemo } from "react";
+import { Link } from "react-router-dom";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import Slider from "@/components/shared/Slider/slider";
 
@@ -28,10 +29,12 @@ const ProductionCard = memo(function ProductionCard({
   name,
   logoPath,
   type,
+  id,
 }: {
   name: string;
   logoPath: string | null;
   type: "company" | "network";
+  id: number;
 }) {
   // Memoized: Image URL
   const imageUrl = useMemo(
@@ -40,7 +43,7 @@ const ProductionCard = memo(function ProductionCard({
   );
 
   return (
-    <div className="group cursor-pointer">
+    <Link to={`/company/${id}`} className="group cursor-pointer block">
       <div className="relative aspect-video overflow-hidden rounded-md bg-zinc-900 border border-zinc-800 transition-all duration-300 group-hover:border-zinc-600 group-hover:shadow-lg">
         {/* Logo or Placeholder */}
         <div className="absolute inset-0 flex items-center justify-center p-4">
@@ -72,7 +75,7 @@ const ProductionCard = memo(function ProductionCard({
           {name}
         </p>
       </div>
-    </div>
+    </Link>
   );
 });
 
@@ -119,6 +122,7 @@ const ProductionSection = memo(function ProductionSection({
           {allItems.map((item) => (
             <ProductionCard
               key={`${item.type}-${item.id}`}
+              id={item.id}
               name={item.name}
               logoPath={item.logo_path}
               type={item.type}

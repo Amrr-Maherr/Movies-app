@@ -1,6 +1,15 @@
 import { memo, useMemo } from "react";
+import { Link } from "react-router-dom";
 import type { MediaDetails, Genre } from "@/types";
-import { formatRuntime, formatDate, getLanguageName, formatNumber, getReleaseDate, getTitle, getRuntime } from "@/utils";
+import {
+  formatRuntime,
+  formatDate,
+  getLanguageName,
+  formatNumber,
+  getReleaseDate,
+  getTitle,
+  getRuntime,
+} from "@/utils";
 import { Card } from "@/components/shared/Card";
 import Slider from "@/components/shared/Slider/slider";
 import ProductionSection from "@/components/sections/ProductionSection";
@@ -10,7 +19,9 @@ interface MediaInfoSectionProps {
 }
 
 // Memoized MediaInfoSection component - avoids re-renders when parent updates
-const MediaInfoSection = memo(function MediaInfoSection({ media }: MediaInfoSectionProps) {
+const MediaInfoSection = memo(function MediaInfoSection({
+  media,
+}: MediaInfoSectionProps) {
   // Memoized: Pre-calculated values
   const title = useMemo(() => getTitle(media), [media]);
   const releaseDate = useMemo(() => getReleaseDate(media), [media]);
@@ -36,7 +47,9 @@ const MediaInfoSection = memo(function MediaInfoSection({ media }: MediaInfoSect
       },
       {
         label: "Original Language",
-        value: media.original_language ? getLanguageName(media.original_language) : "",
+        value: media.original_language
+          ? getLanguageName(media.original_language)
+          : "",
       },
       {
         label: "Rating",
@@ -50,10 +63,23 @@ const MediaInfoSection = memo(function MediaInfoSection({ media }: MediaInfoSect
       },
       {
         label: "Production",
-        value:
-          media.production_companies && media.production_companies.length > 0
-            ? media.production_companies.map((c) => c.name).join(", ")
-            : "",
+        value: "",
+        component:
+          media.production_companies &&
+          media.production_companies.length > 0 ? (
+            <div className="flex flex-wrap gap-2">
+              {media.production_companies.map((c, index) => (
+                <Link
+                  key={c.id}
+                  to={`/company/${c.id}`}
+                  className="text-base text-gray-200 hover:text-white hover:underline transition-colors"
+                >
+                  {c.name}
+                  {index < media.production_companies.length - 1 && ", "}
+                </Link>
+              ))}
+            </div>
+          ) : undefined,
       },
     ];
     return rows.filter((row) => row.value);
@@ -112,7 +138,7 @@ const MediaInfoSection = memo(function MediaInfoSection({ media }: MediaInfoSect
                         id: actor.id,
                         name: actor.name,
                         profileImage: actor.profile_path,
-                        role: actor.character || "Unknown role"
+                        role: actor.character || "Unknown role",
                       }}
                     />
                   ))}
@@ -129,23 +155,28 @@ const MediaInfoSection = memo(function MediaInfoSection({ media }: MediaInfoSect
                   <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     {row.label}
                   </span>
-                  <p className="text-base text-gray-200 font-normal leading-relaxed">
-                    {row.value}
-                  </p>
+                  {row.component ? (
+                    row.component
+                  ) : (
+                    <p className="text-base text-gray-200 font-normal leading-relaxed">
+                      {row.value}
+                    </p>
+                  )}
                 </div>
               ))}
 
               {/* Production Countries */}
-              {media.production_countries && media.production_countries.length > 0 && (
-                <div className="space-y-1.5 pt-4 border-t border-zinc-800">
-                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Production Countries
-                  </span>
-                  <p className="text-base text-gray-200 font-normal">
-                    {media.production_countries.map((c) => c.name).join(", ")}
-                  </p>
-                </div>
-              )}
+              {media.production_countries &&
+                media.production_countries.length > 0 && (
+                  <div className="space-y-1.5 pt-4 border-t border-zinc-800">
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      Production Countries
+                    </span>
+                    <p className="text-base text-gray-200 font-normal">
+                      {media.production_countries.map((c) => c.name).join(", ")}
+                    </p>
+                  </div>
+                )}
 
               {/* Spoken Languages */}
               {media.spoken_languages && media.spoken_languages.length > 0 && (
