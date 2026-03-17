@@ -1,7 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
 import { usePlatformMovies, usePlatformTVShows } from "@/queries";
-import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
+import { SectionSkeleton, Error } from "@/components/ui";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { Film, Tv, Globe } from "lucide-react";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
