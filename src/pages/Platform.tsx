@@ -1,7 +1,10 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
-import { usePlatformMovies, usePlatformTVShows } from "@/queries";
-import { useStreamingPlatforms } from "@/queries/FetchStreamingPlatforms";
+import {
+  usePlatformMovies,
+  usePlatformTVShows,
+  useStreamingPlatforms,
+} from "@/queries";
 import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
 import { Film, Tv, Globe } from "lucide-react";
 
@@ -31,6 +34,8 @@ const Platform = memo(function Platform() {
   const [activeTab, setActiveTab] = useState<"movies" | "tv">("movies");
   const [page, setPage] = useState(1);
 
+  const { data: allPlatforms } = useStreamingPlatforms("US");
+
   const {
     data: moviesData,
     isLoading: moviesLoading,
@@ -43,7 +48,21 @@ const Platform = memo(function Platform() {
     error: tvError,
   } = usePlatformTVShows(platformId, activeTab === "tv" ? page : 1);
 
+  // Get platform info from API or fallback to hardcoded info
+  const platformData = useMemo(() => {
+    return allPlatforms?.find((p) => p.id === platformId);
+  }, [allPlatforms, platformId]);
+
   const platformInfo = PLATFORM_INFO[platformId];
+  const displayName = platformData?.name || `Platform #${platformId}`;
+  const displayLogo = platformData?.logo_path
+    ? `${LOGO_BASE_URL}${platformData.logo_path}`
+    : null;
+  const displayDescription =
+    platformInfo?.description || "Browse movies and TV shows";
+  const displayCountry =
+    platformData?.origin_country || platformInfo?.country || "US";
+
   const contentData = activeTab === "movies" ? moviesData : tvData;
   const isLoading = activeTab === "movies" ? moviesLoading : tvLoading;
   const error = activeTab === "movies" ? moviesError : tvError;
@@ -92,41 +111,35 @@ const Platform = memo(function Platform() {
 
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
             {/* Platform Logo */}
-            <div className="w-32 h-32 md:w-40 md:h-40 bg-white rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
-              <img
-                src={`${LOGO_BASE_URL}/path_for_platform_${platformId}.png`}
-                alt={`Platform ${platformId}`}
-                className="w-full h-full object-contain p-2"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                  (
-                    e.target as HTMLImageElement
-                  ).nextElementSibling?.classList.remove("hidden");
-                }}
-              />
-              <div className="hidden text-center">
-                <div className="text-4xl md:text-5xl font-bold text-[#333]">
-                  {platformId}
-                </div>
+            {displayLogo ? (
+              <div className="w-32 h-32 md:w-40 md:h-40 bg-white rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0 p-4">
+                <OptimizedImage
+                  src={displayLogo}
+                  alt={displayName}
+                  className="w-full h-full object-contain"
+                  objectFit="contain"
+                />
               </div>
-            </div>
+            ) : (
+              <div className="w-32 h-32 md:w-40 md:h-40 bg-gradient-to-br from-red-600 to-red-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span className="text-4xl md:text-5xl font-bold text-white">
+                  {displayName.charAt(0)}
+                </span>
+              </div>
+            )}
 
             {/* Platform Info */}
             <div className="flex-1">
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
-                Platform #{platformId}
+                {displayName}
               </h1>
-              {platformInfo && (
-                <>
-                  <p className="text-base md:text-lg text-[#b3b3b3] mb-3">
-                    {platformInfo.description}
-                  </p>
-                  <div className="flex items-center gap-2 text-sm text-[#737373]">
-                    <Globe className="w-4 h-4" />
-                    <span>Available in {platformInfo.country}</span>
-                  </div>
-                </>
-              )}
+              <p className="text-base md:text-lg text-[#b3b3b3] mb-3">
+                {displayDescription}
+              </p>
+              <div className="flex items-center gap-2 text-sm text-[#737373]">
+                <Globe className="w-4 h-4" />
+                <span>Available in {displayCountry}</span>
+              </div>
             </div>
           </div>
         </div>
