@@ -261,15 +261,15 @@ const MediaHero = memo(function MediaHero({
               <span className="border border-[var(--text-muted)] px-1.5 sm:px-2 py-0.5 text-[var(--text-secondary)] text-[10px] sm:text-xs font-medium">
                 HD
               </span>
+              <p
+                className={`${isVisible ? "hidden" : "block"} text-[var(--text-primary)] text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 max-w-[90vw] sm:max-w-xl font-medium drop-shadow-lg hero-description`}
+                style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
+              >
+                {media.overview || "No description available."}
+              </p>
             </div>
 
             {/* Overview - Line clamped, Netflix style */}
-            <p
-              className={`${isVisible ? "hidden" : "block"} text-[var(--text-primary)] text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 max-w-[90vw] sm:max-w-xl font-medium drop-shadow-lg hero-description`}
-              style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
-            >
-              {media.overview || "No description available."}
-            </p>
 
             {/* Action Buttons - Netflix style */}
             <div className="flex md:flex-nowrap flex-wrap items-center gap-3 pt-4 hero-buttons">
