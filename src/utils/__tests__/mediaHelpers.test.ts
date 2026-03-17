@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { getTitle } from './getTitle';
-import { getReleaseDate } from './getReleaseDate';
-import { getRuntime } from './getRuntime';
-import { getReleaseYear } from './getReleaseYear';
+import { getTitle } from '../getTitle';
+import { getReleaseDate } from '../getReleaseDate';
+import { getRuntime } from '../getRuntime';
+import { getReleaseYear } from '../getReleaseYear';
 
 describe('Media Helpers', () => {
   describe('getTitle', () => {

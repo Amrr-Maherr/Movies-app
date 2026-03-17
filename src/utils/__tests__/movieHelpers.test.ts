@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getMatchScore, getYear, getAgeRating, getGenres, getTrailerEmbedUrl, getTrailerWatchUrl } from './movieHelpers';
+import { getMatchScore, getYear, getAgeRating, getGenres, getTrailerEmbedUrl, getTrailerWatchUrl } from '../movieHelpers';
 import type { Video } from '@/types';
 
 describe('Movie Helpers', () => {

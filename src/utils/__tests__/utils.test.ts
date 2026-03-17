@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { formatDate } from './formatDate';
-import { calculateAge } from './calculateAge';
-import { formatRuntime } from './formatRuntime';
-import { formatNumber } from './formatNumber';
-import { getLanguageName } from './getLanguageName';
+import { formatDate } from '../formatDate';
+import { calculateAge } from '../calculateAge';
+import { formatRuntime } from '../formatRuntime';
+import { formatNumber } from '../formatNumber';
+import { getLanguageName } from '../getLanguageName';
 
 describe('Date Helpers', () => {
   describe('formatDate', () => {

@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { generateSlug, formatSlugWithId, extractIdFromSlug } from './slugify';
+import { generateSlug, formatSlugWithId, extractIdFromSlug } from '../slugify';
 
 test('generateSlug converts title to lowercase slug', () => {
   expect(generateSlug('The Matrix')).toBe('the-matrix');

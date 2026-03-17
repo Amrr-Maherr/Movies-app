@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { filterKeyCrew } from './filterKeyCrew';
-import { extractKeywords } from './extractKeywords';
-import { extractWatchProviders } from './extractWatchProviders';
-import { getKnownForItems } from './getKnownForItems';
+import { filterKeyCrew } from '../filterKeyCrew';
+import { extractKeywords } from '../extractKeywords';
+import { extractWatchProviders } from '../extractWatchProviders';
+import { getKnownForItems } from '../getKnownForItems';
 
 describe('Data Processing', () => {
   describe('filterKeyCrew', () => {
