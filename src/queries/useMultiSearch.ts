@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { multiSearch, type MultiSearchResponse } from "@/services";
+import { multiSearch, type MultiSearchResult } from "@/services";
 
 /**
  * Hook for multi-search (movies, TV shows, and people)
@@ -11,7 +11,7 @@ import { multiSearch, type MultiSearchResponse } from "@/services";
  * const { data, isLoading, error } = useMultiSearch("inception");
  */
 export function useMultiSearch(query: string, page: number = 1) {
-  return useQuery<MultiSearchResponse | null>({
+  return useQuery<MultiSearchResult[] | null>({
     queryKey: ["search", "multi", query, page],
     queryFn: () => multiSearch(query, page),
     enabled: query.length >= 2,

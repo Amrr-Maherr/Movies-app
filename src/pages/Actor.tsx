@@ -1,9 +1,11 @@
 import { useState, memo, useMemo, useCallback, lazy, Suspense } from "react";
+import { Link } from "react-router-dom";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import InfiniteScroll from "react-infinite-scroll-component";
 import usePopularPeople from "@/queries/FetchPopularPeople";
+import { TrendingUp } from "lucide-react";
 
 const PeopleFiltersLazy = lazy(
   () => import("@/components/Actors/PeopleFilters"),
@@ -63,9 +65,18 @@ const ActorsPage = memo(function ActorsPage() {
       />
 
       <div className="px-4 sm:px-8 mb-8">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-3">
-          Popular Actors
-        </h1>
+        <div className="flex items-center justify-between mb-3">
+          <h1 className="text-4xl md:text-5xl font-bold text-white">
+            Popular Actors
+          </h1>
+          <Link
+            to="/trending/actors"
+            className="flex items-center gap-2 text-[var(--netflix-red)] hover:underline font-semibold"
+          >
+            <TrendingUp className="w-5 h-5" />
+            <span>Trending Now</span>
+          </Link>
+        </div>
         <p className="text-[var(--text-secondary)] text-sm md:text-lg max-w-3xl leading-relaxed">
           Explore the most popular actors and celebrities in the industry today.
         </p>

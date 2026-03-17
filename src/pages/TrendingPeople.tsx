@@ -1,7 +1,9 @@
 import { memo, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { useTrendingPeopleDay, useTrendingPeopleWeek } from "@/queries";
-import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
+import { useQuery } from "@tanstack/react-query";
+import { getTrendingPeopleDay, getTrendingPeopleWeek } from "@/services";
+import { SectionSkeleton, Error } from "@/components/ui";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { Star, TrendingUp } from "lucide-react";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
@@ -13,19 +15,40 @@ const TrendingPeople = memo(function TrendingPeople() {
     data: trendingDay,
     isLoading: dayLoading,
     error: dayError,
-  } = useTrendingPeopleDay();
+  } = useQuery({
+    queryKey: ["trending", "people", "day"],
+    queryFn: async () => {
+      const result = await getTrendingPeopleDay(1);
+      return result;
+    },
+    staleTime: 5 * 60 * 1000,
+    retry: 2,
+  });
 
   const {
     data: trendingWeek,
     isLoading: weekLoading,
     error: weekError,
-  } = useTrendingPeopleWeek();
+  } = useQuery({
+    queryKey: ["trending", "people", "week"],
+    queryFn: async () => {
+      const result = await getTrendingPeopleWeek(1);
+      return result;
+    },
+    staleTime: 5 * 60 * 1000,
+    retry: 2,
+  });
 
-  const trendingPeople = timeWindow === "day" ? trendingDay : trendingWeek;
+  const trendingPeople = (
+    timeWindow === "day" ? trendingDay?.results : trendingWeek?.results
+  ) as any[];
   const isLoading = timeWindow === "day" ? dayLoading : weekLoading;
   const error = timeWindow === "day" ? dayError : weekError;
 
-  const people = useMemo(() => trendingPeople?.slice(0, 20) || [], [trendingPeople]);
+  const people = useMemo(
+    () => trendingPeople?.slice(0, 20) || [],
+    [trendingPeople],
+  );
 
   if (isLoading) {
     return (
