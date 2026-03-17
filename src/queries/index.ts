@@ -48,3 +48,6 @@ export { default as usePersonImages } from "./FetchPersonImages";
 // Other hooks
 export { default as useStreamingPlatforms } from "./FetchStreamingPlatforms";
 export { useSearch } from "./FetchSearch";
+
+// Auth hooks
+export { useSignup, useLogin } from "./useAuth";

@@ -6,47 +6,40 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { login, type ApiError } from "@/services";
+import { useLogin } from "@/queries";
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setIsLoading(true);
+  const { mutate: loginUser, isPending, error } = useLogin();
 
-    try {
-      const response = await login({
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    loginUser(
+      {
         email,
         password,
-      });
-
-      // Store token in localStorage
-      if (rememberMe) {
-        localStorage.setItem("token", response.token);
-        localStorage.setItem("user", JSON.stringify(response.user));
-      } else {
-        // Session storage for temporary login
-        sessionStorage.setItem("token", response.token);
-        sessionStorage.setItem("user", JSON.stringify(response.user));
-      }
-
-      // Redirect to home page
-      navigate("/");
-    } catch (err) {
-      const apiError = err as ApiError;
-      setError(
-        apiError.message || "Login failed. Please check your credentials.",
-      );
-    } finally {
-      setIsLoading(false);
-    }
+      },
+      {
+        onSuccess: (response) => {
+          // Store token based on remember me option
+          if (rememberMe) {
+            localStorage.setItem("token", response.token);
+            localStorage.setItem("user", JSON.stringify(response.user));
+          } else {
+            // Session storage for temporary login
+            sessionStorage.setItem("token", response.token);
+            sessionStorage.setItem("user", JSON.stringify(response.user));
+          }
+          // Redirect to home page
+          navigate("/");
+        },
+      },
+    );
   };
 
   return (
@@ -58,7 +51,8 @@ export default function Login() {
         <CardContent>
           {error && (
             <div className="mb-4 p-3 rounded-md bg-red-500/20 border border-red-500 text-red-400 text-sm">
-              {error}
+              {(error as Error).message ||
+                "Login failed. Please check your credentials."}
             </div>
           )}
 
@@ -69,7 +63,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              disabled={isLoading}
+              disabled={isPending}
             />
             <Input
               type="password"
@@ -77,14 +71,14 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              disabled={isLoading}
+              disabled={isPending}
             />
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={isPending}
               className="mt-6 w-full bg-[var(--netflix-red)] hover:bg-[#c11119] text-white font-semibold py-6 text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? "Signing In..." : "Sign In"}
+              {isPending ? "Signing In..." : "Sign In"}
             </Button>
 
             <div className="flex items-center justify-between text-sm text-[#b3b3b3] mt-2 group">
