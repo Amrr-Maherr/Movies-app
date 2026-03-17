@@ -48,6 +48,7 @@ const MediaHero = memo(function MediaHero({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const playerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   // Memoized: Get trailer URLs using utility functions
   const trailerUrl = useMemo(
@@ -138,7 +139,9 @@ const MediaHero = memo(function MediaHero({
   // Listen for fullscreen changes
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const isFullscreen = !!document.fullscreenElement;
+      setIsFullscreen(isFullscreen);
+      setIsVisible(isFullscreen);
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
@@ -227,14 +230,16 @@ const MediaHero = memo(function MediaHero({
           <div className="max-w-2xl">
             {/* Title - Big, dramatic, Netflix style */}
             <h1
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-3 sm:mb-4 tracking-tight leading-none hero-title"
+              className={`${isVisible ? "hidden" : "block"} text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-white mb-3 sm:mb-4 tracking-tight leading-none hero-title`}
               style={{ textShadow: "2px 2px 12px rgba(0,0,0,0.9)" }}
             >
               {title}
             </h1>
 
             {/* Metadata Row */}
-            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 flex-wrap fade-in">
+            <div
+              className={`${isVisible ? "hidden" : "flex"} items-center gap-2 sm:gap-3 mb-3 sm:mb-4 flex-wrap fade-in`}
+            >
               {/* Match Score - Netflix green */}
               <span className="text-[var(--success)] text-xs sm:text-sm font-bold tracking-tight">
                 {matchScore}% Match
@@ -260,7 +265,7 @@ const MediaHero = memo(function MediaHero({
 
             {/* Overview - Line clamped, Netflix style */}
             <p
-              className="text-[var(--text-primary)] text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 max-w-[90vw] sm:max-w-xl font-medium drop-shadow-lg hero-description"
+              className={`${isVisible ? "hidden" : "block"} text-[var(--text-primary)] text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 max-w-[90vw] sm:max-w-xl font-medium drop-shadow-lg hero-description`}
               style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
             >
               {media.overview || "No description available."}
