@@ -37,6 +37,9 @@ const AskedQuestions = lazy(
 const PlatformsSection = lazy(
   () => import("@/components/sections/PlatformsSection"),
 );
+const MoreReasonsSection = lazy(
+  () => import("@/components/sections/MoreReasonsSection"),
+);
 
 const Home = memo(function Home() {
   const {
@@ -227,6 +230,13 @@ const Home = memo(function Home() {
           ) : topRatedLoading ? (
             <SectionSkeleton variant="grid" cardCount={6} />
           ) : null}
+        </LazyWrapper>
+      </Suspense>
+
+      {/* More Reasons to Join Section */}
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
+        <LazyWrapper height={400}>
+          <MoreReasonsSection />
         </LazyWrapper>
       </Suspense>
 
