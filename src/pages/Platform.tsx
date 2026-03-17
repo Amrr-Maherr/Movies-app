@@ -1,6 +1,10 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
-import { usePlatformMovies, usePlatformTVShows } from "@/queries";
+import {
+  usePlatformMovies,
+  usePlatformTVShows,
+  useStreamingPlatforms,
+} from "@/queries";
 import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
 import { Film, Tv, Globe } from "lucide-react";
 
@@ -8,14 +12,21 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const LOGO_BASE_URL = "https://image.tmdb.org/t/p/w200";
 
 // Popular platform IDs for display
-const PLATFORM_INFO: Record<number, { description: string; country: string }> = {
-  8: { description: "Stream unlimited movies and TV shows", country: "US" },
-  49: { description: "Premium TV series and movies", country: "US" },
-  337: { description: "Disney, Pixar, Marvel, Star Wars, and National Geographic", country: "US" },
-  9: { description: "Amazon Prime Video original and licensed content", country: "US" },
-  350: { description: "Apple TV+ original programming", country: "US" },
-  1899: { description: "Max original series and movies", country: "US" },
-};
+const PLATFORM_INFO: Record<number, { description: string; country: string }> =
+  {
+    8: { description: "Stream unlimited movies and TV shows", country: "US" },
+    49: { description: "Premium TV series and movies", country: "US" },
+    337: {
+      description: "Disney, Pixar, Marvel, Star Wars, and National Geographic",
+      country: "US",
+    },
+    9: {
+      description: "Amazon Prime Video original and licensed content",
+      country: "US",
+    },
+    350: { description: "Apple TV+ original programming", country: "US" },
+    1899: { description: "Max original series and movies", country: "US" },
+  };
 
 const Platform = memo(function Platform() {
   const { id } = useParams<{ id: string }>();
@@ -41,8 +52,14 @@ const Platform = memo(function Platform() {
   const error = activeTab === "movies" ? moviesError : tvError;
 
   const content = useMemo(() => contentData?.results || [], [contentData]);
-  const totalPages = useMemo(() => contentData?.total_pages || 1, [contentData]);
-  const totalResults = useMemo(() => contentData?.total_results || 0, [contentData]);
+  const totalPages = useMemo(
+    () => contentData?.total_pages || 1,
+    [contentData],
+  );
+  const totalResults = useMemo(
+    () => contentData?.total_results || 0,
+    [contentData],
+  );
 
   if (isLoading && page === 1) {
     return (
@@ -84,8 +101,10 @@ const Platform = memo(function Platform() {
                 alt={`Platform ${platformId}`}
                 className="w-full h-full object-contain p-2"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                  (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                  (e.target as HTMLImageElement).style.display = "none";
+                  (
+                    e.target as HTMLImageElement
+                  ).nextElementSibling?.classList.remove("hidden");
                 }}
               />
               <div className="hidden text-center">
@@ -145,9 +164,7 @@ const Platform = memo(function Platform() {
             <Tv className="w-5 h-5" />
             TV Shows
           </button>
-          <span className="ml-auto text-[#737373]">
-            {totalResults} titles
-          </span>
+          <span className="ml-auto text-[#737373]">{totalResults} titles</span>
         </div>
 
         {/* Content Grid */}
@@ -193,8 +210,16 @@ const Platform = memo(function Platform() {
                     </h3>
                     <div className="flex items-center justify-between mt-1 text-[#737373] text-xs">
                       <span>
-                        {(activeTab === "movies" ? item.release_date : item.first_air_date)
-                          ? new Date(activeTab === "movies" ? item.release_date : item.first_air_date).getFullYear()
+                        {(
+                          activeTab === "movies"
+                            ? item.release_date
+                            : item.first_air_date
+                        )
+                          ? new Date(
+                              activeTab === "movies"
+                                ? item.release_date
+                                : item.first_air_date,
+                            ).getFullYear()
                           : "TBA"}
                       </span>
                       <span className="flex items-center gap-1">

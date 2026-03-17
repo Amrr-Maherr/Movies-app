@@ -193,27 +193,23 @@ export {
 } from "./networkService";
 
 // ============= Genre Service =============
+// Note: getMovieGenres and getTvGenres are exported from discoverService
 export {
   // Genre Functions
-  getMovieGenres,
-  getTvGenres,
   discoverMoviesByGenre,
   discoverTvShowsByGenre,
   // Types
-  type Genre,
-  type GenresResponse,
   type DiscoverMoviesParams,
   type DiscoverTvParams,
   type DiscoverResponse,
 } from "./genreService";
 
 // ============= Platform Service =============
+// Note: getStreamingPlatforms is exported from trendingService
 export {
   // Platform Functions
-  getStreamingPlatforms,
   getPlatformMovies,
   getPlatformTVShows,
   // Types
-  type StreamingPlatform,
   type PlatformContentResponse,
 } from "./platformService";
