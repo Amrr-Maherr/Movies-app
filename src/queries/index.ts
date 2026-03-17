@@ -57,3 +57,6 @@ export { useCompanyDetails, useCompanyMovies } from "./useCompany";
 
 // Collection hooks
 export { useCollectionDetails } from "./useCollection";
+
+// Network hooks
+export { useNetworkDetails, useNetworkTVSeries } from "./useNetwork";

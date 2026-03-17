@@ -15,6 +15,7 @@ interface Network {
   name: string;
   logo_path: string | null;
   origin_country: string;
+  is_network?: boolean;
 }
 
 interface Collection {
@@ -51,7 +52,10 @@ const ProductionCard = memo(function ProductionCard({
   );
 
   return (
-    <Link to={`/company/${id}`} className="group cursor-pointer block">
+    <Link
+      to={type === "network" ? `/network/${id}` : `/company/${id}`}
+      className="group cursor-pointer block"
+    >
       <div className="relative aspect-video overflow-hidden rounded-md bg-zinc-900 border border-zinc-800 transition-all duration-300 group-hover:border-zinc-600 group-hover:shadow-lg">
         {/* Logo or Placeholder */}
         <div className="absolute inset-0 flex items-center justify-center p-4">

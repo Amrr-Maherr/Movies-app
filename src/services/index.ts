@@ -181,3 +181,13 @@ export {
   type Collection,
   type MoviePart,
 } from "./collectionService";
+
+// ============= Network Service =============
+export {
+  // Network Functions
+  getNetworkDetails,
+  getNetworkTVSeries,
+  // Types
+  type Network,
+  type NetworkTVSeriesResponse,
+} from "./networkService";
