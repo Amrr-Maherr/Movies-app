@@ -67,3 +67,10 @@ export { useMovieGenres, useTvGenres, useMoviesByGenre, useTvShowsByGenre } from
 // Platform hooks
 // Note: useStreamingPlatforms is exported from FetchStreamingPlatforms
 export { usePlatformMovies, usePlatformTVShows } from "./usePlatform";
+
+// Trending hooks
+export { useTrendingPeopleDay, useTrendingPeopleWeek } from "./FetchTrendingPeople";
+
+// Search hooks
+export { useSearch } from "./FetchSearch";
+export { useMultiSearch } from "./useMultiSearch";
