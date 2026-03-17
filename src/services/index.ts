@@ -150,3 +150,15 @@ export {
   type StreamingPlatform,
   type StreamingPlatformsResponse,
 } from "./trendingService";
+
+// ============= Auth Service =============
+export {
+  // Auth Functions
+  signup,
+  login,
+  // Types
+  type SignupData,
+  type LoginData,
+  type AuthResponse,
+  type ApiError,
+} from "./authService";
