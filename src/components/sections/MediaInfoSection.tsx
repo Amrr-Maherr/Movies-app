@@ -222,6 +222,11 @@ const MediaInfoSection = memo(function MediaInfoSection({
         <ProductionSection
           companies={media.production_companies}
           networks={"networks" in media ? media.networks : undefined}
+          collection={
+            "belongs_to_collection" in media
+              ? media.belongs_to_collection
+              : null
+          }
         />
       </div>
     </section>

@@ -70,6 +70,9 @@ const NewPopular = lazy(() => import("@/pages/NewPopular"));
 const MyList = lazy(() => import("@/pages/MyList"));
 const BrowseByLanguages = lazy(() => import("@/pages/BrowseByLanguages"));
 const Company = lazy(() => import("@/pages/Company"));
+const Collection = lazy(() => import("@/pages/Collection"));
+const SeasonDetailsPage = lazy(() => import("@/pages/SeasonDetailsPage"));
+const EpisodeDetailsPage = lazy(() => import("@/pages/EpisodeDetailsPage"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Offline = lazy(() => import("@/pages/Offline"));
 
@@ -164,6 +167,14 @@ const AppRoutes = memo(function AppRoutes() {
             element={
               <PageTransition>
                 <Company />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/collection/:id"
+            element={
+              <PageTransition>
+                <Collection />
               </PageTransition>
             }
           />
@@ -321,6 +332,22 @@ const AppRoutes = memo(function AppRoutes() {
             element={
               <PageTransition>
                 <TVRecommendationsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tv/:slugWithId/season/:seasonNumber"
+            element={
+              <PageTransition>
+                <SeasonDetailsPage />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tv/:slugWithId/season/:seasonNumber/episode/:episodeNumber"
+            element={
+              <PageTransition>
+                <EpisodeDetailsPage />
               </PageTransition>
             }
           />

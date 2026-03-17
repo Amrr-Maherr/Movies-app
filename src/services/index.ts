@@ -172,3 +172,12 @@ export {
   type Company,
   type CompanyMoviesResponse,
 } from "./companyService";
+
+// ============= Collection Service =============
+export {
+  // Collection Functions
+  getCollectionDetails,
+  // Types
+  type Collection,
+  type MoviePart,
+} from "./collectionService";

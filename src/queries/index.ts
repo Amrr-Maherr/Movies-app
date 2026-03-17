@@ -54,3 +54,6 @@ export { useSignup, useLogin } from "./useAuth";
 
 // Company hooks
 export { useCompanyDetails, useCompanyMovies } from "./useCompany";
+
+// Collection hooks
+export { useCollectionDetails } from "./useCollection";
