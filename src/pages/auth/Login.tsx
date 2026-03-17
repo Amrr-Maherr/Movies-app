@@ -2,8 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "@/layout/AuthLayout";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
 import { useLogin } from "@/queries";
 
 export default function Login() {
@@ -93,18 +91,19 @@ export default function Login() {
 
           <div className="flex items-center justify-between text-sm text-[#737373] mt-2">
             <div className="flex items-center space-x-2">
-              <Checkbox
+              <input
+                type="checkbox"
                 id="remember"
                 checked={rememberMe}
-                onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                className="border-[#8c8c8c] data-[state=checked]:bg-[#e50914] data-[state=checked]:border-[#e50914]"
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-600 bg-[#333] text-[#e50914] focus:ring-[#e50914] focus:ring-2"
               />
-              <Label
+              <label
                 htmlFor="remember"
                 className="text-[#737373] cursor-pointer hover:text-white transition-colors"
               >
                 Remember me
-              </Label>
+              </label>
             </div>
             <Link to="#" className="hover:underline">
               Need help?

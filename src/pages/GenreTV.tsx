@@ -1,7 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
 import { useTvShowsByGenre, useTvGenres } from "@/queries";
-import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
+import { SectionSkeleton, Error } from "@/components/ui";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 import { ChevronLeft, Tv } from "lucide-react";
 
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
@@ -12,11 +13,7 @@ const GenreTV = memo(function GenreTV() {
   const [page, setPage] = useState(1);
 
   const { data: tvGenres } = useTvGenres();
-  const {
-    data: tvData,
-    isLoading,
-    error,
-  } = useTvShowsByGenre(genreId, page);
+  const { data: tvData, isLoading, error } = useTvShowsByGenre(genreId, page);
 
   const genreName = useMemo(() => {
     if (!tvGenres) return "Genre";

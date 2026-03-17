@@ -1,10 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo } from "react";
 import { useNetworkDetails, useNetworkTVSeries } from "@/queries";
-import { SectionSkeleton, Error } from "@/components/ui";
-import MediaSection from "@/components/shared/MediaSection";
+import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
 import { Tv, MapPin, Globe, Building2 } from "lucide-react";
-import OptimizedImage from "@/components/ui/OptimizedImage";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -25,11 +23,8 @@ const Network = memo(function Network() {
   } = useNetworkTVSeries(networkId, 1);
 
   const logoUrl = useMemo(
-    () =>
-      network?.logo_path
-        ? `${IMAGE_BASE_URL}${network.logo_path}`
-        : null,
-    [network?.logo_path]
+    () => (network?.logo_path ? `${IMAGE_BASE_URL}${network.logo_path}` : null),
+    [network?.logo_path],
   );
 
   if (networkLoading) {
@@ -130,7 +125,9 @@ const Network = memo(function Network() {
         <div className="border-y border-[#222] bg-black/40">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6">
             <div className="flex items-center gap-4">
-              <span className="text-[#737373] text-sm">Parent Organization:</span>
+              <span className="text-[#737373] text-sm">
+                Parent Organization:
+              </span>
               <Link
                 to={`/network/${network.parent_organization.id}`}
                 className="text-white hover:underline font-medium flex items-center gap-2"
@@ -165,13 +162,35 @@ const Network = memo(function Network() {
             onRetry={() => window.location.reload()}
           />
         ) : networkShows?.results && networkShows.results.length > 0 ? (
-          <MediaSection
-            title=""
-            data={networkShows.results}
-            isLoading={false}
-            error={null}
-            onRetry={() => {}}
-          />
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+            {networkShows.results.map((show: any) => (
+              <Link
+                key={show.id}
+                to={`/tv/${show.id}`}
+                className="group cursor-pointer block"
+              >
+                <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
+                  {show.poster_path ? (
+                    <OptimizedImage
+                      src={`${IMAGE_BASE_URL}${show.poster_path}`}
+                      alt={show.name}
+                      className="w-full h-full"
+                      objectFit="cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-[#333]">
+                      <Tv className="w-12 h-12 text-[#555]" />
+                    </div>
+                  )}
+                </div>
+                <div className="mt-2 md:mt-3">
+                  <h3 className="text-xs md:text-sm text-white font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
+                    {show.name}
+                  </h3>
+                </div>
+              </Link>
+            ))}
+          </div>
         ) : (
           <div className="text-center py-12 text-[#737373]">
             <Tv className="w-16 h-16 mx-auto mb-4 opacity-50" />

@@ -1,33 +1,48 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
-import {
-  usePlatformMovies,
-  usePlatformTVShows,
-  useStreamingPlatforms,
-} from "@/queries";
+import { usePlatformMovies, usePlatformTVShows } from "@/queries";
 import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
 import { Film, Tv, Globe } from "lucide-react";
-import type { StreamingPlatform, PlatformContentResponse } from "@/services";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 const LOGO_BASE_URL = "https://image.tmdb.org/t/p/w200";
 
 // Popular platform IDs for display
-const PLATFORM_INFO: Record<number, { description: string; country: string }> =
-  {
-    8: { description: "Stream unlimited movies and TV shows", country: "US" },
-    49: { description: "Premium TV series and movies", country: "US" },
-    337: {
-      description: "Disney, Pixar, Marvel, Star Wars, and National Geographic",
-      country: "US",
-    },
-    9: {
-      description: "Amazon Prime Video original and licensed content",
-      country: "US",
-    },
-    350: { description: "Apple TV+ original programming", country: "US" },
-    1899: { description: "Max original series and movies", country: "US" },
-  };
+const PLATFORM_INFO: Record<
+  number,
+  { name?: string; description: string; country: string; logo?: string }
+> = {
+  8: {
+    name: "Netflix",
+    description: "Stream unlimited movies and TV shows",
+    country: "US",
+  },
+  49: {
+    name: "HBO Max",
+    description: "Premium TV series and movies",
+    country: "US",
+  },
+  337: {
+    name: "Disney+",
+    description: "Disney, Pixar, Marvel, Star Wars, and National Geographic",
+    country: "US",
+  },
+  9: {
+    name: "Amazon Prime Video",
+    description: "Amazon Prime Video original and licensed content",
+    country: "US",
+  },
+  350: {
+    name: "Apple TV+",
+    description: "Apple TV+ original programming",
+    country: "US",
+  },
+  1899: {
+    name: "Max",
+    description: "Max original series and movies",
+    country: "US",
+  },
+};
 
 const Platform = memo(function Platform() {
   const { id } = useParams<{ id: string }>();
@@ -35,34 +50,24 @@ const Platform = memo(function Platform() {
   const [activeTab, setActiveTab] = useState<"movies" | "tv">("movies");
   const [page, setPage] = useState(1);
 
-  const { data: allPlatforms } = useStreamingPlatforms("US");
-
   const {
     data: moviesData,
     isLoading: moviesLoading,
     error: moviesError,
-  } = usePlatformMovies(platformId, activeTab === "movies" ? page : 1);
+  } = usePlatformMovies(platformId, page);
 
   const {
     data: tvData,
     isLoading: tvLoading,
     error: tvError,
-  } = usePlatformTVShows(platformId, activeTab === "tv" ? page : 1);
-
-  // Get platform info from API or fallback to hardcoded info
-  const platformData = useMemo(() => {
-    return allPlatforms?.find((p: StreamingPlatform) => p.id === platformId);
-  }, [allPlatforms, platformId]);
+  } = usePlatformTVShows(platformId, page);
 
   const platformInfo = PLATFORM_INFO[platformId];
-  const displayName = platformData?.name || `Platform #${platformId}`;
-  const displayLogo = platformData?.logo_path
-    ? `${LOGO_BASE_URL}${platformData.logo_path}`
-    : null;
+  const displayName = platformInfo?.name || `Platform #${platformId}`;
+  const displayLogo = platformInfo?.logo || null;
   const displayDescription =
     platformInfo?.description || "Browse movies and TV shows";
-  const displayCountry =
-    platformData?.origin_country || platformInfo?.country || "US";
+  const displayCountry = platformInfo?.country || "US";
 
   const contentData = activeTab === "movies" ? moviesData : tvData;
   const isLoading = activeTab === "movies" ? moviesLoading : tvLoading;

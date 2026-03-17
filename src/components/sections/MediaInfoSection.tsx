@@ -224,7 +224,7 @@ const MediaInfoSection = memo(function MediaInfoSection({
           networks={"networks" in media ? media.networks : undefined}
           collection={
             "belongs_to_collection" in media
-              ? media.belongs_to_collection
+              ? (media.belongs_to_collection as any)
               : null
           }
         />

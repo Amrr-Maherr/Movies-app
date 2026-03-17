@@ -194,13 +194,12 @@ export {
 
 // ============= Genre Service =============
 // Note: getMovieGenres and getTvGenres are exported from discoverService
+// Note: DiscoverMoviesParams and DiscoverTvParams are exported from discoverService
 export {
   // Genre Functions
   discoverMoviesByGenre,
   discoverTvShowsByGenre,
   // Types
-  type DiscoverMoviesParams,
-  type DiscoverTvParams,
   type DiscoverResponse,
 } from "./genreService";
 

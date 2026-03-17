@@ -1,9 +1,9 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
 import { useMoviesByGenre, useMovieGenres } from "@/queries";
-import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
-import MediaSection from "@/components/shared/MediaSection";
-import { ChevronLeft, Film } from "lucide-react";
+import { SectionSkeleton, Error } from "@/components/ui";
+import OptimizedImage from "@/components/ui/OptimizedImage";
+import {Film } from "lucide-react";
 
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -27,7 +27,10 @@ const GenreMovies = memo(function GenreMovies() {
 
   const movies = useMemo(() => moviesData?.results || [], [moviesData]);
   const totalPages = useMemo(() => moviesData?.total_pages || 1, [moviesData]);
-  const totalResults = useMemo(() => moviesData?.total_results || 0, [moviesData]);
+  const totalResults = useMemo(
+    () => moviesData?.total_results || 0,
+    [moviesData],
+  );
 
   if (isLoading && page === 1) {
     return (
@@ -53,13 +56,6 @@ const GenreMovies = memo(function GenreMovies() {
     <div className="min-h-screen bg-[var(--background-primary)] pt-20 pb-12">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         {/* Back Button */}
-        <Link
-          to="/genres"
-          className="inline-flex items-center gap-2 text-[#b3b3b3] hover:text-white transition-colors mb-6"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          <span>Back to Genres</span>
-        </Link>
 
         {/* Header */}
         <div className="mb-8">
