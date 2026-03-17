@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { memo, useMemo } from "react";
 import type { StreamingPlatform } from "@/types";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import { Link } from "react-router-dom";
 
 export interface PlatformCardProps {
   platform: StreamingPlatform;
@@ -23,21 +24,14 @@ const PlatformCard = memo(function PlatformCard({ platform }: PlatformCardProps)
   }, [platform]);
 
   return (
-    <motion.div
+    <Link
+      // to={`/network/${platform?.parent_organization.id}`}
       className="relative w-full h-full"
-      whileHover={{ 
-        scale: 1.05, 
-        y: -8,
-        transition: { duration: 0.3, ease: "easeOut" }
-      }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <div className="relative h-full w-full rounded-xl overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 border border-neutral-700/50 shadow-lg hover:shadow-2xl hover:shadow-red-500/10 hover:border-red-500/30 transition-all duration-300">
         {/* Background gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60" />
-        
+
         {/* Platform Logo Container */}
         <div className="relative h-full w-full flex items-center justify-center p-6 md:p-8">
           {logoUrl ? (
@@ -67,7 +61,7 @@ const PlatformCard = memo(function PlatformCard({ platform }: PlatformCardProps)
         </div>
 
         {/* Platform Name Overlay (shown on hover) */}
-        <motion.div 
+        <motion.div
           className="absolute bottom-0 left-0 right-0 p-4 md:p-5 bg-gradient-to-t from-black via-black/80 to-transparent"
           initial={{ opacity: 0.7 }}
           whileHover={{ opacity: 1 }}
@@ -83,7 +77,7 @@ const PlatformCard = memo(function PlatformCard({ platform }: PlatformCardProps)
           <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-red-500/5" />
         </div>
       </div>
-    </motion.div>
+    </Link>
   );
 });
 

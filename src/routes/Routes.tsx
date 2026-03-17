@@ -72,6 +72,9 @@ const BrowseByLanguages = lazy(() => import("@/pages/BrowseByLanguages"));
 const Company = lazy(() => import("@/pages/Company"));
 const Collection = lazy(() => import("@/pages/Collection"));
 const Network = lazy(() => import("@/pages/Network"));
+const Genres = lazy(() => import("@/pages/Genres"));
+const GenreMovies = lazy(() => import("@/pages/GenreMovies"));
+const GenreTV = lazy(() => import("@/pages/GenreTV"));
 const SeasonDetailsPage = lazy(() => import("@/pages/SeasonDetailsPage"));
 const EpisodeDetailsPage = lazy(() => import("@/pages/EpisodeDetailsPage"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
@@ -184,6 +187,30 @@ const AppRoutes = memo(function AppRoutes() {
             element={
               <PageTransition>
                 <Network />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/genres"
+            element={
+              <PageTransition>
+                <Genres />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/movie/genre/:id"
+            element={
+              <PageTransition>
+                <GenreMovies />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tv/genre/:id"
+            element={
+              <PageTransition>
+                <GenreTV />
               </PageTransition>
             }
           />

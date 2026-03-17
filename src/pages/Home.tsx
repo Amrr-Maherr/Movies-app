@@ -1,4 +1,5 @@
 import { memo, useMemo, useCallback, lazy, Suspense } from "react";
+import { Link } from "react-router-dom";
 import { Error as ErrorComponent, SectionSkeleton } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -237,6 +238,27 @@ const Home = memo(function Home() {
       <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
         <LazyWrapper height={400}>
           <MoreReasonsSection />
+        </LazyWrapper>
+      </Suspense>
+
+      {/* Browse by Genre Section */}
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+        <LazyWrapper height={300}>
+          <div className="py-12 bg-black border-t border-[#222]">
+            <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
+              <h2 className="text-2xl md:text-4xl font-bold text-white mb-8">
+                Browse by Genre
+              </h2>
+              <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+                <Link
+                  to="/genres"
+                  className="px-6 py-3 bg-[#e50914] hover:bg-[#f40612] text-white font-semibold rounded transition-colors"
+                >
+                  View All Genres
+                </Link>
+              </div>
+            </div>
+          </div>
         </LazyWrapper>
       </Suspense>
 

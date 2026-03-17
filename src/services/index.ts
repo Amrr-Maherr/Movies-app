@@ -191,3 +191,18 @@ export {
   type Network,
   type NetworkTVSeriesResponse,
 } from "./networkService";
+
+// ============= Genre Service =============
+export {
+  // Genre Functions
+  getMovieGenres,
+  getTvGenres,
+  discoverMoviesByGenre,
+  discoverTvShowsByGenre,
+  // Types
+  type Genre,
+  type GenresResponse,
+  type DiscoverMoviesParams,
+  type DiscoverTvParams,
+  type DiscoverResponse,
+} from "./genreService";

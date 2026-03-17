@@ -1,9 +1,10 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo } from "react";
 import { useNetworkDetails, useNetworkTVSeries } from "@/queries";
-import { SectionSkeleton, Error, OptimizedImage } from "@/components/ui";
+import { SectionSkeleton, Error } from "@/components/ui";
 import MediaSection from "@/components/shared/MediaSection";
 import { Tv, MapPin, Globe, Building2 } from "lucide-react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 

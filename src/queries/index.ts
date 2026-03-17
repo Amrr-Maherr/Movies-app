@@ -60,3 +60,6 @@ export { useCollectionDetails } from "./useCollection";
 
 // Network hooks
 export { useNetworkDetails, useNetworkTVSeries } from "./useNetwork";
+
+// Genre hooks
+export { useMovieGenres, useTvGenres, useMoviesByGenre, useTvShowsByGenre } from "./useGenre";
