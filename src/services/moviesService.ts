@@ -178,9 +178,9 @@ export async function getPopularMovies(page: number = 1): Promise<Movie[] | null
  */
 export async function getTopRatedMovies(page: number = 1): Promise<Movie[] | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${API_BASE_URL}/movie/top_rated`, {
+    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/movie/top_rated`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         include_adult: false,
@@ -201,9 +201,9 @@ export async function getTopRatedMovies(page: number = 1): Promise<Movie[] | nul
  */
 export async function getUpcomingMovies(page: number = 1): Promise<Movie[] | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${API_BASE_URL}/movie/upcoming`, {
+    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/movie/upcoming`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         include_adult: false,
@@ -224,9 +224,9 @@ export async function getUpcomingMovies(page: number = 1): Promise<Movie[] | nul
  */
 export async function getNowPlayingMovies(page: number = 1): Promise<Movie[] | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${API_BASE_URL}/movie/now_playing`, {
+    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/movie/now_playing`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         include_adult: false,
@@ -250,9 +250,9 @@ export async function getNowPlayingMovies(page: number = 1): Promise<Movie[] | n
  */
 export async function getMovieDetails(id: number): Promise<MovieDetailsResponse | null> {
   try {
-    const response = await axios.get<MovieDetailsResponse>(`${API_BASE_URL}/movie/${id}`, {
+    const response = await axios.get<MovieDetailsResponse>(`${tmdbConfig.baseUrl}/movie/${id}`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         include_adult: false,
         append_to_response: "credits,videos,images,reviews,similar,external_ids,keywords",
@@ -273,9 +273,9 @@ export async function getMovieDetails(id: number): Promise<MovieDetailsResponse 
  */
 export async function getMovieCredits(id: number): Promise<Credits | null> {
   try {
-    const response = await axios.get<Credits>(`${API_BASE_URL}/movie/${id}/credits`, {
+    const response = await axios.get<Credits>(`${tmdbConfig.baseUrl}/movie/${id}/credits`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
       },
     });
@@ -295,9 +295,9 @@ export async function getMovieCredits(id: number): Promise<Credits | null> {
  */
 export async function getMovieReviews(id: number, page: number = 1): Promise<MovieReviewsResponse | null> {
   try {
-    const response = await axios.get<MovieReviewsResponse>(`${API_BASE_URL}/movie/${id}/reviews`, {
+    const response = await axios.get<MovieReviewsResponse>(``${tmdbConfig.baseUrl}/movie/${id}/reviews`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },
@@ -318,9 +318,9 @@ export async function getMovieReviews(id: number, page: number = 1): Promise<Mov
  */
 export async function getMovieRecommendations(id: number, page: number = 1): Promise<MovieRecommendationsResponse | null> {
   try {
-    const response = await axios.get<MovieRecommendationsResponse>(`${API_BASE_URL}/movie/${id}/recommendations`, {
+    const response = await axios.get<MovieRecommendationsResponse>(``${tmdbConfig.baseUrl}/movie/${id}/recommendations`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },
@@ -341,9 +341,9 @@ export async function getMovieRecommendations(id: number, page: number = 1): Pro
  */
 export async function getMovieSimilar(id: number, page: number = 1): Promise<MovieSimilarResponse | null> {
   try {
-    const response = await axios.get<MovieSimilarResponse>(`${API_BASE_URL}/movie/${id}/similar`, {
+    const response = await axios.get<MovieSimilarResponse>(``${tmdbConfig.baseUrl}/movie/${id}/similar`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },
@@ -364,9 +364,9 @@ export async function getMovieSimilar(id: number, page: number = 1): Promise<Mov
  */
 export async function getMovieVideos(id: number, page: number = 1): Promise<MovieVideosResponse | null> {
   try {
-    const response = await axios.get<MovieVideosResponse>(`${API_BASE_URL}/movie/${id}/videos`, {
+    const response = await axios.get<MovieVideosResponse>(``${tmdbConfig.baseUrl}/movie/${id}/videos`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },
@@ -386,9 +386,9 @@ export async function getMovieVideos(id: number, page: number = 1): Promise<Movi
  */
 export async function getMovieImages(id: number): Promise<MovieImagesResponse | null> {
   try {
-    const response = await axios.get<MovieImagesResponse>(`${API_BASE_URL}/movie/${id}/images`, {
+    const response = await axios.get<MovieImagesResponse>(``${tmdbConfig.baseUrl}/movie/${id}/images`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         include_image_language: "en,null",
       },
@@ -409,9 +409,9 @@ export async function getMovieImages(id: number): Promise<MovieImagesResponse | 
  */
 export async function getMovieWatchProviders(id: number, region: string = "US"): Promise<MovieWatchProvidersResponse | null> {
   try {
-    const response = await axios.get<MovieWatchProvidersResponse>(`${API_BASE_URL}/movie/${id}/watch/providers`, {
+    const response = await axios.get<MovieWatchProvidersResponse>(`${tmdbConfig.baseUrl}/movie/${id}/watch/providers`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         watch_region: region,
       },
     });
