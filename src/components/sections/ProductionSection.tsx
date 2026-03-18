@@ -31,7 +31,7 @@ interface ProductionSectionProps {
   collection?: Collection | null;
 }
 
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w185";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 // Memoized ProductionCard component
 const ProductionCard = memo(function ProductionCard({
@@ -119,7 +119,7 @@ const ProductionSection = memo(function ProductionSection({
 
   return (
     <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
         {/* Collection Section */}
         {collection && (
           <div className="mb-8 pb-8 border-b border-zinc-800">
