@@ -1,12 +1,8 @@
 import { memo } from "react";
-import { Link } from "react-router-dom";
-import { Tv, ArrowLeft } from "lucide-react";
+import { Tv} from "lucide-react";
 import { useStreamingPlatforms } from "@/queries";
 import { SectionSkeleton, Error } from "@/components/ui";
-import OptimizedImage from "@/components/ui/OptimizedImage";
 import PlatformCard from "@/components/sections/PlatformCard";
-
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 /**
  * Platforms Page

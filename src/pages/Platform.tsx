@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import {useParams } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
 import { usePlatformMovies, usePlatformTVShows } from "@/queries";
 import { SectionSkeleton, Error } from "@/components/ui";
