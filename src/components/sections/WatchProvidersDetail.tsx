@@ -191,7 +191,7 @@ const WatchProvidersDetail = memo(function WatchProvidersDetail({
 
   if (!hasProviders) {
     return (
-      <section className="bg-black py-8 md:py-12">
+      <section className="bg-black py-4 md:py-12">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
           <div className="text-center py-12">
             <Tv className="w-16 h-16 text-white/20 mx-auto mb-4" />

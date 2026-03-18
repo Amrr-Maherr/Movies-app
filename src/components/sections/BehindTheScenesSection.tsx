@@ -175,7 +175,7 @@ const BehindTheScenesSection = memo(function BehindTheScenesSection({
 
   return (
     <>
-      <section className="bg-black py-8 md:py-12">
+      <section className="bg-black py-4 md:py-12">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
           {/* Section header */}
           <div className="flex items-center justify-between mb-5">

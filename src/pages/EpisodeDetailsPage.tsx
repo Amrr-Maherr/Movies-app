@@ -187,7 +187,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       {guestStars.length > 0 && (
         <LazyWrapper>
           <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
+            <section className="bg-black py-4 md:py-12 border-t border-zinc-800">
               <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
                 <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
                   Guest Stars
@@ -211,7 +211,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       {/* Key Crew Section */}
       {keyCrew.length > 0 && (
         <LazyWrapper>
-          <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
+          <section className="bg-black py-4 md:py-12 border-t border-zinc-800">
             <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
                 Production Crew
@@ -248,7 +248,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
 
       {/* Episode Info Section */}
       <LazyWrapper>
-        <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
+        <section className="bg-black py-4 md:py-12 border-t border-zinc-800">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
             <div className="grid md:grid-cols-1 gap-8">
               <div className="bg-zinc-900/50 rounded-lg p-6">

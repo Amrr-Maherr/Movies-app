@@ -52,7 +52,7 @@ const ProductionSection = memo(function ProductionSection({
   const hasNetworks = networks.length > 0;
 
   return (
-    <section className="bg-black py-8 md:py-12 border-t border-zinc-800">
+    <section className="bg-black py-4 md:py-12 border-t border-zinc-800">
       <div className="container">
         {/* Collection Section */}
         {collection && <CollectionSection collection={collection} />}

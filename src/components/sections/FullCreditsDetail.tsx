@@ -90,7 +90,7 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
     return cast.filter(
       (actor) =>
         actor.name.toLowerCase().includes(query) ||
-        (actor.character && actor.character.toLowerCase().includes(query))
+        (actor.character && actor.character.toLowerCase().includes(query)),
     );
   }, [cast, searchQuery]);
 
@@ -111,34 +111,38 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
         (member) =>
           member.name.toLowerCase().includes(query) ||
           member.job.toLowerCase().includes(query) ||
-          member.department.toLowerCase().includes(query)
+          member.department.toLowerCase().includes(query),
       );
     }
 
     // Filter by department
     if (filterDepartment !== "all") {
-      result = result.filter((member) => member.department === filterDepartment);
+      result = result.filter(
+        (member) => member.department === filterDepartment,
+      );
     }
 
     return result;
   }, [crew, searchQuery, filterDepartment]);
 
   // Memoized: Handle search change
-  const handleSearchChange = useCallback((
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchQuery(e.target.value);
-  }, []);
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchQuery(e.target.value);
+    },
+    [],
+  );
 
   // Memoized: Handle department filter change
-  const handleDepartmentChange = useCallback((
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setFilterDepartment(e.target.value);
-  }, []);
+  const handleDepartmentChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setFilterDepartment(e.target.value);
+    },
+    [],
+  );
 
   return (
-    <section className="bg-black py-8 md:py-12 min-h-screen">
+    <section className="bg-black py-4 md:py-12 min-h-screen">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
@@ -164,7 +168,7 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
                 className={cn(
                   "w-full sm:w-64 pl-10 pr-4 py-2 rounded-lg",
                   "bg-white/10 border border-white/20 text-white",
-                  "placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30"
+                  "placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30",
                 )}
                 aria-label="Search cast and crew"
               />
@@ -179,7 +183,7 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
                 className={cn(
                   "w-full sm:w-48 pl-10 pr-8 py-2 rounded-lg appearance-none cursor-pointer",
                   "bg-white/10 border border-white/20 text-white",
-                  "focus:outline-none focus:ring-2 focus:ring-white/30"
+                  "focus:outline-none focus:ring-2 focus:ring-white/30",
                 )}
                 aria-label="Filter by department"
               >

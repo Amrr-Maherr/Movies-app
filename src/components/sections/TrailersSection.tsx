@@ -8,7 +8,9 @@ interface TrailersSectionProps {
   videos: Video[];
 }
 
-const TrailersSection = memo(function TrailersSection({ videos }: TrailersSectionProps) {
+const TrailersSection = memo(function TrailersSection({
+  videos,
+}: TrailersSectionProps) {
   const [selectedTrailer, setSelectedTrailer] = useState<Video | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,7 +22,7 @@ const TrailersSection = memo(function TrailersSection({ videos }: TrailersSectio
           video.site === "YouTube" &&
           (video.type === "Trailer" ||
             video.type === "Teaser" ||
-            video.type === "Clip")
+            video.type === "Clip"),
       )
       .slice(0, 10); // Limit to 10 trailers
   }, [videos]);
@@ -42,7 +44,7 @@ const TrailersSection = memo(function TrailersSection({ videos }: TrailersSectio
 
   return (
     <>
-      <section className="bg-black py-8 md:py-12">
+      <section className="bg-black py-4 md:py-12">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
           <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
             Trailers
@@ -60,7 +62,7 @@ const TrailersSection = memo(function TrailersSection({ videos }: TrailersSectio
                 trailer={{
                   videoKey: video.key,
                   name: video.name,
-                  type: video.type
+                  type: video.type,
                 }}
                 onClick={() => handleTrailerClick(video)}
               />

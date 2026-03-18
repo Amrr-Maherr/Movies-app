@@ -65,7 +65,7 @@ const CreditsSection = memo(function CreditsSection({
   }
 
   return (
-    <section className="bg-black py-8 md:py-12">
+    <section className="bg-black py-4 md:py-12">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         {/* Header with Filter */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">

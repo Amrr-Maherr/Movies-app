@@ -50,7 +50,7 @@ const VideoCard = memo(function VideoCard({
           objectFit="cover"
           priority={false}
         />
-        
+
         {/* Play Button Overlay */}
         <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300 flex items-center justify-center">
           <motion.div
@@ -111,9 +111,9 @@ const VideosSection = memo(function VideosSection({
           (video.type === "Trailer" ||
             video.type === "Teaser" ||
             video.type === "Clip" ||
-            video.type === "Featurette")
+            video.type === "Featurette"),
       ),
-    [videos]
+    [videos],
   );
 
   // Memoized: Handle video play
@@ -132,7 +132,7 @@ const VideosSection = memo(function VideosSection({
 
   return (
     <>
-      <section className="bg-black py-8 md:py-12">
+      <section className="bg-black py-4 md:py-12">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
           {/* Section Title */}
           <h2 className="text-xl md:text-2xl font-bold text-white mb-6">
@@ -151,13 +151,18 @@ const VideosSection = memo(function VideosSection({
             }}
           >
             {validVideos.map((video) => (
-              <VideoCard key={video.id || video.key} video={video} onPlay={handlePlay} />
+              <VideoCard
+                key={video.id || video.key}
+                video={video}
+                onPlay={handlePlay}
+              />
             ))}
           </Slider>
 
           {/* Video count info */}
           <p className="text-white/50 text-sm mt-4 text-center md:text-left">
-            {validVideos.length} {validVideos.length === 1 ? "video" : "videos"} available
+            {validVideos.length} {validVideos.length === 1 ? "video" : "videos"}{" "}
+            available
           </p>
         </div>
       </section>
