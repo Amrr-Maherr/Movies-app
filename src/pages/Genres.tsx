@@ -49,7 +49,7 @@ const Genres = memo(function Genres() {
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20">
-      <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-16">
+      <div className="container">
         {/* Page Header */}
         <div className="mb-10 mt-4">
           <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-3">
