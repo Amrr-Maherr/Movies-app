@@ -3,6 +3,7 @@ import { memo } from "react";
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  هسمخش
   onPageChange: (page: number) => void;
 }
 

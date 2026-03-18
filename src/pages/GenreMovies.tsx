@@ -3,8 +3,9 @@ import { memo, useMemo, useState } from "react";
 import { useMoviesByGenre, useMovieGenres } from "@/queries";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film } from "lucide-react";
-import MovieCard from "@/components/MovieCard";
+import Card from "@/components/shared/Card/Card";
 import Pagination from "@/components/Pagination";
+import type { HeroMedia } from "@/types";
 
 const GenreMovies = memo(function GenreMovies() {
   const { id } = useParams<{ id: string }>();
@@ -71,15 +72,8 @@ const GenreMovies = memo(function GenreMovies() {
         {movies.length > 0 ? (
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
-              {movies.map((movie: any) => (
-                <MovieCard
-                  key={movie.id}
-                  id={movie.id}
-                  title={movie.title}
-                  poster_path={movie.poster_path}
-                  release_date={movie.release_date}
-                  vote_average={movie.vote_average}
-                />
+              {movies.map((movie: HeroMedia) => (
+                <Card key={movie.id} movie={movie} variant="compact" />
               ))}
             </div>
 
