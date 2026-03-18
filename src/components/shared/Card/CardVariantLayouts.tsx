@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia, Episode, Season } from "@/types";
+import { Link } from "react-router-dom";
 
 export interface Top10BadgeProps {
   rank: number;
@@ -753,7 +754,7 @@ const HorizontalLayout = memo(
     detailsUrl,
     plainLayout,
   }: HorizontalLayoutProps) => (
-    <a href={detailsUrl} className="block w-full group">
+    <Link to={detailsUrl} className="block w-full group">
       <motion.div
         className={`cursor-pointer bg-zinc-900/80 rounded-xl flex gap-3 border border-white/5 shadow-lg ${
           !plainLayout ? "flex-col md:flex-row" : "hover:bg-zinc-700/80"
@@ -821,7 +822,7 @@ const HorizontalLayout = memo(
           )}
         </div>
       </motion.div>
-    </a>
+    </Link>
   ),
 );
 HorizontalLayout.displayName = "HorizontalLayout";

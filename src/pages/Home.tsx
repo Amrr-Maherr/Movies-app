@@ -1,5 +1,4 @@
 import { memo, useMemo, useCallback, lazy, Suspense } from "react";
-import { Link } from "react-router-dom";
 import { Error as ErrorComponent, SectionSkeleton } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
