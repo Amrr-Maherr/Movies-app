@@ -5,26 +5,46 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import { Link } from "react-router-dom";
 
 export interface PlatformCardProps {
-  platform: StreamingPlatform;
+  platform?: StreamingPlatform;
+  id?: number;
+  name?: string;
+  logoPath?: string | null;
+  type?: "company" | "network";
 }
 
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w200";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 /**
  * PlatformCard Component
  *
- * Displays a streaming platform as a large, visually prominent card
+ * Displays a streaming platform, production company, or network as a card
  * with smooth hover animations using Framer Motion.
  */
 const PlatformCard = memo(function PlatformCard({
   platform,
+  id,
+  name,
+  logoPath,
+  type = "company",
 }: PlatformCardProps) {
+  // Use platform props if provided, otherwise use individual props
+  const displayId = platform?.id ?? id ?? 0;
+  const displayName = platform?.name ?? name ?? "Unknown";
+  const displayLogoPath = platform?.logo_path ?? logoPath ?? null;
+  const displayType = platform ? "platform" : type;
+
   const logoUrl = useMemo(() => {
-    return platform.logo_path ? `${IMAGE_BASE_URL}${platform.logo_path}` : null;
-  }, [platform]);
+    return displayLogoPath ? `${IMAGE_BASE_URL}${displayLogoPath}` : null;
+  }, [displayLogoPath]);
+
+  const linkPath = useMemo(() => {
+    if (platform) return `/platform/${displayId}`;
+    if (type === "network") return `/network/${displayId}`;
+    return `/company/${displayId}`;
+  }, [displayId, displayType, type, platform]);
 
   return (
-    <Link to={`/platform/${platform.id}`} className="relative w-full h-full">
+    <Link to={linkPath} className="relative w-full h-full">
       <div className="relative h-full w-full rounded-xl overflow-hidden bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 border border-neutral-700/50 shadow-lg hover:shadow-2xl hover:shadow-red-500/10 hover:border-red-500/30 transition-all duration-300">
         {/* Background gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60" />
@@ -35,7 +55,7 @@ const PlatformCard = memo(function PlatformCard({
             <div className="relative w-full h-full flex items-center justify-center">
               <OptimizedImage
                 src={logoUrl}
-                alt={platform.name}
+                alt={displayName}
                 className="max-w-full max-h-full object-contain drop-shadow-2xl filter brightness-110 hover:brightness-125 transition-all duration-300"
                 objectFit="contain"
                 width={200}
@@ -47,11 +67,11 @@ const PlatformCard = memo(function PlatformCard({
             <div className="text-center">
               <div className="w-20 h-20 md:w-24 md:h-24 mx-auto mb-4 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center shadow-lg">
                 <span className="text-3xl md:text-4xl font-bold text-white">
-                  {platform.name.charAt(0)}
+                  {displayName.charAt(0)}
                 </span>
               </div>
               <p className="text-white font-semibold text-sm md:text-base">
-                {platform.name}
+                {displayName}
               </p>
             </div>
           )}
@@ -65,7 +85,7 @@ const PlatformCard = memo(function PlatformCard({
           transition={{ duration: 0.2 }}
         >
           <h3 className="text-white font-bold text-center text-sm md:text-base lg:text-lg truncate drop-shadow-lg">
-            {platform.name}
+            {displayName}
           </h3>
         </motion.div>
 
