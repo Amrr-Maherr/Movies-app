@@ -36,8 +36,6 @@ interface MediaHeroProps {
 // Memoized MediaHero component
 const MediaHero = memo(function MediaHero({
   media,
-  onPlayTrailer,
-  onAddToList,
 }: MediaHeroProps) {
   // const [isAddedToList, setIsAddedToList] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
@@ -226,7 +224,7 @@ const MediaHero = memo(function MediaHero({
           CONTENT - Netflix style layout
           ======================================== */}
       <div className="absolute inset-0 z-10 flex items-center">
-        <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+        <div className="container">
           <div className="max-w-2xl">
             {/* Title - Big, dramatic, Netflix style */}
             <h1

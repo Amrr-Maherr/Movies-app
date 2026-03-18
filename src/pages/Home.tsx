@@ -142,7 +142,7 @@ const Home = memo(function Home() {
       {/* Trending Now */}
       <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={250}>
-          <div className="py-6 md:py-8 container">
+          <div className="">
             <MediaSection
               title="Trending Now"
               data={trendingMoviesWeek}
@@ -171,7 +171,7 @@ const Home = memo(function Home() {
       {/* Trending TV Shows */}
       <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={250}>
-          <div className="py-6 md:py-8 container">
+          <div className="">
             <MediaSection
               title="Trending TV Shows"
               data={trendingTvWeek}

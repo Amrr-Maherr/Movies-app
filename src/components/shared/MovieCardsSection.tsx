@@ -31,7 +31,7 @@ const MovieCardsSection = memo(function MovieCardsSection({
   if (isLoading) {
     return (
       <section className="py-8">
-        <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+        <div className="container">
           <Loader />
         </div>
       </section>
@@ -41,7 +41,7 @@ const MovieCardsSection = memo(function MovieCardsSection({
   if (error || movies.length === 0) {
     return (
       <section className="py-8">
-        <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+        <div className="container">
           <Error retryButtonText="Try Again" onRetry={handleRetry} />
         </div>
       </section>
@@ -50,7 +50,7 @@ const MovieCardsSection = memo(function MovieCardsSection({
 
   return (
     <section className="py-8">
-      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+      <div className="container">
         {/* Section Title */}
         {title && (
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-4">

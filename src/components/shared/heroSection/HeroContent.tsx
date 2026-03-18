@@ -19,7 +19,7 @@ const HeroContent = memo(function HeroContent({ movie, onMoreInfo }: ExtraHeroCo
 
   return (
     <div className="absolute inset-0 z-10 flex items-center">
-      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-16">
+      <div className="container">
         <div className="max-w-2xl">
           {/* Title - Big, dramatic, tight spacing (Netflix style) */}
           {/* Responsive: smaller on mobile, larger on desktop */}
