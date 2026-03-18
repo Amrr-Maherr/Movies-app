@@ -5,6 +5,7 @@ import Slider from "@/components/shared/Slider/slider";
 import PlatformCard from "./PlatformCard";
 import type { StreamingPlatform } from "@/types";
 import { SectionSkeleton } from "@/components/ui";
+import { Link } from "react-router-dom";
 
 export interface PlatformsSectionProps {
   platforms: StreamingPlatform[];
@@ -54,7 +55,12 @@ const PlatformsSection = memo(function PlatformsSection({
           iconColor="text-red-600"
           badgeText="Browse by Platform"
         />
-
+        <Link
+          to="/platforms"
+          className="ml-4 text-sm md:text-base text-gray-300 hover:text-white transition-colors flex-shrink-0"
+        >
+          View All →
+        </Link>
         {/* Horizontal Slider with Platform Cards */}
         <div className="mt-6">
           <Slider

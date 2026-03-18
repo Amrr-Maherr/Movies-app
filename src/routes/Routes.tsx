@@ -76,6 +76,7 @@ const Genres = lazy(() => import("@/pages/Genres"));
 const GenreMovies = lazy(() => import("@/pages/GenreMovies"));
 const GenreTV = lazy(() => import("@/pages/GenreTV"));
 const Platform = lazy(() => import("@/pages/Platform"));
+const Platforms = lazy(() => import("@/pages/Platforms"));
 const TrendingPeople = lazy(() => import("@/pages/TrendingPeople"));
 const SeasonDetailsPage = lazy(() => import("@/pages/SeasonDetailsPage"));
 const EpisodeDetailsPage = lazy(() => import("@/pages/EpisodeDetailsPage"));
@@ -221,6 +222,14 @@ const AppRoutes = memo(function AppRoutes() {
             element={
               <PageTransition>
                 <Platform />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/platforms"
+            element={
+              <PageTransition>
+                <Platforms />
               </PageTransition>
             }
           />
