@@ -10,6 +10,7 @@ export interface LandscapeLayoutProps {
   matchPercentage?: number;
   mediaType: "movie" | "tv";
   detailsUrl: string;
+  isAdult?: boolean;
 }
 
 /**
@@ -24,6 +25,7 @@ const LandscapeLayout = memo(
     matchPercentage,
     mediaType,
     detailsUrl,
+    isAdult = false,
   }: LandscapeLayoutProps) => (
     <a href={detailsUrl} className="block w-full group">
       <motion.div
@@ -37,34 +39,55 @@ const LandscapeLayout = memo(
             whileHover={{ scale: 1.08 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
+            {/* Image with blur for adult content */}
             <OptimizedImage
               src={imageUrl}
               alt={title}
-              className="w-full h-full"
+              className={`w-full h-full transition-all duration-300 ${
+                isAdult ? "blur-md scale-105" : ""
+              }`}
               objectFit="cover"
             />
           </motion.div>
+
+          {/* Dark overlay for adult content */}
+          {isAdult && (
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-10" />
+          )}
+
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
           {/* Hover vignette */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-400" />
-          {isHot && (
+
+          {/* Adult Badge (+18) */}
+          {isAdult && (
+            <div className="absolute top-2.5 right-2.5 z-30 bg-red-700/95 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded shadow-lg border border-red-500/50">
+              +18
+            </div>
+          )}
+
+          {/* HOT Badge (hidden for adult content) */}
+          {!isAdult && isHot && (
             <div className="absolute top-2.5 left-2.5 flex items-center gap-1 bg-orange-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow-lg backdrop-blur-sm">
               <Flame className="w-3 h-3" />
               HOT
             </div>
           )}
+
           {/* Play button on hover */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
             <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-2xl backdrop-blur-sm">
               <Play className="w-4 h-4 fill-black text-black ml-0.5" />
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4">
+
+          <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 z-20">
             <h3 className="text-sm md:text-base font-bold text-white mb-1 line-clamp-2 group-hover:text-orange-300 transition-colors duration-300 drop-shadow-lg">
               {title}
             </h3>
             <div className="flex items-center gap-2 text-[10px] md:text-xs text-gray-300">
-              {matchPercentage && matchPercentage > 0 && (
+              {/* Match Percentage (hidden for adult content) */}
+              {!isAdult && matchPercentage && matchPercentage > 0 && (
                 <span className="font-semibold text-green-400">
                   {matchPercentage}% Match
                 </span>

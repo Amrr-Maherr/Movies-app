@@ -617,6 +617,9 @@ const Card = memo(
 
     // Landscape Variant
     if (variant === "landscape") {
+      // Check if content is for adults only
+      const isAdult = movie?.adult === true;
+
       return (
         <LazyWrapper height={250}>
           <motion.div
@@ -630,6 +633,7 @@ const Card = memo(
               matchPercentage={finalMatchPercentage || 0}
               mediaType={mediaType || (tvShow ? "tv" : "movie")}
               detailsUrl={detailsUrl}
+              isAdult={isAdult}
             />
           </motion.div>
         </LazyWrapper>
