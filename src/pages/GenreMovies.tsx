@@ -32,7 +32,7 @@ const GenreMovies = memo(function GenreMovies() {
     [moviesData],
   );
 
-  if (isLoading && page === 1) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-[var(--background-primary)]">
         <SectionSkeleton variant="hero" />
@@ -86,7 +86,10 @@ const GenreMovies = memo(function GenreMovies() {
             />
           </>
         ) : (
-          movies.length === 0 ? :
+          <div className="text-center py-12 text-[var(--text-muted)]">
+            <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
+            <p className="text-lg">No movies available in this genre</p>
+          </div>
         )}
       </div>
     </div>

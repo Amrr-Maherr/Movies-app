@@ -25,7 +25,7 @@ const GenreTV = memo(function GenreTV() {
   const totalPages = useMemo(() => tvData?.total_pages || 1, [tvData]);
   const totalResults = useMemo(() => tvData?.total_results || 0, [tvData]);
 
-  if (isLoading && page === 1) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-[var(--background-primary)]">
         <SectionSkeleton variant="hero" />
