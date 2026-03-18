@@ -184,7 +184,7 @@ export async function getPopularTvShows(page: number = 1): Promise<TvShow[] | nu
         api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
-        include_adult: false,
+        include_adult: true,
       },
     });
     return response.data.results;
@@ -207,7 +207,7 @@ export async function getTopRatedTvShows(page: number = 1): Promise<TvShow[] | n
         api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
-        include_adult: false,
+        include_adult: true,
       },
     });
     return response.data.results;
@@ -230,7 +230,7 @@ export async function getAiringTodayTvShows(page: number = 1): Promise<TvShow[] 
         api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
-        include_adult: false,
+        include_adult: true,
       },
     });
     return response.data.results;
@@ -253,7 +253,7 @@ export async function getOnTheAirTvShows(page: number = 1): Promise<TvShow[] | n
         api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
-        include_adult: false,
+        include_adult: true,
       },
     });
     return response.data.results;
@@ -278,7 +278,7 @@ export async function getTVShowDetails(id: number): Promise<TVDetailsResponse | 
       params: {
         api_key: tmdbConfig.apiKey,
         language: "en-US",
-        include_adult: false,
+        include_adult: true,
         append_to_response: "credits,videos,images,reviews,similar,external_ids,keywords,watch/providers",
       },
     });

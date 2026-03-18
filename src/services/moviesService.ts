@@ -160,7 +160,7 @@ export async function getPopularMovies(page: number = 1): Promise<Movie[] | null
         api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
-        include_adult: false,
+        include_adult: true,
       },
     });
     return response.data.results;
@@ -183,7 +183,7 @@ export async function getTopRatedMovies(page: number = 1): Promise<Movie[] | nul
         api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
-        include_adult: false,
+        include_adult: true,
       },
     });
     return response.data.results;
@@ -206,7 +206,7 @@ export async function getUpcomingMovies(page: number = 1): Promise<Movie[] | nul
         api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
-        include_adult: false,
+        include_adult: true,
       },
     });
     return response.data.results;
@@ -229,7 +229,7 @@ export async function getNowPlayingMovies(page: number = 1): Promise<Movie[] | n
         api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
-        include_adult: false,
+        include_adult: true,
       },
     });
     return response.data.results;
@@ -254,7 +254,7 @@ export async function getMovieDetails(id: number): Promise<MovieDetailsResponse 
       params: {
         api_key: tmdbConfig.apiKey,
         language: "en-US",
-        include_adult: false,
+        include_adult: true,
         append_to_response: "credits,videos,images,reviews,similar,external_ids,keywords",
       },
     });
