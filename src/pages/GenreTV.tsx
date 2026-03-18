@@ -74,6 +74,7 @@ const GenreTV = memo(function GenreTV() {
             <Pagination
               currentPage={page}
               totalPages={totalPages}
+              isLoading={isLoading}
               onPageChange={setPage}
             />
           </>

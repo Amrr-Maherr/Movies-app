@@ -82,13 +82,11 @@ const GenreMovies = memo(function GenreMovies() {
               currentPage={page}
               totalPages={totalPages}
               onPageChange={setPage}
+              isLoading={isLoading}
             />
           </>
         ) : (
-          <div className="text-center py-12 text-[var(--text-muted)]">
-            <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
-            <p className="text-lg">No movies available in this genre</p>
-          </div>
+          movies.length === 0 ? :
         )}
       </div>
     </div>

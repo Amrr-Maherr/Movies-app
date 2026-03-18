@@ -3,13 +3,14 @@ import { memo } from "react";
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  هسمخش
+  isLoading: boolean;
   onPageChange: (page: number) => void;
 }
 
 const Pagination = memo(function Pagination({
   currentPage,
   totalPages,
+  isLoading,
   onPageChange,
 }: PaginationProps) {
   const handlePrevious = () => {
@@ -26,9 +27,12 @@ const Pagination = memo(function Pagination({
     <div className="flex items-center justify-center gap-4">
       <button
         onClick={handlePrevious}
-        disabled={currentPage === 1}
-        className="px-6 py-3 bg-[var(--background-secondary)] text-[var(--text-primary)] rounded-md hover:bg-[var(--background-tertiary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+        disabled={currentPage === 1 || isLoading}
+        className="px-6 py-3 bg-[var(--background-secondary)] text-[var(--text-primary)] rounded-md hover:bg-[var(--background-tertiary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium min-w-[120px] flex items-center justify-center gap-2"
       >
+        {isLoading ? (
+          <div className="w-4 h-4 border-2 border-[var(--text-primary)] border-t-transparent rounded-full animate-spin" />
+        ) : null}
         Previous
       </button>
       <span className="text-[var(--text-primary)] font-medium">
@@ -36,10 +40,13 @@ const Pagination = memo(function Pagination({
       </span>
       <button
         onClick={handleNext}
-        disabled={currentPage === totalPages}
-        className="px-6 py-3 bg-[var(--background-secondary)] text-[var(--text-primary)] rounded-md hover:bg-[var(--background-tertiary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+        disabled={currentPage === totalPages || isLoading}
+        className="px-6 py-3 bg-[var(--background-secondary)] text-[var(--text-primary)] rounded-md hover:bg-[var(--background-tertiary)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium min-w-[120px] flex items-center justify-center gap-2"
       >
         Next
+        {isLoading ? (
+          <div className="w-4 h-4 border-2 border-[var(--text-primary)] border-t-transparent rounded-full animate-spin" />
+        ) : null}
       </button>
     </div>
   );
