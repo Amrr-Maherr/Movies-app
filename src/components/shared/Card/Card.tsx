@@ -370,6 +370,9 @@ const Card = memo(
 
     // Compact variant for dense grids
     if (variant === "compact" && movie) {
+      // Check if content is for adults only
+      const isAdult = movie.adult === true;
+
       return (
         <LazyWrapper height={350}>
           <motion.div
@@ -383,17 +386,38 @@ const Card = memo(
               onMouseLeave={handleCardMouseLeave}
             >
               <div className="relative aspect-[2/3] rounded-md shadow-lg bg-[var(--background-secondary)]">
+                {/* Poster Image with Blur for Adult Content */}
                 <OptimizedImage
                   src={posterUrl}
                   alt={title}
-                  className="w-full h-full transition-transform duration-500 "
+                  className={`w-full h-full transition-all duration-300 ${
+                    isAdult
+                      ? "blur-md scale-105"
+                      : "transition-transform duration-500"
+                  }`}
                   objectFit="cover"
                 />
-                <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
-                  <span className="text-[var(--success)] text-xs font-bold">
-                    {matchScore}%
-                  </span>
-                </div>
+
+                {/* Dark overlay for adult content */}
+                {isAdult && (
+                  <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                )}
+
+                {/* Adult Badge (+18) */}
+                {isAdult && (
+                  <div className="absolute top-2 right-2 z-30 bg-red-700/95 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded shadow-lg border border-red-500/50">
+                    +18
+                  </div>
+                )}
+
+                {/* Match Score Badge (hidden for adult content) */}
+                {!isAdult && (
+                  <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded">
+                    <span className="text-[var(--success)] text-xs font-bold">
+                      {matchScore}%
+                    </span>
+                  </div>
+                )}
                 <div
                   className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
                   style={{ pointerEvents: isHovered ? "auto" : "none" }}
@@ -795,6 +819,9 @@ const Card = memo(
     // Standard Netflix Card with optional badges (requires movie)
     if (!movie) return null;
 
+    // Check if content is for adults only
+    const isAdult = movie.adult === true;
+
     return (
       <LazyWrapper height={350}>
         <motion.div
@@ -807,12 +834,18 @@ const Card = memo(
             onMouseLeave={handleCardMouseLeave}
             onClick={handleNavigate}
           >
-            <CardPoster movie={movie} title={title} rank={rank}>
+            <CardPoster
+              movie={movie}
+              title={title}
+              rank={rank}
+              isAdult={isAdult}
+            >
               <CardBadges
                 showBadge={showBadge}
                 badgeType={badgeType}
-                showMatchScore
+                showMatchScore={!isAdult}
                 matchScore={matchScore}
+                isAdult={isAdult}
               />
               <CardHoverOverlay
                 title={title}

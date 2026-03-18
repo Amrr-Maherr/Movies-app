@@ -9,10 +9,18 @@ export interface CardPosterProps {
   rank?: number;
   children?: React.ReactNode;
   className?: string;
+  isAdult?: boolean;
 }
 
 const CardPoster = memo(
-  ({ movie, title, rank, children, className = "" }: CardPosterProps) => {
+  ({
+    movie,
+    title,
+    rank,
+    children,
+    className = "",
+    isAdult = false,
+  }: CardPosterProps) => {
     const posterUrl = useMemo(() => {
       return movie.poster_path
         ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
@@ -28,13 +36,22 @@ const CardPoster = memo(
           </div>
         )}
 
-        {/* Poster Image */}
-        <OptimizedImage
-          src={posterUrl}
-          alt={title}
-          className="w-full h-full"
-          objectFit="cover"
-        />
+        {/* Poster Image with Blur for Adult Content */}
+        <div className="relative w-full h-full">
+          <OptimizedImage
+            src={posterUrl}
+            alt={title}
+            className={`w-full h-full transition-all duration-300 ${
+              isAdult ? "blur-md scale-105" : ""
+            }`}
+            objectFit="cover"
+          />
+
+          {/* Dark overlay for adult content */}
+          {isAdult && (
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          )}
+        </div>
 
         {/* Netflix Logo Overlay - Top Left Corner */}
         <div className="absolute top-2 left-2 z-20 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
