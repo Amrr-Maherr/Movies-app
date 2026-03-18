@@ -295,7 +295,7 @@ export async function getMovieCredits(id: number): Promise<Credits | null> {
  */
 export async function getMovieReviews(id: number, page: number = 1): Promise<MovieReviewsResponse | null> {
   try {
-    const response = await axios.get<MovieReviewsResponse>(``${tmdbConfig.baseUrl}/movie/${id}/reviews`, {
+    const response = await axios.get<MovieReviewsResponse>(`${tmdbConfig.baseUrl}/movie/${id}/reviews`, {
       params: {
         api_key: tmdbConfig.apiKey,
         language: "en-US",
@@ -318,7 +318,7 @@ export async function getMovieReviews(id: number, page: number = 1): Promise<Mov
  */
 export async function getMovieRecommendations(id: number, page: number = 1): Promise<MovieRecommendationsResponse | null> {
   try {
-    const response = await axios.get<MovieRecommendationsResponse>(``${tmdbConfig.baseUrl}/movie/${id}/recommendations`, {
+    const response = await axios.get<MovieRecommendationsResponse>(`${tmdbConfig.baseUrl}/movie/${id}/recommendations`, {
       params: {
         api_key: tmdbConfig.apiKey,
         language: "en-US",
@@ -341,7 +341,7 @@ export async function getMovieRecommendations(id: number, page: number = 1): Pro
  */
 export async function getMovieSimilar(id: number, page: number = 1): Promise<MovieSimilarResponse | null> {
   try {
-    const response = await axios.get<MovieSimilarResponse>(``${tmdbConfig.baseUrl}/movie/${id}/similar`, {
+    const response = await axios.get<MovieSimilarResponse>(`${tmdbConfig.baseUrl}/movie/${id}/similar`, {
       params: {
         api_key: tmdbConfig.apiKey,
         language: "en-US",
@@ -364,7 +364,7 @@ export async function getMovieSimilar(id: number, page: number = 1): Promise<Mov
  */
 export async function getMovieVideos(id: number, page: number = 1): Promise<MovieVideosResponse | null> {
   try {
-    const response = await axios.get<MovieVideosResponse>(``${tmdbConfig.baseUrl}/movie/${id}/videos`, {
+    const response = await axios.get<MovieVideosResponse>(`${tmdbConfig.baseUrl}/movie/${id}/videos`, {
       params: {
         api_key: tmdbConfig.apiKey,
         language: "en-US",
@@ -386,7 +386,7 @@ export async function getMovieVideos(id: number, page: number = 1): Promise<Movi
  */
 export async function getMovieImages(id: number): Promise<MovieImagesResponse | null> {
   try {
-    const response = await axios.get<MovieImagesResponse>(``${tmdbConfig.baseUrl}/movie/${id}/images`, {
+    const response = await axios.get<MovieImagesResponse>(`${tmdbConfig.baseUrl}/movie/${id}/images`, {
       params: {
         api_key: tmdbConfig.apiKey,
         language: "en-US",
