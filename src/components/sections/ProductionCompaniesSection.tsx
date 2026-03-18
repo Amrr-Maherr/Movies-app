@@ -3,12 +3,12 @@ import { Building2 } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import Slider from "@/components/shared/Slider/slider";
 import PlatformCard from "./PlatformCard";
-import type { ProductionCompany } from "@/services/productionCompaniesService";
+import type { Company } from "@/services/companyService";
 import { SectionSkeleton } from "@/components/ui";
 import { Link } from "react-router-dom";
 
 export interface ProductionCompaniesSectionProps {
-  companies: ProductionCompany[];
+  companies: Company[];
   isLoading?: boolean;
   error?: Error | null;
 }

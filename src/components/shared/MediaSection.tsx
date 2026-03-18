@@ -19,7 +19,7 @@ const MediaSection = memo(function MediaSection({
   data,
   error,
   onRetry,
-  slidesPerView = 5,
+  slidesPerView = 6,
 }: MediaSectionProps) {
   // Memoize media array to prevent unnecessary re-renders
   const media = useMemo(() => data || [], [data]);
@@ -56,7 +56,7 @@ const MediaSection = memo(function MediaSection({
           hideNavigation={false}
           swiperOptions={{
             loop: true,
-            autoplay: false,
+            autoplay: true,
           }}
         >
           {media.map((item: HeroMedia) => (
