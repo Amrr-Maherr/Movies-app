@@ -5,7 +5,8 @@
  * Includes endpoints for network details and TV series by network.
  */
 
-import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
+import axios from "axios";
+import { tmdbConfig } from "@/config/api";
 
 // ============= Types =============
 

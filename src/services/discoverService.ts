@@ -6,7 +6,8 @@
  * such as genre, language, rating, release date, and streaming providers.
  */
 
-import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
+import axios from "axios";
+import { tmdbConfig } from "@/config/api";
 import type { Movie, PopularMoviesResponse, TvShow, PopularTvShowsResponse } from "@/types";
 
 // ============= Response Types =============

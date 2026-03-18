@@ -5,7 +5,8 @@
  * Includes endpoints for person details, movie credits, TV credits, images, and external IDs.
  */
 
-import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
+import axios from "axios";
+import { tmdbConfig } from "@/config/api";
 import type { ImageFile } from "./moviesService";
 
 // ============= Response Types =============

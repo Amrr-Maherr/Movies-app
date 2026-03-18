@@ -5,7 +5,8 @@
  * Includes endpoints for company details and movies by company.
  */
 
-import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
+import axios from "axios";
+import { tmdbConfig } from "@/config/api";
 
 // ============= Types =============
 

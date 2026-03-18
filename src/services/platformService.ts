@@ -5,7 +5,8 @@
  * Includes endpoints for platform details and content by platform.
  */
 
-import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
+import axios from "axios";
+import { tmdbConfig } from "@/config/api";
 import type { Movie, TvShow } from "@/types";
 
 // ============= Types =============

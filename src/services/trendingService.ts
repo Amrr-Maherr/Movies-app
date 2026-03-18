@@ -5,7 +5,8 @@
  * Includes endpoints for trending movies and TV shows by day and week.
  */
 
-import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
+import axios from "axios";
+import { tmdbConfig } from "@/config/api";
 import type { Movie, PopularMoviesResponse, TvShow, PopularTvShowsResponse } from "@/types";
 
 // ============= Trending Movies Endpoints =============

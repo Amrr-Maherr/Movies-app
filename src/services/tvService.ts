@@ -6,7 +6,8 @@
  * as well as TV show details, credits, reviews, recommendations, seasons, and episodes.
  */
 
-import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
+import axios from "axios";
+import { tmdbConfig } from "@/config/api";
 import type { TvShow, PopularTvShowsResponse, Credits, HeroMedia, Season, Episode } from "@/types";
 
 // ============= Response Types =============

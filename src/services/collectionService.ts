@@ -5,7 +5,8 @@
  * Includes endpoints for collection details.
  */
 
-import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
+import axios from "axios";
+import { tmdbConfig } from "@/config/api";
 
 // ============= Types =============
 
