@@ -1,13 +1,14 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { memo, useMemo } from "react";
 import { useCollectionDetails } from "@/queries";
 import { SectionSkeleton, Error } from "@/components/ui";
-import MediaSection from "@/components/shared/MediaSection";
-import { Film, Calendar, Star } from "lucide-react";
+import { Film, Star } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import Card from "@/components/shared/Card/Card";
+import type { HeroMedia } from "@/types";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
-const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
+const POSTER_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 const Collection = memo(function Collection() {
   const { id } = useParams<{ id: string }>();
@@ -24,7 +25,7 @@ const Collection = memo(function Collection() {
       collection?.backdrop_path
         ? `${IMAGE_BASE_URL}${collection.backdrop_path}`
         : null,
-    [collection?.backdrop_path]
+    [collection?.backdrop_path],
   );
 
   const posterUrl = useMemo(
@@ -32,17 +33,20 @@ const Collection = memo(function Collection() {
       collection?.poster_path
         ? `${POSTER_BASE_URL}${collection.poster_path}`
         : null,
-    [collection?.poster_path]
+    [collection?.poster_path],
   );
 
   const totalMovies = useMemo(
     () => collection?.parts?.length || 0,
-    [collection?.parts]
+    [collection?.parts],
   );
 
   const averageRating = useMemo(() => {
     if (!collection?.parts || collection.parts.length === 0) return 0;
-    const sum = collection.parts.reduce((acc, movie) => acc + movie.vote_average, 0);
+    const sum = collection.parts.reduce(
+      (acc, movie) => acc + movie.vote_average,
+      0,
+    );
     return (sum / collection.parts.length).toFixed(1);
   }, [collection?.parts]);
 
@@ -69,7 +73,7 @@ const Collection = memo(function Collection() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)]">
       {/* Hero Section with Backdrop */}
-      <div className="relative h-[400px] md:h-[500px] overflow-hidden">
+      <div className="relative h-[100dvh] overflow-hidden">
         {backdropUrl ? (
           <OptimizedImage
             src={backdropUrl}
@@ -81,7 +85,7 @@ const Collection = memo(function Collection() {
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-[#1a1a2e] to-[#16213e]" />
         )}
-        
+
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-primary)] via-[var(--background-primary)]/80 to-transparent" />
 
@@ -148,52 +152,11 @@ const Collection = memo(function Collection() {
         {collection.parts && collection.parts.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
             {collection.parts.map((movie) => (
-              <Link
+              <Card
                 key={movie.id}
-                to={`/movie/${movie.id}`}
-                className="group cursor-pointer block"
-              >
-                <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
-                  {movie.poster_path ? (
-                    <OptimizedImage
-                      src={`${POSTER_BASE_URL}${movie.poster_path}`}
-                      alt={movie.title}
-                      className="w-full h-full"
-                      objectFit="cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-[#333]">
-                      <Film className="w-12 h-12 text-[#555]" />
-                    </div>
-                  )}
-
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="text-white text-sm font-medium px-2 text-center">
-                      View Details
-                    </span>
-                  </div>
-                </div>
-
-                {/* Movie Info */}
-                <div className="mt-2 md:mt-3">
-                  <h3 className="text-xs md:text-sm text-white font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
-                    {movie.title}
-                  </h3>
-                  <div className="flex items-center gap-2 mt-1 text-[#737373] text-xs">
-                    <Calendar className="w-3 h-3" />
-                    <span>
-                      {movie.release_date
-                        ? new Date(movie.release_date).getFullYear()
-                        : "TBA"}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-current text-[var(--success)]" />
-                      {movie.vote_average.toFixed(1)}
-                    </span>
-                  </div>
-                </div>
-              </Link>
+                movie={movie as HeroMedia}
+                variant="compact"
+              />
             ))}
           </div>
         ) : (
