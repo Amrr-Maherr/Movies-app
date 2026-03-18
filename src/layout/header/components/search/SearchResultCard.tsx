@@ -2,10 +2,11 @@ import { Movie, TvShow } from "@/types/movies";
 import { cn } from "@/lib/utils";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { getPosterUrl, IMAGE_SIZES } from "@/utils/tmdb";
+import type { MultiSearchResult } from "@/services/searchService";
 
 interface SearchResultCardProps {
-  item: Movie | TvShow;
-  type: "movie" | "tv";
+  item: Movie | TvShow | MultiSearchResult;
+  type: "movie" | "tv" | "person";
   onClick: () => void;
 }
 
@@ -15,13 +16,27 @@ export default function SearchResultCard({
   onClick,
 }: SearchResultCardProps) {
   const isMovie = type === "movie";
-  const title = isMovie ? (item as Movie).title : (item as TvShow).name;
-  const posterPath = item.poster_path;
-  const releaseDate = isMovie
-    ? (item as Movie).release_date
-    : (item as TvShow).first_air_date;
-  const year = releaseDate?.split("-")[0] || "N/A";
-  const voteAverage = item.vote_average;
+  const isPerson = type === "person";
+
+  const title = isMovie
+    ? (item as Movie).title
+    : isPerson
+      ? (item as MultiSearchResult).name
+      : (item as TvShow).name;
+
+  const posterPath = isPerson
+    ? (item as MultiSearchResult).profile_path
+    : (item as Movie | TvShow).poster_path;
+
+  const releaseDate = isPerson
+    ? undefined
+    : isMovie
+      ? (item as Movie).release_date
+      : (item as TvShow).first_air_date;
+
+  const year = isPerson ? "Person" : releaseDate?.split("-")[0] || "N/A";
+
+  const voteAverage = isPerson ? 0 : (item as Movie | TvShow).vote_average;
 
   return (
     <div
@@ -29,7 +44,7 @@ export default function SearchResultCard({
       className={cn(
         "flex items-center gap-3 p-2 rounded-md cursor-pointer",
         "hover:bg-white/10 transition-colors duration-200",
-        "group"
+        "group",
       )}
       role="button"
       tabIndex={0}
@@ -40,7 +55,7 @@ export default function SearchResultCard({
         }
       }}
     >
-      {/* Poster Thumbnail */}
+      {/* Poster/Profile Thumbnail */}
       <div className="relative w-12 h-16 flex-shrink-0 overflow-hidden rounded">
         {posterPath ? (
           <OptimizedImage
@@ -62,13 +77,21 @@ export default function SearchResultCard({
           {title}
         </h3>
         <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
-          <span className="uppercase">{isMovie ? "Movie" : "TV Show"}</span>
-          <span>•</span>
-          <span>{year}</span>
-          {voteAverage > 0 && (
+          <span className="uppercase">
+            {isPerson ? "Person" : isMovie ? "Movie" : "TV Show"}
+          </span>
+          {!isPerson && (
             <>
               <span>•</span>
-              <span className="text-green-500">{Math.round(voteAverage * 10)}% match</span>
+              <span>{year}</span>
+              {voteAverage > 0 && (
+                <>
+                  <span>•</span>
+                  <span className="text-green-500">
+                    {Math.round(voteAverage * 10)}% match
+                  </span>
+                </>
+              )}
             </>
           )}
         </div>

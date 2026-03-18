@@ -5,7 +5,7 @@ import { SectionSkeleton, Error } from "@/components/ui";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import {Film } from "lucide-react";
 
-const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
+const POSTER_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 const GenreMovies = memo(function GenreMovies() {
   const { id } = useParams<{ id: string }>();

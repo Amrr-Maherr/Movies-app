@@ -1,48 +1,40 @@
 import { useQuery } from "@tanstack/react-query";
-import { searchMovies, searchTvShows } from "@/services";
+import { multiSearch } from "@/services";
 import type { Movie, TvShow } from "@/types/movies";
+import type { MultiSearchResult } from "@/services/searchService";
 
 export interface SearchResult {
-  item: Movie | TvShow;
-  type: "movie" | "tv";
+  item: Movie | TvShow | MultiSearchResult;
+  type: "movie" | "tv" | "person";
 }
 
 /**
- * Hook for searching movies and TV shows
+ * Hook for searching movies, TV shows, and people using multi-search
  * Uses debouncing to avoid excessive API calls
  */
 export function useSearch(query: string) {
   const {
-    data: movies = [],
-    isLoading: isMoviesLoading,
-    error: moviesError,
+    data: results = [],
+    isLoading,
+    error,
   } = useQuery({
-    queryKey: ["search", "movies", query],
-    queryFn: () => searchMovies(query) as Promise<Movie[]>,
+    queryKey: ["search", "multi", query],
+    queryFn: () => multiSearch(query) as Promise<MultiSearchResult[]>,
     enabled: query.length >= 2,
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  const {
-    data: tvShows = [],
-    isLoading: isTvLoading,
-    error: tvError,
-  } = useQuery({
-    queryKey: ["search", "tv", query],
-    queryFn: () => searchTvShows(query) as Promise<TvShow[]>,
-    enabled: query.length >= 2,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-
-  // Combine results with type information
-  const results: SearchResult[] = [
-    ...movies.map((item) => ({ item, type: "movie" as const })),
-    ...tvShows.map((item) => ({ item, type: "tv" as const })),
-  ];
+  // Filter and map results with type information
+  const mappedResults: SearchResult[] = results
+    .filter((item) => item.media_type === "movie" || item.media_type === "tv" || item.media_type === "person")
+    .map((item) => ({
+      item: item as Movie | TvShow | MultiSearchResult,
+      type: item.media_type as "movie" | "tv" | "person",
+    }));
 
   return {
-    results,
-    isLoading: isMoviesLoading || isTvLoading,
-    error: moviesError || tvError,
+    results: mappedResults,
+    isLoading,
+    error,
   };
 }

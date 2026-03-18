@@ -10,6 +10,7 @@ import { Loader } from "@/components/ui";
 import { useNavigate } from "react-router-dom";
 import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import { Movie, TvShow } from "@/types/movies";
+import type { MultiSearchResult } from "@/services/searchService";
 
 interface SearchPopupProps {
   isOpen: boolean;
@@ -27,14 +28,17 @@ const SearchPopup = memo(function SearchPopup({
   const navigate = useNavigate();
 
   // Clear query when popup closes (using callback instead of effect)
-  const handleOpenChange = useCallback((open: boolean) => {
-    if (!open) {
-      setQuery("");
-    }
-    if (!open && onClose) {
-      onClose();
-    }
-  }, [onClose]);
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open) {
+        setQuery("");
+      }
+      if (!open && onClose) {
+        onClose();
+      }
+    },
+    [onClose],
+  );
 
   // Memoized: Handle ESC key
   useEffect(() => {
@@ -58,13 +62,26 @@ const SearchPopup = memo(function SearchPopup({
   );
 
   const handleSelect = useCallback(
-    ({ item, type }: { item: Movie | TvShow; type: "movie" | "tv" }) => {
-      const title = type === "movie" ? (item as Movie).title : (item as TvShow).name;
-      const slug = generateSlug(title);
-      const slugWithId = formatSlugWithId(slug, item.id);
-      const route = `/${type}/${slugWithId}`;
-      
-      navigate(route);
+    ({
+      item,
+      type,
+    }: {
+      item: Movie | TvShow | MultiSearchResult;
+      type: "movie" | "tv" | "person";
+    }) => {
+      if (type === "person") {
+        const person = item as MultiSearchResult;
+        const slug = generateSlug(person.name || "person");
+        const slugWithId = formatSlugWithId(slug, person.id);
+        navigate(`/actor/${slugWithId}`);
+      } else {
+        const title =
+          type === "movie" ? (item as Movie).title : (item as TvShow).name;
+        const slug = generateSlug(title);
+        const slugWithId = formatSlugWithId(slug, item.id);
+        const route = `/${type}/${slugWithId}`;
+        navigate(route);
+      }
       onClose();
     },
     [navigate, onClose],
@@ -92,7 +109,7 @@ const SearchPopup = memo(function SearchPopup({
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <Input
             type="text"
-            placeholder="Search for movies, TV shows..."
+            placeholder="Search for movies, TV shows, and people..."
             className={cn(
               "w-full h-12 pl-12 pr-12",
               "bg-zinc-900 border border-white/10 rounded-md",
@@ -133,8 +150,7 @@ const SearchPopup = memo(function SearchPopup({
           {!isLoading && results.length > 0 && (
             <>
               <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">
-                {results.length}{" "}
-                {results.length === 1 ? "result" : "results"}
+                {results.length} {results.length === 1 ? "result" : "results"}
               </div>
               {results.map(({ item, type }) => (
                 <SearchResultCard
@@ -150,7 +166,7 @@ const SearchPopup = memo(function SearchPopup({
           {!isLoading && query.length === 0 && (
             <div className="text-center py-12 text-gray-500">
               <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
-              <p className="text-lg">Search for movies and TV shows</p>
+              <p className="text-lg">Search for movies, TV shows, and people</p>
               <p className="text-sm mt-2">Start typing to see results</p>
             </div>
           )}
