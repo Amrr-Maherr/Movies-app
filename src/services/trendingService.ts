@@ -5,12 +5,8 @@
  * Includes endpoints for trending movies and TV shows by day and week.
  */
 
-import axios from "axios";
+import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
 import type { Movie, PopularMoviesResponse, TvShow, PopularTvShowsResponse } from "@/types";
-
-// TMDB API Configuration
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
 
 // ============= Trending Movies Endpoints =============
 
@@ -23,9 +19,9 @@ const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24
  */
 export async function getTrendingMoviesDay(page: number = 1): Promise<Movie[] | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${API_BASE_URL}/trending/movie/day`, {
+    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/trending/movie/day`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         append_to_response: "videos",
@@ -47,9 +43,9 @@ export async function getTrendingMoviesDay(page: number = 1): Promise<Movie[] | 
  */
 export async function getTrendingMoviesWeek(page: number = 1): Promise<Movie[] | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${API_BASE_URL}/trending/movie/week`, {
+    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/trending/movie/week`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         append_to_response: "videos",
@@ -73,9 +69,9 @@ export async function getTrendingMoviesWeek(page: number = 1): Promise<Movie[] |
  */
 export async function getTrendingTvShowsDay(page: number = 1): Promise<TvShow[] | null> {
   try {
-    const response = await axios.get<PopularTvShowsResponse>(`${API_BASE_URL}/trending/tv/day`, {
+    const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/trending/tv/day`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         append_to_response: "videos",
@@ -97,9 +93,9 @@ export async function getTrendingTvShowsDay(page: number = 1): Promise<TvShow[] 
  */
 export async function getTrendingTvShowsWeek(page: number = 1): Promise<TvShow[] | null> {
   try {
-    const response = await axios.get<PopularTvShowsResponse>(`${API_BASE_URL}/trending/tv/week`, {
+    const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/trending/tv/week`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         append_to_response: "videos",
@@ -146,9 +142,9 @@ export interface TrendingPeopleResponse {
  */
 export async function getTrendingPeopleDay(page: number = 1): Promise<TrendingPeopleResponse | null> {
   try {
-    const response = await axios.get<TrendingPeopleResponse>(`${API_BASE_URL}/trending/person/day`, {
+    const response = await axios.get<TrendingPeopleResponse>(`${tmdbConfig.baseUrl}/trending/person/day`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },
@@ -168,9 +164,9 @@ export async function getTrendingPeopleDay(page: number = 1): Promise<TrendingPe
  */
 export async function getTrendingPeopleWeek(page: number = 1): Promise<TrendingPeopleResponse | null> {
   try {
-    const response = await axios.get<TrendingPeopleResponse>(`${API_BASE_URL}/trending/person/week`, {
+    const response = await axios.get<TrendingPeopleResponse>(`${tmdbConfig.baseUrl}/trending/person/week`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },
@@ -204,9 +200,9 @@ export interface StreamingPlatformsResponse {
  */
 export async function getStreamingPlatforms(region: string = "US"): Promise<StreamingPlatform[] | null> {
   try {
-    const response = await axios.get<StreamingPlatformsResponse>(`${API_BASE_URL}/watch/providers/movie`, {
+    const response = await axios.get<StreamingPlatformsResponse>(`${tmdbConfig.baseUrl}/watch/providers/movie`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         watch_region: region,
       },
     });

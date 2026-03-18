@@ -5,12 +5,8 @@
  * Includes endpoints for searching movies, TV shows, people, and multi-search.
  */
 
-import axios from "axios";
+import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
 import type { Movie, TvShow } from "@/types";
-
-// TMDB API Configuration
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
 
 // ============= Response Types =============
 
@@ -110,9 +106,9 @@ export async function searchMovies(
   region?: string
 ): Promise<Movie[] | null> {
   try {
-    const response = await axios.get<MovieSearchResponse>(`${API_BASE_URL}/search/movie`, {
+    const response = await axios.get<MovieSearchResponse>(`${tmdbConfig.baseUrl}/search/movie`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         query,
         page,
@@ -147,9 +143,9 @@ export async function searchTvShows(
   firstAirDateYear?: number
 ): Promise<TvShow[] | null> {
   try {
-    const response = await axios.get<TvSearchResponse>(`${API_BASE_URL}/search/tv`, {
+    const response = await axios.get<TvSearchResponse>(`${tmdbConfig.baseUrl}/search/tv`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         query,
         page,
@@ -179,9 +175,9 @@ export async function searchPeople(
   includeAdult: boolean = false
 ): Promise<PersonSearchResult[] | null> {
   try {
-    const response = await axios.get<PersonSearchResponse>(`${API_BASE_URL}/search/person`, {
+    const response = await axios.get<PersonSearchResponse>(`${tmdbConfig.baseUrl}/search/person`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         query,
         page,
@@ -210,9 +206,9 @@ export async function multiSearch(
   includeAdult: boolean = false
 ): Promise<MultiSearchResult[] | null> {
   try {
-    const response = await axios.get<MultiSearchResponse>(`${API_BASE_URL}/search/multi`, {
+    const response = await axios.get<MultiSearchResponse>(`${tmdbConfig.baseUrl}/search/multi`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         query,
         page,

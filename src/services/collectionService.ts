@@ -5,11 +5,7 @@
  * Includes endpoints for collection details.
  */
 
-import axios from "axios";
-
-// TMDB API Configuration
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
+import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
 
 // ============= Types =============
 
@@ -52,9 +48,9 @@ export interface MoviePart {
  */
 export async function getCollectionDetails(collectionId: number): Promise<Collection | null> {
   try {
-    const response = await axios.get<Collection>(`${API_BASE_URL}/collection/${collectionId}`, {
+    const response = await axios.get<Collection>(`${tmdbConfig.baseUrl}/collection/${collectionId}`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
       },
     });

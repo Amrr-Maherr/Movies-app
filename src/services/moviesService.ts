@@ -1,6 +1,6 @@
 /**
  * Movies Service
- * 
+ *
  * Handles all movie-related API calls to The Movie Database (TMDB).
  * Includes endpoints for popular, top-rated, upcoming, now playing movies,
  * as well as movie details, credits, reviews, recommendations, and more.
@@ -8,13 +8,10 @@
 
 import axios from "axios";
 import type { Movie, PopularMoviesResponse, Credits, HeroMedia } from "@/types";
+import { tmdbConfig } from "@/config/api";
 
 // Re-export PopularMoviesResponse for use in other modules
 export type { PopularMoviesResponse };
-
-// TMDB API Configuration
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
 
 // ============= Response Types =============
 
@@ -158,9 +155,9 @@ export interface MovieWatchProvidersResponse {
  */
 export async function getPopularMovies(page: number = 1): Promise<Movie[] | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${API_BASE_URL}/movie/popular`, {
+    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/movie/popular`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         include_adult: false,

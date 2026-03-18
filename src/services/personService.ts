@@ -5,12 +5,8 @@
  * Includes endpoints for person details, movie credits, TV credits, images, and external IDs.
  */
 
-import axios from "axios";
+import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
 import type { ImageFile } from "./moviesService";
-
-// TMDB API Configuration
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
 
 // ============= Response Types =============
 
@@ -136,9 +132,9 @@ export interface PopularPeopleResponse {
  */
 export async function getPersonDetails(id: number): Promise<PersonDetails | null> {
   try {
-    const response = await axios.get<PersonDetails>(`${API_BASE_URL}/person/${id}`, {
+    const response = await axios.get<PersonDetails>(`${tmdbConfig.baseUrl}/person/${id}`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
       },
     });
@@ -157,9 +153,9 @@ export async function getPersonDetails(id: number): Promise<PersonDetails | null
  */
 export async function getPersonExternalIds(id: number): Promise<PersonExternalIds | null> {
   try {
-    const response = await axios.get<PersonExternalIds>(`${API_BASE_URL}/person/${id}/external_ids`, {
+    const response = await axios.get<PersonExternalIds>(`${tmdbConfig.baseUrl}/person/${id}/external_ids`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
       },
     });
@@ -181,9 +177,9 @@ export async function getPersonExternalIds(id: number): Promise<PersonExternalId
  */
 export async function getPersonMovieCredits(id: number): Promise<PersonMovieCreditsResponse | null> {
   try {
-    const response = await axios.get<PersonMovieCreditsResponse>(`${API_BASE_URL}/person/${id}/movie_credits`, {
+    const response = await axios.get<PersonMovieCreditsResponse>(`${tmdbConfig.baseUrl}/person/${id}/movie_credits`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
       },
     });
@@ -203,9 +199,9 @@ export async function getPersonMovieCredits(id: number): Promise<PersonMovieCred
  */
 export async function getPersonTVCredits(id: number): Promise<PersonTVCreditsResponse | null> {
   try {
-    const response = await axios.get<PersonTVCreditsResponse>(`${API_BASE_URL}/person/${id}/tv_credits`, {
+    const response = await axios.get<PersonTVCreditsResponse>(`${tmdbConfig.baseUrl}/person/${id}/tv_credits`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
       },
     });
@@ -225,9 +221,9 @@ export async function getPersonTVCredits(id: number): Promise<PersonTVCreditsRes
  */
 export async function getPersonCombinedCredits(id: number): Promise<CombinedCredits | null> {
   try {
-    const response = await axios.get<CombinedCredits>(`${API_BASE_URL}/person/${id}/combined_credits`, {
+    const response = await axios.get<CombinedCredits>(`${tmdbConfig.baseUrl}/person/${id}/combined_credits`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
       },
     });
@@ -248,9 +244,9 @@ export async function getPersonCombinedCredits(id: number): Promise<CombinedCred
  */
 export async function getPersonImages(id: number): Promise<PersonImagesResponse | null> {
   try {
-    const response = await axios.get<PersonImagesResponse>(`${API_BASE_URL}/person/${id}/images`, {
+    const response = await axios.get<PersonImagesResponse>(`${tmdbConfig.baseUrl}/person/${id}/images`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
       },
     });
@@ -271,9 +267,9 @@ export async function getPersonImages(id: number): Promise<PersonImagesResponse 
  */
 export async function getPopularPeople(page: number = 1): Promise<PopularPeopleResponse | null> {
   try {
-    const response = await axios.get<PopularPeopleResponse>(`${API_BASE_URL}/person/popular`, {
+    const response = await axios.get<PopularPeopleResponse>(`${tmdbConfig.baseUrl}/person/popular`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },

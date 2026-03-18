@@ -6,12 +6,8 @@
  * as well as TV show details, credits, reviews, recommendations, seasons, and episodes.
  */
 
-import axios from "axios";
+import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
 import type { TvShow, PopularTvShowsResponse, Credits, HeroMedia, Season, Episode } from "@/types";
-
-// TMDB API Configuration
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
 
 // ============= Response Types =============
 
@@ -182,9 +178,9 @@ export interface TVWatchProvidersResponse {
  */
 export async function getPopularTvShows(page: number = 1): Promise<TvShow[] | null> {
   try {
-    const response = await axios.get<PopularTvShowsResponse>(`${API_BASE_URL}/tv/popular`, {
+    const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/tv/popular`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         include_adult: false,
@@ -205,9 +201,9 @@ export async function getPopularTvShows(page: number = 1): Promise<TvShow[] | nu
  */
 export async function getTopRatedTvShows(page: number = 1): Promise<TvShow[] | null> {
   try {
-    const response = await axios.get<PopularTvShowsResponse>(`${API_BASE_URL}/tv/top_rated`, {
+    const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/tv/top_rated`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         include_adult: false,
@@ -228,9 +224,9 @@ export async function getTopRatedTvShows(page: number = 1): Promise<TvShow[] | n
  */
 export async function getAiringTodayTvShows(page: number = 1): Promise<TvShow[] | null> {
   try {
-    const response = await axios.get<PopularTvShowsResponse>(`${API_BASE_URL}/tv/airing_today`, {
+    const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/tv/airing_today`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         include_adult: false,
@@ -251,9 +247,9 @@ export async function getAiringTodayTvShows(page: number = 1): Promise<TvShow[] 
  */
 export async function getOnTheAirTvShows(page: number = 1): Promise<TvShow[] | null> {
   try {
-    const response = await axios.get<PopularTvShowsResponse>(`${API_BASE_URL}/tv/on_the_air`, {
+    const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/tv/on_the_air`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
         include_adult: false,
@@ -277,9 +273,9 @@ export async function getOnTheAirTvShows(page: number = 1): Promise<TvShow[] | n
  */
 export async function getTVShowDetails(id: number): Promise<TVDetailsResponse | null> {
   try {
-    const response = await axios.get<TVDetailsResponse>(`${API_BASE_URL}/tv/${id}`, {
+    const response = await axios.get<TVDetailsResponse>(`${tmdbConfig.baseUrl}/tv/${id}`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         include_adult: false,
         append_to_response: "credits,videos,images,reviews,similar,external_ids,keywords,watch/providers",
@@ -300,9 +296,9 @@ export async function getTVShowDetails(id: number): Promise<TVDetailsResponse | 
  */
 export async function getTVCredits(id: number): Promise<Credits | null> {
   try {
-    const response = await axios.get<Credits>(`${API_BASE_URL}/tv/${id}/credits`, {
+    const response = await axios.get<Credits>(`${tmdbConfig.baseUrl}/tv/${id}/credits`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
       },
     });
@@ -322,9 +318,9 @@ export async function getTVCredits(id: number): Promise<Credits | null> {
  */
 export async function getTVReviews(id: number, page: number = 1): Promise<TVReviewsResponse | null> {
   try {
-    const response = await axios.get<TVReviewsResponse>(`${API_BASE_URL}/tv/${id}/reviews`, {
+    const response = await axios.get<TVReviewsResponse>(`${tmdbConfig.baseUrl}/tv/${id}/reviews`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },
@@ -345,9 +341,9 @@ export async function getTVReviews(id: number, page: number = 1): Promise<TVRevi
  */
 export async function getTVRecommendations(id: number, page: number = 1): Promise<TVRecommendationsResponse | null> {
   try {
-    const response = await axios.get<TVRecommendationsResponse>(`${API_BASE_URL}/tv/${id}/recommendations`, {
+    const response = await axios.get<TVRecommendationsResponse>(`${tmdbConfig.baseUrl}/tv/${id}/recommendations`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },
@@ -368,9 +364,9 @@ export async function getTVRecommendations(id: number, page: number = 1): Promis
  */
 export async function getTVSimilar(id: number, page: number = 1): Promise<TVSimilarResponse | null> {
   try {
-    const response = await axios.get<TVSimilarResponse>(`${API_BASE_URL}/tv/${id}/similar`, {
+    const response = await axios.get<TVSimilarResponse>(`${tmdbConfig.baseUrl}/tv/${id}/similar`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },
@@ -391,9 +387,9 @@ export async function getTVSimilar(id: number, page: number = 1): Promise<TVSimi
  */
 export async function getTVVideos(id: number, page: number = 1): Promise<TVVideosResponse | null> {
   try {
-    const response = await axios.get<TVVideosResponse>(`${API_BASE_URL}/tv/${id}/videos`, {
+    const response = await axios.get<TVVideosResponse>(`${tmdbConfig.baseUrl}/tv/${id}/videos`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page,
       },
@@ -413,9 +409,9 @@ export async function getTVVideos(id: number, page: number = 1): Promise<TVVideo
  */
 export async function getTVImages(id: number): Promise<TVImagesResponse | null> {
   try {
-    const response = await axios.get<TVImagesResponse>(`${API_BASE_URL}/tv/${id}/images`, {
+    const response = await axios.get<TVImagesResponse>(`${tmdbConfig.baseUrl}/tv/${id}/images`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         include_image_language: "en,null",
       },
@@ -436,9 +432,9 @@ export async function getTVImages(id: number): Promise<TVImagesResponse | null> 
  */
 export async function getTVWatchProviders(id: number, region: string = "US"): Promise<TVWatchProvidersResponse | null> {
   try {
-    const response = await axios.get<TVWatchProvidersResponse>(`${API_BASE_URL}/tv/${id}/watch/providers`, {
+    const response = await axios.get<TVWatchProvidersResponse>(`${tmdbConfig.baseUrl}/tv/${id}/watch/providers`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         watch_region: region,
       },
     });
@@ -465,10 +461,10 @@ export async function getTVSeasonDetails(
 ): Promise<Season | null> {
   try {
     const response = await axios.get<Season>(
-      `${API_BASE_URL}/tv/${tvShowId}/season/${seasonNumber}`,
+      `${tmdbConfig.baseUrl}/tv/${tvShowId}/season/${seasonNumber}`,
       {
         params: {
-          api_key: API_KEY,
+          api_key: tmdbConfig.apiKey,
           language: "en-US",
           append_to_response: "videos,images,external_ids,credits",
         },
@@ -497,10 +493,10 @@ export async function getTVEpisodeDetails(
 ): Promise<Episode | null> {
   try {
     const response = await axios.get<Episode>(
-      `${API_BASE_URL}/tv/${tvShowId}/season/${seasonNumber}/episode/${episodeNumber}`,
+      `${tmdbConfig.baseUrl}/tv/${tvShowId}/season/${seasonNumber}/episode/${episodeNumber}`,
       {
         params: {
-          api_key: API_KEY,
+          api_key: tmdbConfig.apiKey,
           language: "en-US",
           append_to_response: "credits,videos,images,external_ids",
         },
@@ -526,10 +522,10 @@ export async function getSeasonEpisodes(
 ): Promise<Episode[] | null> {
   try {
     const response = await axios.get(
-      `${API_BASE_URL}/tv/${tvShowId}/season/${seasonNumber}`,
+      `${tmdbConfig.baseUrl}/tv/${tvShowId}/season/${seasonNumber}`,
       {
         params: {
-          api_key: API_KEY,
+          api_key: tmdbConfig.apiKey,
           language: "en-US",
         },
       }

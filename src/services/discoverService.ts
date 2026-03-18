@@ -6,12 +6,8 @@
  * such as genre, language, rating, release date, and streaming providers.
  */
 
-import axios from "axios";
+import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
 import type { Movie, PopularMoviesResponse, TvShow, PopularTvShowsResponse } from "@/types";
-
-// TMDB API Configuration
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
 
 // ============= Response Types =============
 
@@ -99,9 +95,9 @@ export interface DiscoverTvParams {
  */
 export async function discoverMovies(params: DiscoverMoviesParams = {}): Promise<Movie[] | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${API_BASE_URL}/discover/movie`, {
+    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/discover/movie`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page: params.page ?? 1,
         sort_by: params.sortBy ?? "popularity.desc",
@@ -200,9 +196,9 @@ export async function getMediaByLanguage(languageCode: string, page: number = 1)
  */
 export async function discoverTvShows(params: DiscoverTvParams = {}): Promise<TvShow[] | null> {
   try {
-    const response = await axios.get<PopularTvShowsResponse>(`${API_BASE_URL}/discover/tv`, {
+    const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/discover/tv`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language: "en-US",
         page: params.page ?? 1,
         sort_by: params.sortBy ?? "popularity.desc",
@@ -261,9 +257,9 @@ export interface GenresResponse {
  */
 export async function getMovieGenres(language: string = "en-US"): Promise<Genre[] | null> {
   try {
-    const response = await axios.get<GenresResponse>(`${API_BASE_URL}/genre/movie/list`, {
+    const response = await axios.get<GenresResponse>(`${tmdbConfig.baseUrl}/genre/movie/list`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language,
       },
     });
@@ -282,9 +278,9 @@ export async function getMovieGenres(language: string = "en-US"): Promise<Genre[
  */
 export async function getTvGenres(language: string = "en-US"): Promise<Genre[] | null> {
   try {
-    const response = await axios.get<GenresResponse>(`${API_BASE_URL}/genre/tv/list`, {
+    const response = await axios.get<GenresResponse>(`${tmdbConfig.baseUrl}/genre/tv/list`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
         language,
       },
     });

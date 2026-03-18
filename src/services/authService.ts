@@ -6,9 +6,7 @@
  */
 
 import axios from "axios";
-
-// API Configuration
-const API_BASE_URL = "https://ecommerce.routemisr.com/api/v1/auth";
+import { ecommerceConfig } from "@/config/api";
 
 // ============= Types =============
 
@@ -61,7 +59,7 @@ export interface ApiError {
  */
 export async function signup(data: SignupData): Promise<AuthResponse> {
   try {
-    const response = await axios.post<AuthResponse>(`${API_BASE_URL}/signup`, {
+    const response = await axios.post<AuthResponse>(`${ecommerceConfig.baseUrl}/signup`, {
       name: data.name,
       email: data.email,
       password: data.password,
@@ -98,7 +96,7 @@ export async function signup(data: SignupData): Promise<AuthResponse> {
  */
 export async function login(data: LoginData): Promise<AuthResponse> {
   try {
-    const response = await axios.post<AuthResponse>(`${API_BASE_URL}/signin`, {
+    const response = await axios.post<AuthResponse>(`${ecommerceConfig.baseUrl}/signin`, {
       email: data.email,
       password: data.password,
     });

@@ -5,11 +5,7 @@
  * Includes endpoints for company details and movies by company.
  */
 
-import axios from "axios";
-
-// TMDB API Configuration
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
+import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
 
 // ============= Types =============
 
@@ -66,9 +62,9 @@ export interface Movie {
  */
 export async function getCompanyDetails(companyId: number): Promise<Company | null> {
   try {
-    const response = await axios.get<Company>(`${API_BASE_URL}/company/${companyId}`, {
+    const response = await axios.get<Company>(`${tmdbConfig.baseUrl}/company/${companyId}`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
       },
     });
     return response.data;
@@ -96,10 +92,10 @@ export async function getCompanyMovies(
 ): Promise<CompanyMoviesResponse | null> {
   try {
     const response = await axios.get<CompanyMoviesResponse>(
-      `${API_BASE_URL}/company/${companyId}/movies`,
+      `${tmdbConfig.baseUrl}/company/${companyId}/movies`,
       {
         params: {
-          api_key: API_KEY,
+          api_key: tmdbConfig.apiKey,
           language: "en-US",
           page,
         },

@@ -5,11 +5,7 @@
  * Includes endpoints for network details and TV series by network.
  */
 
-import axios from "axios";
-
-// TMDB API Configuration
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
+import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
 
 // ============= Types =============
 
@@ -65,9 +61,9 @@ export interface TvShow {
  */
 export async function getNetworkDetails(networkId: number): Promise<Network | null> {
   try {
-    const response = await axios.get<Network>(`${API_BASE_URL}/network/${networkId}`, {
+    const response = await axios.get<Network>(`${tmdbConfig.baseUrl}/network/${networkId}`, {
       params: {
-        api_key: API_KEY,
+        api_key: tmdbConfig.apiKey,
       },
     });
     return response.data;
@@ -95,10 +91,10 @@ export async function getNetworkTVSeries(
 ): Promise<NetworkTVSeriesResponse | null> {
   try {
     const response = await axios.get<NetworkTVSeriesResponse>(
-      `${API_BASE_URL}/network/${networkId}/tv_series`,
+      `${tmdbConfig.baseUrl}/network/${networkId}/tv_series`,
       {
         params: {
-          api_key: API_KEY,
+          api_key: tmdbConfig.apiKey,
           language: "en-US",
           page,
         },

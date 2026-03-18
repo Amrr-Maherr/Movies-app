@@ -5,12 +5,8 @@
  * Includes endpoints for platform details and content by platform.
  */
 
-import axios from "axios";
+import axios from "axios";`nimport { tmdbConfig } from "@/config/api";
 import type { Movie, TvShow } from "@/types";
-
-// TMDB API Configuration
-const API_BASE_URL = "https://api.themoviedb.org/3";
-const API_KEY = import.meta.env.VITE_TMDB_API_KEY || "aa9d055a1e5bce0d2c4d627c24422d51";
 
 // ============= Types =============
 
@@ -44,10 +40,10 @@ export interface PlatformContentResponse {
 export async function getStreamingPlatforms(region: string = "US"): Promise<StreamingPlatform[] | null> {
   try {
     const response = await axios.get<{ results: StreamingPlatform[] }>(
-      `${API_BASE_URL}/watch/providers/movie`,
+      `${tmdbConfig.baseUrl}/watch/providers/movie`,
       {
         params: {
-          api_key: API_KEY,
+          api_key: tmdbConfig.apiKey,
           watch_region: region,
           language: "en-US",
         },
@@ -76,10 +72,10 @@ export async function getPlatformMovies(
 ): Promise<PlatformContentResponse | null> {
   try {
     const response = await axios.get<PlatformContentResponse>(
-      `${API_BASE_URL}/discover/movie`,
+      `${tmdbConfig.baseUrl}/discover/movie`,
       {
         params: {
-          api_key: API_KEY,
+          api_key: tmdbConfig.apiKey,
           language: "en-US",
           page,
           sort_by: "popularity.desc",
@@ -111,10 +107,10 @@ export async function getPlatformTVShows(
 ): Promise<PlatformContentResponse | null> {
   try {
     const response = await axios.get<PlatformContentResponse>(
-      `${API_BASE_URL}/discover/tv`,
+      `${tmdbConfig.baseUrl}/discover/tv`,
       {
         params: {
-          api_key: API_KEY,
+          api_key: tmdbConfig.apiKey,
           language: "en-US",
           page,
           sort_by: "popularity.desc",
