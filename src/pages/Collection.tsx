@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { memo, useMemo } from "react";
-import { useCollectionDetails } from "@/queries";
+import { useCollectionDetails } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film, Star } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";

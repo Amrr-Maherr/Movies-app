@@ -4,7 +4,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, Error, SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchMovieDetails from "@/queries/FetchMovieDetails";
+import FetchMovieDetails from '@/hooks/shared/FetchMovieDetails';
 import DetailPageNav from "@/components/shared/DetailPageNav";
 
 const MediaHero = lazy(() => import("@/components/shared/MediaHero"));

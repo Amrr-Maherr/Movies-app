@@ -5,8 +5,8 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchPersonDetails from "@/queries/FetchPersonDetails";
-import { usePersonImages } from "@/queries";
+import FetchPersonDetails from '@/hooks/shared/FetchPersonDetails';
+import { usePersonImages } from "@/hooks/shared";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 import ImagesGallery from "@/components/sections/ImagesGallery";
 

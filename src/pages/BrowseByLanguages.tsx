@@ -5,7 +5,7 @@ import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import Pagination from "@/components/Pagination";
 import type { HeroMedia } from "@/types";
-import useMediaByLanguage from "@/queries/FetchMediaByLanguage";
+import useMediaByLanguage from '@/hooks/shared/FetchMediaByLanguage';
 import LanguagesFilter, {
   SUPPORTED_LANGUAGES,
 } from "@/components/BrowseByLanguages/LanguagesFilter";

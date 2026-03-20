@@ -4,8 +4,8 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchPersonDetails from "@/queries/FetchPersonDetails";
-import FetchPersonCredits from "@/queries/FetchPersonCredits";
+import FetchPersonDetails from '@/hooks/shared/FetchPersonDetails';
+import FetchPersonCredits from '@/hooks/shared/FetchPersonCredits';
 import DetailPageNav from "@/components/shared/DetailPageNav";
 
 const PersonHero = lazy(() => import("@/components/shared/PersonHero"));

@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
-import { useTvShowsByGenre, useTvGenres } from "@/queries";
+import { useTvShowsByGenre, useTvGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Tv } from "lucide-react";
 import Card from "@/components/shared/Card/Card";

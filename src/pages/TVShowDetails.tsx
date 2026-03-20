@@ -4,7 +4,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton, PageSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchTvShowDetails from "@/queries/FetchTvShowDetails";
+import FetchTvShowDetails from '@/hooks/shared/FetchTvShowDetails';
 import DetailPageNav from "@/components/shared/DetailPageNav";
 import { extractKeywords, extractWatchProviders } from "@/utils";
 import type { Video } from "@/types";

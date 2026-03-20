@@ -9,10 +9,10 @@ import type { Movie, HeroMedia, PopularMoviesResponse } from "@/types";
 import Pagination from "@/components/Pagination";
 
 // Hooks
-import usePopularMovies from "@/queries/FetchPopularMovies";
-import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
-import useUpcomingMovies from "@/queries/FetchUpcomingMovies";
-import useNowPlayingMovies from "@/queries/FetchNowPlayingMovies";
+import usePopularMovies from '@/hooks/shared/FetchPopularMovies';
+import useTopRatedMovies from '@/hooks/shared/FetchTopRatedMovies';
+import useUpcomingMovies from '@/hooks/shared/FetchUpcomingMovies';
+import useNowPlayingMovies from '@/hooks/shared/FetchNowPlayingMovies';
 
 const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),

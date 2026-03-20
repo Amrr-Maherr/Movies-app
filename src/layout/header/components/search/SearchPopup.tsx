@@ -5,7 +5,7 @@ import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useDebounce } from "@/utils";
 import SearchResultCard from "./SearchResultCard";
-import { useSearch } from "@/queries/FetchSearch";
+import { useSearch } from '@/hooks/shared/FetchSearch';
 import { Loader } from "@/components/ui";
 import { useNavigate } from "react-router-dom";
 import { generateSlug, formatSlugWithId } from "@/utils/slugify";

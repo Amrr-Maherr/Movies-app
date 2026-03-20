@@ -5,8 +5,8 @@ import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import DetailHeader from "@/components/shared/DetailHeader";
-import FetchTvShowDetails from "@/queries/FetchTvShowDetails";
-import { useTVReviews } from "@/queries";
+import FetchTvShowDetails from '@/hooks/shared/FetchTvShowDetails';
+import { useTVReviews } from "@/hooks/shared";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 import ReviewsSection from "@/components/sections/ReviewsSection";
 

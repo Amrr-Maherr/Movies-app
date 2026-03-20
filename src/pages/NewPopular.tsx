@@ -13,10 +13,10 @@ import type {
 import Pagination from "@/components/Pagination";
 
 // Hooks
-import useTrendingMoviesWeek from "@/queries/FetchTrendingMoviesWeek";
-import useTrendingTvWeek from "@/queries/FetchTrendingTvWeek";
-import useNowPlayingMovies from "@/queries/FetchNowPlayingMovies";
-import usePopularMovies from "@/queries/FetchPopularMovies";
+import useTrendingMoviesWeek from '@/hooks/shared/FetchTrendingMoviesWeek';
+import useTrendingTvWeek from '@/hooks/shared/FetchTrendingTvWeek';
+import useNowPlayingMovies from '@/hooks/shared/FetchNowPlayingMovies';
+import usePopularMovies from '@/hooks/shared/FetchPopularMovies';
 
 const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),

@@ -6,7 +6,7 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { Clock, Calendar, Star } from "lucide-react";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
-import FetchEpisodeDetails from "@/queries/FetchEpisodeDetails";
+import FetchEpisodeDetails from '@/hooks/shared/FetchEpisodeDetails';
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";

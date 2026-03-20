@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo } from "react";
-import { useCompanyDetails, useCompanyMovies } from "@/queries";
+import { useCompanyDetails, useCompanyMovies } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import MediaSection from "@/components/shared/MediaSection";
 import { Film, MapPin, Globe, Building2 } from "lucide-react";

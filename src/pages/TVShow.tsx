@@ -9,10 +9,10 @@ import type { TvShow, HeroMedia, PopularTvShowsResponse } from "@/types";
 import Pagination from "@/components/Pagination";
 
 // Hooks
-import usePopularTvShows from "@/queries/FetchPopularTvShows";
-import useTopRatedTvShows from "@/queries/FetchTopRatedTvShows";
-import useAiringTodayTv from "@/queries/FetchAiringTodayTv";
-import useOnTheAirTv from "@/queries/FetchOnTheAirTv";
+import usePopularTvShows from '@/hooks/shared/FetchPopularTvShows';
+import useTopRatedTvShows from '@/hooks/shared/FetchTopRatedTvShows';
+import useAiringTodayTv from '@/hooks/shared/FetchAiringTodayTv';
+import useOnTheAirTv from '@/hooks/shared/FetchOnTheAirTv';
 
 const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),

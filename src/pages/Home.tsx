@@ -4,12 +4,12 @@ import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import "@/index.css";
 
-import useTrendingMoviesWeek from "@/queries/FetchTrendingMoviesWeek";
-import useTrendingTvWeek from "@/queries/FetchTrendingTvWeek";
-import useUpcomingMovies from "@/queries/FetchUpcomingMovies";
-import usePopularTvShows from "@/queries/FetchPopularTvShows";
-import useTopRatedMovies from "@/queries/FetchTopRatedMovies";
-import useStreamingPlatforms from "@/queries/FetchStreamingPlatforms";
+import useTrendingMoviesWeek from '@/hooks/shared/FetchTrendingMoviesWeek';
+import useTrendingTvWeek from '@/hooks/shared/FetchTrendingTvWeek';
+import useUpcomingMovies from '@/hooks/shared/FetchUpcomingMovies';
+import usePopularTvShows from '@/hooks/shared/FetchPopularTvShows';
+import useTopRatedMovies from '@/hooks/shared/FetchTopRatedMovies';
+import useStreamingPlatforms from '@/hooks/shared/FetchStreamingPlatforms';
 
 const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),

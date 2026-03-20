@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Tv} from "lucide-react";
-import { useStreamingPlatforms } from "@/queries";
+import { useStreamingPlatforms } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import PlatformCard from "@/components/sections/PlatformCard";
 

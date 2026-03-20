@@ -4,7 +4,7 @@ import { Film, Calendar, Star, TrendingUp } from "lucide-react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import { useNowPlayingMoviesQuery } from "@/queries";
+import { useNowPlayingMoviesQuery } from "@/hooks/shared";
 import MediaGrid from "@/components/shared/MediaGrid";
 import HeroSection from "@/components/shared/heroSection/HeroSection";
 import SectionHeader from "@/components/shared/SectionHeader/SectionHeader";

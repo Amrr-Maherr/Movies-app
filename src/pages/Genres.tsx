@@ -1,5 +1,5 @@
 import { memo, useMemo } from "react";
-import { useMovieGenres, useTvGenres } from "@/queries";
+import { useMovieGenres, useTvGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film, Tv } from "lucide-react";
 import GenreCard from "@/components/GenreCard";

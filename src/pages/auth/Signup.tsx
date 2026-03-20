@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "@/layout/AuthLayout";
 import { Input } from "@/components/ui/input";
-import { useSignup } from "@/queries";
+import { useSignup } from "@/hooks/shared";
 
 export default function Signup() {
   const navigate = useNavigate();

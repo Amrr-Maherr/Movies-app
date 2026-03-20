@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo } from "react";
-import { useNetworkDetails, useNetworkTVSeries } from "@/queries";
+import { useNetworkDetails, useNetworkTVSeries } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { Tv, MapPin, Globe, Building2 } from "lucide-react";

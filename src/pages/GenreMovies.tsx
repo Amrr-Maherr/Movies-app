@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
-import { useMoviesByGenre, useMovieGenres } from "@/queries";
+import { useMoviesByGenre, useMovieGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film } from "lucide-react";
 import Card from "@/components/shared/Card/Card";
