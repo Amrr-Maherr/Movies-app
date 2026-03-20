@@ -1,8 +1,8 @@
 import { memo, useMemo } from "react";
-import type { CastMember } from "@/types";
+import type { CastMember, CrewMember } from "@/types";
 import { Card } from "@/components/shared/Card";
 import Slider from "@/components/shared/Slider/slider";
-import { filterKeyCrew, type CrewMember } from "@/utils";
+import { filterKeyCrew } from "@/utils";
 
 interface FullCreditsSectionProps {
   cast: CastMember[];

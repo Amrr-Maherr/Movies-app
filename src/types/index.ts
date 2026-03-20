@@ -23,7 +23,7 @@ export type {
   HeroMedia,
 } from "./hero";
 
-// Movie Details types
+// Movie Details types (canonical sources for Video, Genre, Credits, Season, Episode, ImageFile)
 export type {
   MovieDetails,
   Genre,
@@ -36,6 +36,9 @@ export type {
   Keywords,
   Episode,
   Season,
+  ImageFile,
+  MediaImage,
+  MediaImages,
 } from "./movieDetails";
 
 // Media Details types (shared for Movies and TV Shows)
@@ -55,3 +58,100 @@ export type {
   CrewCredit,
   CombinedCredits,
 } from "./person";
+
+// TV Service types
+export type {
+  TVDetailsResponse,
+  TVExternalIds,
+  TVImagesResponse,
+  TVReview,
+  TVReviewsResponse,
+  TVVideosResponse,
+  TVSimilarResponse,
+  TVRecommendationsResponse,
+  ProviderInfo,
+  WatchProviderRegion,
+  TVWatchProvidersResponse,
+} from "./tvService";
+
+// Movie Service types
+export type {
+  MovieDetailsResponse,
+  MovieImagesResponse,
+  MovieReview,
+  MovieReviewsResponse,
+  MovieVideosResponse,
+  MovieSimilarResponse,
+  MovieRecommendationsResponse,
+  MovieWatchProvidersResponse,
+} from "./movieService";
+
+// Trending Service types
+export type {
+  TrendingPerson,
+  TrendingPeopleResponse,
+  StreamingPlatformsResponse,
+} from "./trendingService";
+
+// Search Service types
+export type {
+  MovieSearchResponse,
+  TvSearchResponse,
+  PersonSearchResult,
+  PersonSearchResponse,
+  MultiSearchResult,
+  MultiSearchResponse,
+} from "./searchService";
+
+// Genre Service types
+export type {
+  GenresResponse,
+  DiscoverMoviesParams,
+  DiscoverTvParams,
+  DiscoverResponse,
+} from "./genreService";
+
+// Discover Service types
+export type {
+  PlatformContentResponse,
+} from "./discoverService";
+
+// Auth Service types
+export type {
+  SignupData,
+  LoginData,
+  AuthResponse,
+  ApiError,
+} from "./authService";
+
+// Collection Service types
+export type {
+  Collection,
+  MoviePart,
+} from "./collectionService";
+
+// Company Service types
+export type {
+  Company,
+  CompanyMoviesResponse,
+} from "./companyService";
+
+// Network Service types
+export type {
+  Network,
+  NetworkTVSeriesResponse,
+} from "./networkService";
+
+// Person Service types
+export type {
+  PersonMovieCreditsResponse,
+  PersonTVCreditsResponse,
+  PersonImagesResponse,
+  PopularPeopleResponse,
+} from "./personService";
+
+// Platform Service types
+export type {
+  StreamingPlatform as PlatformStreamingPlatform,
+  PlatformContentResponse as PlatformServiceContentResponse,
+} from "./platformService";

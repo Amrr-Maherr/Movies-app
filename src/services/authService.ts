@@ -9,6 +9,9 @@ import axios from "axios";
 import { ecommerceConfig } from "@/config/api";
 import type { SignupData, LoginData, AuthResponse, ApiError } from "@/types";
 
+// Re-export types for backward compatibility
+export type { SignupData, LoginData, AuthResponse, ApiError };
+
 // ============= Signup Endpoint =============
 
 /**

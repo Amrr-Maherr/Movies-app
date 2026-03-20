@@ -26,6 +26,22 @@ import type {
   MovieWatchProvidersResponse,
 } from "@/types";
 
+// Re-export types for backward compatibility
+export type {
+  MovieDetailsResponse,
+  MovieImagesResponse,
+  MovieReviewsResponse,
+  MovieVideosResponse,
+  MovieSimilarResponse,
+  MovieRecommendationsResponse,
+  MovieWatchProvidersResponse,
+  ImageFile,
+  Video,
+  MovieReview,
+  ProviderInfo,
+  WatchProviderRegion,
+};
+
 // TMDB API Key - used directly in all endpoints
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';

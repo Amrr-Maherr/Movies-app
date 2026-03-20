@@ -17,6 +17,16 @@ import type {
   MultiSearchResponse,
 } from "@/types";
 
+// Re-export types for backward compatibility
+export type {
+  MovieSearchResponse,
+  TvSearchResponse,
+  PersonSearchResult,
+  PersonSearchResponse,
+  MultiSearchResult,
+  MultiSearchResponse,
+};
+
 // TMDB API Key - used directly in all endpoints
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';

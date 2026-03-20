@@ -1,13 +1,8 @@
 /**
  * Crew member interface for TMDB crew data
+ * Imported from central types to avoid duplication
  */
-export interface CrewMember {
-  id: number;
-  name: string;
-  job: string;
-  department: string;
-  profile_path: string | null;
-}
+import type { CrewMember } from "@/types";
 
 /**
  * Key crew jobs to display in the Crew section

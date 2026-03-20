@@ -4,7 +4,7 @@
  * Types for person-related API responses from TMDB.
  */
 
-import type { ImageFile } from "./movieService";
+import type { ImageFile } from "./movieDetails";
 
 export interface PersonDetails {
   id: number;

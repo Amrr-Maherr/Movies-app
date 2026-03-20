@@ -4,28 +4,8 @@
  * Types for movie-related API responses from TMDB.
  */
 
-import type { Credits, HeroMedia } from "./mediaDetails";
-
-export interface Video {
-  id: string;
-  key: string;
-  name: string;
-  site: string;
-  type: string;
-  size: number;
-  official: boolean;
-  published_at: string;
-}
-
-export interface ImageFile {
-  aspect_ratio: number;
-  file_path: string;
-  height: number;
-  iso_639_1: string | null;
-  vote_average: number;
-  vote_count: number;
-  width: number;
-}
+import type { Credits, Video, ImageFile } from "./movieDetails";
+import type { HeroMedia } from "./hero";
 
 export interface MovieImagesResponse {
   id: number;

@@ -4,7 +4,8 @@
  * Types for TV show-related API responses from TMDB.
  */
 
-import type { Credits, HeroMedia, Season, Episode } from "./mediaDetails";
+import type { Credits, Season, Episode, Video, Genre, ImageFile } from "./movieDetails";
+import type { HeroMedia } from "./hero";
 
 export interface TVExternalIds {
   imdb_id: string | null;
@@ -16,27 +17,6 @@ export interface TVExternalIds {
   instagram_id: string | null;
   twitter_id: string | null;
   wikidata_id: string | null;
-}
-
-export interface Video {
-  id: string;
-  key: string;
-  name: string;
-  site: string;
-  type: string;
-  size: number;
-  official: boolean;
-  published_at: string;
-}
-
-export interface ImageFile {
-  aspect_ratio: number;
-  file_path: string;
-  height: number;
-  iso_639_1: string | null;
-  vote_average: number;
-  vote_count: number;
-  width: number;
 }
 
 export interface TVImagesResponse {

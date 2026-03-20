@@ -8,6 +8,9 @@
 import axios from "axios";
 import type { Movie, TvShow, StreamingPlatform, PlatformContentResponse } from "@/types";
 
+// Re-export types for backward compatibility
+export type { PlatformContentResponse };
+
 // TMDB API Key - used directly in all endpoints
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';

@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 import { Search, Filter } from "lucide-react";
 import { Card } from "@/components/shared/Card";
 import { cn } from "@/lib/utils";
-import type { CastMember } from "@/types";
-import type { CrewMember } from "@/utils/filterKeyCrew";
+import type { CastMember, CrewMember } from "@/types";
 
 interface FullCreditsDetailProps {
   cast: CastMember[];

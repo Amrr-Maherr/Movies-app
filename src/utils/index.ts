@@ -30,7 +30,7 @@ export { getRuntime } from "./getRuntime";
 
 // Data processing
 export { getKnownForItems } from "./getKnownForItems";
-export { filterKeyCrew, type CrewMember } from "./filterKeyCrew";
+export { filterKeyCrew } from "./filterKeyCrew";
 export { extractKeywords } from "./extractKeywords";
 export { extractWatchProviders } from "./extractWatchProviders";
 
