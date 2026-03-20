@@ -43,7 +43,7 @@ const NewReleaseLayout = memo(
 
           {/* Dark overlay for adult content */}
           {isAdult && (
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+            <div className="absolute inset-0" />
           )}
 
           {/* Adult Badge (+18) */}

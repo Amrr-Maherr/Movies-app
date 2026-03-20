@@ -6,48 +6,11 @@
  */
 
 import axios from "axios";
-import { tmdbConfig } from "@/config/api";
+import type { Network, NetworkTVSeriesResponse, TvShow } from "@/types";
 
-// ============= Types =============
-
-export interface Network {
-  id: number;
-  logo_path: string | null;
-  name: string;
-  origin_country: string;
-  headquarters?: string;
-  homepage?: string;
-  description?: string;
-  parent_organization?: {
-    id: number;
-    logo_path: string | null;
-    name: string;
-  } | null;
-}
-
-export interface NetworkTVSeriesResponse {
-  id: number;
-  page: number;
-  results: TvShow[];
-  total_pages: number;
-  total_results: number;
-}
-
-export interface TvShow {
-  id: number;
-  name: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  first_air_date: string;
-  vote_average: number;
-  overview: string;
-  genre_ids: number[];
-  original_language: string;
-  popularity: number;
-  origin_country: string[];
-  original_name: string;
-  vote_count: number;
-}
+// TMDB API Key - used directly in all endpoints
+const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ============= Network Details Endpoint =============
 
@@ -62,9 +25,9 @@ export interface TvShow {
  */
 export async function getNetworkDetails(networkId: number): Promise<Network | null> {
   try {
-    const response = await axios.get<Network>(`${tmdbConfig.baseUrl}/network/${networkId}`, {
+    const response = await axios.get<Network>(`${TMDB_BASE_URL}/network/${networkId}`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
       },
     });
     return response.data;
@@ -92,10 +55,10 @@ export async function getNetworkTVSeries(
 ): Promise<NetworkTVSeriesResponse | null> {
   try {
     const response = await axios.get<NetworkTVSeriesResponse>(
-      `${tmdbConfig.baseUrl}/network/${networkId}/tv_series`,
+      `${TMDB_BASE_URL}/network/${networkId}/tv_series`,
       {
         params: {
-          api_key: tmdbConfig.apiKey,
+          api_key: TMDB_API_KEY,
           language: "en-US",
           page,
         },

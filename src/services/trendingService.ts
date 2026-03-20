@@ -1,13 +1,25 @@
 /**
  * Trending Service
- * 
+ *
  * Handles all trending-related API calls to The Movie Database (TMDB).
  * Includes endpoints for trending movies and TV shows by day and week.
  */
 
 import axios from "axios";
-import { tmdbConfig } from "@/config/api";
-import type { Movie, PopularMoviesResponse, TvShow, PopularTvShowsResponse } from "@/types";
+import type {
+  Movie,
+  PopularMoviesResponse,
+  TvShow,
+  PopularTvShowsResponse,
+  TrendingPerson,
+  TrendingPeopleResponse,
+  StreamingPlatform,
+  StreamingPlatformsResponse,
+} from "@/types";
+
+// TMDB API Key - used directly in all endpoints
+const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ============= Trending Movies Endpoints =============
 
@@ -20,9 +32,9 @@ import type { Movie, PopularMoviesResponse, TvShow, PopularTvShowsResponse } fro
  */
 export async function getTrendingMoviesDay(page: number = 1): Promise<PopularMoviesResponse | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/trending/movie/day`, {
+    const response = await axios.get<PopularMoviesResponse>(`${TMDB_BASE_URL}/trending/movie/day`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page,
         append_to_response: "videos",
@@ -44,9 +56,9 @@ export async function getTrendingMoviesDay(page: number = 1): Promise<PopularMov
  */
 export async function getTrendingMoviesWeek(page: number = 1): Promise<PopularMoviesResponse | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/trending/movie/week`, {
+    const response = await axios.get<PopularMoviesResponse>(`${TMDB_BASE_URL}/trending/movie/week`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page,
         append_to_response: "videos",
@@ -70,9 +82,9 @@ export async function getTrendingMoviesWeek(page: number = 1): Promise<PopularMo
  */
 export async function getTrendingTvShowsDay(page: number = 1): Promise<PopularTvShowsResponse | null> {
   try {
-    const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/trending/tv/day`, {
+    const response = await axios.get<PopularTvShowsResponse>(`${TMDB_BASE_URL}/trending/tv/day`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page,
         append_to_response: "videos",
@@ -94,9 +106,9 @@ export async function getTrendingTvShowsDay(page: number = 1): Promise<PopularTv
  */
 export async function getTrendingTvShowsWeek(page: number = 1): Promise<PopularTvShowsResponse | null> {
   try {
-    const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/trending/tv/week`, {
+    const response = await axios.get<PopularTvShowsResponse>(`${TMDB_BASE_URL}/trending/tv/week`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page,
         append_to_response: "videos",
@@ -111,30 +123,6 @@ export async function getTrendingTvShowsWeek(page: number = 1): Promise<PopularT
 
 // ============= Trending People Endpoints =============
 
-export interface TrendingPerson {
-  id: number;
-  name: string;
-  known_for_department: string;
-  profile_path: string | null;
-  popularity: number;
-  adult: boolean;
-  gender: number;
-  known_for: Array<{
-    id: number;
-    title?: string;
-    name?: string;
-    poster_path: string | null;
-    media_type: "movie" | "tv";
-  }>;
-}
-
-export interface TrendingPeopleResponse {
-  page: number;
-  results: TrendingPerson[];
-  total_pages: number;
-  total_results: number;
-}
-
 /**
  * Fetch trending people (actors, directors) for the day from TMDB API.
  * 
@@ -143,9 +131,9 @@ export interface TrendingPeopleResponse {
  */
 export async function getTrendingPeopleDay(page: number = 1): Promise<TrendingPeopleResponse | null> {
   try {
-    const response = await axios.get<TrendingPeopleResponse>(`${tmdbConfig.baseUrl}/trending/person/day`, {
+    const response = await axios.get<TrendingPeopleResponse>(`${TMDB_BASE_URL}/trending/person/day`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page,
       },
@@ -165,9 +153,9 @@ export async function getTrendingPeopleDay(page: number = 1): Promise<TrendingPe
  */
 export async function getTrendingPeopleWeek(page: number = 1): Promise<TrendingPeopleResponse | null> {
   try {
-    const response = await axios.get<TrendingPeopleResponse>(`${tmdbConfig.baseUrl}/trending/person/week`, {
+    const response = await axios.get<TrendingPeopleResponse>(`${TMDB_BASE_URL}/trending/person/week`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page,
       },
@@ -181,17 +169,6 @@ export async function getTrendingPeopleWeek(page: number = 1): Promise<TrendingP
 
 // ============= Streaming Platforms Endpoints =============
 
-export interface StreamingPlatform {
-  id: number;
-  name: string;
-  logo_path: string;
-  display_priority: number;
-}
-
-export interface StreamingPlatformsResponse {
-  results: StreamingPlatform[];
-}
-
 /**
  * Fetch streaming platforms (watch providers) for movies in a specific region.
  * Returns a list of streaming services like Netflix, Disney+, HBO, etc.
@@ -201,9 +178,9 @@ export interface StreamingPlatformsResponse {
  */
 export async function getStreamingPlatforms(region: string = "US"): Promise<StreamingPlatform[] | null> {
   try {
-    const response = await axios.get<StreamingPlatformsResponse>(`${tmdbConfig.baseUrl}/watch/providers/movie`, {
+    const response = await axios.get<StreamingPlatformsResponse>(`${TMDB_BASE_URL}/watch/providers/movie`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         watch_region: region,
       },
     });

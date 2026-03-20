@@ -1,89 +1,25 @@
 /**
  * Search Service
- * 
+ *
  * Handles all search-related API calls to The Movie Database (TMDB).
  * Includes endpoints for searching movies, TV shows, people, and multi-search.
  */
 
 import axios from "axios";
-import { tmdbConfig } from "@/config/api";
-import type { Movie, TvShow } from "@/types";
+import type {
+  Movie,
+  TvShow,
+  MovieSearchResponse,
+  TvSearchResponse,
+  PersonSearchResult,
+  PersonSearchResponse,
+  MultiSearchResult,
+  MultiSearchResponse,
+} from "@/types";
 
-// ============= Response Types =============
-
-export interface MovieSearchResponse {
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-}
-
-export interface TvSearchResponse {
-  page: number;
-  results: TvShow[];
-  total_pages: number;
-  total_results: number;
-}
-
-export interface PersonSearchResult {
-  id: number;
-  name: string;
-  known_for_department: string;
-  profile_path: string | null;
-  popularity: number;
-  adult: boolean;
-  gender: number;
-  known_for: Array<{
-    id: number;
-    title?: string;
-    name?: string;
-    poster_path: string | null;
-    media_type: "movie" | "tv";
-  }>;
-}
-
-export interface PersonSearchResponse {
-  page: number;
-  results: PersonSearchResult[];
-  total_pages: number;
-  total_results: number;
-}
-
-export interface MultiSearchResult {
-  id: number;
-  media_type: "movie" | "tv" | "person";
-  popularity: number;
-  poster_path?: string | null;
-  profile_path?: string | null;
-  backdrop_path?: string | null;
-  vote_average?: number;
-  vote_count?: number;
-  overview?: string;
-  release_date?: string;
-  first_air_date?: string;
-  title?: string;
-  name?: string;
-  original_language?: string;
-  adult?: boolean;
-  genre_ids?: number[];
-  origin_country?: string[];
-  original_name?: string;
-  known_for_department?: string;
-  known_for?: Array<{
-    id: number;
-    title?: string;
-    name?: string;
-    poster_path: string | null;
-    media_type: "movie" | "tv";
-  }>;
-}
-
-export interface MultiSearchResponse {
-  page: number;
-  results: MultiSearchResult[];
-  total_pages: number;
-  total_results: number;
-}
+// TMDB API Key - used directly in all endpoints
+const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ============= Search Endpoints =============
 
@@ -107,9 +43,9 @@ export async function searchMovies(
   region?: string
 ): Promise<Movie[] | null> {
   try {
-    const response = await axios.get<MovieSearchResponse>(`${tmdbConfig.baseUrl}/search/movie`, {
+    const response = await axios.get<MovieSearchResponse>(`${TMDB_BASE_URL}/search/movie`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         query,
         page,
@@ -144,9 +80,9 @@ export async function searchTvShows(
   firstAirDateYear?: number
 ): Promise<TvShow[] | null> {
   try {
-    const response = await axios.get<TvSearchResponse>(`${tmdbConfig.baseUrl}/search/tv`, {
+    const response = await axios.get<TvSearchResponse>(`${TMDB_BASE_URL}/search/tv`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         query,
         page,
@@ -176,9 +112,9 @@ export async function searchPeople(
   includeAdult: boolean = true
 ): Promise<PersonSearchResult[] | null> {
   try {
-    const response = await axios.get<PersonSearchResponse>(`${tmdbConfig.baseUrl}/search/person`, {
+    const response = await axios.get<PersonSearchResponse>(`${TMDB_BASE_URL}/search/person`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         query,
         page,
@@ -207,9 +143,9 @@ export async function multiSearch(
   includeAdult: boolean = true
 ): Promise<MultiSearchResult[] | null> {
   try {
-    const response = await axios.get<MultiSearchResponse>(`${tmdbConfig.baseUrl}/search/multi`, {
+    const response = await axios.get<MultiSearchResponse>(`${TMDB_BASE_URL}/search/multi`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         query,
         page,

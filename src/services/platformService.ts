@@ -6,26 +6,11 @@
  */
 
 import axios from "axios";
-import { tmdbConfig } from "@/config/api";
-import type { Movie, TvShow } from "@/types";
+import type { Movie, TvShow, StreamingPlatform, PlatformContentResponse } from "@/types";
 
-// ============= Types =============
-
-export interface StreamingPlatform {
-  id: number;
-  logo_path: string | null;
-  name: string;
-  origin_country: string;
-  display_priority?: number;
-}
-
-export interface PlatformContentResponse {
-  id: number;
-  page: number;
-  results: (Movie | TvShow)[];
-  total_pages: number;
-  total_results: number;
-}
+// TMDB API Key - used directly in all endpoints
+const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ============= Platform Watch Providers Endpoint =============
 
@@ -41,10 +26,10 @@ export interface PlatformContentResponse {
 export async function getStreamingPlatforms(region: string = "US"): Promise<StreamingPlatform[] | null> {
   try {
     const response = await axios.get<{ results: StreamingPlatform[] }>(
-      `${tmdbConfig.baseUrl}/watch/providers/movie`,
+      `${TMDB_BASE_URL}/watch/providers/movie`,
       {
         params: {
-          api_key: tmdbConfig.apiKey,
+          api_key: TMDB_API_KEY,
           watch_region: region,
           language: "en-US",
         },
@@ -73,10 +58,10 @@ export async function getPlatformMovies(
 ): Promise<PlatformContentResponse | null> {
   try {
     const response = await axios.get<PlatformContentResponse>(
-      `${tmdbConfig.baseUrl}/discover/movie`,
+      `${TMDB_BASE_URL}/discover/movie`,
       {
         params: {
-          api_key: tmdbConfig.apiKey,
+          api_key: TMDB_API_KEY,
           language: "en-US",
           page,
           sort_by: "popularity.desc",
@@ -108,10 +93,10 @@ export async function getPlatformTVShows(
 ): Promise<PlatformContentResponse | null> {
   try {
     const response = await axios.get<PlatformContentResponse>(
-      `${tmdbConfig.baseUrl}/discover/tv`,
+      `${TMDB_BASE_URL}/discover/tv`,
       {
         params: {
-          api_key: tmdbConfig.apiKey,
+          api_key: TMDB_API_KEY,
           language: "en-US",
           page,
           sort_by: "popularity.desc",

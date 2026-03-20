@@ -392,7 +392,7 @@ const Card = memo(
                   alt={title}
                   className={`w-full h-full transition-all duration-300 ${
                     isAdult
-                      ? "blur-md scale-105"
+                      ? "blur-md"
                       : "transition-transform duration-500"
                   }`}
                   objectFit="cover"
@@ -400,7 +400,7 @@ const Card = memo(
 
                 {/* Dark overlay for adult content */}
                 {isAdult && (
-                  <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                  <div className="absolute inset-0 bg-black/60" />
                 )}
 
                 {/* Adult Badge (+18) */}

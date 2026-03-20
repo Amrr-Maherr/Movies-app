@@ -52,7 +52,7 @@ const LandscapeLayout = memo(
 
           {/* Dark overlay for adult content */}
           {isAdult && (
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-10" />
+            <div className="absolute inset-0 bg-black/60 z-10" />
           )}
 
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />

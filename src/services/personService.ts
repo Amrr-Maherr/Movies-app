@@ -1,127 +1,27 @@
 /**
  * Person Service
- * 
+ *
  * Handles all person-related API calls to The Movie Database (TMDB).
  * Includes endpoints for person details, movie credits, TV credits, images, and external IDs.
  */
 
 import axios from "axios";
-import { tmdbConfig } from "@/config/api";
-import type { ImageFile } from "./moviesService";
+import type {
+  ImageFile,
+  PersonDetails,
+  PersonExternalIds,
+  CastCredit,
+  CrewCredit,
+  PersonMovieCreditsResponse,
+  PersonTVCreditsResponse,
+  CombinedCredits,
+  PersonImagesResponse,
+  PopularPeopleResponse,
+} from "@/types";
 
-// ============= Response Types =============
-
-export interface PersonDetails {
-  id: number;
-  name: string;
-  biography: string;
-  birthday: string | null;
-  deathday: string | null;
-  place_of_birth: string | null;
-  profile_path: string | null;
-  known_for_department: string;
-  popularity: number;
-  adult: boolean;
-  also_known_as: string[];
-  gender: number;
-  imdb_id: string | null;
-  homepage: string | null;
-}
-
-export interface PersonExternalIds {
-  id: number;
-  imdb_id: string | null;
-  freebase_mid: string | null;
-  freebase_id: string | null;
-  tvdb_id: number | null;
-  tvrage_id: number | null;
-  facebook_id: string | null;
-  instagram_id: string | null;
-  twitter_id: string | null;
-  wikidata_id: string | null;
-}
-
-export interface CastCredit {
-  id: number;
-  original_language: string;
-  episode_count: number;
-  overview: string;
-  origin_country: string[];
-  original_name: string;
-  vote_count: number;
-  name: string;
-  media_type: "movie" | "tv";
-  popularity: number;
-  credit_id: string;
-  backdrop_path: string | null;
-  first_air_date: string;
-  vote_average: number;
-  genre_ids: number[];
-  poster_path: string | null;
-  character: string;
-  adult: boolean;
-  order?: number;
-  release_date?: string;
-  title?: string;
-  original_title?: string;
-  video?: boolean;
-}
-
-export interface CrewCredit {
-  id: number;
-  original_language: string;
-  episode_count: number;
-  overview: string;
-  origin_country: string[];
-  original_name: string;
-  vote_count: number;
-  name: string;
-  media_type: "movie" | "tv";
-  popularity: number;
-  credit_id: string;
-  backdrop_path: string | null;
-  first_air_date: string;
-  vote_average: number;
-  genre_ids: number[];
-  poster_path: string | null;
-  adult: boolean;
-  department: string;
-  job: string;
-  release_date?: string;
-  title?: string;
-  original_title?: string;
-  video?: boolean;
-}
-
-export interface PersonMovieCreditsResponse {
-  id: number;
-  cast: CastCredit[];
-  crew: CrewCredit[];
-}
-
-export interface PersonTVCreditsResponse {
-  id: number;
-  cast: CastCredit[];
-  crew: CrewCredit[];
-}
-
-export interface CombinedCredits {
-  cast: CastCredit[];
-  crew: CrewCredit[];
-  id: number;
-}
-
-export interface PersonImagesResponse {
-  id: number;
-  profiles: ImageFile[];
-}
-
-export interface PopularPeopleResponse {
-  page: number;
-  results: PersonDetails[];
-  total_pages: number;
-  total_results: number;
-}
+// TMDB API Key - used directly in all endpoints
+const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ============= Person Details Endpoints =============
 
@@ -133,9 +33,9 @@ export interface PopularPeopleResponse {
  */
 export async function getPersonDetails(id: number): Promise<PersonDetails | null> {
   try {
-    const response = await axios.get<PersonDetails>(`${tmdbConfig.baseUrl}/person/${id}`, {
+    const response = await axios.get<PersonDetails>(`${TMDB_BASE_URL}/person/${id}`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
       },
     });
@@ -154,9 +54,9 @@ export async function getPersonDetails(id: number): Promise<PersonDetails | null
  */
 export async function getPersonExternalIds(id: number): Promise<PersonExternalIds | null> {
   try {
-    const response = await axios.get<PersonExternalIds>(`${tmdbConfig.baseUrl}/person/${id}/external_ids`, {
+    const response = await axios.get<PersonExternalIds>(`${TMDB_BASE_URL}/person/${id}/external_ids`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
       },
     });
@@ -178,9 +78,9 @@ export async function getPersonExternalIds(id: number): Promise<PersonExternalId
  */
 export async function getPersonMovieCredits(id: number): Promise<PersonMovieCreditsResponse | null> {
   try {
-    const response = await axios.get<PersonMovieCreditsResponse>(`${tmdbConfig.baseUrl}/person/${id}/movie_credits`, {
+    const response = await axios.get<PersonMovieCreditsResponse>(`${TMDB_BASE_URL}/person/${id}/movie_credits`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
       },
     });
@@ -200,9 +100,9 @@ export async function getPersonMovieCredits(id: number): Promise<PersonMovieCred
  */
 export async function getPersonTVCredits(id: number): Promise<PersonTVCreditsResponse | null> {
   try {
-    const response = await axios.get<PersonTVCreditsResponse>(`${tmdbConfig.baseUrl}/person/${id}/tv_credits`, {
+    const response = await axios.get<PersonTVCreditsResponse>(`${TMDB_BASE_URL}/person/${id}/tv_credits`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
       },
     });
@@ -222,9 +122,9 @@ export async function getPersonTVCredits(id: number): Promise<PersonTVCreditsRes
  */
 export async function getPersonCombinedCredits(id: number): Promise<CombinedCredits | null> {
   try {
-    const response = await axios.get<CombinedCredits>(`${tmdbConfig.baseUrl}/person/${id}/combined_credits`, {
+    const response = await axios.get<CombinedCredits>(`${TMDB_BASE_URL}/person/${id}/combined_credits`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
       },
     });
@@ -245,9 +145,9 @@ export async function getPersonCombinedCredits(id: number): Promise<CombinedCred
  */
 export async function getPersonImages(id: number): Promise<PersonImagesResponse | null> {
   try {
-    const response = await axios.get<PersonImagesResponse>(`${tmdbConfig.baseUrl}/person/${id}/images`, {
+    const response = await axios.get<PersonImagesResponse>(`${TMDB_BASE_URL}/person/${id}/images`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
       },
     });
@@ -268,9 +168,9 @@ export async function getPersonImages(id: number): Promise<PersonImagesResponse 
  */
 export async function getPopularPeople(page: number = 1): Promise<PopularPeopleResponse | null> {
   try {
-    const response = await axios.get<PopularPeopleResponse>(`${tmdbConfig.baseUrl}/person/popular`, {
+    const response = await axios.get<PopularPeopleResponse>(`${TMDB_BASE_URL}/person/popular`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page,
       },

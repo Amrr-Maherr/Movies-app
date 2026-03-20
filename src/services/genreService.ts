@@ -6,46 +6,19 @@
  */
 
 import axios from "axios";
-import { tmdbConfig } from "@/config/api";
-import type { Movie, TvShow } from "@/types";
+import type {
+  Movie,
+  TvShow,
+  Genre,
+  GenresResponse,
+  DiscoverMoviesParams,
+  DiscoverTvParams,
+  DiscoverResponse,
+} from "@/types";
 
-// ============= Types =============
-
-export interface Genre {
-  id: number;
-  name: string;
-}
-
-export interface GenresResponse {
-  genres: Genre[];
-}
-
-export interface DiscoverMoviesParams {
-  page?: number;
-  withGenres?: string;
-  withoutGenres?: string;
-  sortBy?: string;
-  voteAverageGte?: number;
-  primaryReleaseYear?: number;
-  includeAdult?: boolean;
-}
-
-export interface DiscoverTvParams {
-  page?: number;
-  withGenres?: string;
-  withoutGenres?: string;
-  sortBy?: string;
-  voteAverageGte?: number;
-  firstAirDateYear?: number;
-  includeAdult?: boolean;
-}
-
-export interface DiscoverResponse {
-  page: number;
-  results: Movie[] | TvShow[];
-  total_pages: number;
-  total_results: number;
-}
+// TMDB API Key - used directly in all endpoints
+const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ============= Genre List Endpoints =============
 
@@ -60,9 +33,9 @@ export interface DiscoverResponse {
  */
 export async function getMovieGenres(language: string = "en-US"): Promise<Genre[] | null> {
   try {
-    const response = await axios.get<GenresResponse>(`${tmdbConfig.baseUrl}/genre/movie/list`, {
+    const response = await axios.get<GenresResponse>(`${TMDB_BASE_URL}/genre/movie/list`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language,
       },
     });
@@ -84,9 +57,9 @@ export async function getMovieGenres(language: string = "en-US"): Promise<Genre[
  */
 export async function getTvGenres(language: string = "en-US"): Promise<Genre[] | null> {
   try {
-    const response = await axios.get<GenresResponse>(`${tmdbConfig.baseUrl}/genre/tv/list`, {
+    const response = await axios.get<GenresResponse>(`${TMDB_BASE_URL}/genre/tv/list`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language,
       },
     });
@@ -115,9 +88,9 @@ export async function discoverMoviesByGenre(
   params: DiscoverMoviesParams = {}
 ): Promise<DiscoverResponse | null> {
   try {
-    const response = await axios.get<DiscoverResponse>(`${tmdbConfig.baseUrl}/discover/movie`, {
+    const response = await axios.get<DiscoverResponse>(`${TMDB_BASE_URL}/discover/movie`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page: params.page ?? 1,
         sort_by: params.sortBy ?? "popularity.desc",
@@ -151,9 +124,9 @@ export async function discoverTvShowsByGenre(
   params: DiscoverTvParams = {}
 ): Promise<DiscoverResponse | null> {
   try {
-    const response = await axios.get<DiscoverResponse>(`${tmdbConfig.baseUrl}/discover/tv`, {
+    const response = await axios.get<DiscoverResponse>(`${TMDB_BASE_URL}/discover/tv`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page: params.page ?? 1,
         sort_by: params.sortBy ?? "popularity.desc",

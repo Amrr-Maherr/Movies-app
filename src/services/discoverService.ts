@@ -1,82 +1,27 @@
 /**
  * Discover Service
- * 
+ *
  * Handles all discover and advanced filter API calls to The Movie Database (TMDB).
  * Includes endpoints for discovering movies and TV shows with various filters
  * such as genre, language, rating, release date, and streaming providers.
  */
 
 import axios from "axios";
-import { tmdbConfig } from "@/config/api";
-import type { Movie, PopularMoviesResponse, TvShow, PopularTvShowsResponse } from "@/types";
+import type {
+  Movie,
+  PopularMoviesResponse,
+  TvShow,
+  PopularTvShowsResponse,
+  DiscoverMoviesParams,
+  DiscoverTvParams,
+  Genre,
+  GenresResponse,
+  PlatformContentResponse,
+} from "@/types";
 
-// ============= Response Types =============
-
-export interface DiscoverMoviesParams {
-  page?: number;
-  sortBy?: string;
-  certification?: string;
-  certificationGte?: string;
-  certificationLte?: string;
-  includeAdult?: boolean;
-  includeVideo?: boolean;
-  primaryReleaseDateGte?: string;
-  primaryReleaseDateLte?: string;
-  primaryReleaseYear?: number;
-  releaseDateGte?: string;
-  releaseDateLte?: string;
-  voteAverageGte?: number;
-  voteAverageLte?: number;
-  voteCountGte?: number;
-  voteCountLte?: number;
-  withGenres?: string;
-  withoutGenres?: string;
-  withOriginalLanguage?: string;
-  withReleaseType?: number;
-  withRuntimeGte?: number;
-  withRuntimeLte?: number;
-  withWatchProviders?: string;
-  watchRegion?: string;
-  withCast?: string;
-  withCrew?: string;
-  withCompanies?: string;
-  withKeywords?: string;
-  withoutKeywords?: string;
-  year?: number;
-  region?: string;
-}
-
-export interface DiscoverTvParams {
-  page?: number;
-  sortBy?: string;
-  airDateGte?: string;
-  airDateLte?: string;
-  firstAirDateGte?: string;
-  firstAirDateLte?: string;
-  firstAirDateYear?: number;
-  includeAdult?: boolean;
-  includeNullFirstAirDates?: boolean;
-  voteAverageGte?: number;
-  voteAverageLte?: number;
-  voteCountGte?: number;
-  voteCountLte?: number;
-  withGenres?: string;
-  withoutGenres?: string;
-  withOriginalLanguage?: string;
-  withRuntimeGte?: number;
-  withRuntimeLte?: number;
-  withStatus?: number;
-  withType?: number;
-  withWatchProviders?: string;
-  watchRegion?: string;
-  withCast?: string;
-  withCrew?: string;
-  withCompanies?: string;
-  withKeywords?: string;
-  withoutKeywords?: string;
-  timezone?: string;
-  screenedTheatrically?: boolean;
-}
+// TMDB API Key - used directly in all endpoints
+const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ============= Discover Movies Endpoints =============
 
@@ -96,9 +41,9 @@ export interface DiscoverTvParams {
  */
 export async function discoverMovies(params: DiscoverMoviesParams = {}): Promise<Movie[] | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/discover/movie`, {
+    const response = await axios.get<PopularMoviesResponse>(`${TMDB_BASE_URL}/discover/movie`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page: params.page ?? 1,
         sort_by: params.sortBy ?? "popularity.desc",
@@ -197,9 +142,9 @@ export async function getMediaByLanguage(languageCode: string, page: number = 1)
  */
 export async function discoverTvShows(params: DiscoverTvParams = {}): Promise<TvShow[] | null> {
   try {
-    const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/discover/tv`, {
+    const response = await axios.get<PopularTvShowsResponse>(`${TMDB_BASE_URL}/discover/tv`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language: "en-US",
         page: params.page ?? 1,
         sort_by: params.sortBy ?? "popularity.desc",
@@ -241,15 +186,6 @@ export async function discoverTvShows(params: DiscoverTvParams = {}): Promise<Tv
 
 // ============= Genre Endpoints =============
 
-export interface Genre {
-  id: number;
-  name: string;
-}
-
-export interface GenresResponse {
-  genres: Genre[];
-}
-
 /**
  * Fetch all official movie genres from TMDB API.
  * 
@@ -258,9 +194,9 @@ export interface GenresResponse {
  */
 export async function getMovieGenres(language: string = "en-US"): Promise<Genre[] | null> {
   try {
-    const response = await axios.get<GenresResponse>(`${tmdbConfig.baseUrl}/genre/movie/list`, {
+    const response = await axios.get<GenresResponse>(`${TMDB_BASE_URL}/genre/movie/list`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language,
       },
     });
@@ -279,9 +215,9 @@ export async function getMovieGenres(language: string = "en-US"): Promise<Genre[
  */
 export async function getTvGenres(language: string = "en-US"): Promise<Genre[] | null> {
   try {
-    const response = await axios.get<GenresResponse>(`${tmdbConfig.baseUrl}/genre/tv/list`, {
+    const response = await axios.get<GenresResponse>(`${TMDB_BASE_URL}/genre/tv/list`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
         language,
       },
     });

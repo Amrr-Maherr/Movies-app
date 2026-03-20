@@ -6,49 +6,11 @@
  */
 
 import axios from "axios";
-import { tmdbConfig } from "@/config/api";
+import type { Company, CompanyMoviesResponse, Movie } from "@/types";
 
-// ============= Types =============
-
-export interface Company {
-  id: number;
-  logo_path: string | null;
-  name: string;
-  origin_country: string;
-  headquarters?: string;
-  homepage?: string;
-  description?: string;
-  parent_company?: {
-    id: number;
-    logo_path: string | null;
-    name: string;
-  } | null;
-}
-
-export interface CompanyMoviesResponse {
-  id: number;
-  page: number;
-  results: Movie[];
-  total_pages: number;
-  total_results: number;
-}
-
-export interface Movie {
-  id: number;
-  title: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  release_date: string;
-  vote_average: number;
-  overview: string;
-  genre_ids: number[];
-  original_language: string;
-  popularity: number;
-  video: boolean;
-  adult: boolean;
-  original_title: string;
-  vote_count: number;
-}
+// TMDB API Key - used directly in all endpoints
+const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ============= Company Details Endpoint =============
 
@@ -63,9 +25,9 @@ export interface Movie {
  */
 export async function getCompanyDetails(companyId: number): Promise<Company | null> {
   try {
-    const response = await axios.get<Company>(`${tmdbConfig.baseUrl}/company/${companyId}`, {
+    const response = await axios.get<Company>(`${TMDB_BASE_URL}/company/${companyId}`, {
       params: {
-        api_key: tmdbConfig.apiKey,
+        api_key: TMDB_API_KEY,
       },
     });
     return response.data;
@@ -93,10 +55,10 @@ export async function getCompanyMovies(
 ): Promise<CompanyMoviesResponse | null> {
   try {
     const response = await axios.get<CompanyMoviesResponse>(
-      `${tmdbConfig.baseUrl}/company/${companyId}/movies`,
+      `${TMDB_BASE_URL}/company/${companyId}/movies`,
       {
         params: {
-          api_key: tmdbConfig.apiKey,
+          api_key: TMDB_API_KEY,
           language: "en-US",
           page,
         },
