@@ -1,7 +1,11 @@
-import { memo, useMemo, useState, useCallback } from "react";
-import Slider from "@/components/shared/Slider/slider";
+import { memo, useMemo, useState, useCallback, lazy, Suspense } from "react";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import Card from "@/components/shared/Card/Card";
 import type { CastCredit, CrewCredit } from "@/services/personService";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 type FilterType = "all" | "movies" | "tv";
 
@@ -117,38 +121,45 @@ const CreditsSection = memo(function CreditsSection({
                 </span>
               )}
             </h3>
-            <Slider
-              slidesPerView={6}
-              slidesPerViewMobile={3}
-              spaceBetween={16}
-              hideNavigation={false}
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={6} />}
             >
-              {filteredCast.slice(0, 24).map((credit) => (
-                <Card
-                  key={credit.credit_id}
-                  movie={{
-                    id: credit.id,
-                    title: credit.title || credit.name,
-                    name: credit.name,
-                    overview: credit.overview,
-                    poster_path: credit.poster_path,
-                    backdrop_path: credit.backdrop_path,
-                    vote_average: credit.vote_average,
-                    vote_count: credit.vote_count,
-                    release_date: credit.release_date || credit.first_air_date,
-                    first_air_date: credit.first_air_date,
-                    genre_ids: credit.genre_ids,
-                    adult: credit.adult,
-                    original_language: credit.original_language,
-                    original_name: credit.original_name,
-                    original_title: credit.original_title,
-                    popularity: credit.popularity,
-                    media_type: credit.media_type,
-                  }}
-                  variant="compact"
-                />
-              ))}
-            </Slider>
+              <LazyWrapper height={350}>
+                <Slider
+                  slidesPerView={6}
+                  slidesPerViewMobile={3}
+                  spaceBetween={16}
+                  hideNavigation={false}
+                >
+                  {filteredCast.slice(0, 24).map((credit) => (
+                    <Card
+                      key={credit.credit_id}
+                      movie={{
+                        id: credit.id,
+                        title: credit.title || credit.name,
+                        name: credit.name,
+                        overview: credit.overview,
+                        poster_path: credit.poster_path,
+                        backdrop_path: credit.backdrop_path,
+                        vote_average: credit.vote_average,
+                        vote_count: credit.vote_count,
+                        release_date:
+                          credit.release_date || credit.first_air_date,
+                        first_air_date: credit.first_air_date,
+                        genre_ids: credit.genre_ids,
+                        adult: credit.adult,
+                        original_language: credit.original_language,
+                        original_name: credit.original_name,
+                        original_title: credit.original_title,
+                        popularity: credit.popularity,
+                        media_type: credit.media_type,
+                      }}
+                      variant="compact"
+                    />
+                  ))}
+                </Slider>
+              </LazyWrapper>
+            </Suspense>
           </div>
         )}
 
@@ -163,38 +174,45 @@ const CreditsSection = memo(function CreditsSection({
                 </span>
               )}
             </h3>
-            <Slider
-              slidesPerView={6}
-              slidesPerViewMobile={3}
-              spaceBetween={16}
-              hideNavigation={false}
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={6} />}
             >
-              {filteredCrew.map((credit) => (
-                <Card
-                  key={credit.credit_id}
-                  movie={{
-                    id: credit.id,
-                    title: credit.title || credit.name,
-                    name: credit.name,
-                    overview: credit.overview,
-                    poster_path: credit.poster_path,
-                    backdrop_path: credit.backdrop_path,
-                    vote_average: credit.vote_average,
-                    vote_count: credit.vote_count,
-                    release_date: credit.release_date || credit.first_air_date,
-                    first_air_date: credit.first_air_date,
-                    genre_ids: credit.genre_ids,
-                    adult: credit.adult,
-                    original_language: credit.original_language,
-                    original_name: credit.original_name,
-                    original_title: credit.original_title,
-                    popularity: credit.popularity,
-                    media_type: credit.media_type,
-                  }}
-                  variant="compact"
-                />
-              ))}
-            </Slider>
+              <LazyWrapper height={350}>
+                <Slider
+                  slidesPerView={6}
+                  slidesPerViewMobile={3}
+                  spaceBetween={16}
+                  hideNavigation={false}
+                >
+                  {filteredCrew.map((credit) => (
+                    <Card
+                      key={credit.credit_id}
+                      movie={{
+                        id: credit.id,
+                        title: credit.title || credit.name,
+                        name: credit.name,
+                        overview: credit.overview,
+                        poster_path: credit.poster_path,
+                        backdrop_path: credit.backdrop_path,
+                        vote_average: credit.vote_average,
+                        vote_count: credit.vote_count,
+                        release_date:
+                          credit.release_date || credit.first_air_date,
+                        first_air_date: credit.first_air_date,
+                        genre_ids: credit.genre_ids,
+                        adult: credit.adult,
+                        original_language: credit.original_language,
+                        original_name: credit.original_name,
+                        original_title: credit.original_title,
+                        popularity: credit.popularity,
+                        media_type: credit.media_type,
+                      }}
+                      variant="compact"
+                    />
+                  ))}
+                </Slider>
+              </LazyWrapper>
+            </Suspense>
           </div>
         )}
       </div>

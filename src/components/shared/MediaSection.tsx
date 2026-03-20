@@ -1,8 +1,12 @@
-import { memo, useMemo, useCallback } from "react";
-import Slider from "@/components/shared/Slider/slider";
+import { memo, useMemo, useCallback, lazy, Suspense } from "react";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import Card from "@/components/shared/Card/Card";
 import { Error } from "@/components/ui";
 import type { HeroMedia } from "@/types";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 interface MediaSectionProps {
   title: string;
@@ -29,7 +33,6 @@ const MediaSection = memo(function MediaSection({
     onRetry();
   }, [onRetry]);
 
-
   if (error || media.length === 0) {
     return (
       <section className="py-8">
@@ -49,20 +52,24 @@ const MediaSection = memo(function MediaSection({
         </h2>
 
         {/* Horizontal Carousel */}
-        <Slider
-          slidesPerView={slidesPerView}
-          slidesPerViewMobile={1.5}
-          spaceBetween={16}
-          hideNavigation={false}
-          swiperOptions={{
-            loop: true,
-            autoplay: true,
-          }}
-        >
-          {media.map((item: HeroMedia) => (
-            <Card key={item.id} movie={item} variant="compact" />
-          ))}
-        </Slider>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={300}>
+            <Slider
+              slidesPerView={slidesPerView}
+              slidesPerViewMobile={1.5}
+              spaceBetween={16}
+              hideNavigation={false}
+              swiperOptions={{
+                loop: true,
+                autoplay: true,
+              }}
+            >
+              {media.map((item: HeroMedia) => (
+                <Card key={item.id} movie={item} variant="compact" />
+              ))}
+            </Slider>
+          </LazyWrapper>
+        </Suspense>
       </div>
     </section>
   );

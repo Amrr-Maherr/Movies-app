@@ -6,16 +6,21 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 import type { Movie, HeroMedia } from "@/types";
 
 // Hooks
-import useKidsMovies from '@/hooks/shared/FetchKidsMovies';
+import useKidsMovies from "@/hooks/shared/FetchKidsMovies";
 
-const HeroSection = lazy(() => import("@/components/shared/heroSection/HeroSection"));
+const HeroSection = lazy(
+  () => import("@/components/shared/heroSection/HeroSection"),
+);
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const Kids = memo(function Kids() {
   const { data: movies, isLoading, error, refetch } = useKidsMovies(1);
 
   // Memoized: Pre-computed movies array
-  const moviesData = useMemo(() => (movies || []) as unknown as HeroMedia[], [movies]);
+  const moviesData = useMemo(
+    () => (movies || []) as unknown as HeroMedia[],
+    [movies],
+  );
 
   // Memoized: Error state handler
   const handleRetry = useCallback(() => {
@@ -41,7 +46,9 @@ const Kids = memo(function Kids() {
       </Suspense>
 
       <div className="px-4 sm:px-8 mb-6 mt-8">
-        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Kids & Family</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+          Kids & Family
+        </h1>
         <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
           Discover movies that are perfect for the whole family.
         </p>
@@ -60,12 +67,12 @@ const Kids = memo(function Kids() {
           </button>
         </div>
       ) : (
-        <LazyWrapper height={500}>
-          <AnimatePresence mode="wait">
-            {isLoading ? (
-              <SectionSkeleton variant="grid" cardCount={12} />
-            ) : (
-              <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
+          <LazyWrapper height={500}>
+            <AnimatePresence mode="wait">
+              {isLoading ? (
+                <SectionSkeleton variant="grid" cardCount={12} />
+              ) : (
                 <motion.div
                   key="grid-kids"
                   initial={{ opacity: 0, y: 20 }}
@@ -73,12 +80,15 @@ const Kids = memo(function Kids() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <MediaGrid items={moviesData} emptyMessage="No Kids Movies found." />
+                  <MediaGrid
+                    items={moviesData}
+                    emptyMessage="No Kids Movies found."
+                  />
                 </motion.div>
-              </Suspense>
-            )}
-          </AnimatePresence>
-        </LazyWrapper>
+              )}
+            </AnimatePresence>
+          </LazyWrapper>
+        </Suspense>
       )}
     </div>
   );

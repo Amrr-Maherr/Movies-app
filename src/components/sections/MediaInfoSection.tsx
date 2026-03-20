@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import type { MediaDetails, Genre } from "@/types";
 import {
@@ -11,8 +11,12 @@ import {
   getRuntime,
 } from "@/utils";
 import { Card } from "@/components/shared/Card";
-import Slider from "@/components/shared/Slider/slider";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import ProductionSection from "@/components/sections/ProductionSection";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 interface MediaInfoSectionProps {
   media: MediaDetails;
@@ -124,25 +128,31 @@ const MediaInfoSection = memo(function MediaInfoSection({
                 <h3 className="text-xl md:text-2xl font-bold text-white">
                   Cast
                 </h3>
-                <Slider
-                  slidesPerView={4}
-                  slidesPerViewMobile={1.5}
-                  spaceBetween={16}
-                  hideNavigation={false}
+                <Suspense
+                  fallback={<SectionSkeleton variant="grid" cardCount={4} />}
                 >
-                  {topCast.map((actor) => (
-                    <Card
-                      key={actor.id}
-                      variant="person"
-                      person={{
-                        id: actor.id,
-                        name: actor.name,
-                        profileImage: actor.profile_path,
-                        role: actor.character || "Unknown role",
-                      }}
-                    />
-                  ))}
-                </Slider>
+                  <LazyWrapper height={300}>
+                    <Slider
+                      slidesPerView={4}
+                      slidesPerViewMobile={1.5}
+                      spaceBetween={16}
+                      hideNavigation={false}
+                    >
+                      {topCast.map((actor) => (
+                        <Card
+                          key={actor.id}
+                          variant="person"
+                          person={{
+                            id: actor.id,
+                            name: actor.name,
+                            profileImage: actor.profile_path,
+                            role: actor.character || "Unknown role",
+                          }}
+                        />
+                      ))}
+                    </Slider>
+                  </LazyWrapper>
+                </Suspense>
               </div>
             )}
           </div>

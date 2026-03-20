@@ -1,7 +1,11 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import Card from "@/components/shared/Card/Card";
-import Slider from "@/components/shared/Slider/slider";
 import type { HeroMedia } from "@/types";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 interface MoreLikeThisSectionProps {
   similar: HeroMedia[];
@@ -27,16 +31,20 @@ const MoreLikeThisSection = memo(function MoreLikeThisSection({
         <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
           More Like This
         </h2>
-        <Slider
-          slidesPerView={6}
-          slidesPerViewMobile={3}
-          spaceBetween={16}
-          hideNavigation={false}
-        >
-          {filteredSimilar.map((item) => (
-            <Card key={item.id} movie={item} variant="recommendation" />
-          ))}
-        </Slider>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={350}>
+            <Slider
+              slidesPerView={6}
+              slidesPerViewMobile={3}
+              spaceBetween={16}
+              hideNavigation={false}
+            >
+              {filteredSimilar.map((item) => (
+                <Card key={item.id} movie={item} variant="recommendation" />
+              ))}
+            </Slider>
+          </LazyWrapper>
+        </Suspense>
       </div>
     </section>
   );

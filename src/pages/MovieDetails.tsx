@@ -4,7 +4,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, Error, SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchMovieDetails from '@/hooks/shared/FetchMovieDetails';
+import FetchMovieDetails from "@/hooks/shared/FetchMovieDetails";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 
 const MediaHero = lazy(() => import("@/components/shared/MediaHero"));
@@ -82,57 +82,57 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       />
 
       {/* Hero Section */}
-      <LazyWrapper height={500}>
-        <Suspense fallback={<SectionSkeleton variant="hero" />}>
+      <Suspense fallback={<SectionSkeleton variant="hero" />}>
+        <LazyWrapper height={500}>
           <MediaHero media={data as any} />
-        </Suspense>
-      </LazyWrapper>
+        </LazyWrapper>
+      </Suspense>
 
       {/* Navigation Tabs */}
       <DetailPageNav type="movie" slugWithId={slugWithId || ""} />
 
       {/* Media Info Section */}
-      <LazyWrapper height={300}>
-        <Suspense fallback={<SectionSkeleton variant="grid" />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" />}>
+        <LazyWrapper height={300}>
           <MediaInfoSection media={data as any} />
-        </Suspense>
-      </LazyWrapper>
+        </LazyWrapper>
+      </Suspense>
 
       {/* Trailers Section */}
       {videos.length > 0 && (
-        <LazyWrapper height={400}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={3} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={3} />}>
+          <LazyWrapper height={400}>
             <TrailersSection videos={videos} />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
 
       {/* Behind the Scenes Section */}
-      <LazyWrapper height={400}>
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+        <LazyWrapper height={400}>
           <BehindTheScenesSection images={images} />
-        </Suspense>
-      </LazyWrapper>
+        </LazyWrapper>
+      </Suspense>
 
       {/* More Like This Section */}
       {similar.length > 0 && (
-        <LazyWrapper height={500}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={500}>
             <MoreLikeThisSection similar={similar} />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
 
       {/* Full Credits Section */}
       {(credits.cast.length > 0 || credits.crew.length > 0) && (
-        <LazyWrapper height={500}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={500}>
             <FullCreditsSection
               cast={credits.cast || []}
               crew={credits.crew || []}
             />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
     </div>
   );

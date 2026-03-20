@@ -1,10 +1,12 @@
 import { useParams, Link } from "react-router-dom";
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { useCompanyDetails, useCompanyMovies } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
-import MediaSection from "@/components/shared/MediaSection";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Film, MapPin, Globe, Building2 } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+
+const MediaSection = lazy(() => import("@/components/shared/MediaSection"));
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -25,11 +27,8 @@ const Company = memo(function Company() {
   } = useCompanyMovies(companyId, 1);
 
   const logoUrl = useMemo(
-    () =>
-      company?.logo_path
-        ? `${IMAGE_BASE_URL}${company.logo_path}`
-        : null,
-    [company?.logo_path]
+    () => (company?.logo_path ? `${IMAGE_BASE_URL}${company.logo_path}` : null),
+    [company?.logo_path],
   );
 
   if (companyLoading) {
@@ -165,13 +164,17 @@ const Company = memo(function Company() {
             onRetry={() => window.location.reload()}
           />
         ) : companyMovies?.results && companyMovies.results.length > 0 ? (
-          <MediaSection
-            title=""
-            data={companyMovies.results}
-            isLoading={false}
-            error={null}
-            onRetry={() => {}}
-          />
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+            <LazyWrapper height={350}>
+              <MediaSection
+                title=""
+                data={companyMovies.results}
+                isLoading={false}
+                error={null}
+                onRetry={() => {}}
+              />
+            </LazyWrapper>
+          </Suspense>
         ) : (
           <div className="text-center py-12 text-[#737373]">
             <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />

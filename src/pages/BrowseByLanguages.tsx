@@ -5,7 +5,7 @@ import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import Pagination from "@/components/Pagination";
 import type { HeroMedia } from "@/types";
-import useMediaByLanguage from '@/hooks/shared/FetchMediaByLanguage';
+import useMediaByLanguage from "@/hooks/shared/FetchMediaByLanguage";
 import LanguagesFilter, {
   SUPPORTED_LANGUAGES,
 } from "@/components/BrowseByLanguages/LanguagesFilter";
@@ -82,14 +82,14 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
         </div>
       ) : (
         <>
-          <LazyWrapper height={600}>
-            <AnimatePresence mode="wait">
-              {isLoading ? (
-                <SectionSkeleton variant="grid" cardCount={12} />
-              ) : (
-                <Suspense
-                  fallback={<SectionSkeleton variant="grid" cardCount={12} />}
-                >
+          <Suspense
+            fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          >
+            <LazyWrapper height={600}>
+              <AnimatePresence mode="wait">
+                {isLoading ? (
+                  <SectionSkeleton variant="grid" cardCount={12} />
+                ) : (
                   <motion.div
                     key={`grid-lang-${selectedLanguage}-${currentPage}`}
                     initial={{ opacity: 0, y: 20 }}
@@ -102,10 +102,10 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
                       emptyMessage="No content available for this language."
                     />
                   </motion.div>
-                </Suspense>
-              )}
-            </AnimatePresence>
-          </LazyWrapper>
+                )}
+              </AnimatePresence>
+            </LazyWrapper>
+          </Suspense>
 
           {/* Pagination Component */}
           <Pagination

@@ -9,10 +9,10 @@ import type { TvShow, HeroMedia, PopularTvShowsResponse } from "@/types";
 import Pagination from "@/components/Pagination";
 
 // Hooks
-import usePopularTvShows from '@/hooks/shared/FetchPopularTvShows';
-import useTopRatedTvShows from '@/hooks/shared/FetchTopRatedTvShows';
-import useAiringTodayTv from '@/hooks/shared/FetchAiringTodayTv';
-import useOnTheAirTv from '@/hooks/shared/FetchOnTheAirTv';
+import usePopularTvShows from "@/hooks/shared/FetchPopularTvShows";
+import useTopRatedTvShows from "@/hooks/shared/FetchTopRatedTvShows";
+import useAiringTodayTv from "@/hooks/shared/FetchAiringTodayTv";
+import useOnTheAirTv from "@/hooks/shared/FetchOnTheAirTv";
 
 const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),
@@ -96,12 +96,14 @@ const TVShow = memo(function TVShow() {
         </p>
       </div>
 
-      <LazyWrapper height={250}>
-        <TVShowFilters
-          activeFilter={activeFilter}
-          onFilterChange={handleFilterChange}
-        />
-      </LazyWrapper>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
+        <LazyWrapper height={250}>
+          <TVShowFilters
+            activeFilter={activeFilter}
+            onFilterChange={handleFilterChange}
+          />
+        </LazyWrapper>
+      </Suspense>
 
       {error ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
@@ -116,28 +118,26 @@ const TVShow = memo(function TVShow() {
           </button>
         </div>
       ) : (
-        <LazyWrapper height={500}>
-          {isLoading ? (
-            <SectionSkeleton variant="grid" cardCount={12} />
-          ) : (
-            <Suspense
-              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
-            >
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
+          <LazyWrapper height={500}>
+            {isLoading ? (
+              <SectionSkeleton variant="grid" cardCount={12} />
+            ) : (
               <div className="slide-up">
                 <MediaGrid
                   items={tvShowsData}
                   emptyMessage="No TV Shows found for this filter."
                 />
               </div>
-            </Suspense>
-          )}
-          <Pagination
-            currentPage={page}
-            totalPages={AllPages}
-            isLoading={isLoading}
-            onPageChange={setPage}
-          />
-        </LazyWrapper>
+            )}
+            <Pagination
+              currentPage={page}
+              totalPages={AllPages}
+              isLoading={isLoading}
+              onPageChange={setPage}
+            />
+          </LazyWrapper>
+        </Suspense>
       )}
     </div>
   );

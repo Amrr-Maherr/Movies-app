@@ -1,8 +1,12 @@
-import { memo, useState, useMemo, useCallback } from "react";
+import { memo, useState, useMemo, useCallback, lazy, Suspense } from "react";
 import type { Video } from "@/types";
-import Slider from "@/components/shared/Slider/slider";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Card } from "@/components/shared/Card";
-import TrailerModal from "@/components/shared/TrailerModal";
+
+// Lazy-loaded components
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
+const TrailerModal = lazy(() => import("@/components/shared/TrailerModal"));
 
 interface TrailersSectionProps {
   videos: Video[];
@@ -49,25 +53,29 @@ const TrailersSection = memo(function TrailersSection({
           <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
             Trailers
           </h2>
-          <Slider
-            slidesPerView={4}
-            slidesPerViewMobile={2}
-            spaceBetween={16}
-            hideNavigation={false}
-          >
-            {youtubeTrailers.map((video) => (
-              <Card
-                key={video.id}
-                variant="trailer"
-                trailer={{
-                  videoKey: video.key,
-                  name: video.name,
-                  type: video.type,
-                }}
-                onClick={() => handleTrailerClick(video)}
-              />
-            ))}
-          </Slider>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
+            <LazyWrapper height={300}>
+              <Slider
+                slidesPerView={4}
+                slidesPerViewMobile={2}
+                spaceBetween={16}
+                hideNavigation={false}
+              >
+                {youtubeTrailers.map((video) => (
+                  <Card
+                    key={video.id}
+                    variant="trailer"
+                    trailer={{
+                      videoKey: video.key,
+                      name: video.name,
+                      type: video.type,
+                    }}
+                    onClick={() => handleTrailerClick(video)}
+                  />
+                ))}
+              </Slider>
+            </LazyWrapper>
+          </Suspense>
         </div>
       </section>
 

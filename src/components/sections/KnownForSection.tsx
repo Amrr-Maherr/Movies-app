@@ -1,8 +1,12 @@
-import { memo, useMemo } from "react";
-import Slider from "@/components/shared/Slider/slider";
+import { memo, useMemo, lazy, Suspense } from "react";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import Card from "@/components/shared/Card/Card";
 import { getKnownForItems } from "@/utils";
 import type { CastCredit, CrewCredit } from "@/services/personService";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 interface KnownForSectionProps {
   cast: CastCredit[];
@@ -30,38 +34,42 @@ const KnownForSection = memo(function KnownForSection({
         <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
           Known For
         </h2>
-        <Slider
-          slidesPerView={6}
-          slidesPerViewMobile={3}
-          spaceBetween={16}
-          hideNavigation={false}
-        >
-          {knownForItems.map((credit) => (
-            <Card
-              key={credit.credit_id}
-              movie={{
-                id: credit.id,
-                title: credit.title || credit.name,
-                name: credit.name,
-                overview: credit.overview,
-                poster_path: credit.poster_path,
-                backdrop_path: credit.backdrop_path,
-                vote_average: credit.vote_average,
-                vote_count: credit.vote_count,
-                release_date: credit.release_date || credit.first_air_date,
-                first_air_date: credit.first_air_date,
-                genre_ids: credit.genre_ids,
-                adult: credit.adult,
-                original_language: credit.original_language,
-                original_name: credit.original_name,
-                original_title: credit.original_title,
-                popularity: credit.popularity,
-                media_type: credit.media_type,
-              }}
-              variant="compact"
-            />
-          ))}
-        </Slider>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={350}>
+            <Slider
+              slidesPerView={6}
+              slidesPerViewMobile={3}
+              spaceBetween={16}
+              hideNavigation={false}
+            >
+              {knownForItems.map((credit) => (
+                <Card
+                  key={credit.credit_id}
+                  movie={{
+                    id: credit.id,
+                    title: credit.title || credit.name,
+                    name: credit.name,
+                    overview: credit.overview,
+                    poster_path: credit.poster_path,
+                    backdrop_path: credit.backdrop_path,
+                    vote_average: credit.vote_average,
+                    vote_count: credit.vote_count,
+                    release_date: credit.release_date || credit.first_air_date,
+                    first_air_date: credit.first_air_date,
+                    genre_ids: credit.genre_ids,
+                    adult: credit.adult,
+                    original_language: credit.original_language,
+                    original_name: credit.original_name,
+                    original_title: credit.original_title,
+                    popularity: credit.popularity,
+                    media_type: credit.media_type,
+                  }}
+                  variant="compact"
+                />
+              ))}
+            </Slider>
+          </LazyWrapper>
+        </Suspense>
       </div>
     </section>
   );

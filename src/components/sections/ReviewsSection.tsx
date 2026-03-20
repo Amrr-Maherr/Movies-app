@@ -1,6 +1,10 @@
-import { memo, useMemo } from "react";
-import Slider from "@/components/shared/Slider/slider";
+import { memo, useMemo, lazy, Suspense } from "react";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Card } from "@/components/shared/Card";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 interface ReviewsSectionProps {
   reviews: {
@@ -32,25 +36,29 @@ const ReviewsSection = memo(function ReviewsSection({
         <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
           User Reviews
         </h3>
-        <Slider
-          slidesPerView={4}
-          slidesPerViewMobile={1}
-          spaceBetween={16}
-          hideNavigation={false}
-        >
-          {validReviews.map((review) => (
-            <Card
-              key={review.id || review.author}
-              variant="review"
-              review={{
-                author: review.author,
-                rating: review.author_details?.rating ?? null,
-                content: review.content,
-                date: review.created_at,
-              }}
-            />
-          ))}
-        </Slider>
+        <Suspense fallback={<SectionSkeleton variant="list" cardCount={4} />}>
+          <LazyWrapper height={400}>
+            <Slider
+              slidesPerView={4}
+              slidesPerViewMobile={1}
+              spaceBetween={16}
+              hideNavigation={false}
+            >
+              {validReviews.map((review) => (
+                <Card
+                  key={review.id || review.author}
+                  variant="review"
+                  review={{
+                    author: review.author,
+                    rating: review.author_details?.rating ?? null,
+                    content: review.content,
+                    date: review.created_at,
+                  }}
+                />
+              ))}
+            </Slider>
+          </LazyWrapper>
+        </Suspense>
       </div>
     </section>
   );

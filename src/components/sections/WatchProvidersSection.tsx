@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { cn } from "@/lib/utils";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import Slider from "@/components/shared/Slider/slider";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import type { Provider } from "@/types";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 interface WatchProviderCardProps {
   provider: Provider;
@@ -152,21 +156,25 @@ const WatchProvidersSection = memo(function WatchProvidersSection({
         )}
 
         {/* Horizontal Slider of Providers */}
-        <Slider
-          slidesPerView={6}
-          slidesPerViewMobile={2}
-          spaceBetween={16}
-          hideNavigation={false}
-          swiperOptions={{
-            loop: false,
-            grabCursor: true,
-          }}
-          className="watch-providers-slider"
-        >
-          {sortedProviders.map((provider) => (
-            <WatchProviderCard key={provider.id} provider={provider} />
-          ))}
-        </Slider>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={150}>
+            <Slider
+              slidesPerView={6}
+              slidesPerViewMobile={2}
+              spaceBetween={16}
+              hideNavigation={false}
+              swiperOptions={{
+                loop: false,
+                grabCursor: true,
+              }}
+              className="watch-providers-slider"
+            >
+              {sortedProviders.map((provider) => (
+                <WatchProviderCard key={provider.id} provider={provider} />
+              ))}
+            </Slider>
+          </LazyWrapper>
+        </Suspense>
 
         {/* Optional: Additional info text */}
         <p className="text-white/50 text-sm mt-4 text-center md:text-left">

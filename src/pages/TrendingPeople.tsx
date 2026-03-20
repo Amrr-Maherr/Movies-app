@@ -1,10 +1,13 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useMemo, useState, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getTrendingPeopleDay, getTrendingPeopleWeek } from "@/services";
 import { SectionSkeleton, Error } from "@/components/ui";
-import OptimizedImage from "@/components/ui/OptimizedImage";
 import { Star, TrendingUp } from "lucide-react";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
+
+// Lazy-loaded components
+const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -114,54 +117,60 @@ const TrendingPeople = memo(function TrendingPeople() {
 
         {/* People Grid */}
         {people.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-            {people.map((person: any, index) => (
-              <Link
-                key={person.id}
-                to={`/person/${person.id}`}
-                className="group cursor-pointer block"
-              >
-                <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
-                  {person.profile_path ? (
-                    <OptimizedImage
-                      src={`${IMAGE_BASE_URL}${person.profile_path}`}
-                      alt={person.name}
-                      className="w-full h-full"
-                      objectFit="cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-[#333]">
-                      <span className="text-4xl text-[#555]">👤</span>
+          <Suspense
+            fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          >
+            <LazyWrapper height={400}>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+                {people.map((person: any, index) => (
+                  <Link
+                    key={person.id}
+                    to={`/person/${person.id}`}
+                    className="group cursor-pointer block"
+                  >
+                    <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
+                      {person.profile_path ? (
+                        <OptimizedImage
+                          src={`${IMAGE_BASE_URL}${person.profile_path}`}
+                          alt={person.name}
+                          className="w-full h-full"
+                          objectFit="cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-[#333]">
+                          <span className="text-4xl text-[#555]">👤</span>
+                        </div>
+                      )}
+
+                      {/* Rank Badge */}
+                      <div className="absolute top-2 left-2 bg-[var(--netflix-red)] text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center">
+                        {index + 1}
+                      </div>
+
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span className="text-white text-sm font-medium px-2 text-center">
+                          View Profile
+                        </span>
+                      </div>
                     </div>
-                  )}
 
-                  {/* Rank Badge */}
-                  <div className="absolute top-2 left-2 bg-[var(--netflix-red)] text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center">
-                    {index + 1}
-                  </div>
-
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="text-white text-sm font-medium px-2 text-center">
-                      View Profile
-                    </span>
-                  </div>
-                </div>
-
-                {/* Person Info */}
-                <div className="mt-2 md:mt-3">
-                  <h3 className="text-xs md:text-sm text-white font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
-                    {person.name}
-                  </h3>
-                  {person.known_for_department && (
-                    <p className="text-[#737373] text-xs mt-1">
-                      {person.known_for_department}
-                    </p>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
+                    {/* Person Info */}
+                    <div className="mt-2 md:mt-3">
+                      <h3 className="text-xs md:text-sm text-white font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
+                        {person.name}
+                      </h3>
+                      {person.known_for_department && (
+                        <p className="text-[#737373] text-xs mt-1">
+                          {person.known_for_department}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </LazyWrapper>
+          </Suspense>
         ) : (
           <div className="text-center py-12 text-[#737373]">
             <TrendingUp className="w-16 h-16 mx-auto mb-4 opacity-50" />

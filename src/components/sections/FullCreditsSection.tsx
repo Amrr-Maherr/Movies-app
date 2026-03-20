@@ -1,8 +1,12 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import type { CastMember, CrewMember } from "@/types";
 import { Card } from "@/components/shared/Card";
-import Slider from "@/components/shared/Slider/slider";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { filterKeyCrew } from "@/utils";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 interface FullCreditsSectionProps {
   cast: CastMember[];
@@ -34,25 +38,31 @@ const FullCreditsSection = memo(function FullCreditsSection({
             <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
               Top Billed Cast
             </h2>
-            <Slider
-              slidesPerView={6}
-              slidesPerViewMobile={3}
-              spaceBetween={16}
-              hideNavigation={false}
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={6} />}
             >
-              {topBilledCast.map((actor) => (
-                <Card
-                  key={actor.id}
-                  variant="person"
-                  person={{
-                    id: actor.id,
-                    name: actor.name,
-                    profileImage: actor.profile_path,
-                    role: actor.character || "Unknown role",
-                  }}
-                />
-              ))}
-            </Slider>
+              <LazyWrapper height={350}>
+                <Slider
+                  slidesPerView={6}
+                  slidesPerViewMobile={3}
+                  spaceBetween={16}
+                  hideNavigation={false}
+                >
+                  {topBilledCast.map((actor) => (
+                    <Card
+                      key={actor.id}
+                      variant="person"
+                      person={{
+                        id: actor.id,
+                        name: actor.name,
+                        profileImage: actor.profile_path,
+                        role: actor.character || "Unknown role",
+                      }}
+                    />
+                  ))}
+                </Slider>
+              </LazyWrapper>
+            </Suspense>
           </div>
         )}
 
@@ -62,25 +72,31 @@ const FullCreditsSection = memo(function FullCreditsSection({
             <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
               Crew
             </h2>
-            <Slider
-              slidesPerView={6}
-              slidesPerViewMobile={3}
-              spaceBetween={16}
-              hideNavigation={false}
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={6} />}
             >
-              {keyCrew.map((member) => (
-                <Card
-                  key={member.id}
-                  variant="person"
-                  person={{
-                    id: member.id,
-                    name: member.name,
-                    profileImage: member.profile_path,
-                    role: member.job,
-                  }}
-                />
-              ))}
-            </Slider>
+              <LazyWrapper height={350}>
+                <Slider
+                  slidesPerView={6}
+                  slidesPerViewMobile={3}
+                  spaceBetween={16}
+                  hideNavigation={false}
+                >
+                  {keyCrew.map((member) => (
+                    <Card
+                      key={member.id}
+                      variant="person"
+                      person={{
+                        id: member.id,
+                        name: member.name,
+                        profileImage: member.profile_path,
+                        role: member.job,
+                      }}
+                    />
+                  ))}
+                </Slider>
+              </LazyWrapper>
+            </Suspense>
           </div>
         )}
       </div>

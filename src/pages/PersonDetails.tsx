@@ -4,8 +4,8 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchPersonDetails from '@/hooks/shared/FetchPersonDetails';
-import FetchPersonCredits from '@/hooks/shared/FetchPersonCredits';
+import FetchPersonDetails from "@/hooks/shared/FetchPersonDetails";
+import FetchPersonCredits from "@/hooks/shared/FetchPersonCredits";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 
 const PersonHero = lazy(() => import("@/components/shared/PersonHero"));
@@ -98,17 +98,19 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       />
 
       {/* Hero Section */}
-      <LazyWrapper height={500}>
-        <PersonHero person={personData} />
-      </LazyWrapper>
+      <Suspense fallback={<SectionSkeleton variant="hero" />}>
+        <LazyWrapper height={500}>
+          <PersonHero person={personData} />
+        </LazyWrapper>
+      </Suspense>
 
       {/* Navigation Tabs */}
       <DetailPageNav type="person" slugWithId={slugWithId || ""} />
 
       {/* Social Links Section */}
       {externalIdsData && (
-        <LazyWrapper height={150}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
+          <LazyWrapper height={150}>
             <SocialLinksSection
               imdbId={externalIdsData.imdb_id}
               twitterId={externalIdsData.twitter_id}
@@ -117,22 +119,22 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
               wikidataId={externalIdsData.wikidata_id}
               homepage={personData.homepage}
             />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
 
       {/* Known For Section */}
       {(cast.length > 0 || crew.length > 0) && (
-        <LazyWrapper height={400}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
+          <LazyWrapper height={400}>
             <KnownForSection cast={cast} crew={crew} />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
 
       {/* Biography Section */}
-      <LazyWrapper height={400}>
-        <Suspense fallback={<SectionSkeleton variant="list" cardCount={1} />}>
+      <Suspense fallback={<SectionSkeleton variant="list" cardCount={1} />}>
+        <LazyWrapper height={400}>
           <BiographySection
             biography={personData.biography}
             placeOfBirth={personData.place_of_birth}
@@ -140,16 +142,16 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
             deathday={personData.deathday}
             knownForDepartment={personData.known_for_department}
           />
-        </Suspense>
-      </LazyWrapper>
+        </LazyWrapper>
+      </Suspense>
 
       {/* Credits Section */}
       {(cast.length > 0 || crew.length > 0) && (
-        <LazyWrapper height={600}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={600}>
             <CreditsSection cast={cast} crew={crew} />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
     </div>
   );

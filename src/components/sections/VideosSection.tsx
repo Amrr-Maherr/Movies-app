@@ -1,10 +1,14 @@
-import { memo, useMemo, useState, useCallback } from "react";
+import { memo, useMemo, useState, useCallback, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
-import Slider from "@/components/shared/Slider/slider";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import TrailerModal from "@/components/shared/TrailerModal";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import type { Video } from "@/types";
+
+// Lazy-loaded components
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
+const TrailerModal = lazy(() => import("@/components/shared/TrailerModal"));
 
 interface VideosSectionProps {
   videos: Video[];
@@ -140,24 +144,28 @@ const VideosSection = memo(function VideosSection({
           </h2>
 
           {/* Horizontal Slider of Videos */}
-          <Slider
-            slidesPerView={4}
-            slidesPerViewMobile={2}
-            spaceBetween={16}
-            hideNavigation={false}
-            swiperOptions={{
-              loop: false,
-              grabCursor: true,
-            }}
-          >
-            {validVideos.map((video) => (
-              <VideoCard
-                key={video.id || video.key}
-                video={video}
-                onPlay={handlePlay}
-              />
-            ))}
-          </Slider>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
+            <LazyWrapper height={300}>
+              <Slider
+                slidesPerView={4}
+                slidesPerViewMobile={2}
+                spaceBetween={16}
+                hideNavigation={false}
+                swiperOptions={{
+                  loop: false,
+                  grabCursor: true,
+                }}
+              >
+                {validVideos.map((video) => (
+                  <VideoCard
+                    key={video.id || video.key}
+                    video={video}
+                    onPlay={handlePlay}
+                  />
+                ))}
+              </Slider>
+            </LazyWrapper>
+          </Suspense>
 
           {/* Video count info */}
           <p className="text-white/50 text-sm mt-4 text-center md:text-left">

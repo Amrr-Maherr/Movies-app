@@ -4,7 +4,7 @@ import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import Pagination from "@/components/Pagination";
-import usePopularPeople from '@/hooks/shared/FetchPopularPeople';
+import usePopularPeople from "@/hooks/shared/FetchPopularPeople";
 import { TrendingUp } from "lucide-react";
 
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
@@ -73,7 +73,9 @@ const ActorsPage = memo(function ActorsPage() {
       ) : (
         <div className="">
           <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <MediaGrid items={allItems} type="person" />
+            <LazyWrapper height={500}>
+              <MediaGrid items={allItems} type="person" />
+            </LazyWrapper>
           </Suspense>
 
           {/* Pagination Component */}

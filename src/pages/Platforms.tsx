@@ -1,8 +1,11 @@
-import { memo } from "react";
-import { Tv} from "lucide-react";
+import { memo, lazy, Suspense } from "react";
+import { Tv } from "lucide-react";
 import { useStreamingPlatforms } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
-import PlatformCard from "@/components/sections/PlatformCard";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
+
+// Lazy-loaded components
+const PlatformCard = lazy(() => import("@/components/sections/PlatformCard"));
 
 /**
  * Platforms Page
@@ -48,19 +51,23 @@ const Platforms = memo(function Platforms() {
           </div>
 
           <p className="text-lg text-[#b3b3b3] max-w-2xl">
-            Browse all available streaming platforms and discover movies and TV shows
-            available on each service.
+            Browse all available streaming platforms and discover movies and TV
+            shows available on each service.
           </p>
         </div>
 
         {/* Platforms Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-          {platforms.map((platform) => (
-            <div key={platform.id} className="h-[200px] md:h-[240px]">
-              <PlatformCard platform={platform} />
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
+          <LazyWrapper height={400}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+              {platforms.map((platform) => (
+                <div key={platform.id} className="h-[200px] md:h-[240px]">
+                  <PlatformCard platform={platform} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </LazyWrapper>
+        </Suspense>
 
         {/* Platform Count */}
         <div className="mt-8 text-center text-[#737373]">

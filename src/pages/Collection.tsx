@@ -1,11 +1,15 @@
 import { useParams } from "react-router-dom";
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { useCollectionDetails } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Film, Star } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import Card from "@/components/shared/Card/Card";
 import type { HeroMedia } from "@/types";
+
+const Card = lazy(() =>
+  import("@/components/shared/Card").then((m) => ({ default: m.Card })),
+);
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/original";
@@ -150,15 +154,19 @@ const Collection = memo(function Collection() {
         </h2>
 
         {collection.parts && collection.parts.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-            {collection.parts.map((movie) => (
-              <Card
-                key={movie.id}
-                movie={movie as HeroMedia}
-                variant="compact"
-              />
-            ))}
-          </div>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+            <LazyWrapper height={350}>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+                {collection.parts.map((movie) => (
+                  <Card
+                    key={movie.id}
+                    movie={movie as HeroMedia}
+                    variant="compact"
+                  />
+                ))}
+              </div>
+            </LazyWrapper>
+          </Suspense>
         ) : (
           <div className="text-center py-12 text-[#737373]">
             <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />

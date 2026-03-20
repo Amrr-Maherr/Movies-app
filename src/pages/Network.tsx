@@ -1,9 +1,11 @@
 import { useParams, Link } from "react-router-dom";
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { useNetworkDetails, useNetworkTVSeries } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
-import OptimizedImage from "@/components/ui/OptimizedImage";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Tv, MapPin, Globe, Building2 } from "lucide-react";
+
+const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -56,14 +58,20 @@ const Network = memo(function Network() {
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8">
             {/* Network Logo */}
             {logoUrl ? (
-              <div className="w-32 h-32 md:w-48 md:h-48 bg-white rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
-                <OptimizedImage
-                  src={logoUrl}
-                  alt={network.name}
-                  className="w-full h-full object-contain p-2"
-                  objectFit="contain"
-                />
-              </div>
+              <Suspense
+                fallback={<SectionSkeleton variant="grid" cardCount={1} />}
+              >
+                <LazyWrapper height={200}>
+                  <div className="w-32 h-32 md:w-48 md:h-48 bg-white rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
+                    <OptimizedImage
+                      src={logoUrl}
+                      alt={network.name}
+                      className="w-full h-full object-contain p-2"
+                      objectFit="contain"
+                    />
+                  </div>
+                </LazyWrapper>
+              </Suspense>
             ) : (
               <div className="w-32 h-32 md:w-48 md:h-48 bg-[#333] rounded-lg flex items-center justify-center flex-shrink-0">
                 <Tv className="w-16 h-16 md:w-24 md:h-24 text-white" />
@@ -163,35 +171,39 @@ const Network = memo(function Network() {
             onRetry={() => window.location.reload()}
           />
         ) : networkShows?.results && networkShows.results.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-            {networkShows.results.map((show: any) => (
-              <Link
-                key={show.id}
-                to={`/tv/${show.id}`}
-                className="group cursor-pointer block"
-              >
-                <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
-                  {show.poster_path ? (
-                    <OptimizedImage
-                      src={`${IMAGE_BASE_URL}${show.poster_path}`}
-                      alt={show.name}
-                      className="w-full h-full"
-                      objectFit="cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-[#333]">
-                      <Tv className="w-12 h-12 text-[#555]" />
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+            <LazyWrapper height={350}>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+                {networkShows.results.map((show: any) => (
+                  <Link
+                    key={show.id}
+                    to={`/tv/${show.id}`}
+                    className="group cursor-pointer block"
+                  >
+                    <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
+                      {show.poster_path ? (
+                        <OptimizedImage
+                          src={`${IMAGE_BASE_URL}${show.poster_path}`}
+                          alt={show.name}
+                          className="w-full h-full"
+                          objectFit="cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-[#333]">
+                          <Tv className="w-12 h-12 text-[#555]" />
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="mt-2 md:mt-3">
-                  <h3 className="text-xs md:text-sm text-white font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
-                    {show.name}
-                  </h3>
-                </div>
-              </Link>
-            ))}
-          </div>
+                    <div className="mt-2 md:mt-3">
+                      <h3 className="text-xs md:text-sm text-white font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
+                        {show.name}
+                      </h3>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </LazyWrapper>
+          </Suspense>
         ) : (
           <div className="text-center py-12 text-[#737373]">
             <Tv className="w-16 h-16 mx-auto mb-4 opacity-50" />

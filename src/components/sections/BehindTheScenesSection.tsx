@@ -1,9 +1,13 @@
-import { memo, useState, useCallback, useMemo } from "react";
+import { memo, useState, useCallback, useMemo, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { MediaImage } from "@/types/movieDetails";
-import Slider from "@/components/shared/Slider/slider";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/";
 const THUMB_SIZE = "w780";
@@ -189,26 +193,32 @@ const BehindTheScenesSection = memo(function BehindTheScenesSection({
 
           {/* Horizontal scroll strip */}
           <div className="">
-            <Slider
-              slidesPerView={4}
-              slidesPerViewMobile={1}
-              spaceBetween={12}
-              hideNavigation={true}
-              className="pb-2"
-              swiperOptions={{
-                loop: false,
-                grabCursor: true,
-              }}
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={4} />}
             >
-              {displayImages.map((image, index) => (
-                <ImageCard
-                  key={image.file_path}
-                  image={image}
-                  index={index}
-                  onClick={openLightbox}
-                />
-              ))}
-            </Slider>
+              <LazyWrapper height={250}>
+                <Slider
+                  slidesPerView={4}
+                  slidesPerViewMobile={1}
+                  spaceBetween={12}
+                  hideNavigation={true}
+                  className="pb-2"
+                  swiperOptions={{
+                    loop: false,
+                    grabCursor: true,
+                  }}
+                >
+                  {displayImages.map((image, index) => (
+                    <ImageCard
+                      key={image.file_path}
+                      image={image}
+                      index={index}
+                      onClick={openLightbox}
+                    />
+                  ))}
+                </Slider>
+              </LazyWrapper>
+            </Suspense>
           </div>
         </div>
       </section>

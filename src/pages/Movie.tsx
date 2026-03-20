@@ -9,10 +9,10 @@ import type { Movie, HeroMedia, PopularMoviesResponse } from "@/types";
 import Pagination from "@/components/Pagination";
 
 // Hooks
-import usePopularMovies from '@/hooks/shared/FetchPopularMovies';
-import useTopRatedMovies from '@/hooks/shared/FetchTopRatedMovies';
-import useUpcomingMovies from '@/hooks/shared/FetchUpcomingMovies';
-import useNowPlayingMovies from '@/hooks/shared/FetchNowPlayingMovies';
+import usePopularMovies from "@/hooks/shared/FetchPopularMovies";
+import useTopRatedMovies from "@/hooks/shared/FetchTopRatedMovies";
+import useUpcomingMovies from "@/hooks/shared/FetchUpcomingMovies";
+import useNowPlayingMovies from "@/hooks/shared/FetchNowPlayingMovies";
 
 const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),
@@ -97,12 +97,14 @@ const Movie = memo(function Movie() {
         </p>
       </div>
 
-      <LazyWrapper height={250}>
-        <MovieFilters
-          activeFilter={activeFilter}
-          onFilterChange={handleFilterChange}
-        />
-      </LazyWrapper>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
+        <LazyWrapper height={250}>
+          <MovieFilters
+            activeFilter={activeFilter}
+            onFilterChange={handleFilterChange}
+          />
+        </LazyWrapper>
+      </Suspense>
 
       {error ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
@@ -117,25 +119,23 @@ const Movie = memo(function Movie() {
           </button>
         </div>
       ) : (
-        <LazyWrapper height={500}>
-          {isLoading ? (
-            <SectionSkeleton variant="grid" cardCount={12} />
-          ) : (
-            <Suspense
-              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
-            >
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
+          <LazyWrapper height={500}>
+            {isLoading ? (
+              <SectionSkeleton variant="grid" cardCount={12} />
+            ) : (
               <div className="slide-up">
                 <MediaGrid items={moviesData} emptyMessage="No Movies found." />
               </div>
-            </Suspense>
-          )}
-          <Pagination
-            currentPage={page}
-            totalPages={AllPages}
-            isLoading={isLoading}
-            onPageChange={setPage}
-          />
-        </LazyWrapper>
+            )}
+            <Pagination
+              currentPage={page}
+              totalPages={AllPages}
+              isLoading={isLoading}
+              onPageChange={setPage}
+            />
+          </LazyWrapper>
+        </Suspense>
       )}
     </div>
   );

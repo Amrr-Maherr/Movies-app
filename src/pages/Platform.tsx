@@ -1,11 +1,15 @@
-import {useParams } from "react-router-dom";
-import { memo, useMemo, useState } from "react";
+import { useParams } from "react-router-dom";
+import { memo, useMemo, useState, lazy, Suspense } from "react";
 import { usePlatformMovies, usePlatformTVShows } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film, Tv, Globe } from "lucide-react";
-import Card from "@/components/shared/Card/Card";
 import Pagination from "@/components/Pagination";
 import type { HeroMedia } from "@/types";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
+
+// Lazy-loaded components
+const Card = lazy(() => import("@/components/shared/Card/Card"));
+const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 
 // Popular platform IDs for display
 const PLATFORM_INFO: Record<
@@ -174,11 +178,17 @@ const Platform = memo(function Platform() {
         {/* Content Grid */}
         {content.length > 0 ? (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
-              {content.map((item: HeroMedia) => (
-                <Card key={item.id} movie={item} variant="compact" />
-              ))}
-            </div>
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+            >
+              <LazyWrapper height={500}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
+                  {content.map((item: HeroMedia) => (
+                    <Card key={item.id} movie={item} variant="compact" />
+                  ))}
+                </div>
+              </LazyWrapper>
+            </Suspense>
 
             {/* Pagination */}
             <Pagination

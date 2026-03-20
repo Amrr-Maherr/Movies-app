@@ -1,9 +1,13 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { Award } from "lucide-react";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import Card from "@/components/shared/Card/Card";
 import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
-import Slider from "../shared/Slider/slider";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("../shared/Slider/slider"));
 
 interface AwardWinnersSectionProps {
   movies: HeroMedia[];
@@ -26,16 +30,20 @@ const AwardWinnersSection = memo(function AwardWinnersSection({
           icon={Award}
           iconColor="text-yellow-500"
         />
-        <Slider
-          slidesPerView={6}
-          hideNavigation={false}
-          slidesPerViewMobile={1.5}
-        >
-          {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4"> */}
-          {items.map((movie) => (
-            <Card key={movie.id} movie={movie} variant="awardWinner" />
-          ))}
-        </Slider>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={350}>
+            <Slider
+              slidesPerView={6}
+              hideNavigation={false}
+              slidesPerViewMobile={1.5}
+            >
+              {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4"> */}
+              {items.map((movie) => (
+                <Card key={movie.id} movie={movie} variant="awardWinner" />
+              ))}
+            </Slider>
+          </LazyWrapper>
+        </Suspense>
         {/* </div> */}
       </div>
     </div>

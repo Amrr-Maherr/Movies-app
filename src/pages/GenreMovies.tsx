@@ -1,11 +1,14 @@
 import { useParams } from "react-router-dom";
-import { memo, useMemo, useState } from "react";
+import { memo, useMemo, useState, lazy, Suspense } from "react";
 import { useMoviesByGenre, useMovieGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film } from "lucide-react";
-import Card from "@/components/shared/Card/Card";
 import Pagination from "@/components/Pagination";
 import type { HeroMedia } from "@/types";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
+
+// Lazy-loaded components
+const Card = lazy(() => import("@/components/shared/Card/Card"));
 
 const GenreMovies = memo(function GenreMovies() {
   const { id } = useParams<{ id: string }>();
@@ -71,11 +74,17 @@ const GenreMovies = memo(function GenreMovies() {
         {/* Movies Grid */}
         {movies.length > 0 ? (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
-              {movies.map((movie: HeroMedia) => (
-                <Card key={movie.id} movie={movie} variant="compact" />
-              ))}
-            </div>
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+            >
+              <LazyWrapper height={500}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
+                  {movies.map((movie: HeroMedia) => (
+                    <Card key={movie.id} movie={movie} variant="compact" />
+                  ))}
+                </div>
+              </LazyWrapper>
+            </Suspense>
 
             {/* Pagination */}
             <Pagination

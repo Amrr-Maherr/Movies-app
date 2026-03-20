@@ -1,10 +1,14 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, Star, ThumbsUp } from "lucide-react";
-import Slider from "@/components/shared/Slider/slider";
+import { SectionSkeleton } from "@/components/ui";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import Card from "@/components/shared/Card/Card";
 import { cn } from "@/lib/utils";
 import type { HeroMedia } from "@/types";
+
+// Lazy-loaded component
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 interface RecommendationsSectionProps {
   recommendations: HeroMedia[];
@@ -132,20 +136,28 @@ const RecommendationsSection = memo(function RecommendationsSection({
         </div>
 
         {/* Horizontal Slider */}
-        <Slider
-          slidesPerView={6}
-          slidesPerViewMobile={3}
-          spaceBetween={16}
-          hideNavigation={false}
-          swiperOptions={{
-            loop: false,
-            grabCursor: true,
-          }}
-        >
-          {filteredRecommendations.map((media, index) => (
-            <RecommendationCard key={media.id} media={media} index={index} />
-          ))}
-        </Slider>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={350}>
+            <Slider
+              slidesPerView={6}
+              slidesPerViewMobile={3}
+              spaceBetween={16}
+              hideNavigation={false}
+              swiperOptions={{
+                loop: false,
+                grabCursor: true,
+              }}
+            >
+              {filteredRecommendations.map((media, index) => (
+                <RecommendationCard
+                  key={media.id}
+                  media={media}
+                  index={index}
+                />
+              ))}
+            </Slider>
+          </LazyWrapper>
+        </Suspense>
 
         {/* Info Text */}
         <div className="mt-6 p-4 bg-white/5 rounded-lg border border-white/10">

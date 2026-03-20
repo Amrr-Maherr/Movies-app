@@ -1,8 +1,11 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, lazy, Suspense } from "react";
 import { useMovieGenres, useTvGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film, Tv } from "lucide-react";
-import GenreCard from "@/components/GenreCard";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
+
+// Lazy-loaded components
+const GenreCard = lazy(() => import("@/components/GenreCard"));
 
 const Genres = memo(function Genres() {
   const {
@@ -70,16 +73,22 @@ const Genres = memo(function Genres() {
           </div>
 
           {movieGenres && movieGenres.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
-              {movieGenres.map((genre) => (
-                <GenreCard
-                  key={`movie-${genre.id}`}
-                  id={genre.id}
-                  name={genre.name}
-                  type="movie"
-                />
-              ))}
-            </div>
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+            >
+              <LazyWrapper height={300}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
+                  {movieGenres.map((genre) => (
+                    <GenreCard
+                      key={`movie-${genre.id}`}
+                      id={genre.id}
+                      name={genre.name}
+                      type="movie"
+                    />
+                  ))}
+                </div>
+              </LazyWrapper>
+            </Suspense>
           ) : (
             <div className="text-center py-16 text-[var(--text-muted)]">
               <Film className="w-14 h-14 mx-auto mb-3 opacity-30" />
@@ -98,16 +107,22 @@ const Genres = memo(function Genres() {
           </div>
 
           {tvGenres && tvGenres.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
-              {tvGenres.map((genre) => (
-                <GenreCard
-                  key={`tv-${genre.id}`}
-                  id={genre.id}
-                  name={genre.name}
-                  type="tv"
-                />
-              ))}
-            </div>
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+            >
+              <LazyWrapper height={300}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
+                  {tvGenres.map((genre) => (
+                    <GenreCard
+                      key={`tv-${genre.id}`}
+                      id={genre.id}
+                      name={genre.name}
+                      type="tv"
+                    />
+                  ))}
+                </div>
+              </LazyWrapper>
+            </Suspense>
           ) : (
             <div className="text-center py-16 text-[var(--text-muted)]">
               <Tv className="w-14 h-14 mx-auto mb-3 opacity-30" />

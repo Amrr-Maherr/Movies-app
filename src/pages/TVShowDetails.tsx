@@ -4,7 +4,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton, PageSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchTvShowDetails from '@/hooks/shared/FetchTvShowDetails';
+import FetchTvShowDetails from "@/hooks/shared/FetchTvShowDetails";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 import { extractKeywords, extractWatchProviders } from "@/utils";
 import type { Video } from "@/types";
@@ -129,60 +129,60 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       />
 
       {/* Hero Section */}
-      <LazyWrapper height={500}>
-        <Suspense fallback={<SectionSkeleton variant="hero" />}>
+      <Suspense fallback={<SectionSkeleton variant="hero" />}>
+        <LazyWrapper height={500}>
           <MediaHero media={data as any} />
-        </Suspense>
-      </LazyWrapper>
+        </LazyWrapper>
+      </Suspense>
 
       {/* Navigation Tabs */}
       <DetailPageNav type="tv" slugWithId={slugWithId || ""} />
 
       {/* Media Info Section */}
-      <LazyWrapper height={300}>
-        <Suspense fallback={<SectionSkeleton variant="grid" />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" />}>
+        <LazyWrapper height={300}>
           <MediaInfoSection media={data as any} />
-        </Suspense>
-      </LazyWrapper>
+        </LazyWrapper>
+      </Suspense>
 
       {/* Episodes/Seasons Section */}
       {seasons.length > 0 && (
-        <LazyWrapper height={500}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={500}>
             <EpisodesSection seasons={seasons} tvShowId={data.id} />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
 
       {/* Trailers Section */}
       {trailers.length > 0 && (
-        <LazyWrapper height={400}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={3} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={3} />}>
+          <LazyWrapper height={400}>
             <TrailersSection videos={trailers} />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
 
       {/* Behind the Scenes Section */}
-      <LazyWrapper height={400}>
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+        <LazyWrapper height={400}>
           <BehindTheScenesSection images={backdrops} />
-        </Suspense>
-      </LazyWrapper>
+        </LazyWrapper>
+      </Suspense>
 
       {/* Reviews Section */}
       {reviews.length > 0 && (
-        <LazyWrapper height={400}>
-          <Suspense fallback={<SectionSkeleton variant="list" cardCount={3} />}>
+        <Suspense fallback={<SectionSkeleton variant="list" cardCount={3} />}>
+          <LazyWrapper height={400}>
             <ReviewsSection reviews={reviews} />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
 
       {/* Keywords Section */}
       {keywords.length > 0 && (
-        <LazyWrapper height={200}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
+          <LazyWrapper height={200}>
             <section className="bg-black py-4 md:py-12">
               <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
                 <h3 className="text-xl md:text-2xl font-bold text-white mb-4">
@@ -191,26 +191,26 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
                 <KeywordsSection keywords={keywords} />
               </div>
             </section>
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
 
       {/* Watch Providers Section */}
       {watchProviders.length > 0 && (
-        <LazyWrapper height={300}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
+          <LazyWrapper height={300}>
             <WatchProvidersSection providers={watchProviders} />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
 
       {/* More Like This Section */}
       {similar.length > 0 && (
-        <LazyWrapper height={500}>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+          <LazyWrapper height={500}>
             <MoreLikeThisSection similar={similar} />
-          </Suspense>
-        </LazyWrapper>
+          </LazyWrapper>
+        </Suspense>
       )}
     </div>
   );
