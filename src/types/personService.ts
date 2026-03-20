@@ -111,6 +111,40 @@ export interface PersonImagesResponse {
   profiles: ImageFile[];
 }
 
+/**
+ * HeroMedia type extension to support media_type for person credits
+ */
+export interface HeroMediaWithMediaType {
+  id: number;
+  title?: string;
+  name?: string;
+  overview: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  vote_average: number;
+  vote_count: number;
+  release_date?: string;
+  first_air_date?: string;
+  genre_ids: number[];
+  adult: boolean;
+  original_language: string;
+  original_name?: string;
+  original_title?: string;
+  popularity: number;
+  media_type?: "movie" | "tv";
+}
+
+export interface PopularPersonResult {
+  id: number;
+  name: string;
+  profile_path: string | null;
+  known_for_department: string;
+  gender: number;
+  popularity: number;
+  adult: boolean;
+  known_for: HeroMediaWithMediaType[];
+}
+
 export interface PopularPeopleResponse {
   page: number;
   results: PersonDetails[];

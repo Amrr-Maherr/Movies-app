@@ -57,7 +57,13 @@ export type {
   CastCredit,
   CrewCredit,
   CombinedCredits,
-} from "./person";
+  PersonMovieCreditsResponse,
+  PersonTVCreditsResponse,
+  PersonImagesResponse,
+  PopularPeopleResponse,
+  HeroMediaWithMediaType,
+  PopularPersonResult,
+} from "./personService";
 
 // TV Service types
 export type {
@@ -141,14 +147,6 @@ export type {
   Network,
   NetworkTVSeriesResponse,
 } from "./networkService";
-
-// Person Service types
-export type {
-  PersonMovieCreditsResponse,
-  PersonTVCreditsResponse,
-  PersonImagesResponse,
-  PopularPeopleResponse,
-} from "./personService";
 
 // Platform Service types
 export type {

@@ -20,6 +20,7 @@ const ScrollToTop = () => {
 const MovieDetails = lazy(() => import("@/pages/MovieDetails"));
 const TVShowDetailsPage = lazy(() => import("@/pages/TVShowDetails"));
 const PersonDetailsPage = lazy(() => import("@/pages/PersonDetails"));
+const TagsPage = lazy(() => import("@/pages/Tags"));
 
 // Movie detail sub-pages
 const MovieReviewsPage = lazy(() => import("@/pages/movie/MovieReviewsPage"));
@@ -126,6 +127,14 @@ const AppRoutes = memo(function AppRoutes() {
             element={
               <PageTransition>
                 <TVShow />
+              </PageTransition>
+            }
+          />
+          <Route
+            path="/tags/:slug"
+            element={
+              <PageTransition>
+                <TagsPage />
               </PageTransition>
             }
           />
