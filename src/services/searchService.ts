@@ -89,10 +89,10 @@ export interface MultiSearchResponse {
 
 /**
  * Search for movies by title or keywords.
- * 
+ *
  * @param query - Search query string
  * @param page - Page number for pagination (default: 1)
- * @param includeAdult - Include adult content in results (default: false)
+ * @param includeAdult - Include adult content in results (default: true)
  * @param year - Filter by release year (optional)
  * @param primaryReleaseYear - Filter by primary release year (optional)
  * @param region - Filter by region (ISO 3166-1 alpha-2) (optional)
@@ -101,7 +101,7 @@ export interface MultiSearchResponse {
 export async function searchMovies(
   query: string,
   page: number = 1,
-  includeAdult: boolean = false,
+  includeAdult: boolean = true,
   year?: number,
   primaryReleaseYear?: number,
   region?: string
@@ -128,10 +128,10 @@ export async function searchMovies(
 
 /**
  * Search for TV shows by title or keywords.
- * 
+ *
  * @param query - Search query string
  * @param page - Page number for pagination (default: 1)
- * @param includeAdult - Include adult content in results (default: false)
+ * @param includeAdult - Include adult content in results (default: true)
  * @param year - Filter by first air date year (optional)
  * @param firstAirDateYear - Filter by first air date year (optional)
  * @returns Array of TV shows matching the search or null on error
@@ -139,7 +139,7 @@ export async function searchMovies(
 export async function searchTvShows(
   query: string,
   page: number = 1,
-  includeAdult: boolean = false,
+  includeAdult: boolean = true,
   year?: number,
   firstAirDateYear?: number
 ): Promise<TvShow[] | null> {
@@ -164,16 +164,16 @@ export async function searchTvShows(
 
 /**
  * Search for people (actors, directors, crew) by name.
- * 
+ *
  * @param query - Search query string
  * @param page - Page number for pagination (default: 1)
- * @param includeAdult - Include adult content in results (default: false)
+ * @param includeAdult - Include adult content in results (default: true)
  * @returns Array of people matching the search or null on error
  */
 export async function searchPeople(
   query: string,
   page: number = 1,
-  includeAdult: boolean = false
+  includeAdult: boolean = true
 ): Promise<PersonSearchResult[] | null> {
   try {
     const response = await axios.get<PersonSearchResponse>(`${tmdbConfig.baseUrl}/search/person`, {
@@ -195,16 +195,16 @@ export async function searchPeople(
 /**
  * Perform a multi-search across movies, TV shows, and people in a single request.
  * This is useful for global search functionality.
- * 
+ *
  * @param query - Search query string
  * @param page - Page number for pagination (default: 1)
- * @param includeAdult - Include adult content in results (default: false)
+ * @param includeAdult - Include adult content in results (default: true)
  * @returns Multi-search response with combined results or null on error
  */
 export async function multiSearch(
   query: string,
   page: number = 1,
-  includeAdult: boolean = false
+  includeAdult: boolean = true
 ): Promise<MultiSearchResult[] | null> {
   try {
     const response = await axios.get<MultiSearchResponse>(`${tmdbConfig.baseUrl}/search/multi`, {

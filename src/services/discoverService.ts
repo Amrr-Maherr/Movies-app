@@ -102,7 +102,7 @@ export async function discoverMovies(params: DiscoverMoviesParams = {}): Promise
         language: "en-US",
         page: params.page ?? 1,
         sort_by: params.sortBy ?? "popularity.desc",
-        include_adult: params.includeAdult ?? false,
+        include_adult: params.includeAdult ?? true,
         include_video: params.includeVideo ?? false,
         ...(params.certification && { certification: params.certification }),
         ...(params.certificationGte && { "certification.gte": params.certificationGte }),
@@ -152,7 +152,7 @@ export async function getKidsMovies(page: number = 1): Promise<Movie[] | null> {
     page,
     withGenres: "10751", // Family genre ID
     sortBy: "popularity.desc",
-    includeAdult: false,
+    includeAdult: true,
   });
 }
 
@@ -170,7 +170,7 @@ export async function getMediaByLanguage(languageCode: string, page: number = 1)
       page,
       withOriginalLanguage: languageCode,
       sortBy: "popularity.desc",
-      includeAdult: false,
+      includeAdult: true,
     });
     return response;
   } catch (error) {
@@ -203,7 +203,7 @@ export async function discoverTvShows(params: DiscoverTvParams = {}): Promise<Tv
         language: "en-US",
         page: params.page ?? 1,
         sort_by: params.sortBy ?? "popularity.desc",
-        include_adult: params.includeAdult ?? false,
+        include_adult: params.includeAdult ?? true,
         include_null_first_air_dates: params.includeNullFirstAirDates ?? false,
         screened_theatrically: params.screenedTheatrically ?? false,
         ...(params.airDateGte && { "air_date.gte": params.airDateGte }),
