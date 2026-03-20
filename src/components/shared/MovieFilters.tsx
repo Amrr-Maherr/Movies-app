@@ -1,8 +1,8 @@
 export type MovieFilterOption =
   | "popular"
   | "topRated"
-  | "nowPlaying"
-  | "upcoming";
+  | "upcoming"
+  | "nowPlaying";
 
 interface MovieFiltersProps {
   activeFilter: MovieFilterOption;
@@ -12,8 +12,8 @@ interface MovieFiltersProps {
 const filters: { id: MovieFilterOption; label: string }[] = [
   { id: "popular", label: "Popular" },
   { id: "topRated", label: "Top Rated" },
-  { id: "nowPlaying", label: "Now Playing" },
   { id: "upcoming", label: "Upcoming" },
+  { id: "nowPlaying", label: "Now Playing" },
 ];
 
 export default function MovieFilters({

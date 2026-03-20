@@ -2,8 +2,11 @@ import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import TVShowFilters, { TVShowFilterOption } from "@/components/shared/TVShowFilters";
-import type { TvShow, HeroMedia } from "@/types";
+import TVShowFilters, {
+  TVShowFilterOption,
+} from "@/components/shared/TVShowFilters";
+import type { TvShow, HeroMedia, PopularTvShowsResponse } from "@/types";
+import Pagination from "@/components/Pagination";
 
 // Hooks
 import usePopularTvShows from "@/queries/FetchPopularTvShows";
@@ -11,16 +14,20 @@ import useTopRatedTvShows from "@/queries/FetchTopRatedTvShows";
 import useAiringTodayTv from "@/queries/FetchAiringTodayTv";
 import useOnTheAirTv from "@/queries/FetchOnTheAirTv";
 
-const HeroSection = lazy(() => import("@/components/shared/heroSection/HeroSection"));
+const HeroSection = lazy(
+  () => import("@/components/shared/heroSection/HeroSection"),
+);
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const TVShow = memo(function TVShow() {
-  const [activeFilter, setActiveFilter] = useState<TVShowFilterOption>("popular");
+  const [page, setPage] = useState(1);
+  const [activeFilter, setActiveFilter] =
+    useState<TVShowFilterOption>("popular");
 
-  const popularQuery = usePopularTvShows(1);
-  const topRatedQuery = useTopRatedTvShows(1);
-  const airingTodayQuery = useAiringTodayTv(1);
-  const onTheAirQuery = useOnTheAirTv(1);
+  const popularQuery = usePopularTvShows(page);
+  const topRatedQuery = useTopRatedTvShows(page);
+  const airingTodayQuery = useAiringTodayTv(page);
+  const onTheAirQuery = useOnTheAirTv(page);
 
   const getCurrentQuery = useCallback(() => {
     switch (activeFilter) {
@@ -34,21 +41,30 @@ const TVShow = memo(function TVShow() {
       default:
         return popularQuery;
     }
-  }, [activeFilter, popularQuery, topRatedQuery, airingTodayQuery, onTheAirQuery]);
+  }, [
+    activeFilter,
+    popularQuery,
+    topRatedQuery,
+    airingTodayQuery,
+    onTheAirQuery,
+  ]);
 
   const currentQuery = getCurrentQuery();
   const { data: tvShows, isLoading, error, refetch } = currentQuery;
+  const AllPages = tvShows?.total_pages;
 
   // Memoized: Pre-computed tvShows array
-  const tvShowsData = useMemo(() => (tvShows || []) as unknown as HeroMedia[], [tvShows]);
+  const tvShowsData = useMemo(
+    () => (tvShows?.results || []) as unknown as HeroMedia[],
+    [tvShows?.results],
+  );
 
   // Memoized: Error state handler
   const handleRetry = useCallback(() => {
     refetch();
   }, [refetch]);
 
-  // FIX #6: Memoized filter change handler to prevent re-creation on every render
-  // This prevents TVShowFilters from re-rendering unnecessarily
+  // Memoized filter change handler
   const handleFilterChange = useCallback((filter: TVShowFilterOption) => {
     setActiveFilter(filter);
   }, []);
@@ -72,14 +88,19 @@ const TVShow = memo(function TVShow() {
       </Suspense>
 
       <div className="px-4 sm:px-8 mb-6 mt-8">
-        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">TV Shows</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+          TV Shows
+        </h1>
         <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
           Browse the most popular, highly-rated, and currently airing TV series.
         </p>
       </div>
 
       <LazyWrapper height={250}>
-        <TVShowFilters activeFilter={activeFilter} onFilterChange={handleFilterChange} />
+        <TVShowFilters
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+        />
       </LazyWrapper>
 
       {error ? (
@@ -99,12 +120,23 @@ const TVShow = memo(function TVShow() {
           {isLoading ? (
             <SectionSkeleton variant="grid" cardCount={12} />
           ) : (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+            >
               <div className="slide-up">
-                <MediaGrid items={tvShowsData} emptyMessage="No TV Shows found for this filter." />
+                <MediaGrid
+                  items={tvShowsData}
+                  emptyMessage="No TV Shows found for this filter."
+                />
               </div>
             </Suspense>
           )}
+          <Pagination
+            currentPage={page}
+            totalPages={AllPages}
+            isLoading={isLoading}
+            onPageChange={setPage}
+          />
         </LazyWrapper>
       )}
     </div>

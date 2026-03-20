@@ -173,11 +173,11 @@ export interface TVWatchProvidersResponse {
 
 /**
  * Fetch popular TV shows from TMDB API.
- * 
+ *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of popular TV shows or null on error
+ * @returns PopularTvShowsResponse or null on error
  */
-export async function getPopularTvShows(page: number = 1): Promise<TvShow[] | null> {
+export async function getPopularTvShows(page: number = 1): Promise<PopularTvShowsResponse | null> {
   try {
     const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/tv/popular`, {
       params: {
@@ -187,7 +187,7 @@ export async function getPopularTvShows(page: number = 1): Promise<TvShow[] | nu
         include_adult: true,
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching popular TV shows:", error);
     return null;
@@ -196,11 +196,11 @@ export async function getPopularTvShows(page: number = 1): Promise<TvShow[] | nu
 
 /**
  * Fetch top-rated TV shows from TMDB API.
- * 
+ *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of top-rated TV shows or null on error
+ * @returns PopularTvShowsResponse or null on error
  */
-export async function getTopRatedTvShows(page: number = 1): Promise<TvShow[] | null> {
+export async function getTopRatedTvShows(page: number = 1): Promise<PopularTvShowsResponse | null> {
   try {
     const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/tv/top_rated`, {
       params: {
@@ -210,7 +210,7 @@ export async function getTopRatedTvShows(page: number = 1): Promise<TvShow[] | n
         include_adult: true,
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching top-rated TV shows:", error);
     return null;
@@ -219,11 +219,11 @@ export async function getTopRatedTvShows(page: number = 1): Promise<TvShow[] | n
 
 /**
  * Fetch TV shows airing today from TMDB API.
- * 
+ *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of TV shows airing today or null on error
+ * @returns PopularTvShowsResponse or null on error
  */
-export async function getAiringTodayTvShows(page: number = 1): Promise<TvShow[] | null> {
+export async function getAiringTodayTvShows(page: number = 1): Promise<PopularTvShowsResponse | null> {
   try {
     const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/tv/airing_today`, {
       params: {
@@ -233,7 +233,7 @@ export async function getAiringTodayTvShows(page: number = 1): Promise<TvShow[] 
         include_adult: true,
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching airing today TV shows:", error);
     return null;
@@ -242,11 +242,11 @@ export async function getAiringTodayTvShows(page: number = 1): Promise<TvShow[] 
 
 /**
  * Fetch TV shows currently broadcasting new episodes from TMDB API.
- * 
+ *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of TV shows on the air or null on error
+ * @returns PopularTvShowsResponse or null on error
  */
-export async function getOnTheAirTvShows(page: number = 1): Promise<TvShow[] | null> {
+export async function getOnTheAirTvShows(page: number = 1): Promise<PopularTvShowsResponse | null> {
   try {
     const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/tv/on_the_air`, {
       params: {
@@ -256,7 +256,7 @@ export async function getOnTheAirTvShows(page: number = 1): Promise<TvShow[] | n
         include_adult: true,
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching on the air TV shows:", error);
     return null;

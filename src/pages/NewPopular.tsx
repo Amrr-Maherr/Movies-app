@@ -2,7 +2,9 @@ import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import NewPopularFilters, { NewPopularFilterOption } from "@/components/shared/NewPopularFilters";
+import NewPopularFilters, {
+  NewPopularFilterOption,
+} from "@/components/shared/NewPopularFilters";
 import type { HeroMedia } from "@/types";
 
 // Hooks
@@ -11,16 +13,19 @@ import useTrendingTvWeek from "@/queries/FetchTrendingTvWeek";
 import useNowPlayingMovies from "@/queries/FetchNowPlayingMovies";
 import usePopularMovies from "@/queries/FetchPopularMovies";
 
-const HeroSection = lazy(() => import("@/components/shared/heroSection/HeroSection"));
+const HeroSection = lazy(
+  () => import("@/components/shared/heroSection/HeroSection"),
+);
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const NewPopular = memo(function NewPopular() {
-  const [activeFilter, setActiveFilter] = useState<NewPopularFilterOption>("trendingMovies");
+  const [activeFilter, setActiveFilter] =
+    useState<NewPopularFilterOption>("trendingMovies");
 
   const trendingMoviesQuery = useTrendingMoviesWeek(1);
   const trendingTvQuery = useTrendingTvWeek(1);
   const nowPlayingQuery = useNowPlayingMovies(1);
-  const popularMoviesQuery = usePopularMovies();
+  const popularMoviesQuery = usePopularMovies(1);
 
   const getCurrentQuery = useCallback(() => {
     switch (activeFilter) {
@@ -34,13 +39,22 @@ const NewPopular = memo(function NewPopular() {
       default:
         return trendingMoviesQuery;
     }
-  }, [activeFilter, trendingMoviesQuery, trendingTvQuery, nowPlayingQuery, popularMoviesQuery]);
+  }, [
+    activeFilter,
+    trendingMoviesQuery,
+    trendingTvQuery,
+    nowPlayingQuery,
+    popularMoviesQuery,
+  ]);
 
   const currentQuery = getCurrentQuery();
   const { data: mediaItems, isLoading, error, refetch } = currentQuery;
 
   // Memoized: Pre-computed mediaItems array
-  const mediaData = useMemo(() => (mediaItems || []) as unknown as HeroMedia[], [mediaItems]);
+  const mediaData = useMemo(
+    () => (mediaItems || []) as unknown as HeroMedia[],
+    [mediaItems],
+  );
 
   // Memoized: Error state handler
   const handleRetry = useCallback(() => {
@@ -108,7 +122,9 @@ const NewPopular = memo(function NewPopular() {
           {isLoading ? (
             <SectionSkeleton variant="grid" cardCount={12} />
           ) : (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
+            <Suspense
+              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+            >
               <div className="slide-up">
                 <MediaGrid
                   items={mediaData}

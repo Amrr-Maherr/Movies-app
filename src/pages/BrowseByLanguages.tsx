@@ -3,26 +3,28 @@ import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import InfiniteScroll from "react-infinite-scroll-component";
+import Pagination from "@/components/Pagination";
 import type { HeroMedia } from "@/types";
 import useMediaByLanguage from "@/queries/FetchMediaByLanguage";
-import LanguagesFilter, { SUPPORTED_LANGUAGES } from "@/components/BrowseByLanguages/LanguagesFilter";
+import LanguagesFilter, {
+  SUPPORTED_LANGUAGES,
+} from "@/components/BrowseByLanguages/LanguagesFilter";
 
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const BrowseByLanguages = memo(function BrowseByLanguages() {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(SUPPORTED_LANGUAGES[0].code);
-  const {
-    data,
-    isLoading,
-    error,
-    refetch,
-    fetchNextPage,
-    hasNextPage
-  } = useMediaByLanguage(selectedLanguage);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(
+    SUPPORTED_LANGUAGES[0].code,
+  );
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const { data, isLoading, error, refetch, isFetching } = useMediaByLanguage(
+    selectedLanguage,
+    currentPage,
+  );
 
   const handleLanguageSelect = useCallback((code: string) => {
     setSelectedLanguage(code);
+    setCurrentPage(1); // Reset to first page when language changes
   }, []);
 
   // Memoized: Error state handler
@@ -30,10 +32,13 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
     refetch();
   }, [refetch]);
 
-  const allItems = useMemo(() =>
-    data?.pages.flatMap((page) => page.results) || [],
-    [data]
-  );
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const totalPages = data?.total_pages ?? 1;
+  const allItems = useMemo(() => data?.results || [], [data]);
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-24 container">
@@ -76,46 +81,40 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
           </button>
         </div>
       ) : (
-        <LazyWrapper height={600}>
-          <AnimatePresence mode="wait">
-            {isLoading ? (
-              <SectionSkeleton variant="grid" cardCount={12} />
-            ) : (
-              <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-                <motion.div
-                  key={`grid-lang-${selectedLanguage}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
+        <>
+          <LazyWrapper height={600}>
+            <AnimatePresence mode="wait">
+              {isLoading ? (
+                <SectionSkeleton variant="grid" cardCount={12} />
+              ) : (
+                <Suspense
+                  fallback={<SectionSkeleton variant="grid" cardCount={12} />}
                 >
-                  <InfiniteScroll
-                    dataLength={allItems.length}
-                    next={fetchNextPage}
-                    hasMore={!!hasNextPage}
-                    loader={
-                      <div className="h-24 flex items-center justify-center w-full">
-                        <SectionSkeleton variant="grid" cardCount={6} />
-                      </div>
-                    }
-                    endMessage={
-                      <div className="py-10 text-center text-[var(--text-secondary)]">
-                        <p>You&apos;ve reached the end of the list.</p>
-                      </div>
-                    }
-                    style={{ overflow: "hidden" }}
-                    scrollThreshold={0.9}
+                  <motion.div
+                    key={`grid-lang-${selectedLanguage}-${currentPage}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <MediaGrid
                       items={allItems as unknown as HeroMedia[]}
                       emptyMessage="No content available for this language."
                     />
-                  </InfiniteScroll>
-                </motion.div>
-              </Suspense>
-            )}
-          </AnimatePresence>
-        </LazyWrapper>
+                  </motion.div>
+                </Suspense>
+              )}
+            </AnimatePresence>
+          </LazyWrapper>
+
+          {/* Pagination Component */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            isLoading={isFetching}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
     </div>
   );

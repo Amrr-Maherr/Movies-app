@@ -44,7 +44,7 @@ const LandscapeLayout = memo(
               src={imageUrl}
               alt={title}
               className={`w-full h-full transition-all duration-300 ${
-                isAdult ? "blur-md scale-105" : ""
+                isAdult ? "blur-md" : ""
               }`}
               objectFit="cover"
             />

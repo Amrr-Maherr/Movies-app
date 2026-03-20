@@ -149,13 +149,13 @@ export interface MovieWatchProvidersResponse {
 
 /**
  * Fetch popular movies from TMDB API.
- * 
+ *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of popular movies or null on error
+ * @returns PopularMoviesResponse or null on error
  */
-export async function getPopularMovies(page: number = 1): Promise<Movie[] | null> {
+export async function getPopularMovies(page: number = 1): Promise<PopularMoviesResponse | null> {
   try {
-    const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/movie/popular`, {
+    const response = await axios.get<PopularMoviesResponse>(`https://api.themoviedb.org/3/discover/movie`, {
       params: {
         api_key: tmdbConfig.apiKey,
         language: "en-US",
@@ -163,7 +163,7 @@ export async function getPopularMovies(page: number = 1): Promise<Movie[] | null
         include_adult: true,
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching popular movies:", error);
     return null;
@@ -172,11 +172,11 @@ export async function getPopularMovies(page: number = 1): Promise<Movie[] | null
 
 /**
  * Fetch top-rated movies from TMDB API.
- * 
+ *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of top-rated movies or null on error
+ * @returns PopularMoviesResponse or null on error
  */
-export async function getTopRatedMovies(page: number = 1): Promise<Movie[] | null> {
+export async function getTopRatedMovies(page: number = 1): Promise<PopularMoviesResponse | null> {
   try {
     const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/movie/top_rated`, {
       params: {
@@ -186,7 +186,7 @@ export async function getTopRatedMovies(page: number = 1): Promise<Movie[] | nul
         include_adult: true,
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching top-rated movies:", error);
     return null;
@@ -195,11 +195,11 @@ export async function getTopRatedMovies(page: number = 1): Promise<Movie[] | nul
 
 /**
  * Fetch upcoming movies from TMDB API.
- * 
+ *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of upcoming movies or null on error
+ * @returns PopularMoviesResponse or null on error
  */
-export async function getUpcomingMovies(page: number = 1): Promise<Movie[] | null> {
+export async function getUpcomingMovies(page: number = 1): Promise<PopularMoviesResponse | null> {
   try {
     const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/movie/upcoming`, {
       params: {
@@ -209,7 +209,7 @@ export async function getUpcomingMovies(page: number = 1): Promise<Movie[] | nul
         include_adult: true,
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching upcoming movies:", error);
     return null;
@@ -218,11 +218,11 @@ export async function getUpcomingMovies(page: number = 1): Promise<Movie[] | nul
 
 /**
  * Fetch movies currently in theaters from TMDB API.
- * 
+ *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of now playing movies or null on error
+ * @returns PopularMoviesResponse or null on error
  */
-export async function getNowPlayingMovies(page: number = 1): Promise<Movie[] | null> {
+export async function getNowPlayingMovies(page: number = 1): Promise<PopularMoviesResponse | null> {
   try {
     const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/movie/now_playing`, {
       params: {
@@ -232,7 +232,7 @@ export async function getNowPlayingMovies(page: number = 1): Promise<Movie[] | n
         include_adult: true,
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching now playing movies:", error);
     return null;

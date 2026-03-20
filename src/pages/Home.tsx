@@ -58,14 +58,14 @@ const Home = memo(function Home() {
     data: upcomingMovies,
     isLoading: upcomingLoading,
     refetch: upcomingRefetch,
-  } = useUpcomingMovies();
+  } = useUpcomingMovies(1);
   const {
     data: popularTv,
     isLoading: popularTvLoading,
     refetch: popularTvRefetch,
-  } = usePopularTvShows();
+  } = usePopularTvShows(1);
   const { data: topRatedMovies, isLoading: topRatedLoading } =
-    useTopRatedMovies();
+    useTopRatedMovies(1);
   const {
     data: platforms,
     isLoading: platformsLoading,
@@ -157,9 +157,9 @@ const Home = memo(function Home() {
       {/* New Releases Section */}
       <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
         <LazyWrapper height={350}>
-          {upcomingMovies ? (
+          {upcomingMovies?.results ? (
             <NewReleasesSection
-              movies={upcomingMovies}
+              movies={upcomingMovies.results}
               title="New Releases This Week"
             />
           ) : upcomingLoading ? (
@@ -186,9 +186,9 @@ const Home = memo(function Home() {
       {/* Featured Movie */}
       <Suspense fallback={<SectionSkeleton variant="hero" />}>
         <LazyWrapper height={500}>
-          {upcomingMovies && upcomingMovies[0] ? (
+          {upcomingMovies?.results && upcomingMovies.results[0] ? (
             <MoviePromo
-              movie={upcomingMovies[0]}
+              movie={upcomingMovies.results[0]}
               mediaType="movie"
               variant="left"
             />
@@ -199,8 +199,8 @@ const Home = memo(function Home() {
       {/* Only on Netflix Section */}
       <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={400}>
-          {popularTv ? (
-            <OnlyOnNetflixSection movies={popularTv} mediaType="tv" />
+          {popularTv?.results ? (
+            <OnlyOnNetflixSection movies={popularTv.results} mediaType="tv" />
           ) : popularTvLoading ? (
             <SectionSkeleton variant="grid" cardCount={6} />
           ) : null}
@@ -225,8 +225,11 @@ const Home = memo(function Home() {
       {/* Award Winners Section */}
       <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={350}>
-          {topRatedMovies ? (
-            <AwardWinnersSection movies={topRatedMovies} mediaType="movie" />
+          {topRatedMovies?.results ? (
+            <AwardWinnersSection
+              movies={topRatedMovies.results}
+              mediaType="movie"
+            />
           ) : topRatedLoading ? (
             <SectionSkeleton variant="grid" cardCount={6} />
           ) : null}

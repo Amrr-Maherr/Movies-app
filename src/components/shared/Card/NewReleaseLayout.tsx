@@ -36,7 +36,7 @@ const NewReleaseLayout = memo(
             src={posterUrl}
             alt={title}
             className={`w-full h-full transition-all duration-300 ${
-              isAdult ? "blur-md scale-105" : ""
+              isAdult ? "blur-md" : ""
             }`}
             objectFit="cover"
           />

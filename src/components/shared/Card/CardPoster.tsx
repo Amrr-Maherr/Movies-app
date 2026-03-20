@@ -42,15 +42,13 @@ const CardPoster = memo(
             src={posterUrl}
             alt={title}
             className={`w-full h-full transition-all duration-300 ${
-              isAdult ? "blur-md scale-105" : ""
+              isAdult ? "blur-md" : ""
             }`}
             objectFit="cover"
           />
 
           {/* Dark overlay for adult content */}
-          {isAdult && (
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-          )}
+          {isAdult && <div className="absolute inset-0" />}
         </div>
 
         {/* Netflix Logo Overlay - Top Left Corner */}

@@ -1,11 +1,11 @@
 import { getTopRatedTvShows } from "@/services";
-import type { TvShow } from "@/types";
+import type { PopularTvShowsResponse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useTopRatedTvShows(page: number = 1) {
-  const { data, error, refetch, isLoading } = useQuery<TvShow[]>({
+  const { data, error, refetch, isLoading } = useQuery<PopularTvShowsResponse>({
     queryKey: ["topRatedTvShows", page],
-    queryFn: () => getTopRatedTvShows(page) as Promise<TvShow[]>,
+    queryFn: () => getTopRatedTvShows(page) as Promise<PopularTvShowsResponse>,
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,
   });

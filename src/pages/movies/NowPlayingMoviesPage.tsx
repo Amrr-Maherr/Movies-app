@@ -35,8 +35,8 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
 
   // Memoized: Get featured movies for hero (top 5)
   const featuredMovies = useMemo(() => {
-    if (!movies || movies.length === 0) return [];
-    return movies
+    if (!movies?.results || movies.results.length === 0) return [];
+    return movies.results
       .filter((m: Movie) => m.backdrop_path)
       .sort((a: Movie, b: Movie) => b.popularity - a.popularity)
       .slice(0, 5);
@@ -44,8 +44,8 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
 
   // Memoized: Get trending movies for slider
   const trendingMovies = useMemo(() => {
-    if (!movies || movies.length === 0) return [];
-    return movies
+    if (!movies?.results || movies.results.length === 0) return [];
+    return movies.results
       .filter((m: Movie) => m.vote_average >= 7)
       .sort((a: Movie, b: Movie) => b.vote_average - a.vote_average)
       .slice(0, 10);
@@ -53,10 +53,10 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
 
   // Memoized: Get new releases
   const newReleases = useMemo(() => {
-    if (!movies || movies.length === 0) return [];
+    if (!movies?.results || movies.results.length === 0) return [];
     const now = new Date();
     const oneMonthAgo = new Date(now.setMonth(now.getMonth() - 1));
-    return movies
+    return movies.results
       .filter((m: Movie) => {
         if (!m.release_date) return false;
         return new Date(m.release_date) >= oneMonthAgo;
@@ -120,7 +120,7 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
                 Now Playing in Theaters
               </h1>
               <p className="text-white/60 text-sm">
-                {movies.length} movies currently showing • Updated daily
+                {movies.results.length} movies currently showing • Updated daily
               </p>
             </div>
           </div>
@@ -206,7 +206,7 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
           <SectionHeader
             title="All Movies in Theaters"
-            subtitle={`Showing ${movies.length} movies`}
+            subtitle={`Showing ${movies.results.length} movies`}
             icon={Star}
             iconColor="text-yellow-500"
           />
@@ -214,7 +214,7 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
             <Suspense
               fallback={<SectionSkeleton variant="grid" cardCount={12} />}
             >
-              <MediaGrid items={movies} type="movie" />
+              <MediaGrid items={movies.results} type="movie" />
             </Suspense>
           </LazyWrapper>
         </div>
@@ -238,7 +238,7 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setCurrentPage((p) => p + 1)}
-              disabled={movies.length < 20}
+              disabled={movies.results.length < 20}
               className="px-6 py-2 bg-white/10 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 transition-colors"
             >
               Next
