@@ -1,7 +1,7 @@
 import { memo, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import Slider from "@/components/shared/Slider/slider";
+import { useNavigate } from "react-router-dom";
 
 export interface KeywordsSectionProps {
   keywords: string[];
@@ -11,17 +11,19 @@ export interface KeywordsSectionProps {
 
 /**
  * Netflix-style Keywords/Tags section
- * Displays keywords as clickable badges/pills in a horizontal slider
+ * Displays keywords as clickable badges/pills in a grid layout
  */
 export const KeywordsSection = memo(function KeywordsSection({
   keywords,
   onKeywordClick,
   className,
 }: KeywordsSectionProps) {
+  const navigate = useNavigate();
   // Memoized: Keyword click handler
   const handleKeywordClick = useCallback(
     (keyword: string) => {
       onKeywordClick?.(keyword);
+      navigate(`/tags/${encodeURIComponent(keyword)}`);
     },
     [onKeywordClick],
   );
@@ -55,7 +57,7 @@ export const KeywordsSection = memo(function KeywordsSection({
           "focus:outline-none focus:ring-2 focus:ring-netflix-red/60",
           "cursor-pointer select-none",
           "whitespace-nowrap",
-          "w-fit"
+          "w-fit",
         )}
         type="button"
         aria-label={`Filter by keyword: ${keyword}`}
@@ -71,17 +73,7 @@ export const KeywordsSection = memo(function KeywordsSection({
 
   return (
     <div className={cn("w-full", className)}>
-      <Slider
-        slidesPerView={6}
-        slidesPerViewMobile={2}
-        spaceBetween={12}
-        hideNavigation={true}
-        swiperOptions={{
-          autoplay: false,
-        }}
-      >
-        {renderedKeywords}
-      </Slider>
+      <div className="flex flex-wrap gap-3">{renderedKeywords}</div>
     </div>
   );
 });
