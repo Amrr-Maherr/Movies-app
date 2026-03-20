@@ -16,9 +16,9 @@ import type { Movie, PopularMoviesResponse, TvShow, PopularTvShowsResponse } fro
  * These movies that are currently trending based on user activity.
  *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of trending movies or null on error
+ * @returns PopularMoviesResponse or null on error
  */
-export async function getTrendingMoviesDay(page: number = 1): Promise<Movie[] | null> {
+export async function getTrendingMoviesDay(page: number = 1): Promise<PopularMoviesResponse | null> {
   try {
     const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/trending/movie/day`, {
       params: {
@@ -28,7 +28,7 @@ export async function getTrendingMoviesDay(page: number = 1): Promise<Movie[] | 
         append_to_response: "videos",
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching trending movies (day):", error);
     return null;
@@ -40,9 +40,9 @@ export async function getTrendingMoviesDay(page: number = 1): Promise<Movie[] | 
  * These movies that have been trending over the past week.
  *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of trending movies or null on error
+ * @returns PopularMoviesResponse or null on error
  */
-export async function getTrendingMoviesWeek(page: number = 1): Promise<Movie[] | null> {
+export async function getTrendingMoviesWeek(page: number = 1): Promise<PopularMoviesResponse | null> {
   try {
     const response = await axios.get<PopularMoviesResponse>(`${tmdbConfig.baseUrl}/trending/movie/week`, {
       params: {
@@ -52,7 +52,7 @@ export async function getTrendingMoviesWeek(page: number = 1): Promise<Movie[] |
         append_to_response: "videos",
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching trending movies (week):", error);
     return null;
@@ -66,9 +66,9 @@ export async function getTrendingMoviesWeek(page: number = 1): Promise<Movie[] |
  * These are TV shows that are currently trending based on user activity.
  *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of trending TV shows or null on error
+ * @returns PopularTvShowsResponse or null on error
  */
-export async function getTrendingTvShowsDay(page: number = 1): Promise<TvShow[] | null> {
+export async function getTrendingTvShowsDay(page: number = 1): Promise<PopularTvShowsResponse | null> {
   try {
     const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/trending/tv/day`, {
       params: {
@@ -78,7 +78,7 @@ export async function getTrendingTvShowsDay(page: number = 1): Promise<TvShow[] 
         append_to_response: "videos",
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching trending TV shows (day):", error);
     return null;
@@ -90,9 +90,9 @@ export async function getTrendingTvShowsDay(page: number = 1): Promise<TvShow[] 
  * These are TV shows that have been trending over the past week.
  *
  * @param page - Page number for pagination (default: 1)
- * @returns Array of trending TV shows or null on error
+ * @returns PopularTvShowsResponse or null on error
  */
-export async function getTrendingTvShowsWeek(page: number = 1): Promise<TvShow[] | null> {
+export async function getTrendingTvShowsWeek(page: number = 1): Promise<PopularTvShowsResponse | null> {
   try {
     const response = await axios.get<PopularTvShowsResponse>(`${tmdbConfig.baseUrl}/trending/tv/week`, {
       params: {
@@ -102,7 +102,7 @@ export async function getTrendingTvShowsWeek(page: number = 1): Promise<TvShow[]
         append_to_response: "videos",
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching trending TV shows (week):", error);
     return null;

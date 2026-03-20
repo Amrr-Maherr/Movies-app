@@ -76,8 +76,8 @@ const Home = memo(function Home() {
   // FIX: Only take a few items for hero section to prevent swiper from overworking
   const heroData = useMemo(
     () => [
-      ...(trendingMoviesWeek?.slice(0, 5) || []),
-      ...(trendingTvWeek?.slice(0, 5) || []),
+      ...(trendingMoviesWeek?.results?.slice(0, 5) || []),
+      ...(trendingTvWeek?.results?.slice(0, 5) || []),
     ],
     [trendingMoviesWeek, trendingTvWeek],
   );
@@ -128,9 +128,9 @@ const Home = memo(function Home() {
       {/* Top 10 Movies Section */}
       <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
         <LazyWrapper height={300}>
-          {trendingMoviesWeek ? (
+          {trendingMoviesWeek?.results ? (
             <TopPicksSection
-              movies={trendingMoviesWeek}
+              movies={trendingMoviesWeek.results}
               title="Top 6 Movies in Egypt Today"
             />
           ) : trendingWeekLoading ? (
@@ -145,7 +145,7 @@ const Home = memo(function Home() {
           <div className="">
             <MediaSection
               title="Trending Now"
-              data={trendingMoviesWeek}
+              data={trendingMoviesWeek?.results}
               isLoading={trendingWeekLoading}
               error={trendingWeekError}
               onRetry={trendingWeekRefetch}
@@ -174,7 +174,7 @@ const Home = memo(function Home() {
           <div className="">
             <MediaSection
               title="Trending TV Shows"
-              data={trendingTvWeek}
+              data={trendingTvWeek?.results}
               isLoading={trendingTvWeekLoading}
               error={trendingTvWeekError}
               onRetry={trendingTvWeekRefetch}

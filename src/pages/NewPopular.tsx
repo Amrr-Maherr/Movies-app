@@ -5,7 +5,12 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 import NewPopularFilters, {
   NewPopularFilterOption,
 } from "@/components/shared/NewPopularFilters";
-import type { HeroMedia } from "@/types";
+import type {
+  HeroMedia,
+  PopularMoviesResponse,
+  PopularTvShowsResponse,
+} from "@/types";
+import Pagination from "@/components/Pagination";
 
 // Hooks
 import useTrendingMoviesWeek from "@/queries/FetchTrendingMoviesWeek";
@@ -19,13 +24,14 @@ const HeroSection = lazy(
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const NewPopular = memo(function NewPopular() {
+  const [page, setPage] = useState(1);
   const [activeFilter, setActiveFilter] =
     useState<NewPopularFilterOption>("trendingMovies");
 
-  const trendingMoviesQuery = useTrendingMoviesWeek(1);
-  const trendingTvQuery = useTrendingTvWeek(1);
-  const nowPlayingQuery = useNowPlayingMovies(1);
-  const popularMoviesQuery = usePopularMovies(1);
+  const trendingMoviesQuery = useTrendingMoviesWeek(page);
+  const trendingTvQuery = useTrendingTvWeek(page);
+  const nowPlayingQuery = useNowPlayingMovies(page);
+  const popularMoviesQuery = usePopularMovies(page);
 
   const getCurrentQuery = useCallback(() => {
     switch (activeFilter) {
@@ -49,11 +55,16 @@ const NewPopular = memo(function NewPopular() {
 
   const currentQuery = getCurrentQuery();
   const { data: mediaItems, isLoading, error, refetch } = currentQuery;
+  const AllPages = (
+    mediaItems as PopularMoviesResponse | PopularTvShowsResponse
+  )?.total_pages;
 
   // Memoized: Pre-computed mediaItems array
   const mediaData = useMemo(
-    () => (mediaItems || []) as unknown as HeroMedia[],
-    [mediaItems],
+    () =>
+      ((mediaItems as PopularMoviesResponse | PopularTvShowsResponse)
+        ?.results || []) as unknown as HeroMedia[],
+    [(mediaItems as PopularMoviesResponse | PopularTvShowsResponse)?.results],
   );
 
   // Memoized: Error state handler
@@ -133,6 +144,12 @@ const NewPopular = memo(function NewPopular() {
               </div>
             </Suspense>
           )}
+          <Pagination
+            currentPage={page}
+            totalPages={AllPages}
+            isLoading={isLoading}
+            onPageChange={setPage}
+          />
         </LazyWrapper>
       )}
     </div>

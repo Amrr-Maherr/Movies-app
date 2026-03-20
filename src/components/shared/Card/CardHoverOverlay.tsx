@@ -73,11 +73,11 @@ const CardHoverOverlay = memo(
                 )}
               </button>
             )}
-            {showDropdown && (
+            {/* {showDropdown && (
               <button className="bg-[var(--background-secondary)]/90 backdrop-blur-sm text-white p-2 rounded-md hover:bg-[var(--background-tertiary)] transition-colors border border-white/20">
                 <ChevronDown className="h-3 w-3" />
               </button>
-            )}
+            )} */}
           </div>
           <div className="flex items-center gap-2 text-[10px]">
             <span className="text-[var(--success)] font-bold">

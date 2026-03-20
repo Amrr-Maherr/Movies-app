@@ -1,11 +1,12 @@
 import { getTrendingMoviesWeek } from "@/services";
-import type { Movie } from "@/types";
+import type { PopularMoviesResponse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 export default function useTrendingMoviesWeek(page: number = 1) {
-  const { data, error, refetch, isLoading } = useQuery<Movie[]>({
+  const { data, error, refetch, isLoading } = useQuery<PopularMoviesResponse>({
     queryKey: ["trendingMoviesWeek", page],
-    queryFn: () => getTrendingMoviesWeek(page) as Promise<Movie[]>,
+    queryFn: () =>
+      getTrendingMoviesWeek(page) as Promise<PopularMoviesResponse>,
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,
   });

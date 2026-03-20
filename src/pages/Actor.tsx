@@ -71,7 +71,7 @@ const ActorsPage = memo(function ActorsPage() {
       ) : isLoading && allItems.length === 0 ? (
         <SectionSkeleton variant="grid" cardCount={6} />
       ) : (
-        <div className="px-4 sm:px-8 pb-16">
+        <div className="">
           <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
             <MediaGrid items={allItems} type="person" />
           </Suspense>
