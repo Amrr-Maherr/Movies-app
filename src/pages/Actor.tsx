@@ -3,59 +3,32 @@ import { Link } from "react-router-dom";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import InfiniteScroll from "react-infinite-scroll-component";
+import Pagination from "@/components/Pagination";
 import usePopularPeople from "@/queries/FetchPopularPeople";
 import { TrendingUp } from "lucide-react";
 
-const PeopleFiltersLazy = lazy(
-  () => import("@/components/Actors/PeopleFilters"),
-);
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const ActorsPage = memo(function ActorsPage() {
-  const [selectedGender, setSelectedGender] = useState<string>("all");
-  const [selectedLetter, setSelectedLetter] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const {
-    data,
-    isLoading,
-    isFetching,
-    error,
-    refetch,
-    fetchNextPage,
-    hasNextPage,
-  } = usePopularPeople();
-
-  const handleGenderSelect = useCallback((gender: string) => {
-    setSelectedGender(gender);
-  }, []);
-
-  const handleLetterSelect = useCallback((letter: string) => {
-    setSelectedLetter(letter);
-  }, []);
+  const { data, isLoading, isFetching, error, refetch } =
+    usePopularPeople(currentPage);
 
   const handleRetry = useCallback(() => {
     refetch();
   }, [refetch]);
 
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   const allItems = useMemo(() => {
-    const pages = data?.pages ?? [];
-    let items = pages.flatMap((page) => page.results ?? []);
+    return data?.results ?? [];
+  }, [data]);
 
-    if (selectedGender !== "all") {
-      items = items.filter(
-        (person) => person.gender.toString() === selectedGender,
-      );
-    }
-
-    if (selectedLetter !== "all") {
-      items = items.filter((person) =>
-        person.name.toUpperCase().startsWith(selectedLetter),
-      );
-    }
-
-    return items;
-  }, [data, selectedGender, selectedLetter]);
+  const totalPages = data?.total_pages ?? 1;
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-24">
@@ -82,17 +55,6 @@ const ActorsPage = memo(function ActorsPage() {
         </p>
       </div>
 
-      <LazyWrapper height={100}>
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
-          <PeopleFiltersLazy
-            selectedGender={selectedGender}
-            onGenderSelect={handleGenderSelect}
-            selectedLetter={selectedLetter}
-            onLetterSelect={handleLetterSelect}
-          />
-        </Suspense>
-      </LazyWrapper>
-
       {error ? (
         <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
           <p className="text-xl text-[var(--error)] font-semibold mb-6">
@@ -110,22 +72,17 @@ const ActorsPage = memo(function ActorsPage() {
         <SectionSkeleton variant="grid" cardCount={6} />
       ) : (
         <div className="px-4 sm:px-8 pb-16">
-          <InfiniteScroll
-            dataLength={allItems.length}
-            next={fetchNextPage}
-            hasMore={!!hasNextPage}
-            loader={null}
-            className=""
-          >
-            <Suspense
-              fallback={<SectionSkeleton variant="grid" cardCount={6} />}
-            >
-              <MediaGrid items={allItems} type="person" />
-            </Suspense>
-            {isFetching && hasNextPage && (
-              <SectionSkeleton variant="grid" cardCount={6} />
-            )}
-          </InfiniteScroll>
+          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
+            <MediaGrid items={allItems} type="person" />
+          </Suspense>
+
+          {/* Pagination Component */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            isLoading={isFetching}
+            onPageChange={handlePageChange}
+          />
         </div>
       )}
     </div>

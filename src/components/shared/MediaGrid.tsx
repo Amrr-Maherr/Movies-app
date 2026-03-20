@@ -52,7 +52,7 @@ const StandardGrid = memo(({ items, type }: { items: any[]; type: "movie" | "tv"
   }, [items, type]);
 
   return (
-    <div className="px-4 sm:px-8 pb-10">
+    <div className="">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
         {renderedItems}
       </div>
