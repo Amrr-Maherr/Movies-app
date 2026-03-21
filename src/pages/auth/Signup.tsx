@@ -43,8 +43,15 @@ export default function Signup() {
       {
         onSuccess: (response) => {
           // Store token in localStorage
-          localStorage.setItem("token", response.token);
-          localStorage.setItem("user", JSON.stringify(response.user));
+          localStorage.setItem("token", response.accessToken);
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              email: response.email,
+              firstName: response.firstName,
+              image: response.image,
+            }),
+          );
           // Redirect to home page after short delay
           setTimeout(() => {
             navigate("/");
