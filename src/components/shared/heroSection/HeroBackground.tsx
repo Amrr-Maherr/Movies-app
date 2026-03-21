@@ -1,7 +1,7 @@
 import { getBackdropUrl } from "@/utils/tmdb";
 import { getTitle } from "@/utils";
 import type { HeroBackgroundProps, HeroMedia } from "@/types";
-import { useMemo, useRef, useEffect, useState } from "react";
+import { useMemo, useRef, useEffect, useState, memo } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 
 // ============================================
@@ -35,7 +35,16 @@ function getTrailerUrl(movie: HeroMedia): string | null {
 // ============================================
 // COMPONENT
 // ============================================
-export default function HeroBackground({ movie }: HeroBackgroundProps) {
+/**
+ * Memoized HeroBackground Component
+ *
+ * Displays background image/video for hero sections.
+ * Memoized to prevent unnecessary re-renders when parent components update.
+ * Uses useMemo for computed values (image URL, trailer URL, title).
+ */
+const HeroBackground = memo(function HeroBackground({
+  movie,
+}: HeroBackgroundProps) {
   const imageUrl = useMemo(
     () => getBackdropUrl(movie.backdrop_path),
     [movie.backdrop_path],
@@ -117,4 +126,6 @@ export default function HeroBackground({ movie }: HeroBackgroundProps) {
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-transparent" />
     </>
   );
-}
+});
+
+export default HeroBackground;

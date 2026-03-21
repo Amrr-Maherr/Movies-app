@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/shared/Pagination";
 import type { HeroMedia } from "@/types";
 import useMediaByLanguage from "@/hooks/shared/FetchMediaByLanguage";
 import LanguagesFilter, {

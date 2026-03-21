@@ -1,3 +1,5 @@
+import { memo, useCallback } from "react";
+
 export type TVShowFilterOption =
   | "popular"
   | "topRated"
@@ -16,10 +18,24 @@ const filters: { id: TVShowFilterOption; label: string }[] = [
   { id: "onTheAir", label: "On The Air" },
 ];
 
-export default function TVShowFilters({
+/**
+ * Memoized TVShowFilters Component
+ *
+ * Displays filter buttons for TV show listing pages.
+ * Memoized to prevent unnecessary re-renders when parent components update.
+ */
+const TVShowFilters = memo(function TVShowFilters({
   activeFilter,
   onFilterChange,
 }: TVShowFiltersProps) {
+  // Memoize click handler to prevent recreation on every render
+  const handleFilterClick = useCallback(
+    (filter: TVShowFilterOption) => {
+      onFilterChange(filter);
+    },
+    [onFilterChange],
+  );
+
   return (
     <div className="flex items-center gap-2 overflow-x-auto pb-4 pt-2 no-scrollbar px-4 sm:px-8">
       {filters.map((filter) => {
@@ -27,7 +43,7 @@ export default function TVShowFilters({
         return (
           <button
             key={filter.id}
-            onClick={() => onFilterChange(filter.id)}
+            onClick={() => handleFilterClick(filter.id)}
             className={`relative px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all duration-300 ${
               isActive
                 ? "text-black"
@@ -46,4 +62,6 @@ export default function TVShowFilters({
       })}
     </div>
   );
-}
+});
+
+export default TVShowFilters;

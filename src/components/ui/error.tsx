@@ -1,69 +1,72 @@
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { memo } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export interface ErrorProps {
   /**
    * Optional custom class name for additional styling
    */
-  className?: string
+  className?: string;
   /**
    * Error title to display
    * @default "Something went wrong"
    */
-  title?: string
+  title?: string;
   /**
    * Detailed error message to display
    * @default "We're sorry, but we couldn't load this content. Please try again."
    */
-  message?: string
+  message?: string;
   /**
    * Optional error code or technical details
    */
-  errorCode?: string
+  errorCode?: string;
   /**
    * Callback function to retry the failed operation
    */
-  onRetry?: () => void
+  onRetry?: () => void;
   /**
    * Custom text for the retry button
    * @default "Retry"
    */
-  retryButtonText?: string
+  retryButtonText?: string;
   /**
    * If true, error takes full screen; if false, fits within container
    * @default false
    */
-  fullscreen?: boolean
+  fullscreen?: boolean;
 }
 
 /**
  * Netflix-style Error Component
- * 
+ *
  * Displays an error message with a retry button when something fails to load.
  * Uses Netflix color scheme and provides accessible error feedback.
- * 
+ *
+ * Memoized to prevent unnecessary re-renders when parent components update.
+ *
  * @example
  * // Basic usage with retry callback
  * <Error onRetry={() => refetch()} />
- * 
+ *
  * @example
  * // Fullscreen error with custom message
- * <Error 
+ * <Error
  *   fullscreen
  *   title="Failed to load"
  *   message="The content you're looking for is unavailable."
  *   errorCode="Error 404"
  *   onRetry={() => window.location.reload()}
  * />
- * 
+ *
  * @example
  * // Container error with custom button text
- * <Error 
+ * <Error
  *   retryButtonText="Try Again"
  *   onRetry={handleRetry}
  * />
  */
-export function Error({
+export const Error = memo(function Error({
   className,
   title = "Something went wrong",
   message = "We're sorry, but we couldn't load this content. Please try again.",
@@ -79,7 +82,7 @@ export function Error({
         fullscreen
           ? "fixed inset-0 z-50 bg-background"
           : "w-full h-full min-h-[200px] p-6",
-        className
+        className,
       )}
       role="alert"
       aria-live="assertive"
@@ -90,7 +93,7 @@ export function Error({
           "flex items-center justify-center rounded-full",
           "bg-destructive/10 dark:bg-destructive/20",
           "mb-6",
-          "w-20 h-20"
+          "w-20 h-20",
         )}
       >
         <svg
@@ -110,32 +113,17 @@ export function Error({
       </div>
 
       {/* Error Title */}
-      <h2
-        className={cn(
-          "text-2xl font-semibold text-foreground",
-          "mb-2"
-        )}
-      >
+      <h2 className={cn("text-2xl font-semibold text-foreground", "mb-2")}>
         {title}
       </h2>
 
       {/* Error Message */}
-      <p
-        className={cn(
-          "text-muted-foreground max-w-md",
-          "mb-2"
-        )}
-      >
-        {message}
-      </p>
+      <p className={cn("text-muted-foreground max-w-md", "mb-2")}>{message}</p>
 
       {/* Error Code (if provided) */}
       {errorCode && (
         <p
-          className={cn(
-            "text-sm text-muted-foreground font-mono",
-            "mt-2 mb-4"
-          )}
+          className={cn("text-sm text-muted-foreground font-mono", "mt-2 mb-4")}
         >
           {errorCode}
         </p>
@@ -150,7 +138,7 @@ export function Error({
           className={cn(
             "mt-4 min-w-[120px]",
             "bg-netflix-red hover:bg-netflix-red-hover",
-            "transition-colors duration-200"
+            "transition-colors duration-200",
           )}
           aria-label={`Retry loading content: ${title}`}
         >
@@ -172,5 +160,5 @@ export function Error({
         </Button>
       )}
     </div>
-  )
-}
+  );
+});

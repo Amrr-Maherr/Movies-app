@@ -1,4 +1,12 @@
-export default function MediaGridSkeleton() {
+import { memo } from "react";
+
+/**
+ * Memoized MediaGridSkeleton Component
+ *
+ * Displays a grid of skeleton placeholders for media content loading states.
+ * Memoized to prevent unnecessary re-renders.
+ */
+const MediaGridSkeleton = memo(function MediaGridSkeleton() {
   const skeletonCount = 12; // Typical starting amount
 
   return (
@@ -15,4 +23,6 @@ export default function MediaGridSkeleton() {
       </div>
     </div>
   );
-}
+});
+
+export default MediaGridSkeleton;

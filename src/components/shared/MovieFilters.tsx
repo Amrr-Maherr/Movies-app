@@ -1,3 +1,5 @@
+import { memo, useCallback } from "react";
+
 export type MovieFilterOption =
   | "popular"
   | "topRated"
@@ -16,10 +18,24 @@ const filters: { id: MovieFilterOption; label: string }[] = [
   { id: "nowPlaying", label: "Now Playing" },
 ];
 
-export default function MovieFilters({
+/**
+ * Memoized MovieFilters Component
+ *
+ * Displays filter buttons for movie listing pages.
+ * Memoized to prevent unnecessary re-renders when parent components update.
+ */
+const MovieFilters = memo(function MovieFilters({
   activeFilter,
   onFilterChange,
 }: MovieFiltersProps) {
+  // Memoize click handler to prevent recreation on every render
+  const handleFilterClick = useCallback(
+    (filter: MovieFilterOption) => {
+      onFilterChange(filter);
+    },
+    [onFilterChange],
+  );
+
   return (
     <div className="flex items-center gap-2 overflow-x-auto pb-4 pt-2 no-scrollbar px-4 sm:px-8">
       {filters.map((filter) => {
@@ -27,7 +43,7 @@ export default function MovieFilters({
         return (
           <button
             key={filter.id}
-            onClick={() => onFilterChange(filter.id)}
+            onClick={() => handleFilterClick(filter.id)}
             className={`relative px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all duration-300 ${
               isActive
                 ? "text-black"
@@ -46,4 +62,6 @@ export default function MovieFilters({
       })}
     </div>
   );
-}
+});
+
+export default MovieFilters;

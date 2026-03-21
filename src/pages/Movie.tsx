@@ -6,7 +6,7 @@ import MovieFilters, {
   MovieFilterOption,
 } from "@/components/shared/MovieFilters";
 import type { Movie, HeroMedia, PopularMoviesResponse } from "@/types";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/shared/Pagination";
 
 // Hooks
 import usePopularMovies from "@/hooks/shared/FetchPopularMovies";

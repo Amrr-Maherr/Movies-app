@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/shared/Pagination";
 import usePopularPeople from "@/hooks/shared/FetchPopularPeople";
 import { TrendingUp } from "lucide-react";
 

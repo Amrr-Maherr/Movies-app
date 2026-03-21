@@ -1,14 +1,16 @@
-import { memo, useMemo, useCallback, Suspense } from "react";
+import { memo, useMemo, useCallback, Suspense, lazy } from "react";
 import { useParams } from "react-router-dom";
 import { Image as ImageIcon } from "lucide-react";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchPersonDetails from '@/hooks/shared/FetchPersonDetails';
+import FetchPersonDetails from "@/hooks/shared/FetchPersonDetails";
 import { usePersonImages } from "@/hooks/shared";
 import DetailPageNav from "@/components/shared/DetailPageNav";
-import ImagesGallery from "@/components/sections/ImagesGallery";
+
+// Lazy-loaded component - heavy component with modal and grid rendering
+const ImagesGallery = lazy(() => import("@/components/sections/ImagesGallery"));
 
 /**
  * PersonImagesPage Component

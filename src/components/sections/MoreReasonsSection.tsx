@@ -1,4 +1,5 @@
 import { LucideIcon, Tv, Download, Laptop, Users } from "lucide-react";
+import { memo } from "react";
 
 interface FeatureBoxProps {
   icon: LucideIcon;
@@ -6,10 +7,23 @@ interface FeatureBoxProps {
   description: string;
 }
 
-function FeatureBox({ icon: Icon, title, description }: FeatureBoxProps) {
+/**
+ * Memoized FeatureBox Component
+ *
+ * Displays a single feature with icon, title, and description.
+ * Memoized to prevent unnecessary re-renders.
+ */
+const FeatureBox = memo(function FeatureBox({
+  icon: Icon,
+  title,
+  description,
+}: FeatureBoxProps) {
   return (
     <div className="flex flex-col items-center text-center p-6 md:p-8">
-      <Icon className="w-12 h-12 md:w-16 md:h-16 text-white mb-4 md:mb-6" strokeWidth={1.5} />
+      <Icon
+        className="w-12 h-12 md:w-16 md:h-16 text-white mb-4 md:mb-6"
+        strokeWidth={1.5}
+      />
       <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">
         {title}
       </h3>
@@ -18,7 +32,7 @@ function FeatureBox({ icon: Icon, title, description }: FeatureBoxProps) {
       </p>
     </div>
   );
-}
+});
 
 const features = [
   {
@@ -47,7 +61,13 @@ const features = [
   },
 ];
 
-export default function MoreReasonsSection() {
+/**
+ * Memoized MoreReasonsSection Component
+ *
+ * Displays the "More Reasons to Join" section with feature boxes.
+ * Memoized to prevent unnecessary re-renders.
+ */
+const MoreReasonsSection = memo(function MoreReasonsSection() {
   return (
     <section className="py-12 md:py-20 bg-black border-t border-[#222]">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
@@ -68,4 +88,6 @@ export default function MoreReasonsSection() {
       </div>
     </section>
   );
-}
+});
+
+export default MoreReasonsSection;

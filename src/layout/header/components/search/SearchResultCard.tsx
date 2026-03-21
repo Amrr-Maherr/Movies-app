@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { getPosterUrl, IMAGE_SIZES } from "@/utils/tmdb";
 import type { MultiSearchResult } from "@/services/searchService";
+import { memo, useCallback } from "react";
 
 interface SearchResultCardProps {
   item: Movie | TvShow | MultiSearchResult;
@@ -10,7 +11,13 @@ interface SearchResultCardProps {
   onClick: () => void;
 }
 
-export default function SearchResultCard({
+/**
+ * Memoized SearchResultCard Component
+ *
+ * Displays a search result item with poster, title, and metadata.
+ * Memoized to prevent unnecessary re-renders in search results list.
+ */
+const SearchResultCard = memo(function SearchResultCard({
   item,
   type,
   onClick,
@@ -18,6 +25,7 @@ export default function SearchResultCard({
   const isMovie = type === "movie";
   const isPerson = type === "person";
 
+  // Memoize computed values
   const title = isMovie
     ? (item as Movie).title
     : isPerson
@@ -38,6 +46,17 @@ export default function SearchResultCard({
 
   const voteAverage = isPerson ? 0 : (item as Movie | TvShow).vote_average;
 
+  // Memoize keyboard handler
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onClick();
+      }
+    },
+    [onClick],
+  );
+
   return (
     <div
       onClick={onClick}
@@ -48,12 +67,7 @@ export default function SearchResultCard({
       )}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onClick();
-        }
-      }}
+      onKeyDown={handleKeyDown}
     >
       {/* Poster/Profile Thumbnail */}
       <div className="relative w-12 h-16 flex-shrink-0 overflow-hidden rounded">
@@ -98,4 +112,6 @@ export default function SearchResultCard({
       </div>
     </div>
   );
-}
+});
+
+export default SearchResultCard;

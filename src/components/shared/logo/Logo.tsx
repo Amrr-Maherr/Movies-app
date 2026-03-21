@@ -1,8 +1,17 @@
-import OptimizedImage from '@/components/ui/OptimizedImage';
-import logo from '@/assets/logos/vite.svg'
-import type { LogoProps } from '@/types/logo';
+import OptimizedImage from "@/components/ui/OptimizedImage";
+import logo from "@/assets/logos/vite.svg";
+import type { LogoProps } from "@/types/logo";
+import { memo } from "react";
 
-export default function Logo({ className = "w-[50px] h-[50px]" }: LogoProps) {
+/**
+ * Memoized Logo Component
+ *
+ * Displays the Netflix logo using OptimizedImage.
+ * Memoized to prevent unnecessary re-renders when parent components update.
+ */
+const Logo = memo(function Logo({
+  className = "w-[50px] h-[50px]",
+}: LogoProps) {
   return (
     <div className={className}>
       <OptimizedImage
@@ -13,4 +22,6 @@ export default function Logo({ className = "w-[50px] h-[50px]" }: LogoProps) {
       />
     </div>
   );
-}
+});
+
+export default Logo;

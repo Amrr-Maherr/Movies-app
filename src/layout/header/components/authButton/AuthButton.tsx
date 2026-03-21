@@ -1,5 +1,5 @@
 // src/layout/header/components/authButton/AuthButton.tsx
-import React from "react";
+import React, { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -8,7 +8,13 @@ interface AuthButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
   onClick?: () => void;
 }
 
-export default function AuthButton({
+/**
+ * Memoized AuthButton Component
+ *
+ * Renders a styled button for authentication actions.
+ * Memoized to prevent unnecessary re-renders.
+ */
+const AuthButton = memo(function AuthButton({
   label,
   onClick,
   className,
@@ -26,4 +32,6 @@ export default function AuthButton({
       {label}
     </Button>
   );
-}
+});
+
+export default AuthButton;

@@ -10,7 +10,7 @@ import type {
   PopularMoviesResponse,
   PopularTvShowsResponse,
 } from "@/types";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/shared/Pagination";
 
 // Hooks
 import useTrendingMoviesWeek from "@/hooks/shared/FetchTrendingMoviesWeek";

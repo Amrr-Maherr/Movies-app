@@ -6,7 +6,7 @@ import TVShowFilters, {
   TVShowFilterOption,
 } from "@/components/shared/TVShowFilters";
 import type { TvShow, HeroMedia, PopularTvShowsResponse } from "@/types";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/shared/Pagination";
 
 // Hooks
 import usePopularTvShows from "@/hooks/shared/FetchPopularTvShows";

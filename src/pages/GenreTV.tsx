@@ -3,7 +3,7 @@ import { memo, useMemo, useState, lazy, Suspense } from "react";
 import { useTvShowsByGenre, useTvGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Tv } from "lucide-react";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/shared/Pagination";
 import type { HeroMedia } from "@/types";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 
