@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLogin } from "@/hooks/shared";
 
 export default function Step1CreateAccount({ onNext }) {
   const navigate = useNavigate();
@@ -12,12 +13,33 @@ export default function Step1CreateAccount({ onNext }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const { mutate: loginUser, isPending, error: apiError } = useLogin();
+
   const handleSubmit = () => {
     if (!email || !password) {
       setError("Please fill in all fields");
       return;
     }
-    onNext({ email, password });
+
+    loginUser(
+      {
+        email,
+        password,
+      },
+      {
+        onSuccess: (response) => {
+          console.log(response);
+          localStorage.setItem("token", response?.accessToken);
+          localStorage.setItem("name", JSON.stringify(response.firstName));
+          localStorage.setItem("image", JSON.stringify(response.image));
+          localStorage.setItem("email", JSON.stringify(response.email));
+          onNext({ email, password });
+        },
+        onError: (err) => {
+          setError((err as Error).message || "Login failed");
+        },
+      },
+    );
   };
 
   return (
@@ -28,6 +50,21 @@ export default function Step1CreateAccount({ onNext }) {
         <p className="text-neutral-400 text-sm">
           Create your account to get started
         </p>
+      </div>
+
+      {/* Test Credentials */}
+      <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-4 mb-6">
+        <p className="text-sm font-medium text-white mb-2">Test Credentials:</p>
+        <div className="text-sm text-neutral-400 space-y-1">
+          <p>
+            <span className="text-neutral-500">Username:</span>{" "}
+            <span className="text-white font-mono">emilys</span>
+          </p>
+          <p>
+            <span className="text-neutral-500">Password:</span>{" "}
+            <span className="text-white font-mono">emilyspass</span>
+          </p>
+        </div>
       </div>
 
       {/* Form */}
@@ -72,11 +109,21 @@ export default function Step1CreateAccount({ onNext }) {
 
         <Button
           onClick={handleSubmit}
+          disabled={isPending}
           className="w-full h-12 bg-[#E50914] hover:bg-[#f40612] text-white font-medium disabled:opacity-50"
           size="lg"
         >
-          Next
-          <ArrowRight className="ml-2 h-5 w-5" />
+          {isPending ? (
+            <span className="flex items-center gap-2">
+              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Signing in...
+            </span>
+          ) : (
+            <>
+              Next
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </>
+          )}
         </Button>
 
         <p className="text-xs text-center text-neutral-500 leading-relaxed pt-4">

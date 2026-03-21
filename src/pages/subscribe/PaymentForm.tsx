@@ -124,6 +124,21 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
         </div>
       </div>
 
+      {/* Test Credentials */}
+      <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-4 mb-6">
+        <p className="text-sm font-medium text-white mb-2">Test Credentials:</p>
+        <div className="text-sm text-neutral-400 space-y-1">
+          <p>
+            <span className="text-neutral-500">Username:</span>{" "}
+            <span className="text-white font-mono">emilys</span>
+          </p>
+          <p>
+            <span className="text-neutral-500">Password:</span>{" "}
+            <span className="text-white font-mono">emilyspass</span>
+          </p>
+        </div>
+      </div>
+
       {/* Payment Form Card */}
       <div className="bg-black border border-neutral-800 rounded-lg p-6 mb-6">
         <Elements stripe={stripePromise}>

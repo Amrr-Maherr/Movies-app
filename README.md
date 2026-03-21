@@ -39,6 +39,22 @@ Built with **React 19**, **TypeScript**, and **Tailwind CSS v4**, this project s
 - **🎭 Genres** - Explore content by genre categories
 - **👥 Actors & People** - Browse trending and popular personalities
 
+#### Subscription & Payment
+- **💳 Multi-Step Subscription Flow** - 4-step checkout process
+  - Step 1: Create account with email and password
+  - Step 2: Choose subscription plan (Basic, Standard, Premium)
+  - Step 3: Confirm subscription details
+  - Step 4: Success screen with next steps
+- **💰 Payment Gateway Integration** - Stripe-powered payment processing
+  - Secure card input with Stripe Elements
+  - Real-time card validation
+  - Support for Visa, Mastercard, AMEX, Discover
+  - Test credentials displayed for easy testing
+- **🔐 Authentication** - Login/Signup with dummyjson API
+  - Test credentials: `emilys` / `emilyspass`
+  - Token-based authentication
+  - Persistent login with localStorage
+
 #### Content Details
 - **📄 Detailed Pages** - Comprehensive movie/TV show information
 - **🎭 Cast & Crew** - Full credits with actor profiles
@@ -159,6 +175,13 @@ netflix/
 │   │   ├── PersonDetails.tsx        # Person profile
 │   │   ├── MyList.tsx               # User watchlist
 │   │   ├── auth/                    # Auth pages
+│   │   │   └── Login.tsx            # Login page with test credentials
+│   │   ├── subscribe/               # Subscription flow (4 steps)
+│   │   │   ├── Step1CreateAccount.tsx    # Account creation + login
+│   │   │   ├── Step2ChoosePlan.tsx       # Plan selection
+│   │   │   ├── Step3ConfirmSubscription.tsx  # Confirmation
+│   │   │   ├── Step4SuccessScreen.tsx      # Success page
+│   │   │   └── PaymentForm.tsx             # Stripe payment integration
 │   │   ├── movie/                   # Movie sub-pages (7)
 │   │   ├── tv/                      # TV sub-pages (7)
 │   │   └── person/                  # Person sub-pages (3)
@@ -169,6 +192,7 @@ netflix/
 │   │   ├── personService.ts         # Person API
 │   │   ├── searchService.ts         # Search functionality
 │   │   ├── discoverService.ts       # Advanced filtering
+│   │   ├── authService.ts           # Authentication (login/signup)
 │   │   └── ... (8 more services)
 │   │
 │   ├── queries/                     # React Query hooks (48 files)

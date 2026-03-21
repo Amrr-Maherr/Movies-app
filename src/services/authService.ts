@@ -32,12 +32,12 @@ export type { SignupData, LoginData, AuthResponse, ApiError };
  */
 export async function signup(data: SignupData): Promise<AuthResponse> {
   try {
-    const response = await axios.post<AuthResponse>(`${ecommerceConfig.baseUrl}/signup`, {
-      name: data.name,
+    const response = await axios.post<AuthResponse>(`https://dummyjson.com/auth/signup`, {
+      username: data.email,
       email: data.email,
       password: data.password,
-      rePassword: data.rePassword,
-      phone: data.phone,
+      firstName: data.name,
+      gender: 'male',
     });
     return response.data;
   } catch (error) {
@@ -69,9 +69,10 @@ export async function signup(data: SignupData): Promise<AuthResponse> {
  */
 export async function login(data: LoginData): Promise<AuthResponse> {
   try {
-    const response = await axios.post<AuthResponse>(`${ecommerceConfig.baseUrl}/signin`, {
-      email: data.email,
+    const response = await axios.post<AuthResponse>(`https://dummyjson.com/auth/login`, {
+      username: data.email,
       password: data.password,
+      expiresInMins: 30,
     });
     return response.data;
   } catch (error) {

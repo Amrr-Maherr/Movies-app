@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Play, Home, ArrowLeft } from "lucide-react";
+import { CheckCircle2, Play, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 

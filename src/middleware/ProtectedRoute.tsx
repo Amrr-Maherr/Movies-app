@@ -6,8 +6,8 @@ export default function ProtectedRoute() {
   console.log(payment, "payment");
   console.log(token, "token");
 
-  if (!token && payment !== "success") {
-    return <Navigate to="/login" replace />;
+  if (payment !== "success") {
+    return <Navigate to="/subscribe" replace />;
   }
 
   return <Outlet />;

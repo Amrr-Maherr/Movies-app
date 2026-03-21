@@ -28,13 +28,19 @@ export default function Login() {
       {
         onSuccess: (response) => {
           // Store token based on remember me option
+          console.log(response);
+
           if (rememberMe) {
-            localStorage.setItem("token", response.token);
-            localStorage.setItem("user", JSON.stringify(response.user));
+            localStorage.setItem("token", response?.accessToken);
+            localStorage.setItem("name", JSON.stringify(response.firstName));
+            localStorage.setItem("image", JSON.stringify(response.image));
+            localStorage.setItem("email", JSON.stringify(response.email));
           } else {
             // Session storage for temporary login
-            sessionStorage.setItem("token", response.token);
-            sessionStorage.setItem("user", JSON.stringify(response.user));
+            localStorage.setItem("token", response?.accessToken);
+            localStorage.setItem("name", JSON.stringify(response.firstName));
+            localStorage.setItem("image", JSON.stringify(response.image));
+            localStorage.setItem("email", JSON.stringify(response.email));
           }
           // Redirect to home page
           navigate("/");
@@ -47,6 +53,23 @@ export default function Login() {
     <AuthLayout>
       <div className="w-full max-w-[450px] bg-black/75 rounded-lg px-8 py-16 md:px-16 md:py-12">
         <h1 className="text-3xl font-bold text-white mb-8">Sign In</h1>
+
+        {/* Test Credentials */}
+        <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-4 mb-6">
+          <p className="text-sm font-medium text-white mb-2">
+            Test Credentials:
+          </p>
+          <div className="text-sm text-neutral-400 space-y-1">
+            <p>
+              <span className="text-neutral-500">Username:</span>{" "}
+              <span className="text-white font-mono">emilys</span>
+            </p>
+            <p>
+              <span className="text-neutral-500">Password:</span>{" "}
+              <span className="text-white font-mono">emilyspass</span>
+            </p>
+          </div>
+        </div>
 
         {error && (
           <div className="mb-4 p-3 rounded bg-[#e87c7c] text-white text-sm">

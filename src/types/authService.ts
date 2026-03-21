@@ -9,7 +9,7 @@ export interface SignupData {
   email: string;
   password: string;
   rePassword: string;
-  phone: string;
+  phone?: string;
 }
 
 export interface LoginData {
@@ -18,14 +18,10 @@ export interface LoginData {
 }
 
 export interface AuthResponse {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    role: string;
-  };
-  token: string;
+  accessToken: string
+  email: string
+  image: string
+  firstName: string;
 }
 
 export interface ApiError {
