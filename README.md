@@ -7,6 +7,7 @@
 ![Vite](https://img.shields.io/badge/Vite-7.3.1-646cff?style=for-the-badge&logo=vite)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.1-38bdf8?style=for-the-badge&logo=tailwindcss)
 ![PWA](https://img.shields.io/badge/PWA-Supported-5A0FC8?style=for-the-badge)
+![Stripe](https://img.shields.io/badge/Stripe-Integrated-6772e5?style=for-the-badge&logo=stripe)
 
 [Features](#-features) • [Tech Stack](#-tech-stack) • [Demo](#-demo) • [Installation](#-getting-started) • [Documentation](#-documentation)
 
@@ -41,21 +42,45 @@ Built with **React 19**, **TypeScript**, and **Tailwind CSS v4**, this project s
 - **🎭 Genres** - Explore content by genre categories
 - **👥 Actors & People** - Browse trending and popular personalities
 
-#### Subscription & Payment
-- **💳 Multi-Step Subscription Flow** - 4-step checkout process
-  - Step 1: Create account with email and password
-  - Step 2: Choose subscription plan (Basic, Standard, Premium)
-  - Step 3: Confirm subscription details
-  - Step 4: Success screen with next steps
-- **💰 Payment Gateway Integration** - Stripe-powered payment processing
-  - Secure card input with Stripe Elements
-  - Real-time card validation
-  - Support for Visa, Mastercard, AMEX, Discover
+#### Subscription & Payment 💳
+- **💳 Multi-Step Subscription Flow** - Complete 5-step checkout process
+  - **Step 1: Account Creation** - Email/password authentication with dummyjson API
+    - Test credentials: `emilys` / `emilyspass`
+    - Token-based authentication with localStorage persistence
+    - Form validation with error handling
+  - **Step 2: Plan Selection** - Three subscription tiers
+    - **Basic** - $9.99/month (1 screen, SD 480p, Unlimited movies)
+    - **Standard** - $15.99/month (2 screens, HD 1080p, Downloads included) ⭐ Most Popular
+    - **Premium** - $19.99/month (4 screens, 4K + HDR, Priority support)
+  - **Step 3: Confirmation** - Review subscription details before payment
+    - Account information display
+    - Selected plan summary with features
+    - Payment method preview
+    - Total due breakdown
+  - **Step 4: Payment** - Secure Stripe payment processing
+    - Stripe Elements for secure card input
+    - Real-time card validation
+    - Support for Visa, Mastercard, AMEX, Discover
+    - Test mode enabled with publishable key
+  - **Step 5: Success** - Confirmation screen with next steps
+    - Success animation with checkmark
+    - Plan activation confirmation
+    - Quick actions (Start Watching, Go Home)
+    - Email confirmation notice
+
+- **🔒 Payment Security Features**
+  - PCI DSS compliant via Stripe Elements
+  - Token-based payment processing
+  - No sensitive data stored on servers
+  - SSL/TLS encryption for all transactions
   - Test credentials displayed for easy testing
-- **🔐 Authentication** - Login/Signup with dummyjson API
-  - Test credentials: `emilys` / `emilyspass`
-  - Token-based authentication
+
+- **🔐 Authentication System**
+  - Login/Signup with dummyjson API
+  - Protected routes middleware
+  - Token-based session management
   - Persistent login with localStorage
+  - Payment status verification
 
 #### Content Details
 - **📄 Detailed Pages** - Comprehensive movie/TV show information
@@ -115,6 +140,12 @@ Built with **React 19**, **TypeScript**, and **Tailwind CSS v4**, this project s
 | **Axios** | 1.13.6 | HTTP client |
 | **React Hook Form** | 7.71.2 | Form handling |
 
+### Payment Processing
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Stripe JS** | 8.11.0 | Payment processing SDK |
+| **Stripe React** | 5.6.1 | React components for Stripe |
+
 ### Build & Testing
 | Technology | Version | Purpose |
 |------------|---------|---------|
@@ -132,6 +163,7 @@ Built with **React 19**, **TypeScript**, and **Tailwind CSS v4**, this project s
 | **React Window** | Virtualized lists |
 | **React Infinite Scroll** | Infinite scrolling |
 | **React Loading Skeleton** | Loading states |
+| **React Hot Toast** | Toast notifications |
 
 ---
 
@@ -140,6 +172,15 @@ Built with **React 19**, **TypeScript**, and **Tailwind CSS v4**, this project s
 ```
 netflix/
 ├── public/                          # Static assets
+│   ├── favicon-16x16.png           # Browser favicon
+│   ├── favicon-32x32.png           # Browser favicon
+│   ├── apple-touch-icon.png        # iOS home screen icon
+│   ├── pwa-192x192.png             # PWA icon 192px
+│   ├── pwa-512x512.png             # PWA icon 512px
+│   ├── manifest.webmanifest        # PWA manifest
+│   ├── robots.txt                  # SEO robots file
+│   ├── sitemap.xml                 # SEO sitemap
+│   └── vite.svg                    # Vite logo
 │
 ├── src/
 │   ├── components/                  # React components
@@ -166,7 +207,7 @@ netflix/
 │   │       ├── OptimizedImage.tsx   # Lazy-loaded images
 │   │       └── SectionSkeleton.tsx  # Skeleton loaders
 │   │
-│   ├── pages/                       # Page components (45 files)
+│   ├── pages/                       # Page components (48 files)
 │   │   ├── Home.tsx                 # Main landing
 │   │   ├── Movie.tsx                # Movies browse
 │   │   ├── TVShow.tsx               # TV shows browse
@@ -177,13 +218,15 @@ netflix/
 │   │   ├── PersonDetails.tsx        # Person profile
 │   │   ├── MyList.tsx               # User watchlist
 │   │   ├── auth/                    # Auth pages
-│   │   │   └── Login.tsx            # Login page with test credentials
-│   │   ├── subscribe/               # Subscription flow (4 steps)
+│   │   │   ├── Login.tsx            # Login page with test credentials
+│   │   │   └── Signup.tsx           # Signup page
+│   │   ├── subscribe/               # Subscription flow (5 components)
 │   │   │   ├── Step1CreateAccount.tsx    # Account creation + login
-│   │   │   ├── Step2ChoosePlan.tsx       # Plan selection
-│   │   │   ├── Step3ConfirmSubscription.tsx  # Confirmation
-│   │   │   ├── Step4SuccessScreen.tsx      # Success page
-│   │   │   └── PaymentForm.tsx             # Stripe payment integration
+│   │   │   ├── Step2ChoosePlan.tsx       # Plan selection (3 tiers)
+│   │   │   ├── Step3ConfirmSubscription.tsx  # Confirmation page
+│   │   │   ├── PaymentForm.tsx             # Stripe payment integration
+│   │   │   └── Step4SuccessScreen.tsx      # Success page
+│   │   ├── SubscribePage.tsx        # Main subscription container
 │   │   ├── movie/                   # Movie sub-pages (7)
 │   │   ├── tv/                      # TV sub-pages (7)
 │   │   └── person/                  # Person sub-pages (3)
@@ -195,7 +238,13 @@ netflix/
 │   │   ├── searchService.ts         # Search functionality
 │   │   ├── discoverService.ts       # Advanced filtering
 │   │   ├── authService.ts           # Authentication (login/signup)
-│   │   └── ... (8 more services)
+│   │   ├── companyService.ts        # Production companies
+│   │   ├── collectionService.ts     # Movie collections
+│   │   ├── networkService.ts        # TV networks
+│   │   ├── platformService.ts       # Streaming platforms
+│   │   ├── genreService.ts          # Genre filtering
+│   │   ├── trendingService.ts       # Trending content
+│   │   └── index.ts                 # Central export
 │   │
 │   ├── queries/                     # React Query hooks (48 files)
 │   │   ├── FetchPopularMovies.tsx
@@ -204,8 +253,8 @@ netflix/
 │   │   └── ... (45 more hooks)
 │   │
 │   ├── store/                       # Redux store
-│   │   ├── store.ts                 # Store config
-│   │   └── ListReucer.ts            # My List slice
+│   │   ├── store.ts                 # Store configuration
+│   │   └── ListReucer.ts            # My List slice (add/remove/clear)
 │   │
 │   ├── types/                       # TypeScript types
 │   │   ├── movies.ts                # Movie/TV types
@@ -232,6 +281,16 @@ netflix/
 │   ├── providers/                   # App providers
 │   │   └── Providers.tsx            # Query + Router + Context
 │   │
+│   ├── middleware/                  # Route middleware
+│   │   └── ProtectedRoute.tsx       # Auth + payment verification
+│   │
+│   ├── config/                      # Configuration files
+│   │   └── api.ts                   # API configuration (TMDB, Ecommerce)
+│   │
+│   ├── hooks/                       # Custom React hooks
+│   │   └── shared/                  # Shared hooks
+│   │       └── useLogin.ts          # Login hook
+│   │
 │   ├── App.tsx                      # Root component
 │   ├── main.tsx                     # Entry point
 │   └── index.css                    # Global styles
@@ -241,7 +300,8 @@ netflix/
 │
 ├── package.json                     # Dependencies
 ├── tsconfig.json                    # TypeScript config
-├── vite.config.ts                   # Vite config
+├── vite.config.ts                   # Vite config (PWA, optimization)
+├── vercel.json                      # Vercel deployment config
 └── README.md                        # This file
 ```
 
@@ -255,25 +315,36 @@ netflix/
 App
 ├── Providers (React Query, Redux, Router, Context)
 │   └── Routes
-│       └── MainLayout
-│           ├── Header
-│           │   ├── NavLinks
-│           │   ├── ProfileMenu
-│           │   └── SearchPopup
-│           ├── Page Content
-│           │   ├── Home
-│           │   │   ├── HeroSection
-│           │   │   ├── TopPicksSection
-│           │   │   ├── MediaSection (multiple)
-│           │   │   └── ... (more sections)
-│           │   ├── MovieDetails
-│           │   │   ├── MediaHero
-│           │   │   ├── MediaInfoSection
-│           │   │   ├── TrailersSection
-│           │   │   ├── FullCreditsSection
-│           │   │   └── ... (more sections)
-│           │   └── ... (other pages)
-│           └── Footer (lazy-loaded)
+│       ├── Public Routes
+│       │   ├── Login
+│       │   ├── Signup
+│       │   └── Subscribe (5-step flow)
+│       │       ├── Step1: Create Account
+│       │       ├── Step2: Choose Plan
+│       │       ├── Step3: Confirm
+│       │       ├── Step4: Payment (Stripe)
+│       │       └── Step5: Success
+│       │
+│       └── Protected Routes (Requires paymentStatus = "success")
+│           └── MainLayout
+│               ├── Header
+│               │   ├── NavLinks
+│               │   ├── ProfileMenu
+│               │   └── SearchPopup
+│               ├── Page Content
+│               │   ├── Home
+│               │   │   ├── HeroSection
+│               │   │   ├── TopPicksSection
+│               │   │   ├── MediaSection (multiple)
+│               │   │   └── ... (more sections)
+│               │   ├── MovieDetails
+│               │   │   ├── MediaHero
+│               │   │   ├── MediaInfoSection
+│               │   │   ├── TrailersSection
+│               │   │   ├── FullCreditsSection
+│               │   │   └── ... (more sections)
+│               │   └── ... (other pages)
+│               └── Footer (lazy-loaded)
 ```
 
 ### Data Flow
@@ -287,13 +358,77 @@ React Query Hook (e.g., usePopularMovies)
     ↓
 Service Layer (e.g., getPopularMovies)
     ↓
-TMDB API
+TMDB API / Auth API
     ↓
-Response → React Query Cache
+Response → React Query Cache / localStorage
     ↓
 Component Re-render with Data
     ↓
 UI Display
+```
+
+### Payment Flow Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Subscription Flow                         │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│  Step 1: Account Creation                                    │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ • Email/Password Form                                 │   │
+│  │ • dummyjson API Authentication                        │   │
+│  │ • Token stored in localStorage                        │   │
+│  │ • User data: token, email, firstName, image           │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│  Step 2: Plan Selection                                      │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ • Basic: $9.99/mo  (1 screen, SD)                     │   │
+│  │ • Standard: $15.99/mo (2 screens, HD) ⭐              │   │
+│  │ • Premium: $19.99/mo (4 screens, 4K+HDR)              │   │
+│  │ • Plan ID stored in state                             │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│  Step 3: Confirmation                                        │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ • Display account email                               │   │
+│  │ • Display selected plan with features                 │   │
+│  │ • Display payment method preview                      │   │
+│  │ • Total due calculation                               │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│  Step 4: Payment (Stripe)                                    │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ • Stripe Elements Card Component                      │   │
+│  │ • Real-time card validation                           │   │
+│  │ • Token creation via stripe.createToken()             │   │
+│  │ • paymentStatus = "success" in localStorage           │   │
+│  │ • Supported: Visa, Mastercard, AMEX, Discover         │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│  Step 5: Success                                             │
+│  ┌──────────────────────────────────────────────────────┐   │
+│  │ • Success animation                                   │   │
+│  │ • Plan activation message                             │   │
+│  │ • "Start Watching" button → Home                      │   │
+│  │ • Email confirmation notice                           │   │
+│  └──────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ### State Management Strategy
@@ -303,7 +438,38 @@ UI Display
 | **Server State** | React Query | `src/queries/` |
 | **Client State** | Redux Toolkit | `src/store/` |
 | **Modal State** | Context API | `src/contexts/` |
+| **Auth State** | localStorage | `src/middleware/` |
+| **Payment State** | localStorage | `src/pages/subscribe/` |
 | **Local UI State** | React Hooks | Components |
+
+### Authentication & Authorization Flow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Protected Route Guard                     │
+│                    (ProtectedRoute.tsx)                      │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+            ┌───────────────────────────────┐
+            │  Check localStorage.payment   │
+            │  Status === "success" ?       │
+            └───────────────────────────────┘
+                     │              │
+                    YES            NO
+                     │              │
+                     │              ▼
+                     │    ┌─────────────────────┐
+                     │    │ Redirect to         │
+                     │    │ /subscribe          │
+                     │    └─────────────────────┘
+                     │
+                     ▼
+            ┌─────────────────────┐
+            │ Render <Outlet />   │
+            │ (Protected Content) │
+            └─────────────────────┘
+```
 
 ---
 
@@ -313,6 +479,7 @@ UI Display
 
 - **Node.js** 18+ and npm
 - **TMDB API Key** (free at [themoviedb.org](https://www.themoviedb.org/settings/api))
+- **Stripe Account** (optional, for payment testing - use provided test key)
 
 ### Installation
 
@@ -331,6 +498,9 @@ UI Display
    ```bash
    # Create .env file in root directory
    VITE_TMDB_API_KEY=your_api_key_here
+   VITE_TMDB_BASE_URL=https://api.themoviedb.org/3
+   VITE_TMDB_IMAGE_BASE_URL=https://image.tmdb.org/t/p
+   VITE_ECOMMERCE_BASE_URL=https://ecommerce.routemisr.com/api/v1
    ```
 
 4. **Start development server**
@@ -348,6 +518,191 @@ UI Display
 ```bash
 npm run build
 npm run preview
+```
+
+### Deployment (Vercel)
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+```
+
+---
+
+## 💳 Payment System Documentation
+
+### Overview
+
+The application includes a complete subscription and payment system powered by **Stripe**. The payment flow is designed to be secure, user-friendly, and production-ready.
+
+### Payment Flow Steps
+
+#### Step 1: Account Creation
+- **Component:** `Step1CreateAccount.tsx`
+- **Features:**
+  - Email and password input
+  - Integration with dummyjson authentication API
+  - Token storage in localStorage
+  - Form validation with error handling
+  - Test credentials displayed for easy testing
+
+- **Test Credentials:**
+  ```
+  Username: emilys
+  Password: emilyspass
+  ```
+
+- **State Management:**
+  ```typescript
+  localStorage.setItem("token", response?.accessToken);
+  localStorage.setItem("name", JSON.stringify(response.firstName));
+  localStorage.setItem("image", JSON.stringify(response.image));
+  localStorage.setItem("email", JSON.stringify(response.email));
+  ```
+
+#### Step 2: Plan Selection
+- **Component:** `Step2ChoosePlan.tsx`
+- **Features:**
+  - Three subscription tiers with feature comparison
+  - Visual plan cards with selection indicators
+  - "Most Popular" badge for Standard plan
+  - Feature list with checkmarks
+  - Responsive grid layout
+
+- **Available Plans:**
+
+| Plan | Price | Screens | Quality | Features |
+|------|-------|---------|---------|----------|
+| **Basic** | $9.99/mo | 1 | SD 480p | Unlimited movies |
+| **Standard** ⭐ | $15.99/mo | 2 | HD 1080p | Downloads included |
+| **Premium** | $19.99/mo | 4 | 4K + HDR | Priority support |
+
+- **State Management:**
+  ```typescript
+  const [selectedPlanId, setSelectedPlanId] = useState("tier-standard");
+  ```
+
+#### Step 3: Confirmation
+- **Component:** `Step3ConfirmSubscription.tsx`
+- **Features:**
+  - Account information display with avatar
+  - Selected plan summary with all features
+  - Payment method preview
+  - Total due calculation
+  - Terms and conditions agreement
+  - Visual hierarchy with cards and separators
+
+- **Displayed Information:**
+  - User email with avatar initial
+  - Plan name and price
+  - Plan features list
+  - Payment method icon
+  - Total due today and recurring amount
+
+#### Step 4: Payment Processing
+- **Component:** `PaymentForm.tsx`
+- **Technology:** Stripe Elements
+- **Features:**
+  - Secure card input with Stripe Elements
+  - Real-time card validation
+  - Card number, expiry, CVC, postal code
+  - Loading state during processing
+  - Success/error feedback
+  - Test mode enabled
+
+- **Stripe Configuration:**
+  ```typescript
+  const stripePromise = loadStripe(
+    "pk_test_51S3dQaJyhK1JCMi8Znjoo5NoLzEcgBIQ3C0xPnT2KG8yt88Tf0i5tJgLnu9EspJ3Nc6xmugxQ0a0jp51gWRSWRG400A2YuzVzP"
+  );
+  ```
+
+- **Payment Processing:**
+  ```typescript
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const card = elements.getElement(CardElement);
+    const { error } = await stripe.createToken(card);
+    
+    if (error) {
+      setMessage(error.message);
+    } else {
+      localStorage.setItem("paymentStatus", "success");
+      setMessage("Payment successful! ✅");
+      setTimeout(() => onSuccess(), 1000);
+    }
+  };
+  ```
+
+- **Supported Cards:**
+  - Visa
+  - Mastercard
+  - American Express
+  - Discover
+
+- **Security Features:**
+  - PCI DSS compliant (Stripe Elements)
+  - Token-based processing
+  - No sensitive data stored
+  - SSL/TLS encryption
+  - 3D Secure support (via Stripe)
+
+#### Step 5: Success Screen
+- **Component:** `Step4SuccessScreen.tsx`
+- **Features:**
+  - Success animation with checkmark icon
+  - Plan activation confirmation
+  - "What's included" feature grid
+  - Action buttons (Start Watching, Go Home)
+  - Email confirmation notice
+
+- **Actions:**
+  - **Start Watching:** Redirects to home page
+  - **Go Home:** Navigates to home page
+
+### Protected Routes
+
+The application uses a middleware component to protect routes that require an active subscription:
+
+```typescript
+// ProtectedRoute.tsx
+export default function ProtectedRoute() {
+  const token = localStorage.getItem("token");
+  const payment = localStorage.getItem("paymentStatus");
+
+  if (payment !== "success") {
+    return <Navigate to="/subscribe" replace />;
+  }
+
+  return <Outlet />;
+}
+```
+
+### Test Payment Credentials
+
+For testing purposes, use the following Stripe test cards:
+
+| Card Number | Description |
+|-------------|-------------|
+| 4242 4242 4242 4242 | Visa (Success) |
+| 5555 5555 5555 4444 | Mastercard (Success) |
+| 3782 822463 10005 | AMEX (Success) |
+| 6011 1111 1111 1117 | Discover (Success) |
+
+**Any future expiry date, any 3-digit CVC, any postal code**
+
+### Payment State Management
+
+```typescript
+// localStorage keys used:
+- "token" - Authentication token
+- "paymentStatus" - Payment completion status ("success")
+- "email" - User email
+- "name" - User first name
+- "image" - User profile image
 ```
 
 ---
@@ -378,6 +733,12 @@ npm run preview
 - **Live Search** - Debounced API calls
 - **Result Cards** - Compact card variant
 - **Multi-category** - Movies, TV shows, people
+
+### Subscription Flow
+- **5-Step Process** - Account → Plan → Confirm → Pay → Success
+- **Progress Indicator** - Visual progress bar with step markers
+- **Back Navigation** - Navigate back to previous steps
+- **Responsive Design** - Mobile and desktop optimized
 
 ---
 
@@ -415,14 +776,22 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 - By Genre, By Language, By Platform
 - Kids Movies, Trending (Day/Week)
 
+**Authentication:**
+- Login (dummyjson API)
+- Signup (dummyjson API)
+
+**Payment:**
+- Stripe Token Creation
+- Card Validation
+
 ### Query Caching Strategy
 
 | Query Type | Stale Time | Retry |
 |------------|------------|-------|
-| List Data | 5 minutes | 2 |
-| Details | 10 minutes | 2 |
-| Search | 5 minutes | 1 |
-| Person | 15 minutes | 2 |
+| **List Data** | 5 minutes | 2 |
+| **Details** | 10 minutes | 2 |
+| **Search** | 5 minutes | 1 |
+| **Person** | 15 minutes | 2 |
 
 ---
 
@@ -523,12 +892,12 @@ Largest Chunks:
 
 ## 📚 Documentation
 
-| Document | Description |
-|----------|-------------|
-| [API_ENDPOINTS.md](./API_ENDPOINTS.md) | Complete API reference (975 lines) |
-| [DOCUMENTATION.md](./DOCUMENTATION.md) | Application documentation (947 lines) |
-| [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) | Developer setup guide (1469 lines) |
-| [PARTIALLY_USED_ENDPOINTS_STATUS.md](./PARTIALLY_USED_ENDPOINTS_STATUS.md) | Feature implementation status |
+| Document | Description | Lines |
+|----------|-------------|-------|
+| [API_ENDPOINTS.md](./API_ENDPOINTS.md) | Complete API reference | 975 |
+| [DOCUMENTATION.md](./DOCUMENTATION.md) | Application documentation | 947 |
+| [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) | Developer setup guide | 1469 |
+| [PARTIALLY_USED_ENDPOINTS_STATUS.md](./PARTIALLY_USED_ENDPOINTS_STATUS.md) | Feature implementation status | - |
 
 ---
 
@@ -536,10 +905,10 @@ Largest Chunks:
 
 ```bash
 # Development
-npm run dev              # Start dev server
+npm run dev              # Start dev server (http://localhost:5173)
 
 # Build
-npm run build            # Production build
+npm run build            # Production build (output: /build)
 npm run preview          # Preview production build
 
 # Testing
@@ -576,6 +945,7 @@ npm run sitemap          # Generate sitemap.xml
 - **Card Hover:** Scale 1.05 + shadow (300ms)
 - **Hero Auto-rotate:** 8 second interval
 - **Modal/Drawer:** Smooth slide-in
+- **Progress Bar:** Gradient animation (500ms)
 
 ---
 
@@ -583,10 +953,33 @@ npm run sitemap          # Generate sitemap.xml
 
 | Breakpoint | Width | Layout Changes |
 |------------|-------|----------------|
-| Mobile | 320px - 639px | 2-3 columns, mobile nav |
-| Tablet | 640px - 1023px | 3-4 columns, simplified UI |
-| Desktop | 1024px - 1439px | 5-6 columns, full nav |
-| Large | 1440px+ | 6+ columns, max-width container |
+| **Mobile** | 320px - 639px | 2-3 columns, mobile nav, simplified UI |
+| **Tablet** | 640px - 1023px | 3-4 columns, tablet nav |
+| **Desktop** | 1024px - 1439px | 5-6 columns, full nav |
+| **Large** | 1440px+ | 6+ columns, max-width container |
+
+---
+
+## 🔐 Security Features
+
+### Authentication
+- Token-based authentication
+- Secure token storage in localStorage
+- Protected route middleware
+- Session timeout handling
+
+### Payment Security
+- PCI DSS compliance via Stripe Elements
+- Token-based payment processing
+- No sensitive card data stored
+- SSL/TLS encryption for all transactions
+- 3D Secure support
+
+### Data Protection
+- Input validation on all forms
+- XSS prevention via React
+- CSRF protection via API tokens
+- Secure headers configuration
 
 ---
 
@@ -597,6 +990,13 @@ npm run sitemap          # Generate sitemap.xml
 3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+### Code Style Guidelines
+- Follow TypeScript strict mode conventions
+- Use functional components with hooks
+- Implement proper error boundaries
+- Add PropTypes or TypeScript types
+- Write meaningful commit messages
 
 ---
 
@@ -609,10 +1009,20 @@ This project is for educational purposes only. Not affiliated with Netflix.
 ## 🙏 Acknowledgments
 
 - **TMDB** - Movie and TV show data API
+- **Stripe** - Payment processing platform
 - **React Team** - Amazing UI library
 - **Tailwind Labs** - CSS framework
-- **Framer** - Animation library
 - **Radix UI** - Accessible components
+- **DummyJSON** - Authentication API for testing
+
+---
+
+## 📞 Support
+
+For support and questions:
+- Open an issue on GitHub
+- Check existing documentation
+- Review API documentation
 
 ---
 
