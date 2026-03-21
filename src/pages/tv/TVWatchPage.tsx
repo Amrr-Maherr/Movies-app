@@ -1,14 +1,19 @@
-import { memo, useMemo, useCallback } from "react";
+import { memo, useMemo, useCallback, Suspense, lazy } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
-import { PageSkeleton, Error } from "@/components/ui";
+import { PageSkeleton, Error, SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import DetailHeader from "@/components/shared/DetailHeader";
-import FetchTvShowDetails from '@/hooks/shared/FetchTvShowDetails';
+import FetchTvShowDetails from "@/hooks/shared/FetchTvShowDetails";
 import { useTVWatchProviders } from "@/hooks/shared";
 import DetailPageNav from "@/components/shared/DetailPageNav";
-import WatchProvidersDetail from "@/components/sections/WatchProvidersDetail";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Link as LinkIcon, Tv } from "lucide-react";
+
+// Lazy-loaded component - heavy component with provider cards grid
+const WatchProvidersDetail = lazy(
+  () => import("@/components/sections/WatchProvidersDetail"),
+);
 
 /**
  * TVWatchPage Component
