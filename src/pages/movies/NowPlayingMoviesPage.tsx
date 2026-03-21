@@ -1,16 +1,22 @@
-import { memo, useMemo, useCallback, Suspense, useState } from "react";
+import { memo, useMemo, useCallback, Suspense, useState, lazy } from "react";
 import { motion } from "framer-motion";
 import { Film, Calendar, Star, TrendingUp } from "lucide-react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { useNowPlayingMoviesQuery } from "@/hooks/shared";
-import MediaGrid from "@/components/shared/MediaGrid";
-import HeroSection from "@/components/shared/heroSection/HeroSection";
-import SectionHeader from "@/components/shared/SectionHeader/SectionHeader";
-import Slider from "@/components/shared/Slider/slider";
-import Card from "@/components/shared/Card/Card";
 import type { Movie } from "@/types";
+
+// Lazy-loaded components
+const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
+const HeroSection = lazy(
+  () => import("@/components/shared/heroSection/HeroSection"),
+);
+const SectionHeader = lazy(
+  () => import("@/components/shared/SectionHeader/SectionHeader"),
+);
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
+const Card = lazy(() => import("@/components/shared/Card/Card"));
 
 /**
  * NowPlayingMoviesPage Component
@@ -131,13 +137,17 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
       {trendingMovies.length > 0 && (
         <section className="bg-black py-8">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-            <SectionHeader
-              title="Trending Now"
-              subtitle="Highest rated movies this week"
-              icon={TrendingUp}
-              iconColor="text-red-500"
-              badgeText="Hot"
-            />
+            <Suspense
+              fallback={<SectionSkeleton variant="list" cardCount={1} />}
+            >
+              <SectionHeader
+                title="Trending Now"
+                subtitle="Highest rated movies this week"
+                icon={TrendingUp}
+                iconColor="text-red-500"
+                badgeText="Hot"
+              />
+            </Suspense>
             <LazyWrapper height={400}>
               <Suspense
                 fallback={<SectionSkeleton variant="grid" cardCount={6} />}
@@ -168,14 +178,18 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
       {newReleases.length > 0 && (
         <section className="bg-black py-8">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-            <SectionHeader
-              title="New Releases"
-              subtitle="Fresh in theaters this month"
-              icon={Calendar}
-              iconColor="text-blue-500"
-              badgeText="New"
-              badgeColor="text-blue-500"
-            />
+            <Suspense
+              fallback={<SectionSkeleton variant="list" cardCount={1} />}
+            >
+              <SectionHeader
+                title="New Releases"
+                subtitle="Fresh in theaters this month"
+                icon={Calendar}
+                iconColor="text-blue-500"
+                badgeText="New"
+                badgeColor="text-blue-500"
+              />
+            </Suspense>
             <LazyWrapper height={400}>
               <Suspense
                 fallback={<SectionSkeleton variant="grid" cardCount={6} />}
@@ -204,12 +218,14 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
       {/* All Now Playing Movies Grid */}
       <section className="bg-black py-8">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-          <SectionHeader
-            title="All Movies in Theaters"
-            subtitle={`Showing ${movies.results.length} movies`}
-            icon={Star}
-            iconColor="text-yellow-500"
-          />
+          <Suspense fallback={<SectionSkeleton variant="list" cardCount={1} />}>
+            <SectionHeader
+              title="All Movies in Theaters"
+              subtitle={`Showing ${movies.results.length} movies`}
+              icon={Star}
+              iconColor="text-yellow-500"
+            />
+          </Suspense>
           <LazyWrapper height={1200}>
             <Suspense
               fallback={<SectionSkeleton variant="grid" cardCount={12} />}

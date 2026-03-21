@@ -4,9 +4,10 @@ import { useCollectionDetails } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Film, Star } from "lucide-react";
-import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 
+// Lazy-loaded components
+const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 const Card = lazy(() =>
   import("@/components/shared/Card").then((m) => ({ default: m.Card })),
 );
@@ -79,13 +80,15 @@ const Collection = memo(function Collection() {
       {/* Hero Section with Backdrop */}
       <div className="relative h-[100dvh] overflow-hidden">
         {backdropUrl ? (
-          <OptimizedImage
-            src={backdropUrl}
-            alt={collection.name}
-            className="w-full h-full"
-            objectFit="cover"
-            priority
-          />
+          <Suspense fallback={null}>
+            <OptimizedImage
+              src={backdropUrl}
+              alt={collection.name}
+              className="w-full h-full"
+              objectFit="cover"
+              priority
+            />
+          </Suspense>
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-[#1a1a2e] to-[#16213e]" />
         )}
@@ -100,12 +103,14 @@ const Collection = memo(function Collection() {
               {/* Poster */}
               {posterUrl ? (
                 <div className="hidden md:block w-48 lg:w-64 flex-shrink-0 rounded-lg overflow-hidden shadow-2xl">
-                  <OptimizedImage
-                    src={posterUrl}
-                    alt={collection.name}
-                    className="w-full h-full"
-                    objectFit="cover"
-                  />
+                  <Suspense fallback={null}>
+                    <OptimizedImage
+                      src={posterUrl}
+                      alt={collection.name}
+                      className="w-full h-full"
+                      objectFit="cover"
+                    />
+                  </Suspense>
                 </div>
               ) : null}
 

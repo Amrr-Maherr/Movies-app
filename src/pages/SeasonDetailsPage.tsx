@@ -3,18 +3,19 @@ import { useParams, Link } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
-import OptimizedImage from "@/components/ui/OptimizedImage";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { ArrowLeft, Calendar, Film, Clock, Star } from "lucide-react";
-import FetchTvSeasonDetails from '@/hooks/shared/FetchTvSeasonDetails';
+import FetchTvSeasonDetails from "@/hooks/shared/FetchTvSeasonDetails";
 import type { Episode } from "@/types";
 
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
-const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
-
+// Lazy-loaded components
+const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 const Card = lazy(() =>
   import("@/components/shared/Card").then((m) => ({ default: m.Card })),
 );
+
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+const BACKDROP_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 const SeasonDetailsPage = memo(function SeasonDetailsPage() {
   const { slugWithId, seasonNumber } = useParams<{

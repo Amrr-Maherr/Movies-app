@@ -4,8 +4,9 @@ import { useCompanyDetails, useCompanyMovies } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Film, MapPin, Globe, Building2 } from "lucide-react";
-import OptimizedImage from "@/components/ui/OptimizedImage";
 
+// Lazy-loaded components
+const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 const MediaSection = lazy(() => import("@/components/shared/MediaSection"));
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";

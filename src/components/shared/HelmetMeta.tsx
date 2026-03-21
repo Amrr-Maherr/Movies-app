@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet";
+import { memo, useMemo } from "react";
 
 interface HelmetMetaProps {
   /** The name of the Movie, Series, Season, Actor, or Episode */
@@ -20,10 +21,11 @@ interface HelmetMetaProps {
 }
 
 /**
- * HelmetMeta Component
+ * Memoized HelmetMeta Component
  *
  * A reusable component to set dynamic HTML head content for each page.
  * Sets the page title, meta description, Open Graph, and Twitter Card tags for SEO.
+ * Memoized to prevent unnecessary re-renders when parent components update.
  *
  * @example
  * // For a movie page
@@ -37,41 +39,34 @@ interface HelmetMetaProps {
  *   rating="PG-13"
  *   date="2019-04-26"
  * />
- *
- * @example
- * // For a series page
- * <HelmetMeta
- *   name="Breaking Bad"
- *   description="A high school chemistry teacher turned methamphetamine producer..."
- *   image="https://image.tmdb.org/t/p/original/poster.jpg"
- *   url="https://www.myapp.com/series/123456"
- *   type="video.tv_show"
- * />
- *
- * @example
- * // For an actor page
- * <HelmetMeta
- *   name="Robert Downey Jr."
- *   description="Robert Downey Jr. is an American actor known for Iron Man, Sherlock Holmes..."
- *   image="https://image.tmdb.org/t/p/original/profile.jpg"
- *   url="https://www.myapp.com/actors/123456"
- *   type="profile"
- * />
  */
-const HelmetMeta = ({
+const HelmetMeta = memo(function HelmetMeta({
   name,
   description,
   image,
   url,
-  type = 'website',
+  type = "website",
   keywords,
   rating,
   date,
-}: HelmetMetaProps) => {
-  const siteName = 'Netflix';
+}: HelmetMetaProps) {
+  const siteName = "Netflix";
   const fullTitle = `${name} | ${siteName}`;
-  const imageUrl = image || 'https://www.myapp.com/og-default.jpg';
-  const pageUrl = url || (typeof window !== 'undefined' ? window.location.href : 'https://www.myapp.com');
+
+  // Memoize computed values to prevent recalculation on every render
+  const imageUrl = useMemo(
+    () => image || "https://www.myapp.com/og-default.jpg",
+    [image],
+  );
+
+  const pageUrl = useMemo(
+    () =>
+      url ||
+      (typeof window !== "undefined"
+        ? window.location.href
+        : "https://www.myapp.com"),
+    [url],
+  );
 
   return (
     <Helmet>
@@ -103,6 +98,6 @@ const HelmetMeta = ({
       <meta name="robots" content="index, follow" />
     </Helmet>
   );
-};
+});
 
 export default HelmetMeta;
