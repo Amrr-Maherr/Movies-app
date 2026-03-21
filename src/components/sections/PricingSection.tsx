@@ -1,7 +1,15 @@
 "use client";
 
-import { memo, useMemo } from "react";
-import { Check, Monitor, Users, Download, Headphones, Crown } from "lucide-react";
+import { memo, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Check,
+  Monitor,
+  Users,
+  Download,
+  Headphones,
+  Crown,
+} from "lucide-react";
 
 const tiersData = [
   {
@@ -54,20 +62,32 @@ const tiersData = [
 ];
 
 const PricingSection = memo(function PricingSection() {
+  const navigate = useNavigate();
+
   // Memoized: Pre-process tiers with icon components
   const tiers = useMemo(() => tiersData, []);
+
+  const handlePlanClick = useCallback(
+    (planId: string) => {
+      navigate(`/subscribe?plan=${planId}`, { state: { planId } });
+    },
+    [navigate],
+  );
+
   return (
     <section className="py-16">
       <div className="container mx-auto">
         <div className="space-y-10">
           <div className="text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-white">Plans</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-white">
+              Plans
+            </h2>
             <p className="text-3xl font-semibold text-white max-w-2xl mx-auto">
               Pick the plan that fits your binge
             </p>
             <p className="mt-4 text-lg text-gray-400 max-w-xl mx-auto">
-              Stream your favorite movies and series on any device. No hidden fees,
-              cancel anytime.
+              Stream your favorite movies and series on any device. No hidden
+              fees, cancel anytime.
             </p>
           </div>
 
@@ -77,8 +97,9 @@ const PricingSection = memo(function PricingSection() {
               return (
                 <div
                   key={tier.id}
-                  className={`relative bg-zinc-900 rounded-sm p-6 transition-all duration-300 hover:scale-105 hover:z-10 ${tier.featured ? "ring-2 ring-red-500" : ""
-                    }`}
+                  className={`relative bg-zinc-900 rounded-sm p-6 transition-all duration-300 hover:scale-105 hover:z-10 ${
+                    tier.featured ? "ring-2 ring-red-500" : ""
+                  }`}
                 >
                   {tier.badge && (
                     <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
@@ -92,7 +113,10 @@ const PricingSection = memo(function PricingSection() {
                   </div>
 
                   {/* Title */}
-                  <h3 id={tier.id} className="text-lg font-bold text-white text-center mb-2">
+                  <h3
+                    id={tier.id}
+                    className="text-lg font-bold text-white text-center mb-2"
+                  >
                     {tier.name}
                   </h3>
 
@@ -105,7 +129,9 @@ const PricingSection = memo(function PricingSection() {
                   </p>
 
                   {/* Description */}
-                  <p className="text-sm text-gray-300 text-center mb-6">{tier.description}</p>
+                  <p className="text-sm text-gray-300 text-center mb-6">
+                    {tier.description}
+                  </p>
 
                   {/* Features */}
                   <ul className="space-y-3 mb-6">
@@ -114,23 +140,26 @@ const PricingSection = memo(function PricingSection() {
                       return (
                         <li key={idx} className="flex gap-x-3 items-start">
                           <Icon className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
-                          <span className="text-sm text-gray-300">{feature.text}</span>
+                          <span className="text-sm text-gray-300">
+                            {feature.text}
+                          </span>
                         </li>
                       );
                     })}
                   </ul>
 
                   {/* Button */}
-                  <a
-                    href={tier.href}
+                  <button
+                    onClick={() => handlePlanClick(tier.id)}
                     aria-describedby={tier.id}
-                    className={`block rounded-md py-3 text-center text-sm font-semibold transition-colors ${tier.featured
-                      ? "bg-red-500 text-white hover:bg-red-600"
-                      : "bg-white/10 text-white hover:bg-white/20"
-                      }`}
+                    className={`w-full rounded-md py-3 text-center text-sm font-semibold transition-colors ${
+                      tier.featured
+                        ? "bg-red-500 text-white hover:bg-red-600"
+                        : "bg-white/10 text-white hover:bg-white/20"
+                    }`}
                   >
                     Get started today
-                  </a>
+                  </button>
                 </div>
               );
             })}
