@@ -1,296 +1,157 @@
 "use client";
 
-import { memo, useCallback } from "react";
-import { Check, Monitor, Users, Download, Headphones, Crown, Tv } from "lucide-react";
+import { Check, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Separator } from "@/components/ui/separator";
 
-interface Plan {
-  id: string;
-  name: string;
-  priceMonthly: string;
-  description: string;
-  icon: React.ComponentType<{ className?: string }>;
-  features: string[];
-  quality: string;
-  resolution: string;
-  devices: number;
-  badge?: string;
-}
-
-const PLANS_DATA: Plan[] = [
+const PLANS = [
   {
     id: "tier-basic",
     name: "Basic",
-    priceMonthly: "$9.99",
-    description: "Perfect for individual viewers",
-    icon: Monitor,
-    features: [
-      "1 screen at a time",
-      "Standard Definition (SD)",
-      "Unlimited movies and series",
-      "Watch on any device",
-    ],
-    quality: "Good",
-    resolution: "480p",
-    devices: 1,
+    price: "$9.99",
+    features: ["1 screen", "SD 480p", "Unlimited movies"],
   },
   {
     id: "tier-standard",
     name: "Standard",
-    priceMonthly: "$15.99",
-    description: "Great for couples or small families",
-    icon: Users,
+    price: "$15.99",
     badge: "Most Popular",
-    features: [
-      "2 screens at a time",
-      "High Definition (HD)",
-      "Unlimited movies and series",
-      "Download for offline viewing",
-    ],
-    quality: "Better",
-    resolution: "1080p",
-    devices: 2,
+    features: ["2 screens", "HD 1080p", "Downloads included"],
   },
   {
     id: "tier-premium",
     name: "Premium",
-    priceMonthly: "$19.99",
-    description: "The ultimate streaming experience",
-    icon: Crown,
-    features: [
-      "4 screens at a time",
-      "Ultra HD (4K+HDR)",
-      "Unlimited movies and series",
-      "Download for offline viewing",
-      "Priority customer support",
-    ],
-    quality: "Best",
-    resolution: "4K+HDR",
-    devices: 4,
+    price: "$19.99",
+    features: ["4 screens", "4K + HDR", "Priority support"],
   },
 ];
 
-interface Step2ChoosePlanProps {
-  selectedPlanId: string;
-  onSelectPlan: (planId: string) => void;
-  onNext: () => void;
-  onBack: () => void;
-}
-
-const Step2ChoosePlan = memo(function Step2ChoosePlan({
+export default function Step2ChoosePlan({
   selectedPlanId,
   onSelectPlan,
   onNext,
-  onBack,
-}: Step2ChoosePlanProps) {
-  const handlePlanSelect = useCallback(
-    (planId: string) => {
-      onSelectPlan(planId);
-    },
-    [onSelectPlan]
-  );
-
-  const selectedPlan = PLANS_DATA.find((plan) => plan.id === selectedPlanId);
-
+}) {
   return (
-    <div className="w-full max-w-5xl mx-auto">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-white mb-2">Choose Your Plan</h2>
-        <p className="text-neutral-400">
-          Select the plan that works best for you
+    <div className="w-full max-w-[900px] mx-auto px-6 py-8">
+      {/* Header */}
+      <div className="text-center mb-10">
+        <h1 className="text-3xl font-bold text-white mb-2">
+          Choose the plan that's right for you
+        </h1>
+        <p className="text-neutral-400 text-sm">
+          Join Netflix and select your monthly subscription
         </p>
       </div>
 
       {/* Plan Cards */}
-      <div className="grid md:grid-cols-3 gap-4 mb-8">
-        {PLANS_DATA.map((plan) => {
-          const IconComponent = plan.icon;
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        {PLANS.map((plan) => {
           const isSelected = plan.id === selectedPlanId;
 
           return (
-            <Card
+            <div
               key={plan.id}
-              className={`cursor-pointer transition-all duration-300 relative ${
+              onClick={() => onSelectPlan(plan.id)}
+              className={`cursor-pointer relative overflow-hidden rounded-lg border transition-all ${
                 isSelected
-                  ? "border-red-500 ring-2 ring-red-500/30 bg-neutral-800/80"
-                  : "border-neutral-800 bg-neutral-900/50 hover:border-neutral-700"
+                  ? "border-white bg-neutral-900"
+                  : "border-neutral-800 bg-black hover:border-neutral-600"
               }`}
-              onClick={() => handlePlanSelect(plan.id)}
             >
+              {/* Badge */}
               {plan.badge && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge variant="default" className="bg-red-600">
+                <div className="absolute top-3 right-3 z-10">
+                  <Badge className="bg-[#E50914] text-white border-0 text-xs px-2 py-0.5">
+                    <Star className="h-2.5 w-2.5 mr-1 fill-current" />
                     {plan.badge}
                   </Badge>
                 </div>
               )}
-              <CardHeader className="text-center pb-2">
-                <div className="flex justify-center mb-4">
-                  <IconComponent
-                    className={`w-12 h-12 ${
-                      isSelected ? "text-red-500" : "text-neutral-500"
-                    }`}
-                  />
-                </div>
-                <CardTitle className="text-xl text-white">{plan.name}</CardTitle>
-                <CardDescription className="text-neutral-400 text-sm">
-                  {plan.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+
+              <div className="p-5 space-y-4">
+                {/* Plan Name & Price */}
                 <div className="text-center">
-                  <span className="text-3xl font-bold text-white">
-                    {plan.priceMonthly}
-                  </span>
-                  <span className="text-neutral-400 text-sm">/month</span>
+                  <h3 className="text-lg font-semibold text-white mb-1">
+                    {plan.name}
+                  </h3>
+                  <div className="flex items-baseline justify-center gap-1">
+                    <span className="text-3xl font-bold text-white">
+                      {plan.price}
+                    </span>
+                    <span className="text-neutral-400 text-xs">/month</span>
+                  </div>
                 </div>
 
-                <ul className="space-y-2">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm">
-                      <Check
-                        className={`h-4 w-4 flex-shrink-0 ${
-                          isSelected ? "text-red-500" : "text-neutral-500"
+                {/* Features */}
+                <ul className="space-y-3 pt-4 border-t border-neutral-800">
+                  {plan.features.map((feature, i) => (
+                    <li key={i} className="flex items-center gap-3 text-sm">
+                      <div
+                        className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          isSelected ? "bg-white" : "bg-neutral-800"
                         }`}
-                      />
-                      <span className="text-neutral-300">{feature}</span>
+                      >
+                        <Check
+                          className={`h-3 w-3 ${
+                            isSelected ? "text-black" : "text-neutral-400"
+                          }`}
+                        />
+                      </div>
+                      <span
+                        className={
+                          isSelected ? "text-white" : "text-neutral-400"
+                        }
+                      >
+                        {feature}
+                      </span>
                     </li>
                   ))}
                 </ul>
 
+                {/* Select Indicator */}
                 <div
-                  className={`rounded-md py-2 text-center text-sm font-medium transition-colors ${
-                    isSelected
-                      ? "bg-red-600 text-white"
-                      : "bg-neutral-800 text-neutral-300"
+                  className={`pt-4 text-center text-sm font-medium ${
+                    isSelected ? "text-white" : "text-neutral-500"
                   }`}
                 >
                   {isSelected ? "Selected" : "Select Plan"}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           );
         })}
       </div>
 
-      {/* Comparison Table */}
-      <Card className="border-neutral-800 bg-neutral-900/50 mb-8">
-        <CardHeader>
-          <CardTitle className="text-lg text-white">Plan Comparison</CardTitle>
-          <CardDescription className="text-neutral-400">
-            Compare features across all plans
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow className="border-neutral-800">
-                <TableHead className="text-neutral-400 w-[200px]">Feature</TableHead>
-                {PLANS_DATA.map((plan) => (
-                  <TableHead
-                    key={plan.id}
-                    className={`text-center ${
-                      plan.id === selectedPlanId ? "text-red-500" : "text-neutral-400"
-                    }`}
-                  >
-                    {plan.name}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow className="border-neutral-800">
-                <TableCell className="font-medium text-neutral-300">Price</TableCell>
-                {PLANS_DATA.map((plan) => (
-                  <TableCell key={plan.id} className="text-center text-white">
-                    {plan.priceMonthly}/mo
-                  </TableCell>
-                ))}
-              </TableRow>
-              <TableRow className="border-neutral-800">
-                <TableCell className="font-medium text-neutral-300">Quality</TableCell>
-                {PLANS_DATA.map((plan) => (
-                  <TableCell key={plan.id} className="text-center text-neutral-300">
-                    {plan.quality}
-                  </TableCell>
-                ))}
-              </TableRow>
-              <TableRow className="border-neutral-800">
-                <TableCell className="font-medium text-neutral-300">Resolution</TableCell>
-                {PLANS_DATA.map((plan) => (
-                  <TableCell key={plan.id} className="text-center text-neutral-300">
-                    {plan.resolution}
-                  </TableCell>
-                ))}
-              </TableRow>
-              <TableRow className="border-neutral-800">
-                <TableCell className="font-medium text-neutral-300">Devices</TableCell>
-                {PLANS_DATA.map((plan) => (
-                  <TableCell key={plan.id} className="text-center text-neutral-300">
-                    {plan.devices}
-                  </TableCell>
-                ))}
-              </TableRow>
-              <TableRow className="border-neutral-800">
-                <TableCell className="font-medium text-neutral-300">Downloads</TableCell>
-                {PLANS_DATA.map((plan, idx) => (
-                  <TableCell key={plan.id} className="text-center">
-                    {idx > 0 ? (
-                      <Check className="h-5 w-5 text-green-500 mx-auto" />
-                    ) : (
-                      <span className="text-neutral-600">—</span>
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-              <TableRow className="border-neutral-800">
-                <TableCell className="font-medium text-neutral-300">HDR/4K</TableCell>
-                {PLANS_DATA.map((plan, idx) => (
-                  <TableCell key={plan.id} className="text-center">
-                    {idx === 2 ? (
-                      <Check className="h-5 w-5 text-green-500 mx-auto" />
-                    ) : (
-                      <span className="text-neutral-600">—</span>
-                    )}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Navigation Buttons */}
-      <div className="flex gap-4 justify-center">
-        <Button
-          onClick={onBack}
-          variant="outline"
-          className="min-w-[120px] border-neutral-700 text-neutral-300 hover:bg-neutral-800"
-          size="lg"
-        >
-          Back
-        </Button>
+      {/* Continue Button */}
+      <div className="flex justify-center">
         <Button
           onClick={onNext}
-          className="min-w-[120px] h-12 text-base font-semibold bg-red-600 hover:bg-red-700"
+          className="bg-[#E50914] hover:bg-[#f40612] text-white font-medium px-10 h-12 disabled:opacity-50"
           size="lg"
         >
           Continue
         </Button>
       </div>
+
+      {/* Features List */}
+      <div className="mt-12 space-y-4">
+        <h3 className="text-lg font-semibold text-white text-center mb-6">
+          What's included with your subscription
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+          {[
+            "Unlimited movies and TV shows",
+            "Download & watch offline",
+            "Watch on any device",
+            "Cancel anytime",
+          ].map((feature, idx) => (
+            <div key={idx} className="flex items-center gap-3">
+              <Check className="h-5 w-5 text-white flex-shrink-0" />
+              <span className="text-neutral-300 text-sm">{feature}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
-});
-
-export default Step2ChoosePlan;
+}

@@ -584,17 +584,16 @@ const AppRoutes = memo(function AppRoutes() {
                 </PageTransition>
               }
             />
-
-            {/* Subscribe page */}
-            <Route
-              path="/subscribe"
-              element={
-                <PageTransition>
-                  <SubscribePage />
-                </PageTransition>
-              }
-            />
           </Route>
+          {/* Subscribe page */}
+          <Route
+            path="/subscribe"
+            element={
+              <PageTransition>
+                <SubscribePage />
+              </PageTransition>
+            }
+          />
           {/* 404 route */}
           <Route
             path="*"

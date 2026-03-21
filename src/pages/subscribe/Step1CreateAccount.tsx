@@ -1,135 +1,102 @@
 "use client";
 
-import { memo, useState, useCallback } from "react";
-import { Mail, Lock, ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 
-interface Step1CreateAccountProps {
-  onNext: (data: { email: string; password: string }) => void;
-}
-
-const Step1CreateAccount = memo(function Step1CreateAccount({ onNext }: Step1CreateAccountProps) {
+export default function Step1CreateAccount({ onNext }) {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [error, setError] = useState("");
 
-  const validateForm = useCallback(() => {
-    const newErrors: { email?: string; password?: string } = {};
-
-    if (!email) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Please enter a valid email";
+  const handleSubmit = () => {
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
     }
-
-    if (!password) {
-      newErrors.password = "Password is required";
-    } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [email, password]);
-
-  const handleNext = useCallback(() => {
-    if (validateForm()) {
-      onNext({ email, password });
-    }
-  }, [validateForm, onNext, email, password]);
-
-  const handleKeyPress = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter") {
-        handleNext();
-      }
-    },
-    [handleNext]
-  );
+    onNext({ email, password });
+  };
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <Card className="border-neutral-800 bg-neutral-900/50">
-        <CardHeader className="text-center pb-2">
-          <CardTitle className="text-2xl font-bold text-white">Create Account</CardTitle>
-          <CardDescription className="text-neutral-400">
-            Enter your email and password to get started
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6 pt-6">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium text-neutral-300">
-                Email address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  className={`pl-10 ${errors.email ? "border-red-500" : ""}`}
-                  aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? "email-error" : undefined}
-                />
-              </div>
-              {errors.email && (
-                <p id="email-error" className="text-sm text-red-500">
-                  {errors.email}
-                </p>
-              )}
-            </div>
+    <div className="w-full max-w-[500px] mx-auto px-6 py-8">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-white mb-2">Sign In</h1>
+        <p className="text-neutral-400 text-sm">
+          Create your account to get started
+        </p>
+      </div>
 
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium text-neutral-300">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-500" />
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  className={`pl-10 ${errors.password ? "border-red-500" : ""}`}
-                  aria-invalid={!!errors.password}
-                  aria-describedby={errors.password ? "password-error" : undefined}
-                />
-              </div>
-              {errors.password && (
-                <p id="password-error" className="text-sm text-red-500">
-                  {errors.password}
-                </p>
-              )}
-            </div>
+      {/* Form */}
+      <div className="space-y-5">
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-neutral-300 block">
+            Email
+          </label>
+          <Input
+            type="email"
+            placeholder="name@example.com"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError("");
+            }}
+            className="h-12 bg-black border border-neutral-700 text-white placeholder:text-neutral-500 focus:border-white focus:ring-0"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-neutral-300 block">
+            Password
+          </label>
+          <Input
+            type="password"
+            placeholder="Create a password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError("");
+            }}
+            className="h-12 bg-black border border-neutral-700 text-white placeholder:text-neutral-500 focus:border-white focus:ring-0"
+          />
+        </div>
+
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/20 rounded-md p-3">
+            <p className="text-sm text-red-500">{error}</p>
           </div>
+        )}
 
-          <Separator className="bg-neutral-800" />
+        <Button
+          onClick={handleSubmit}
+          className="w-full h-12 bg-[#E50914] hover:bg-[#f40612] text-white font-medium disabled:opacity-50"
+          size="lg"
+        >
+          Next
+          <ArrowRight className="ml-2 h-5 w-5" />
+        </Button>
 
-          <Button
-            onClick={handleNext}
-            className="w-full h-12 text-base font-semibold bg-red-600 hover:bg-red-700"
-            size="lg"
+        <p className="text-xs text-center text-neutral-500 leading-relaxed pt-4">
+          By continuing, you agree to our{" "}
+          <a
+            href="/terms-of-use"
+            className="text-neutral-400 hover:text-white underline"
           >
-            Next
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
-
-          <p className="text-xs text-center text-neutral-500">
-            By continuing, you agree to our Terms of Use and Privacy Policy.
-          </p>
-        </CardContent>
-      </Card>
+            Terms of Use
+          </a>{" "}
+          and{" "}
+          <a
+            href="/privacy"
+            className="text-neutral-400 hover:text-white underline"
+          >
+            Privacy Policy
+          </a>
+          .
+        </p>
+      </div>
     </div>
   );
-});
-
-export default Step1CreateAccount;
+}

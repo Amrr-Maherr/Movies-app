@@ -2,7 +2,6 @@ export { Loader } from "./loader"
 export { Error } from "./error"
 export { LoadingFallback } from "./LoadingFallback"
 export { SectionSkeleton, PageSkeleton } from "./SectionSkeleton"
-export { default as RouteLoader } from "./RouteLoader"
 export {
   Dialog,
   DialogClose,
