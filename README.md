@@ -16,7 +16,7 @@
 
 ## 📖 Description
 
-A **production-ready Netflix clone** built with cutting-edge web technologies. This application delivers a complete streaming platform experience with movie/TV show browsing, detailed content pages, personalized recommendations, and a responsive design that works seamlessly across all devices.
+A **production-ready Netflix clone** built with cutting-edge web technologies. This application delivers a complete streaming platform experience with movie/TV show browsing, detailed content pages, personalized recommendations, subscription flow, and Stripe payment integration.
 
 Built with **React 19**, **TypeScript**, and **Tailwind CSS v4**, this project showcases modern web development best practices including:
 - ⚡ Lightning-fast performance with code splitting and lazy loading
@@ -24,6 +24,8 @@ Built with **React 19**, **TypeScript**, and **Tailwind CSS v4**, this project s
 - 📱 Fully responsive design (320px - 1920px+)
 - 🔌 PWA support with offline capabilities
 - 🎯 Type-safe development with TypeScript 5.9
+- 💳 Complete subscription flow with Stripe payment gateway
+- 🔐 Authentication with dummyjson API
 
 ---
 
