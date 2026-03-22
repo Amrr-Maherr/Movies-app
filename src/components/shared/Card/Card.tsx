@@ -391,17 +391,13 @@ const Card = memo(
                   src={posterUrl}
                   alt={title}
                   className={`w-full h-full transition-all duration-300 ${
-                    isAdult
-                      ? "blur-md"
-                      : "transition-transform duration-500"
+                    isAdult ? "blur-md" : "transition-transform duration-500"
                   }`}
                   objectFit="cover"
                 />
 
                 {/* Dark overlay for adult content */}
-                {isAdult && (
-                  <div className="absolute inset-0 bg-black/60" />
-                )}
+                {isAdult && <div className="absolute inset-0 bg-black/60" />}
 
                 {/* Adult Badge (+18) */}
                 {isAdult && (
@@ -422,23 +418,31 @@ const Card = memo(
                   className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent flex flex-col justify-end p-3 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100"
                   style={{ pointerEvents: isHovered ? "auto" : "none" }}
                 >
-                  <div className="flex items-center gap-2 mb-2">
+                  {/* 
+                    ACCESSIBILITY FIX: Action buttons now have minimum 48px × 48px touch targets
+                    - Added min-h-[48px] for adequate touch height
+                    - Added gap-3 for proper spacing between buttons (prevents accidental clicks)
+                    - Added touch-manipulation for better mobile behavior
+                  */}
+                  <div className="flex items-center gap-3 mb-2">
                     <button
-                      className="flex-1 bg-white text-black py-2 rounded font-semibold text-xs flex items-center justify-center gap-1 hover:bg-gray-200"
+                      className="flex-1 bg-white text-black min-h-[48px] rounded font-semibold text-xs flex items-center justify-center gap-2 hover:bg-gray-200 touch-manipulation"
                       onClick={handlePlayClick}
+                      aria-label={`Play ${title}`}
                     >
                       <span className="sr-only">Play</span>
-                      <svg className="h-3 w-3 fill-black" viewBox="0 0 24 24">
+                      <svg className="h-4 w-4 fill-black" viewBox="0 0 24 24">
                         <path d="M8 5v14l11-7z" />
                       </svg>
                     </button>
                     <button
-                      className="bg-[var(--background-secondary)]/90 backdrop-blur text-white p-2 rounded hover:bg-[var(--background-tertiary)] border border-white/20"
+                      className="min-w-[48px] min-h-[48px] bg-[var(--background-secondary)]/90 backdrop-blur text-white rounded hover:bg-[var(--background-tertiary)] border border-white/20 touch-manipulation flex items-center justify-center"
                       onClick={handleMoreInfoClick}
+                      aria-label={`More information about ${title}`}
                     >
                       <span className="sr-only">More info</span>
                       <svg
-                        className="h-3 w-3"
+                        className="h-5 w-5"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"

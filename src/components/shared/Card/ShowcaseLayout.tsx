@@ -18,6 +18,12 @@ export interface ShowcaseLayoutProps {
 /**
  * Showcase Layout Component (Large featured cards)
  * Displays a large featured card with badges and overview
+ *
+ * ACCESSIBILITY FIX:
+ * - Anchor now has proper touch target with min-h-[48px]
+ * - Added aria-label for screen readers
+ * - Added touch-manipulation for better mobile behavior
+ * - Added keyboard navigation support
  */
 const ShowcaseLayout = memo(
   ({
@@ -31,11 +37,23 @@ const ShowcaseLayout = memo(
     detailsUrl,
     aspectRatio = "aspect-video md:aspect-[10/9]",
   }: ShowcaseLayoutProps) => (
-    <a href={detailsUrl} className="block w-full group">
+    <a
+      href={detailsUrl}
+      className="block w-full group touch-manipulation"
+      aria-label={`View details for ${title}`}
+    >
       <motion.div
-        className={`relative ${aspectRatio} rounded-xl cursor-pointer shadow-2xl`}
+        className={`relative ${aspectRatio} rounded-xl cursor-pointer shadow-2xl min-h-[48px]`}
         whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
+        role="article"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            window.location.href = detailsUrl;
+          }
+        }}
       >
         <motion.div
           className="absolute inset-0"
@@ -89,7 +107,7 @@ const ShowcaseLayout = memo(
           {/* CTA hint */}
           <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="flex items-center gap-1.5 bg-white text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-              <Play className="w-3 h-3 fill-current" />
+              <Play className="w-3 h-3 fill-current" aria-hidden="true" />
               Watch Now
             </div>
           </div>

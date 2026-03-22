@@ -14,6 +14,11 @@ export interface RecommendationLayoutProps {
 /**
  * Recommendation Layout Component
  * Displays a card with match percentage for recommendations
+ *
+ * ACCESSIBILITY FIX:
+ * - Wrapped container has proper role and aria-label
+ * - Added touch-manipulation for better mobile behavior
+ * - Image has proper alt text
  */
 const RecommendationLayout = memo(
   ({
@@ -23,7 +28,11 @@ const RecommendationLayout = memo(
     isHovered,
   }: RecommendationLayoutProps) => {
     return (
-      <>
+      <div
+        className="group touch-manipulation min-h-[48px]"
+        role="article"
+        aria-label={`Recommendation: ${title}`}
+      >
         <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
           <OptimizedImage
             src={posterUrl}
@@ -43,7 +52,7 @@ const RecommendationLayout = memo(
                     {matchPercentage}% Match
                   </span>
                 )}
-                <Star className="w-4 h-4 text-white" />
+                <Star className="w-4 h-4 text-white" aria-hidden="true" />
               </div>
             </div>
           </div>
@@ -51,7 +60,7 @@ const RecommendationLayout = memo(
         <h3 className="text-xs md:text-sm text-gray-300 group-hover:text-white transition-colors line-clamp-2">
           {title}
         </h3>
-      </>
+      </div>
     );
   },
 );

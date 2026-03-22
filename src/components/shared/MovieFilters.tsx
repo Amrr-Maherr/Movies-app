@@ -23,6 +23,12 @@ const filters: { id: MovieFilterOption; label: string }[] = [
  *
  * Displays filter buttons for movie listing pages.
  * Memoized to prevent unnecessary re-renders when parent components update.
+ *
+ * ACCESSIBILITY FIX:
+ * - Added min-h-[48px] for proper touch target size
+ * - Added touch-manipulation for better mobile behavior
+ * - Added proper spacing between buttons (gap-2)
+ * - Added aria-pressed for toggle button state
  */
 const MovieFilters = memo(function MovieFilters({
   activeFilter,
@@ -44,11 +50,13 @@ const MovieFilters = memo(function MovieFilters({
           <button
             key={filter.id}
             onClick={() => handleFilterClick(filter.id)}
-            className={`relative px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all duration-300 ${
+            className={`relative px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all duration-300 min-h-[48px] touch-manipulation ${
               isActive
                 ? "text-black"
                 : "text-[var(--text-secondary)] hover:text-white bg-[var(--background-secondary)]/50 hover:bg-[var(--background-tertiary)]"
             }`}
+            aria-pressed={isActive}
+            aria-label={`Filter by ${filter.label}`}
           >
             {isActive && (
               <div

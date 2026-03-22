@@ -25,6 +25,11 @@ interface PaginationProps {
  * - Disabled states for boundary conditions
  * - Loading state support
  * - Accessible (ARIA labels, keyboard navigation)
+ *
+ * ACCESSIBILITY FIX:
+ * - Added min-h-[48px] min-w-[48px] for proper touch target size
+ * - Added touch-manipulation for better mobile behavior
+ * - Increased spacing between page buttons
  */
 const ShadcnPagination = memo(function ShadcnPagination({
   currentPage,
@@ -103,6 +108,7 @@ const ShadcnPagination = memo(function ShadcnPagination({
             onClick={handlePrevious}
             disabled={currentPage === 1 || isLoading}
             aria-disabled={currentPage === 1 || isLoading}
+            className="min-h-[48px] min-w-[48px] touch-manipulation"
           />
         </PaginationItem>
 
@@ -124,6 +130,7 @@ const ShadcnPagination = memo(function ShadcnPagination({
                 disabled={isLoading}
                 aria-label={`Go to page ${page}`}
                 aria-current={page === currentPage ? "page" : undefined}
+                className="min-h-[48px] min-w-[48px] touch-manipulation"
               >
                 {page}
               </PaginationLink>
@@ -137,6 +144,7 @@ const ShadcnPagination = memo(function ShadcnPagination({
             onClick={handleNext}
             disabled={currentPage === totalPages || isLoading}
             aria-disabled={currentPage === totalPages || isLoading}
+            className="min-h-[48px] min-w-[48px] touch-manipulation"
           />
         </PaginationItem>
       </PaginationContent>

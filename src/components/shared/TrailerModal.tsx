@@ -55,13 +55,18 @@ const TrailerModal = memo(function TrailerModal({
       aria-labelledby="modal-title"
     >
       <div className="relative w-full max-w-5xl mx-4">
-        {/* Close Button */}
+        {/* 
+          ACCESSIBILITY FIX: Close button now has 48px × 48px touch target
+          - Added min-w-[48px] min-h-[48px] for proper touch target size
+          - Added touch-manipulation for better mobile behavior
+          - Increased icon size for better visibility
+        */}
         <button
           onClick={onClose}
-          className="absolute -top-12 right-0 text-white hover:text-red-500 transition-colors duration-200"
+          className="absolute -top-12 right-0 text-white hover:text-red-500 transition-colors duration-200 min-w-[48px] min-h-[48px] flex items-center justify-center touch-manipulation"
           aria-label="Close trailer"
         >
-          <X className="h-10 w-10" />
+          <X className="h-10 w-10" aria-hidden="true" />
         </button>
 
         {/* Video Container */}

@@ -1,5 +1,6 @@
 import { memo, useMemo } from "react";
 import { X, Play, Plus, Check, ThumbsUp } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +13,7 @@ import {
   getAgeRating,
   getGenres,
 } from "@/utils/movieHelpers";
+import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -41,6 +43,8 @@ const MovieModal = memo(function MovieModal({
   isOpen,
   onClose,
 }: MovieModalProps) {
+  const navigate = useNavigate();
+
   // Memoized: Pre-calculated values (moved before early return to follow hooks rules)
   const matchScore = useMemo(
     () => (movie ? getMatchScore(movie.vote_average) : 0),
@@ -71,6 +75,20 @@ const MovieModal = memo(function MovieModal({
     () => (movie ? getGenres(movie.genre_ids) : []),
     [movie],
   );
+
+  const isTvShow = movie ? "first_air_date" in movie : false;
+  const slug = generateSlug(title);
+  const slugWithId = formatSlugWithId(slug, movie?.id ?? 0);
+  const detailsUrl = movie
+    ? `/${isTvShow ? "tv" : "movie"}/${slugWithId}`
+    : "#";
+
+  const handlePlayClick = () => {
+    if (movie && detailsUrl !== "#") {
+      navigate(detailsUrl);
+      onClose();
+    }
+  };
 
   // Redux: Check if item is in list
   const dispatch = useAppDispatch();
@@ -187,7 +205,10 @@ const MovieModal = memo(function MovieModal({
                       {/* Action Buttons */}
                       <div className="flex items-center justify-center sm:justify-start gap-3 flex-wrap">
                         {/* Play Button */}
-                        <button className="bg-white text-black px-6 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-gray-200 transition-all button-hover hover-scale tap-scale">
+                        <button
+                          onClick={handlePlayClick}
+                          className="bg-white text-black px-6 py-3 rounded-md font-semibold text-sm flex items-center gap-2 hover:bg-gray-200 transition-all button-hover hover-scale tap-scale"
+                        >
                           <Play className="h-4 w-4 fill-black" />
                           Play
                         </button>

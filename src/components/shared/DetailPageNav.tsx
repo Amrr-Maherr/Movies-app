@@ -99,6 +99,11 @@ interface NavButtonProps {
 
 /**
  * Individual navigation button component
+ *
+ * ACCESSIBILITY FIX:
+ * - Added min-h-[48px] min-w-[48px] for proper touch target size
+ * - Added touch-manipulation for better mobile behavior
+ * - Increased icon size for better visibility
  */
 const NavButton = memo(function NavButton({
   item,
@@ -106,14 +111,20 @@ const NavButton = memo(function NavButton({
   isMobile = false,
 }: NavButtonProps) {
   return (
-    <Link to={item.href} className="flex-shrink-0">
+    <Link to={item.href} className="flex-shrink-0 inline-flex">
       <motion.button
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className={cn(
-          "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200",
+          /* 
+            ACCESSIBILITY FIX: Navigation buttons now have 48px × 48px touch targets
+            - Added min-h-[48px] for adequate touch height
+            - Added touch-manipulation for better mobile behavior
+            - Mobile buttons have icon-only with proper touch target
+          */
+          "flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 min-h-[48px] rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 touch-manipulation",
           isActive
             ? "bg-red-600 text-white shadow-md shadow-red-600/30"
             : "text-white/70 hover:text-white hover:bg-white/10",
@@ -121,7 +132,7 @@ const NavButton = memo(function NavButton({
         aria-current={isActive ? "page" : undefined}
         aria-label={`Navigate to ${item.label} page`}
       >
-        {item.icon}
+        <span className="flex items-center justify-center">{item.icon}</span>
         {!isMobile && <span>{item.label}</span>}
       </motion.button>
     </Link>

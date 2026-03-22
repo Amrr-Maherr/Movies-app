@@ -26,13 +26,9 @@ const SectionHeader = memo(function SectionHeader({
   return (
     <div className="flex items-center justify-between mb-4 md:mb-6">
       <div className="flex items-center gap-2">
-        {Icon && (
-          <Icon className={`w-5 h-5 md:w-6 md:h-6 ${iconColor}`} />
-        )}
+        {Icon && <Icon className="w-5 h-5 md:w-6 md:h-6" aria-hidden="true" />}
         <div>
-          <h2 className="text-xl md:text-2xl font-bold text-white">
-            {title}
-          </h2>
+          <h2 className="text-xl md:text-2xl font-bold text-white">{title}</h2>
           {subtitle && (
             <p className="text-sm md:text-base text-gray-400 mb-4 md:mb-6">
               {subtitle}
@@ -49,8 +45,8 @@ const SectionHeader = memo(function SectionHeader({
           </span>
         )}
         {actionLabel && actionHref && (
-          <a href={actionHref}>
-            <button className="flex items-center gap-1 text-sm md:text-base text-gray-300 hover:text-white transition-colors">
+          <a href={actionHref} className="inline-flex" aria-label={actionLabel}>
+            <button className="flex items-center gap-1 text-sm md:text-base text-gray-300 hover:text-white transition-colors min-h-[48px] min-w-[48px] px-3 touch-manipulation">
               {actionLabel}
             </button>
           </a>

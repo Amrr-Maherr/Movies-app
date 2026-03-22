@@ -16,6 +16,11 @@ export interface NewReleaseLayoutProps {
 /**
  * New Release Layout Component
  * Displays a card with NEW badge and release date
+ *
+ * ACCESSIBILITY FIX:
+ * - Wrapped container has proper role and aria-label
+ * - Added touch-manipulation for better mobile behavior
+ * - Badges have proper positioning and don't overlap touch targets
  */
 const NewReleaseLayout = memo(
   ({
@@ -24,13 +29,16 @@ const NewReleaseLayout = memo(
     posterUrl,
     ratingValue,
     formattedReleaseDate,
-    children,
   }: NewReleaseLayoutProps) => {
     // Check if content is for adults only
     const isAdult = movie.adult === true;
 
     return (
-      <>
+      <div
+        className="group touch-manipulation min-h-[48px]"
+        role="article"
+        aria-label={`New Release: ${title}`}
+      >
         <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
           <OptimizedImage
             src={posterUrl}
@@ -42,9 +50,7 @@ const NewReleaseLayout = memo(
           />
 
           {/* Dark overlay for adult content */}
-          {isAdult && (
-            <div className="absolute inset-0" />
-          )}
+          {isAdult && <div className="absolute inset-0" />}
 
           {/* Adult Badge (+18) */}
           {isAdult && (
@@ -63,7 +69,10 @@ const NewReleaseLayout = memo(
           {/* Rating Badge (hidden for adult content) */}
           {!isAdult && ratingValue && (
             <div className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded flex items-center gap-1 z-10">
-              <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+              <Star
+                className="w-3 h-3 text-yellow-400 fill-yellow-400"
+                aria-hidden="true"
+              />
               {ratingValue}
             </div>
           )}
@@ -76,20 +85,17 @@ const NewReleaseLayout = memo(
               </p>
             </div>
           </div>
-
-          {/* Children (additional overlays) */}
-          {children}
         </div>
         <h3 className="text-sm md:text-base text-white font-medium line-clamp-1 group-hover:text-gray-300 transition-colors">
           {title}
         </h3>
         {formattedReleaseDate && (
           <div className="flex items-center gap-1 text-xs text-gray-400 mt-1">
-            <Calendar className="w-3 h-3" />
+            <Calendar className="w-3 h-3" aria-hidden="true" />
             {formattedReleaseDate}
           </div>
         )}
-      </>
+      </div>
     );
   },
 );

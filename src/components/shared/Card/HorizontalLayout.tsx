@@ -18,6 +18,12 @@ export interface HorizontalLayoutProps {
 /**
  * Horizontal Layout Component (Image on left, text on right)
  * Displays a horizontal card with image and text side by side
+ *
+ * ACCESSIBILITY FIX:
+ * - Link now has proper touch target with min-h-[48px]
+ * - Added aria-label for screen readers
+ * - Added touch-manipulation for better mobile behavior
+ * - Added keyboard navigation support
  */
 const HorizontalLayout = memo(
   ({
@@ -30,13 +36,25 @@ const HorizontalLayout = memo(
     detailsUrl,
     plainLayout,
   }: HorizontalLayoutProps) => (
-    <Link to={detailsUrl} className="block w-full group">
+    <Link
+      to={detailsUrl}
+      className="block w-full group touch-manipulation"
+      aria-label={`View details for ${title}`}
+    >
       <motion.div
-        className={`cursor-pointer bg-zinc-900/80 rounded-xl flex gap-3 border border-white/5 shadow-lg ${
+        className={`cursor-pointer bg-zinc-900/80 rounded-xl flex gap-3 border border-white/5 shadow-lg min-h-[48px] ${
           !plainLayout ? "flex-col md:flex-row" : "hover:bg-zinc-700/80"
         }`}
         whileHover={{ y: -2, boxShadow: "0 20px 40px rgba(0,0,0,0.5)" }}
         transition={{ duration: 0.25, ease: "easeOut" }}
+        role="article"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            window.location.href = detailsUrl;
+          }
+        }}
       >
         <div
           className={`relative flex-shrink-0 ${
