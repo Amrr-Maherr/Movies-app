@@ -39,52 +39,11 @@ export default function SubscribePage() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 py-8 px-4 sm:py-12 sm:px-6">
+    <div className="min-h-screen bg-neutral-950 py-8 px-4 sm:py-30 sm:px-6">
       <div className="max-w-4xl mx-auto">
-        {/* Back Button */}
-        {currentStep > 1 && currentStep < 5 && (
-          <button
-            onClick={handleBack}
-            className="flex items-center gap-2 text-neutral-400 hover:text-white mb-6 transition-colors group"
-          >
-            <div className="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-700 transition-colors">
-              <ArrowLeft className="h-4 w-4" />
-            </div>
-            <span className="text-sm font-medium">Back</span>
-          </button>
-        )}
-
-        {/* Header */}
-        {currentStep < 5 && (
-          <div className="text-center mb-8">
-            {/* Netflix Logo */}
-            <div className="flex justify-center mb-4">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg shadow-red-600/30">
-                <span className="text-white font-bold text-xl">N</span>
-              </div>
-            </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
-              Join Netflix
-            </h1>
-            <p className="text-neutral-400 text-sm">
-              Step {currentStep} of {STEPS.length}
-            </p>
-          </div>
-        )}
-
         {/* Progress Bar */}
         {currentStep < 5 && (
           <div className="mb-10">
-            {/* Progress Bar */}
-            <div className="h-1.5 bg-neutral-800 rounded-full overflow-hidden mb-8">
-              <div
-                className="h-full bg-gradient-to-r from-red-600 via-red-500 to-red-600 transition-all duration-500 ease-out"
-                style={{
-                  width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%`,
-                }}
-              />
-            </div>
-
             {/* Step Indicators - Hidden on mobile, shown on desktop */}
             <div className="hidden sm:flex justify-between">
               {STEPS.map((step) => {

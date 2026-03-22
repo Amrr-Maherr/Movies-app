@@ -1,9 +1,9 @@
 import { memo, useMemo, useCallback, Suspense, useState, lazy } from "react";
-import { motion } from "framer-motion";
-import { Film, Calendar, Star, TrendingUp } from "lucide-react";
+import { Film, Star } from "lucide-react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import ShadcnPagination from "@/components/shared/Pagination/ShadcnPagination";
 import { useNowPlayingMoviesQuery } from "@/hooks/shared";
 import type { Movie } from "@/types";
 
@@ -15,8 +15,6 @@ const HeroSection = lazy(
 const SectionHeader = lazy(
   () => import("@/components/shared/SectionHeader/SectionHeader"),
 );
-const Slider = lazy(() => import("@/components/shared/Slider/slider"));
-const Card = lazy(() => import("@/components/shared/Card/Card"));
 
 /**
  * NowPlayingMoviesPage Component
@@ -46,28 +44,6 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
       .filter((m: Movie) => m.backdrop_path)
       .sort((a: Movie, b: Movie) => b.popularity - a.popularity)
       .slice(0, 5);
-  }, [movies]);
-
-  // Memoized: Get trending movies for slider
-  const trendingMovies = useMemo(() => {
-    if (!movies?.results || movies.results.length === 0) return [];
-    return movies.results
-      .filter((m: Movie) => m.vote_average >= 7)
-      .sort((a: Movie, b: Movie) => b.vote_average - a.vote_average)
-      .slice(0, 10);
-  }, [movies]);
-
-  // Memoized: Get new releases
-  const newReleases = useMemo(() => {
-    if (!movies?.results || movies.results.length === 0) return [];
-    const now = new Date();
-    const oneMonthAgo = new Date(now.setMonth(now.getMonth() - 1));
-    return movies.results
-      .filter((m: Movie) => {
-        if (!m.release_date) return false;
-        return new Date(m.release_date) >= oneMonthAgo;
-      })
-      .slice(0, 10);
   }, [movies]);
 
   if (isLoading) {
@@ -133,88 +109,6 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
         </div>
       </section>
 
-      {/* Trending Now Section */}
-      {trendingMovies.length > 0 && (
-        <section className="bg-black py-8">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-            <Suspense
-              fallback={<SectionSkeleton variant="list" cardCount={1} />}
-            >
-              <SectionHeader
-                title="Trending Now"
-                subtitle="Highest rated movies this week"
-                icon={TrendingUp}
-                iconColor="text-red-500"
-                badgeText="Hot"
-              />
-            </Suspense>
-            <LazyWrapper height={400}>
-              <Suspense
-                fallback={<SectionSkeleton variant="grid" cardCount={6} />}
-              >
-                <Slider
-                  slidesPerView={6}
-                  slidesPerViewMobile={3}
-                  spaceBetween={16}
-                  hideNavigation={false}
-                >
-                  {trendingMovies.map((movie) => (
-                    <Card
-                      key={movie.id}
-                      movie={movie}
-                      variant="standard"
-                      showBadge
-                      badgeType="trending"
-                    />
-                  ))}
-                </Slider>
-              </Suspense>
-            </LazyWrapper>
-          </div>
-        </section>
-      )}
-
-      {/* New Releases Section */}
-      {newReleases.length > 0 && (
-        <section className="bg-black py-8">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-            <Suspense
-              fallback={<SectionSkeleton variant="list" cardCount={1} />}
-            >
-              <SectionHeader
-                title="New Releases"
-                subtitle="Fresh in theaters this month"
-                icon={Calendar}
-                iconColor="text-blue-500"
-                badgeText="New"
-                badgeColor="text-blue-500"
-              />
-            </Suspense>
-            <LazyWrapper height={400}>
-              <Suspense
-                fallback={<SectionSkeleton variant="grid" cardCount={6} />}
-              >
-                <Slider
-                  slidesPerView={6}
-                  slidesPerViewMobile={3}
-                  spaceBetween={16}
-                  hideNavigation={false}
-                >
-                  {newReleases.map((movie) => (
-                    <Card
-                      key={movie.id}
-                      movie={movie}
-                      variant="newRelease"
-                      isNew
-                    />
-                  ))}
-                </Slider>
-              </Suspense>
-            </LazyWrapper>
-          </div>
-        </section>
-      )}
-
       {/* All Now Playing Movies Grid */}
       <section className="bg-black py-8">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
@@ -236,32 +130,13 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
         </div>
       </section>
 
-      {/* Pagination Info */}
-      <section className="bg-black py-8 border-t border-white/10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
-          <div className="flex items-center justify-center gap-4">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="px-6 py-2 bg-white/10 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 transition-colors"
-            >
-              Previous
-            </motion.button>
-            <span className="text-white/80">Page {currentPage}</span>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setCurrentPage((p) => p + 1)}
-              disabled={movies.results.length < 20}
-              className="px-6 py-2 bg-white/10 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/20 transition-colors"
-            >
-              Next
-            </motion.button>
-          </div>
-        </div>
-      </section>
+      {/* Pagination */}
+      <ShadcnPagination
+        currentPage={currentPage}
+        totalPages={movies.total_pages}
+        isLoading={isLoading}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 });
