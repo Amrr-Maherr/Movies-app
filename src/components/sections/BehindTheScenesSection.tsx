@@ -72,17 +72,21 @@ const Lightbox = memo(function Lightbox({
         )}
 
         {/* Image */}
-        <motion.img
+        <motion.div
           key={activeIndex}
-          src={`${IMAGE_BASE_URL}${FULL_SIZE}${current.file_path}`}
-          alt={`Behind the scenes ${activeIndex + 1}`}
-          className="max-h-[90vh] max-w-[90vw] object-contain rounded-lg shadow-2xl"
+          className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-2xl overflow-hidden"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.2 }}
           onClick={(e) => e.stopPropagation()}
-          loading="lazy"
-        />
+        >
+          <OptimizedImage
+            src={`${IMAGE_BASE_URL}${FULL_SIZE}${current.file_path}`}
+            alt={`Behind the scenes ${activeIndex + 1}`}
+            className="max-h-[90vh] max-w-[90vw] object-contain"
+            objectFit="contain"
+          />
+        </motion.div>
 
         {/* Next */}
         {activeIndex < images.length - 1 && (

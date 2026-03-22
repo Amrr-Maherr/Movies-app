@@ -135,14 +135,19 @@ const Company = memo(function Company() {
                 to={`/company/${company.parent_company.id}`}
                 className="text-white hover:underline font-medium flex items-center gap-2"
               >
-                {company.parent_company.logo_path ? (
-                  <img
-                    src={`${IMAGE_BASE_URL}${company.parent_company.logo_path}`}
-                    alt={company.parent_company.name}
-                    className="h-8 object-contain"
-                  />
-                ) : (
-                  <span>{company.parent_company.name}</span>
+                {company.parent_company && (
+                  <Suspense
+                    fallback={<span className="text-white/60">Loading...</span>}
+                  >
+                    <LazyWrapper height={32}>
+                      <OptimizedImage
+                        src={`${IMAGE_BASE_URL}${company.parent_company.logo_path}`}
+                        alt={company.parent_company.name}
+                        className="h-8 object-contain"
+                        objectFit="contain"
+                      />
+                    </LazyWrapper>
+                  </Suspense>
                 )}
               </Link>
             </div>

@@ -1,8 +1,10 @@
-import { memo, useMemo, useState, useCallback } from "react";
+import { memo, useMemo, useState, useCallback, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { ImageFile } from "@/services/moviesService";
+
+const LazyOptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 
 interface ImagesGalleryProps {
   images: ImageFile[];
@@ -84,8 +86,6 @@ const ImageModal = memo(function ImageModal({
   onNext: () => void;
   type: "backdrop" | "poster" | "logo";
 }) {
-  const imageUrl = `${TMDB_IMAGE_BASE_URL}/original${image.file_path}`;
-
   return (
     <AnimatePresence>
       <motion.div
@@ -152,11 +152,20 @@ const ImageModal = memo(function ImageModal({
           className="max-w-7xl max-h-[90vh] p-4"
           onClick={(e) => e.stopPropagation()}
         >
-          <img
-            src={imageUrl}
-            alt={`${type} image full size`}
-            className="max-w-full max-h-[85vh] object-contain rounded-lg"
-          />
+          <Suspense
+            fallback={
+              <div className="w-full h-[60vh] bg-zinc-800 animate-pulse rounded-lg flex items-center justify-center">
+                <span className="text-white/60">Loading image...</span>
+              </div>
+            }
+          >
+            <LazyOptimizedImage
+              src={`${TMDB_IMAGE_BASE_URL}/w1280${image.file_path}`}
+              alt={`${type} image full size`}
+              className="max-w-full max-h-[85vh] object-contain rounded-lg"
+              objectFit="contain"
+            />
+          </Suspense>
         </motion.div>
       </motion.div>
     </AnimatePresence>

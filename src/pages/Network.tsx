@@ -141,14 +141,19 @@ const Network = memo(function Network() {
                 to={`/network/${network.parent_organization.id}`}
                 className="text-white hover:underline font-medium flex items-center gap-2"
               >
-                {network.parent_organization.logo_path ? (
-                  <img
-                    src={`${IMAGE_BASE_URL}${network.parent_organization.logo_path}`}
-                    alt={network.parent_organization.name}
-                    className="h-8 object-contain"
-                  />
-                ) : (
-                  <span>{network.parent_organization.name}</span>
+                {network.parent_organization && (
+                  <Suspense
+                    fallback={<span className="text-white/60">Loading...</span>}
+                  >
+                    <LazyWrapper height={32}>
+                      <OptimizedImage
+                        src={`${IMAGE_BASE_URL}${network.parent_organization.logo_path}`}
+                        alt={network.parent_organization.name}
+                        className="h-8 object-contain"
+                        objectFit="contain"
+                      />
+                    </LazyWrapper>
+                  </Suspense>
                 )}
               </Link>
             </div>

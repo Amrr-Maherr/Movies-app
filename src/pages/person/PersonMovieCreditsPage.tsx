@@ -1,15 +1,17 @@
-import { memo, useMemo, useCallback, Suspense } from "react";
+import { memo, useMemo, useCallback, Suspense, lazy } from "react";
 import { useParams } from "react-router-dom";
 import { Film } from "lucide-react";
 import { extractIdFromSlug } from "@/utils/slugify";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchPersonDetails from '@/hooks/shared/FetchPersonDetails';
+import FetchPersonDetails from "@/hooks/shared/FetchPersonDetails";
 import { usePersonMovieCredits } from "@/hooks/shared";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 import MediaGrid from "@/components/shared/MediaGrid";
 import { getYear } from "@/utils";
+
+const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 
 /**
  * PersonMovieCreditsPage Component
@@ -146,11 +148,20 @@ const PersonMovieCreditsPage = memo(function PersonMovieCreditsPage() {
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
           {/* Page Title */}
           <div className="flex items-center gap-4">
-            <img
-              src={`https://image.tmdb.org/t/p/w185${personData.profile_path}`}
-              alt={personData.name}
-              className="w-20 h-28 object-cover rounded-lg shadow-lg"
-            />
+            <Suspense
+              fallback={
+                <div className="w-20 h-28 bg-zinc-800 animate-pulse rounded-lg" />
+              }
+            >
+              <LazyWrapper height="100%">
+                <OptimizedImage
+                  src={`https://image.tmdb.org/t/p/w185${personData.profile_path}`}
+                  alt={personData.name}
+                  className="w-20 h-28 object-cover rounded-lg shadow-lg"
+                  objectFit="cover"
+                />
+              </LazyWrapper>
+            </Suspense>
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                 {personData.name}

@@ -1,6 +1,9 @@
-import { memo } from "react";
+import { memo, lazy, Suspense } from "react";
 import { Tv, DollarSign } from "lucide-react";
 import type { MovieDetailsResponse, TVDetailsResponse } from "@/services";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
+
+const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 
 interface WatchProviderStats {
   flatrate?: { length: number };
@@ -86,12 +89,20 @@ const DetailHeader = memo(function DetailHeader({
         <div className="flex flex-col items-center md:items-start md:flex-row gap-4 sm:gap-6 md:gap-8 lg:gap-10">
           {/* Poster */}
           <div className="flex-shrink-0 w-full max-w-[200px] sm:max-w-[240px] md:max-w-[280px] lg:max-w-[320px]">
-            <img
-              src={`https://image.tmdb.org/t/p/w342${media.poster_path}`}
-              alt={title}
-              className="w-full h-auto aspect-[2/3] object-cover rounded-lg sm:rounded-xl shadow-2xl shadow-black/50 border border-white/10"
-              loading="lazy"
-            />
+            <Suspense
+              fallback={
+                <div className="w-full aspect-[2/3] bg-zinc-800 animate-pulse rounded-lg sm:rounded-xl" />
+              }
+            >
+              <LazyWrapper height="100%">
+                <OptimizedImage
+                  src={`https://image.tmdb.org/t/p/w342${media.poster_path}`}
+                  alt={title}
+                  className="w-full h-auto aspect-[2/3] object-cover rounded-lg sm:rounded-xl shadow-2xl shadow-black/50 border border-white/10"
+                  objectFit="cover"
+                />
+              </LazyWrapper>
+            </Suspense>
           </div>
 
           {/* Info */}
