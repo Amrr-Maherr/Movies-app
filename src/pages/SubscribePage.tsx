@@ -8,6 +8,7 @@ import Step2ChoosePlan from "./subscribe/Step2ChoosePlan";
 import PaymentForm from "./subscribe/PaymentForm";
 import Step3ConfirmSubscription from "./subscribe/Step3ConfirmSubscription";
 import Step4SuccessScreen from "./subscribe/Step4SuccessScreen";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 const STEPS = [
   { id: 1, name: "Account" },
@@ -40,6 +41,10 @@ export default function SubscribePage() {
 
   return (
     <div className="min-h-screen bg-neutral-950 py-8 px-4 sm:py-30 sm:px-6">
+      <HelmetMeta
+        name="Subscribe to Netflix"
+        description="Choose your subscription plan and start watching unlimited movies and TV shows."
+      />
       <div className="max-w-4xl mx-auto">
         {/* Progress Bar */}
         {currentStep < 5 && (

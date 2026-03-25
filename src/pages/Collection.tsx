@@ -5,6 +5,7 @@ import { SectionSkeleton, Error } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Film, Star } from "lucide-react";
 import type { HeroMedia } from "@/types";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
 const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
@@ -77,6 +78,10 @@ const Collection = memo(function Collection() {
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)]">
+      <HelmetMeta
+        name={collection.name}
+        description={`Watch the ${collection.name} movie collection. ${totalMovies} movies with an average rating of ${averageRating}/10.`}
+      />
       {/* Hero Section with Backdrop */}
       <div className="relative h-[100dvh] overflow-hidden">
         {backdropUrl ? (

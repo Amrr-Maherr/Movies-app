@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "@/hooks/shared";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function Step1CreateAccount({ onNext }) {
   const navigate = useNavigate();
@@ -44,6 +45,10 @@ export default function Step1CreateAccount({ onNext }) {
 
   return (
     <div className="w-full max-w-[500px] mx-auto px-6 py-8">
+      <HelmetMeta
+        name="Create Account"
+        description="Create your Netflix account to start your subscription journey."
+      />
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white mb-2">Sign In</h1>

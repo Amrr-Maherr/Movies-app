@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import type { HeroMedia } from "@/types";
 import { SectionSkeleton, Error } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
 const Card = lazy(() => import("@/components/shared/Card/Card"));
@@ -34,6 +35,10 @@ export default function Tags() {
 
   return (
     <div className="container mx-auto px-4 py-20 min-h-screen bg-[var(--background-primary)]">
+      <HelmetMeta
+        name={`Tag: ${keyword}`}
+        description={`Browse all movies and TV shows tagged with "${keyword}". Find related content on Netflix.`}
+      />
       <h1 className="text-3xl font-bold text-white mb-6">Tag: {keyword}</h1>
 
       {results.length === 0 ? (

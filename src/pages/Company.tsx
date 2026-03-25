@@ -4,6 +4,7 @@ import { useCompanyDetails, useCompanyMovies } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Film, MapPin, Globe, Building2 } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
 const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
@@ -54,6 +55,10 @@ const Company = memo(function Company() {
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)]">
+      <HelmetMeta
+        name={company.name}
+        description={`Browse movies and TV shows produced by ${company.name}. ${companyMovies?.total_results || 0} titles available.`}
+      />
       {/* Header Section */}
       <div className="relative h-[300px] md:h-[400px] bg-gradient-to-b from-black/80 to-[var(--background-primary)]">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl h-full flex items-center">

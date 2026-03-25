@@ -3,6 +3,7 @@ import { Tv } from "lucide-react";
 import { useStreamingPlatforms } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
 const PlatformCard = lazy(() => import("@/components/sections/PlatformCard"));
@@ -38,6 +39,10 @@ const Platforms = memo(function Platforms() {
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20 pb-12">
+      <HelmetMeta
+        name="Streaming Platforms"
+        description="Browse all available streaming platforms and discover movies and TV shows available on each service."
+      />
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         {/* Header */}
         <div className="mb-8">

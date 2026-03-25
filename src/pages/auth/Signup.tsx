@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "@/layout/AuthLayout";
 import { useSignup } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
 const Input = lazy(() =>
@@ -63,6 +64,10 @@ export default function Signup() {
 
   return (
     <AuthLayout>
+      <HelmetMeta
+        name="Create an Account"
+        description="Sign up for Netflix to start watching movies and TV shows"
+      />
       <div className="w-full max-w-[450px] bg-black/75 rounded-lg px-8 py-16 md:px-16 md:py-12">
         <h1 className="text-3xl font-bold text-white mb-8">
           Create an Account

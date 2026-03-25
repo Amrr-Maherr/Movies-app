@@ -3,10 +3,15 @@
 import { CheckCircle2, Play, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function Step4SuccessScreen({ planName, onGoHome }) {
   return (
     <div className="w-full max-w-[500px] mx-auto px-6 py-8">
+      <HelmetMeta
+        name="Subscription Successful"
+        description={`Your ${planName} subscription is now active. Start watching unlimited movies and TV shows on Netflix.`}
+      />
       {/* Success Icon */}
       <div className="text-center mb-8">
         <div className="inline-flex items-center justify-center mb-6">

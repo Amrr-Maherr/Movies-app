@@ -6,6 +6,7 @@ import { Tv } from "lucide-react";
 import Pagination from "@/components/shared/Pagination";
 import type { HeroMedia } from "@/types";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
 const Card = lazy(() => import("@/components/shared/Card/Card"));
@@ -50,6 +51,10 @@ const GenreTV = memo(function GenreTV() {
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20 pb-12">
+      <HelmetMeta
+        name={`${genreName} TV Shows`}
+        description={`Watch ${totalResults} TV shows in the ${genreName} genre. Stream the best ${genreName} series on Netflix.`}
+      />
       <div className="container">
         {/* Header */}
         <div className="mb-8">

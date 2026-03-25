@@ -5,6 +5,7 @@ import { getTrendingPeopleDay, getTrendingPeopleWeek } from "@/services";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Star, TrendingUp } from "lucide-react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
 const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
@@ -75,6 +76,10 @@ const TrendingPeople = memo(function TrendingPeople() {
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20 pb-12">
+      <HelmetMeta
+        name="Trending People"
+        description="Discover the most popular actors and directors trending right now on Netflix."
+      />
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         {/* Header */}
         <div className="mb-8">

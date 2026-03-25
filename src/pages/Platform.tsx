@@ -6,6 +6,7 @@ import { Film, Tv, Globe } from "lucide-react";
 import Pagination from "@/components/shared/Pagination";
 import type { HeroMedia } from "@/types";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
 const Card = lazy(() => import("@/components/shared/Card/Card"));
@@ -108,6 +109,10 @@ const Platform = memo(function Platform() {
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20 pb-12">
+      <HelmetMeta
+        name={`${displayName} - Streaming Platform`}
+        description={`${displayDescription}. Browse ${totalResults} movies and TV shows available on ${displayName}.`}
+      />
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         {/* Header */}
         <div className="mb-8">

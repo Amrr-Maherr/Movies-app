@@ -4,6 +4,7 @@ import { useNetworkDetails, useNetworkTVSeries } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { Tv, MapPin, Globe, Building2 } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 
@@ -52,6 +53,10 @@ const Network = memo(function Network() {
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)]">
+      <HelmetMeta
+        name={network.name}
+        description={`Browse TV shows from ${network.name}. ${networkShows?.total_results || 0} TV series available.`}
+      />
       {/* Header Section */}
       <div className="relative h-[300px] md:h-[400px] bg-gradient-to-b from-black/80 to-[var(--background-primary)]">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl h-full flex items-center">

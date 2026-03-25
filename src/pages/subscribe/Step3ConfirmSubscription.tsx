@@ -4,6 +4,7 @@ import { Check, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 const PLANS = {
   "tier-basic": {
@@ -32,6 +33,10 @@ export default function Step3ConfirmSubscription({
 
   return (
     <div className="w-full max-w-[550px] mx-auto px-6 py-8">
+      <HelmetMeta
+        name="Confirm Subscription"
+        description="Review your Netflix subscription details before confirming your payment."
+      />
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-white mb-2">

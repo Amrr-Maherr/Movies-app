@@ -3,6 +3,7 @@
 import { Check, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 const PLANS = [
   {
@@ -33,6 +34,10 @@ export default function Step2ChoosePlan({
 }) {
   return (
     <div className="w-full max-w-[900px] mx-auto px-6 py-8">
+      <HelmetMeta
+        name="Choose Your Plan"
+        description="Select the perfect Netflix subscription plan for your needs. Basic, Standard, or Premium."
+      />
       {/* Header */}
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold text-white mb-2">

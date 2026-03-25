@@ -3,6 +3,7 @@ import { useMovieGenres, useTvGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film, Tv } from "lucide-react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
 const GenreCard = lazy(() => import("@/components/GenreCard"));
@@ -52,6 +53,10 @@ const Genres = memo(function Genres() {
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20">
+      <HelmetMeta
+        name="Browse by Genre"
+        description="Explore movies and TV shows organized by category. Find your favorite genres and discover new content on Netflix."
+      />
       <div className="container">
         {/* Page Header */}
         <div className="mb-10 mt-4">

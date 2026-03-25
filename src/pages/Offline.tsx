@@ -1,5 +1,6 @@
-import { WifiOff, RefreshCw, Home } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { WifiOff, RefreshCw, Home } from "lucide-react";
+import { Link } from "react-router-dom";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function OfflinePage() {
   const handleRetry = () => {
@@ -10,6 +11,10 @@ export default function OfflinePage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background-primary)] text-[var(--text-primary)] p-4">
+      <HelmetMeta
+        name="You're Offline"
+        description="You've lost your internet connection. Check your network settings and try again."
+      />
       <div className="text-center max-w-md">
         {/* Offline Icon */}
         <div className="bg-white/10 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -18,10 +23,11 @@ export default function OfflinePage() {
 
         {/* Title */}
         <h1 className="text-3xl font-bold mb-2">You're Offline</h1>
-        
+
         {/* Description */}
         <p className="text-gray-400 mb-8">
-          It looks like you've lost your internet connection. Check your network settings and try again.
+          It looks like you've lost your internet connection. Check your network
+          settings and try again.
         </p>
 
         {/* Actions */}
@@ -33,7 +39,7 @@ export default function OfflinePage() {
             <RefreshCw className="h-5 w-5" />
             Try Again
           </button>
-          
+
           <Link
             to="/"
             className="flex items-center justify-center gap-2 bg-white/10 text-white px-6 py-3 rounded font-semibold hover:bg-white/20 transition-colors"

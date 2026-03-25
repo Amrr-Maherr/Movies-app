@@ -12,6 +12,7 @@ import { Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2Icon } from "lucide-react";
+import HelmetMeta from "@/components/shared/HelmetMeta";
 
 const stripePromise = loadStripe(
   "pk_test_51S3dQaJyhK1JCMi8Znjoo5NoLzEcgBIQ3C0xPnT2KG8yt88Tf0i5tJgLnu9EspJ3Nc6xmugxQ0a0jp51gWRSWRG400A2YuzVzP",
@@ -111,6 +112,10 @@ interface PaymentFormProps {
 export default function PaymentForm({ onSuccess }: PaymentFormProps) {
   return (
     <div className="w-full max-w-[500px] mx-auto px-6 py-8">
+      <HelmetMeta
+        name="Payment"
+        description="Secure payment for your Netflix subscription. Enter your card details to complete your subscription."
+      />
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center flex-shrink-0">
