@@ -245,11 +245,11 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
           {recommendations.length > 0 ? (
             <RecommendationsSection recommendations={recommendations} title="More Like This" variant="recommendations" />
           ) : (
-            <section className="bg-black py-16">
+            <section className="bg-[var(--section-bg)] py-16">
               <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
                 <Heart className="w-20 h-20 text-white/20 mx-auto mb-4" />
                 <h2 className="text-2xl font-bold text-white mb-2">No Recommendations Available</h2>
-                <p className="text-white/60 text-lg">We don't have enough data to recommend similar shows yet.</p>
+                <p className="text-[var(--section-meta-color)] text-lg">We don't have enough data to recommend similar shows yet.</p>
               </div>
             </section>
           )}
@@ -261,9 +261,9 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <section className="bg-black py-12">
+    <section className="bg-[var(--section-bg)] py-12">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
-        <p className="text-white/60 text-lg">{message}</p>
+        <p className="text-[var(--section-meta-color)] text-lg">{message}</p>
       </div>
     </section>
   );

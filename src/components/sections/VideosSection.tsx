@@ -1,12 +1,10 @@
 import { memo, useMemo, useState, useCallback, lazy, Suspense } from "react";
-import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionSkeleton } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import type { Video } from "@/types";
 
-// Lazy-loaded components
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 const TrailerModal = lazy(() => import("@/components/shared/TrailerModal"));
 
@@ -15,174 +13,105 @@ interface VideosSectionProps {
   title?: string;
 }
 
-// Memoized VideoCard component
+const TYPE_LABEL: Record<string, string> = {
+  Trailer: "TRAILER",
+  Teaser: "TEASER",
+  Clip: "CLIP",
+  Featurette: "FEATURETTE",
+};
+
+const TYPE_COLOR: Record<string, string> = {
+  Trailer:    "bg-[var(--badge-trailer)]",
+  Teaser:     "bg-[var(--badge-teaser)]",
+  Clip:       "bg-[var(--badge-clip)]",
+  Featurette: "bg-[var(--badge-featurette)]",
+};
+
 const VideoCard = memo(function VideoCard({
   video,
   onPlay,
 }: {
   video: Video;
-  onPlay: (video: Video) => void;
+  onPlay: (v: Video) => void;
 }) {
-  const thumbnailUrl = `https://img.youtube.com/vi/${video.key}/hqdefault.jpg`;
-  const isTrailer = video.type === "Trailer";
-  const isTeaser = video.type === "Teaser";
-  const isClip = video.type === "Clip";
-
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ scale: 1.05 }}
-      className="relative cursor-pointer group"
+    <div
+      className="cursor-pointer group"
       onClick={() => onPlay(video)}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onPlay(video);
-        }
-      }}
-      aria-label={`Play ${video.type}: ${video.name}`}
+      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onPlay(video)}
+      aria-label={`Play ${video.name}`}
     >
-      <div className="relative aspect-video rounded-lg overflow-hidden bg-zinc-800">
+      <div className="relative aspect-video rounded overflow-hidden bg-zinc-900">
         <OptimizedImage
-          src={thumbnailUrl}
-          alt={video.name || `${video.type} thumbnail`}
-          className="w-full h-full"
+          src={`https://img.youtube.com/vi/${video.key}/hqdefault.jpg`}
+          alt={video.name}
+          className="w-full h-full transition-transform duration-300 group-hover:scale-105"
           objectFit="cover"
-          priority={false}
         />
+        {/* dark overlay */}
+        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors duration-200" />
 
-        {/* Play Button Overlay */}
-        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300 flex items-center justify-center">
-          <motion.div
-            initial={{ scale: 0.8 }}
-            whileHover={{ scale: 1.1 }}
-            className="w-14 h-14 rounded-full bg-red-600/90 flex items-center justify-center backdrop-blur-sm border-2 border-white/30"
-          >
-            <Play className="w-6 h-6 text-white ml-1" fill="white" />
-          </motion.div>
+        {/* play icon */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-colors">
+            <Play className="w-5 h-5 text-white fill-white ml-0.5" />
+          </div>
         </div>
 
-        {/* Video Type Badge */}
-        <div className="absolute top-2 left-2 flex gap-1">
-          {isTrailer && (
-            <span className="px-2 py-1 text-xs font-semibold bg-red-600 text-white rounded">
-              TRAILER
-            </span>
-          )}
-          {isTeaser && (
-            <span className="px-2 py-1 text-xs font-semibold bg-blue-600 text-white rounded">
-              TEASER
-            </span>
-          )}
-          {isClip && (
-            <span className="px-2 py-1 text-xs font-semibold bg-green-600 text-white rounded">
-              CLIP
-            </span>
-          )}
-        </div>
+        {/* type badge */}
+        {TYPE_LABEL[video.type] && (
+          <span className={`absolute top-2 left-2 text-[10px] font-bold text-white px-1.5 py-0.5 rounded ${TYPE_COLOR[video.type] ?? "bg-zinc-700"}`}>
+            {TYPE_LABEL[video.type]}
+          </span>
+        )}
       </div>
 
-      {/* Video Title */}
-      <p className="mt-2 text-sm font-medium text-white line-clamp-2 group-hover:text-red-400 transition-colors">
-        {video.name || `${video.type}`}
+      <p className="mt-2 text-sm text-white/80 line-clamp-1 group-hover:text-white transition-colors">
+        {video.name}
       </p>
-    </motion.div>
+    </div>
   );
 });
 
-/**
- * VideosSection Component
- * Displays a horizontal slider of video thumbnails (trailers, teasers, clips)
- * with Framer Motion animations and modal playback
- */
 const VideosSection = memo(function VideosSection({
   videos,
   title = "Videos & Trailers",
 }: VideosSectionProps) {
-  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [selected, setSelected] = useState<Video | null>(null);
 
-  // Memoized: Filter valid YouTube videos
   const validVideos = useMemo(
-    () =>
-      videos.filter(
-        (video) =>
-          video.site === "YouTube" &&
-          video.key &&
-          (video.type === "Trailer" ||
-            video.type === "Teaser" ||
-            video.type === "Clip" ||
-            video.type === "Featurette"),
-      ),
+    () => videos.filter((v) => v.site === "YouTube" && v.key &&
+      ["Trailer", "Teaser", "Clip", "Featurette"].includes(v.type)),
     [videos],
   );
 
-  // Memoized: Handle video play
-  const handlePlay = useCallback((video: Video) => {
-    setSelectedVideo(video);
-  }, []);
+  const handlePlay = useCallback((v: Video) => setSelected(v), []);
+  const handleClose = useCallback(() => setSelected(null), []);
 
-  // Memoized: Handle modal close
-  const handleCloseModal = useCallback(() => {
-    setSelectedVideo(null);
-  }, []);
-
-  if (validVideos.length === 0) {
-    return null;
-  }
+  if (!validVideos.length) return null;
 
   return (
     <>
-      <section className="bg-black py-4 md:py-12">
+      <section className="bg-[var(--section-bg)] py-10">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-          {/* Section Title */}
-          <h2 className="text-xl md:text-2xl font-bold text-white mb-6">
-            {title}
-          </h2>
-
-          {/* Horizontal Slider of Videos */}
+          <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6">{title}</h2>
           <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
-            <LazyWrapper height={300}>
-              <Slider
-                slidesPerView={4}
-                slidesPerViewMobile={2}
-                spaceBetween={16}
-                hideNavigation={false}
-                swiperOptions={{
-                  loop: false,
-                  grabCursor: true,
-                }}
-              >
-                {validVideos.map((video) => (
-                  <VideoCard
-                    key={video.id || video.key}
-                    video={video}
-                    onPlay={handlePlay}
-                  />
+            <LazyWrapper height={280}>
+              <Slider slidesPerView={4} slidesPerViewMobile={2} spaceBetween={12} hideNavigation={false}>
+                {validVideos.map((v) => (
+                  <VideoCard key={v.id || v.key} video={v} onPlay={handlePlay} />
                 ))}
               </Slider>
             </LazyWrapper>
           </Suspense>
-
-          {/* Video count info */}
-          <p className="text-white/50 text-sm mt-4 text-center md:text-left">
-            {validVideos.length} {validVideos.length === 1 ? "video" : "videos"}{" "}
-            available
-          </p>
+          <p className="text-[var(--section-meta-color)] text-xs mt-4">{validVideos.length} videos</p>
         </div>
       </section>
 
-      {/* Trailer Modal */}
-      {selectedVideo && (
-        <TrailerModal
-          videoKey={selectedVideo.key}
-          isOpen={!!selectedVideo}
-          onClose={handleCloseModal}
-          title={selectedVideo.name}
-        />
+      {selected && (
+        <TrailerModal videoKey={selected.key} isOpen title={selected.name} onClose={handleClose} />
       )}
     </>
   );

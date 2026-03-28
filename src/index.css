@@ -88,6 +88,22 @@
   --error: #e50914;
   --info: #0071eb;
 
+  /* ── Detail page / Tab sections ── */
+  --section-bg: #141414;
+  --section-title-color: #ffffff;
+  --section-meta-color: rgba(255,255,255,0.4);
+  --tab-active-color: #ffffff;
+  --tab-inactive-color: rgba(255,255,255,0.5);
+  --tab-indicator: #e50914;
+  --tab-border: rgba(255,255,255,0.1);
+  --provider-logo-bg: #2a2a2a;
+  --badge-trailer: #e50914;
+  --badge-teaser: #1d4ed8;
+  --badge-clip: #15803d;
+  --badge-featurette: #7e22ce;
+  --lightbox-bg: rgba(0,0,0,0.95);
+  --input-search-bg: rgba(255,255,255,0.08);
+
   /* shadcn compatibility */
   --radius: 0.625rem;
   --background: oklch(0.97 0 0);

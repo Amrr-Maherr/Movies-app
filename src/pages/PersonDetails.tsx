@@ -162,11 +162,11 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
 
       {/* Movies */}
       {activeTab === "movies" && (
-        <section className="bg-black py-8">
+        <section className="bg-[var(--section-bg)] py-10">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
             {movies.length > 0 ? (
               <>
-                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6 flex items-center gap-2">
                   <Film className="w-5 h-5" /> Filmography ({movies.length} movies)
                 </h2>
                 <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
@@ -176,7 +176,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
             ) : (
               <div className="text-center py-12">
                 <Film className="w-16 h-16 text-white/20 mx-auto mb-4" />
-                <p className="text-white/60 text-lg">No movie credits available yet.</p>
+                <p className="text-[var(--section-meta-color)] text-lg">No movie credits available yet.</p>
               </div>
             )}
           </div>
@@ -185,11 +185,11 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
 
       {/* TV Shows */}
       {activeTab === "tv" && (
-        <section className="bg-black py-8">
+        <section className="bg-[var(--section-bg)] py-10">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
             {tvShows.length > 0 ? (
               <>
-                <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6 flex items-center gap-2">
                   <Tv className="w-5 h-5" /> TV Filmography ({tvShows.length} shows)
                 </h2>
                 <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
@@ -199,7 +199,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
             ) : (
               <div className="text-center py-12">
                 <Tv className="w-16 h-16 text-white/20 mx-auto mb-4" />
-                <p className="text-white/60 text-lg">No TV show credits available yet.</p>
+                <p className="text-[var(--section-meta-color)] text-lg">No TV show credits available yet.</p>
               </div>
             )}
           </div>
@@ -213,10 +213,10 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
             {profileImages.length > 0 ? (
               <ImagesGallery images={profileImages} title="Photo Gallery" type="posters" />
             ) : (
-              <section className="bg-black py-12">
+              <section className="bg-[var(--section-bg)] py-12">
                 <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
                   <ImageIcon className="w-16 h-16 text-white/20 mx-auto mb-4" />
-                  <p className="text-white/60 text-lg">No profile images available yet.</p>
+                  <p className="text-[var(--section-meta-color)] text-lg">No profile images available yet.</p>
                 </div>
               </section>
             )}

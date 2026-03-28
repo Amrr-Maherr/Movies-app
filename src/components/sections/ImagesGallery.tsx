@@ -1,10 +1,10 @@
 import { memo, useMemo, useState, useCallback, lazy, Suspense } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { ImageFile } from "@/services/moviesService";
 
-const LazyOptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
+const LazyImage = lazy(() => import("@/components/ui/OptimizedImage"));
 
 interface ImagesGalleryProps {
   images: ImageFile[];
@@ -12,79 +12,54 @@ interface ImagesGalleryProps {
   type?: "backdrops" | "posters" | "logos" | "all";
 }
 
-const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
+const BASE = "https://image.tmdb.org/t/p";
 
-// Memoized ImageCard component
+const getType = (img: ImageFile): "backdrop" | "poster" | "logo" => {
+  if (img.iso_639_1 !== null && img.aspect_ratio > 2) return "logo";
+  if (img.aspect_ratio >= 1.5) return "backdrop";
+  return "poster";
+};
+
+// ── Image card ──────────────────────────────────────────────────────────────
 const ImageCard = memo(function ImageCard({
   image,
   onClick,
-  type,
 }: {
   image: ImageFile;
   onClick: () => void;
-  type: "backdrop" | "poster" | "logo";
 }) {
-  const imageUrl = `${TMDB_IMAGE_BASE_URL}/w500${image.file_path}`;
-
+  const type = getType(image);
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ scale: 1.03 }}
-      className="relative cursor-pointer group overflow-hidden rounded-lg"
+    <div
+      className={`relative overflow-hidden rounded cursor-pointer group bg-zinc-900 ${type === "backdrop" ? "aspect-video" : "aspect-[2/3]"}`}
       onClick={onClick}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onClick();
-        }
-      }}
-      aria-label={`View ${type} image`}
+      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onClick()}
+      aria-label="View image"
     >
-      <div
-        className={`relative ${
-          type === "backdrop" ? "aspect-video" : "aspect-[2/3]"
-        } bg-zinc-800`}
-      >
-        <OptimizedImage
-          src={imageUrl}
-          alt={`${type} image`}
-          className="w-full h-full"
-          objectFit={type === "logo" ? "contain" : "cover"}
-          priority={false}
-        />
-
-        {/* Hover Overlay */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileHover={{ opacity: 1 }}
-            className="text-white text-sm font-medium"
-          >
-            View
-          </motion.div>
-        </div>
-      </div>
-    </motion.div>
+      <OptimizedImage
+        src={`${BASE}/w500${image.file_path}`}
+        alt="gallery image"
+        className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+        objectFit={type === "logo" ? "contain" : "cover"}
+      />
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-200" />
+    </div>
   );
 });
 
-// Memoized ImageModal component for full-screen viewing
-const ImageModal = memo(function ImageModal({
+// ── Lightbox ─────────────────────────────────────────────────────────────────
+const Lightbox = memo(function Lightbox({
   image,
   onClose,
-  onPrevious,
+  onPrev,
   onNext,
-  type,
 }: {
   image: ImageFile;
   onClose: () => void;
-  onPrevious: () => void;
+  onPrev: () => void;
   onNext: () => void;
-  type: "backdrop" | "poster" | "logo";
 }) {
   return (
     <AnimatePresence>
@@ -92,77 +67,49 @@ const ImageModal = memo(function ImageModal({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--lightbox-bg)]"
         onClick={onClose}
         role="dialog"
         aria-modal="true"
-        aria-label="Image viewer"
       >
-        {/* Close Button */}
-        <motion.button
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          whileHover={{ scale: 1.1 }}
-          className="absolute top-4 right-4 z-10 p-2 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
-          onClick={(e) => {
-            e.stopPropagation();
-            onClose();
-          }}
-          aria-label="Close image viewer"
+        {/* close */}
+        <button
+          className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+          onClick={(e) => { e.stopPropagation(); onClose(); }}
+          aria-label="Close"
         >
-          <X className="w-6 h-6" />
-        </motion.button>
+          <X className="w-5 h-5" />
+        </button>
 
-        {/* Previous Button */}
-        <motion.button
-          initial={{ x: -20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          whileHover={{ scale: 1.1 }}
-          className="absolute left-4 z-10 p-3 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
-          onClick={(e) => {
-            e.stopPropagation();
-            onPrevious();
-          }}
-          aria-label="Previous image"
+        {/* prev */}
+        <button
+          className="absolute left-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          aria-label="Previous"
         >
           <ChevronLeft className="w-6 h-6" />
-        </motion.button>
+        </button>
 
-        {/* Next Button */}
-        <motion.button
-          initial={{ x: 20, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          whileHover={{ scale: 1.1 }}
-          className="absolute right-4 z-10 p-3 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
-          onClick={(e) => {
-            e.stopPropagation();
-            onNext();
-          }}
-          aria-label="Next image"
+        {/* next */}
+        <button
+          className="absolute right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          aria-label="Next"
         >
           <ChevronRight className="w-6 h-6" />
-        </motion.button>
+        </button>
 
-        {/* Image */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.92, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="max-w-7xl max-h-[90vh] p-4"
+          className="max-w-5xl max-h-[90vh] p-4"
           onClick={(e) => e.stopPropagation()}
         >
-          <Suspense
-            fallback={
-              <div className="w-full h-[60vh] bg-zinc-800 animate-pulse rounded-lg flex items-center justify-center">
-                <span className="text-white/60">Loading image...</span>
-              </div>
-            }
-          >
-            <LazyOptimizedImage
-              src={`${TMDB_IMAGE_BASE_URL}/w1280${image.file_path}`}
-              alt={`${type} image full size`}
-              className="max-w-full max-h-[85vh] object-contain rounded-lg"
+          <Suspense fallback={<div className="w-[800px] h-[450px] bg-zinc-800 animate-pulse rounded" />}>
+            <LazyImage
+              src={`${BASE}/w1280${image.file_path}`}
+              alt="full size"
+              className="max-w-full max-h-[85vh] object-contain rounded"
               objectFit="contain"
             />
           </Suspense>
@@ -172,119 +119,61 @@ const ImageModal = memo(function ImageModal({
   );
 });
 
-/**
- * ImagesGallery Component
- * Displays a responsive grid of images (backdrops, posters, or logos)
- * with Framer Motion animations and full-screen modal viewing
- */
+// ── Main ─────────────────────────────────────────────────────────────────────
 const ImagesGallery = memo(function ImagesGallery({
   images,
   title = "Gallery",
   type = "all",
 }: ImagesGalleryProps) {
-  const [selectedImage, setSelectedImage] = useState<ImageFile | null>(null);
+  const [selected, setSelected] = useState<ImageFile | null>(null);
 
-  // Memoized: Filter and categorize images
-  const filteredImages = useMemo(() => {
-    let result;
-    if (type === "backdrops") {
-      result = images.filter((img) => img.aspect_ratio >= 1.5);
-    } else if (type === "posters") {
-      result = images.filter((img) => img.aspect_ratio < 1.5);
-    } else if (type === "logos") {
-      result = images.filter(
-        (img) => img.iso_639_1 !== null && img.aspect_ratio > 2,
-      );
-    } else {
-      result = images;
-    }
-
-    return result;
+  const filtered = useMemo(() => {
+    if (type === "backdrops") return images.filter((i) => i.aspect_ratio >= 1.5);
+    if (type === "posters")   return images.filter((i) => i.aspect_ratio < 1.5);
+    if (type === "logos")     return images.filter((i) => i.iso_639_1 !== null && i.aspect_ratio > 2);
+    return images;
   }, [images, type]);
 
-  // Memoized: Get image type
-  const getImageType = useCallback(
-    (image: ImageFile): "backdrop" | "poster" | "logo" => {
-      if (image.iso_639_1 !== null && image.aspect_ratio > 2) return "logo";
-      if (image.aspect_ratio >= 1.5) return "backdrop";
-      return "poster";
-    },
-    [],
-  );
-
-  // Memoized: Handle image click
-  const handleImageClick = useCallback((image: ImageFile) => {
-    setSelectedImage(image);
-  }, []);
-
-  // Memoized: Handle close
-  const handleClose = useCallback(() => {
-    setSelectedImage(null);
-  }, []);
-
-  // Memoized: Handle navigation
-  const handlePrevious = useCallback(() => {
-    if (!selectedImage) return;
-    const currentIndex = filteredImages.findIndex(
-      (img) => img.file_path === selectedImage.file_path,
-    );
-    const prevIndex =
-      currentIndex > 0 ? currentIndex - 1 : filteredImages.length - 1;
-    setSelectedImage(filteredImages[prevIndex]);
-  }, [selectedImage, filteredImages]);
+  const handlePrev = useCallback(() => {
+    if (!selected) return;
+    const idx = filtered.findIndex((i) => i.file_path === selected.file_path);
+    setSelected(filtered[idx > 0 ? idx - 1 : filtered.length - 1]);
+  }, [selected, filtered]);
 
   const handleNext = useCallback(() => {
-    if (!selectedImage) return;
-    const currentIndex = filteredImages.findIndex(
-      (img) => img.file_path === selectedImage.file_path,
-    );
-    const nextIndex =
-      currentIndex < filteredImages.length - 1 ? currentIndex + 1 : 0;
-    setSelectedImage(filteredImages[nextIndex]);
-  }, [selectedImage, filteredImages]);
+    if (!selected) return;
+    const idx = filtered.findIndex((i) => i.file_path === selected.file_path);
+    setSelected(filtered[idx < filtered.length - 1 ? idx + 1 : 0]);
+  }, [selected, filtered]);
 
-  if (filteredImages.length === 0) {
-    return null;
-  }
+  if (!filtered.length) return null;
+
+  const shown = filtered.slice(0, 20);
 
   return (
     <>
-      <section className="bg-black py-4 md:py-12">
+      <section className="bg-[var(--section-bg)] py-10">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-          {/* Section Title */}
-          <h2 className="text-xl md:text-2xl font-bold text-white mb-6">
-            {title}
-          </h2>
+          <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6">{title}</h2>
 
-          {/* Images Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {filteredImages.slice(0, 20).map((image) => (
-              <ImageCard
-                key={image.file_path}
-                image={image}
-                type={getImageType(image)}
-                onClick={() => handleImageClick(image)}
-              />
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {shown.map((img) => (
+              <ImageCard key={img.file_path} image={img} onClick={() => setSelected(img)} />
             ))}
           </div>
 
-          {/* Image count info */}
-          <p className="text-white/50 text-sm mt-4 text-center md:text-left">
-            Showing {Math.min(20, filteredImages.length)} of{" "}
-            {filteredImages.length}{" "}
-            {filteredImages.length === 1 ? "image" : "images"}
+          <p className="text-[var(--section-meta-color)] text-xs mt-4">
+            Showing {shown.length} of {filtered.length} images
           </p>
         </div>
       </section>
 
-      {/* Image Modal */}
-      {selectedImage && (
-        <ImageModal
-          image={selectedImage}
-          onClose={handleClose}
-          onPrevious={handlePrevious}
+      {selected && (
+        <Lightbox
+          image={selected}
+          onClose={() => setSelected(null)}
+          onPrev={handlePrev}
           onNext={handleNext}
-          type={getImageType(selectedImage)}
         />
       )}
     </>

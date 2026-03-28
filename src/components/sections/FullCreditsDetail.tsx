@@ -1,6 +1,5 @@
 import { memo, useMemo, useState, useCallback } from "react";
-import { motion } from "framer-motion";
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import { Card } from "@/components/shared/Card";
 import { cn } from "@/lib/utils";
 import type { CastMember, CrewMember } from "@/types";
@@ -11,228 +10,141 @@ interface FullCreditsDetailProps {
   title?: string;
 }
 
-// Memoized CastCard component
-const CastCard = memo(function CastCard({
-  actor,
-  index,
-}: {
-  actor: CastMember;
-  index: number;
-}) {
+// ── Cast card ─────────────────────────────────────────────────────────────────
+const CastCard = memo(function CastCard({ actor }: { actor: CastMember }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.05 }}
-      whileHover={{ scale: 1.02 }}
-      className="bg-white/5 rounded-lg overflow-hidden border border-white/10 hover:border-white/20 transition-colors"
-    >
-      <Card
-        variant="person"
-        person={{
-          id: actor.id,
-          name: actor.name,
-          profileImage: actor.profile_path,
-          role: actor.character || "Unknown role",
-        }}
-      />
-    </motion.div>
+    <Card
+      variant="person"
+      person={{
+        id: actor.id,
+        name: actor.name,
+        profileImage: actor.profile_path,
+        role: actor.character || "Unknown role",
+      }}
+    />
   );
 });
 
-// Memoized CrewCard component
-const CrewCard = memo(function CrewCard({
-  member,
-  index,
-}: {
-  member: CrewMember;
-  index: number;
-}) {
+// ── Crew card ─────────────────────────────────────────────────────────────────
+const CrewCard = memo(function CrewCard({ member }: { member: CrewMember }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.05 }}
-      whileHover={{ scale: 1.02 }}
-      className="bg-white/5 rounded-lg overflow-hidden border border-white/10 hover:border-white/20 transition-colors"
-    >
-      <Card
-        variant="person"
-        person={{
-          id: member.id,
-          name: member.name,
-          profileImage: member.profile_path,
-          role: `${member.job} • ${member.department}`,
-        }}
-      />
-    </motion.div>
+    <Card
+      variant="person"
+      person={{
+        id: member.id,
+        name: member.name,
+        profileImage: member.profile_path,
+        role: `${member.job} · ${member.department}`,
+      }}
+    />
   );
 });
 
-/**
- * FullCreditsDetail Component
- * Displays comprehensive cast and crew information in a detailed grid layout
- * with search and filter capabilities
- */
+// ── Main ──────────────────────────────────────────────────────────────────────
 const FullCreditsDetail = memo(function FullCreditsDetail({
   cast,
   crew,
   title = "Cast & Crew",
 }: FullCreditsDetailProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterDepartment, setFilterDepartment] = useState<string>("all");
+  const [query, setQuery] = useState("");
+  const [dept, setDept] = useState("all");
 
-  // Memoized: Filter cast by search query
+  const departments = useMemo(
+    () => ["all", ...Array.from(new Set(crew.map((m) => m.department)))],
+    [crew],
+  );
+
   const filteredCast = useMemo(() => {
-    if (!searchQuery) return cast;
-    const query = searchQuery.toLowerCase();
+    if (!query) return cast;
+    const q = query.toLowerCase();
     return cast.filter(
-      (actor) =>
-        actor.name.toLowerCase().includes(query) ||
-        (actor.character && actor.character.toLowerCase().includes(query)),
+      (a) => a.name.toLowerCase().includes(q) || a.character?.toLowerCase().includes(q),
     );
-  }, [cast, searchQuery]);
+  }, [cast, query]);
 
-  // Memoized: Get unique departments from crew
-  const departments = useMemo(() => {
-    const depts = new Set(crew.map((m) => m.department));
-    return ["all", ...Array.from(depts)];
-  }, [crew]);
-
-  // Memoized: Filter crew by search and department
   const filteredCrew = useMemo(() => {
     let result = crew;
-
-    // Filter by search query
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+    if (query) {
+      const q = query.toLowerCase();
       result = result.filter(
-        (member) =>
-          member.name.toLowerCase().includes(query) ||
-          member.job.toLowerCase().includes(query) ||
-          member.department.toLowerCase().includes(query),
+        (m) => m.name.toLowerCase().includes(q) || m.job.toLowerCase().includes(q),
       );
     }
-
-    // Filter by department
-    if (filterDepartment !== "all") {
-      result = result.filter(
-        (member) => member.department === filterDepartment,
-      );
-    }
-
+    if (dept !== "all") result = result.filter((m) => m.department === dept);
     return result;
-  }, [crew, searchQuery, filterDepartment]);
+  }, [crew, query, dept]);
 
-  // Memoized: Handle search change
-  const handleSearchChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSearchQuery(e.target.value);
-    },
-    [],
-  );
-
-  // Memoized: Handle department filter change
-  const handleDepartmentChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setFilterDepartment(e.target.value);
-    },
-    [],
-  );
+  const handleQuery = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value), []);
+  const handleDept  = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => setDept(e.target.value), []);
 
   return (
-    <section className="bg-black py-4 md:py-12 min-h-screen">
+    <section className="bg-[var(--section-bg)] py-10 min-h-screen">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-        {/* Section Header */}
+
+        {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-              {title}
-            </h2>
-            <p className="text-white/60 text-sm">
-              {cast.length} cast members • {crew.length} crew members
+            <h2 className="text-xl font-semibold text-[var(--section-title-color)]">{title}</h2>
+            <p className="text-[var(--section-meta-color)] text-sm mt-1">
+              {cast.length} cast · {crew.length} crew
             </p>
           </div>
 
-          {/* Search and Filter Controls */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Search Input */}
+          {/* Controls */}
+          <div className="flex gap-3 flex-wrap">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
               <input
                 type="text"
-                placeholder="Search cast & crew..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className={cn(
-                  "w-full sm:w-64 pl-10 pr-4 py-2 rounded-lg",
-                  "bg-white/10 border border-white/20 text-white",
-                  "placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/30",
-                )}
+                placeholder="Search..."
+                value={query}
+                onChange={handleQuery}
+                className="pl-9 pr-4 py-2 rounded bg-[var(--input-search-bg)] border border-[var(--tab-border)] text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white/30 w-52"
                 aria-label="Search cast and crew"
               />
             </div>
 
-            {/* Department Filter */}
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
-              <select
-                value={filterDepartment}
-                onChange={handleDepartmentChange}
-                className={cn(
-                  "w-full sm:w-48 pl-10 pr-8 py-2 rounded-lg appearance-none cursor-pointer",
-                  "bg-white/10 border border-white/20 text-white",
-                  "focus:outline-none focus:ring-2 focus:ring-white/30",
-                )}
-                aria-label="Filter by department"
-              >
-                {departments.map((dept) => (
-                  <option key={dept} value={dept} className="bg-zinc-900">
-                    {dept === "all" ? "All Departments" : dept}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <select
+              value={dept}
+              onChange={handleDept}
+              className="px-3 py-2 rounded bg-[var(--input-search-bg)] border border-[var(--tab-border)] text-sm text-white focus:outline-none focus:border-white/30 cursor-pointer"
+              aria-label="Filter by department"
+            >
+              {departments.map((d) => (
+                <option key={d} value={d} className="bg-zinc-900">
+                  {d === "all" ? "All Departments" : d}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
-        {/* Cast Section */}
+        {/* Cast */}
         {filteredCast.length > 0 && (
-          <div className="mb-12">
-            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-              <span className="w-1 h-6 bg-red-600 rounded" />
-              Cast ({filteredCast.length})
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-              {filteredCast.map((actor, index) => (
-                <CastCard key={actor.id} actor={actor} index={index} />
-              ))}
+          <div className="mb-10">
+            <p className="text-[var(--section-meta-color)] text-xs font-semibold uppercase tracking-widest mb-4">
+              Cast <span className="opacity-50">({filteredCast.length})</span>
+            </p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+              {filteredCast.map((a) => <CastCard key={a.id} actor={a} />)}
             </div>
           </div>
         )}
 
-        {/* Crew Section */}
+        {/* Crew */}
         {filteredCrew.length > 0 && (
           <div>
-            <h3 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-              <span className="w-1 h-6 bg-blue-600 rounded" />
-              Crew ({filteredCrew.length})
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-              {filteredCrew.map((member, index) => (
-                <CrewCard key={member.id} member={member} index={index} />
-              ))}
+            <p className="text-[var(--section-meta-color)] text-xs font-semibold uppercase tracking-widest mb-4">
+              Crew <span className="opacity-50">({filteredCrew.length})</span>
+            </p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+              {filteredCrew.map((m) => <CrewCard key={`${m.id}-${m.job}`} member={m} />)}
             </div>
           </div>
         )}
 
-        {/* Empty State */}
-        {filteredCast.length === 0 && filteredCrew.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-white/60 text-lg">
-              No cast or crew members found matching your search.
-            </p>
-          </div>
+        {!filteredCast.length && !filteredCrew.length && (
+          <p className="text-[var(--section-meta-color)] text-center py-16">No results found.</p>
         )}
       </div>
     </section>
