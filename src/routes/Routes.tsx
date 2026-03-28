@@ -18,7 +18,7 @@ const ScrollToTop = () => {
 
 // Lazy-loaded page components
 const MovieDetails = lazy(() => import("@/pages/MovieDetails"));
-const ProtectedRoute = lazy(() => import("@/middleware/ProtectedRoute"));
+const ProtectedRoute = lazy(() => import("@/guards/ProtectedRoute"));
 const TVShowDetailsPage = lazy(() => import("@/pages/TVShowDetails"));
 const PersonDetailsPage = lazy(() => import("@/pages/PersonDetails"));
 const TagsPage = lazy(() => import("@/pages/Tags"));

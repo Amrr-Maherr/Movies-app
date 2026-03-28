@@ -38,10 +38,10 @@ export default function Login() {
             localStorage.setItem("email", JSON.stringify(response.email));
           } else {
             // Session storage for temporary login
-            localStorage.setItem("token", response?.accessToken);
-            localStorage.setItem("name", JSON.stringify(response.firstName));
-            localStorage.setItem("image", JSON.stringify(response.image));
-            localStorage.setItem("email", JSON.stringify(response.email));
+            sessionStorage.setItem("token", response?.accessToken);
+            sessionStorage.setItem("name", JSON.stringify(response.firstName));
+            sessionStorage.setItem("image", JSON.stringify(response.image));
+            sessionStorage.setItem("email", JSON.stringify(response.email));
           }
           // Redirect to home page
           navigate("/");
