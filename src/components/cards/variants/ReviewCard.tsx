@@ -1,6 +1,5 @@
 import { memo, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { ReviewLayout } from "@/components/shared/Card/CardVariantLayouts";
 import type { CardProps } from "../types";
@@ -23,20 +22,7 @@ const ReviewCard = memo(({ review }: ReviewCardProps) => {
 
   const ratingStars = useMemo(() => {
     if (!review?.rating || review.rating <= 0) return null;
-    const starCount = Math.round(review.rating / 2);
-    return (
-      <div className="flex items-center gap-0.5">
-        {[1, 2, 3, 4, 5].map((s) => (
-          <Star
-            key={s}
-            className={`h-3 w-3 ${s <= starCount ? "fill-yellow-400 text-yellow-400" : "fill-zinc-700 text-zinc-700"}`}
-          />
-        ))}
-        <span className="ml-1 text-[10px] font-medium text-yellow-400">
-          {review.rating.toFixed(1)}
-        </span>
-      </div>
-    );
+    return review.rating;
   }, [review]);
 
   const truncatedContent = useMemo(() => {

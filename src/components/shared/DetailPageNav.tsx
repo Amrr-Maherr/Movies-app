@@ -31,8 +31,11 @@ interface TabItem {
 
 interface DetailPageNavProps {
   type: "movie" | "tv" | "person";
-  activeTab: TabId;
-  onTabChange: (tab: TabId) => void;
+  // New tabs API
+  activeTab?: TabId;
+  onTabChange?: (tab: TabId) => void;
+  // Legacy prop — kept for backward compatibility with old sub-pages
+  slugWithId?: string;
 }
 
 // ============================================
@@ -111,6 +114,9 @@ const DetailPageNav = memo(function DetailPageNav({ type, activeTab, onTabChange
   const tabs = useMemo(() => getTabItems(type), [type]);
   const activeIndex = useMemo(() => tabs.findIndex((t) => t.id === activeTab), [tabs, activeTab]);
 
+  // When used in legacy mode (no onTabChange), clicking does nothing — tabs are display-only
+  const handleClick = (tab: TabId) => onTabChange?.(tab);
+
   return (
     <nav
       className="sticky top-[64px] z-40 bg-black/95 backdrop-blur-md border-white/10 shadow-lg"
@@ -125,7 +131,7 @@ const DetailPageNav = memo(function DetailPageNav({ type, activeTab, onTabChange
               key={tab.id}
               tab={tab}
               isActive={activeTab === tab.id}
-              onClick={() => onTabChange(tab.id)}
+              onClick={() => handleClick(tab.id)}
             />
           ))}
         </div>
@@ -138,7 +144,7 @@ const DetailPageNav = memo(function DetailPageNav({ type, activeTab, onTabChange
               tab={tab}
               isActive={activeTab === tab.id}
               isMobile
-              onClick={() => onTabChange(tab.id)}
+              onClick={() => handleClick(tab.id)}
             />
           ))}
         </div>

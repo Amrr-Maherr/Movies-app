@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import DetailPageNav from "../DetailPageNav";
 
 // Mock framer-motion
@@ -20,165 +20,103 @@ vi.mock("framer-motion", () => ({
 }));
 
 describe("DetailPageNav", () => {
-  const renderWithRouter = (
-    initialPath: string,
-    type: string,
-    slugWithId: string,
+  const renderNav = (
+    type: "movie" | "tv" | "person",
+    activeTab = "overview",
   ) => {
     return render(
-      <MemoryRouter initialEntries={[initialPath]}>
+      <MemoryRouter>
         <DetailPageNav
-          type={type as "movie" | "tv" | "person"}
-          slugWithId={slugWithId}
+          type={type}
+          activeTab={activeTab as any}
+          onTabChange={() => {}}
         />
-        <Routes>
-          <Route path={`/${type}/:slug`} element={<div>Overview</div>} />
-          <Route path={`/${type}/:slug/reviews`} element={<div>Reviews</div>} />
-          <Route path={`/${type}/:slug/videos`} element={<div>Videos</div>} />
-          <Route path={`/${type}/:slug/images`} element={<div>Images</div>} />
-          <Route path={`/${type}/:slug/watch`} element={<div>Watch</div>} />
-          <Route path={`/${type}/:slug/credits`} element={<div>Credits</div>} />
-          <Route
-            path={`/${type}/:slug/recommendations`}
-            element={<div>More</div>}
-          />
-        </Routes>
       </MemoryRouter>,
     );
   };
 
   describe("Movie Navigation", () => {
     it("should render all movie navigation items", () => {
-      renderWithRouter("/movie/inception-123", "movie", "inception-123");
+      renderNav("movie");
 
-      expect(
-        screen.getByLabelText("Navigate to Overview page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Reviews page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Videos page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Images page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Watch page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Credits page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to More page"),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText("Overview")).toBeInTheDocument();
+      expect(screen.getByLabelText("Reviews")).toBeInTheDocument();
+      expect(screen.getByLabelText("Videos")).toBeInTheDocument();
+      expect(screen.getByLabelText("Images")).toBeInTheDocument();
+      expect(screen.getByLabelText("Watch")).toBeInTheDocument();
+      expect(screen.getByLabelText("Credits")).toBeInTheDocument();
+      expect(screen.getByLabelText("More")).toBeInTheDocument();
     });
 
     it("should highlight active navigation item", () => {
-      renderWithRouter(
-        "/movie/inception-123/reviews",
-        "movie",
-        "inception-123",
-      );
+      renderNav("movie", "reviews");
 
-      const reviewsButton = screen.getByLabelText("Navigate to Reviews page");
-      expect(reviewsButton).toHaveClass("bg-red-600");
+      const buttons = screen.getAllByLabelText("Reviews");
+      expect(buttons[0]).toHaveClass("bg-red-600");
     });
   });
 
   describe("TV Show Navigation", () => {
     it("should render all TV show navigation items", () => {
-      renderWithRouter("/tv/breaking-bad-456", "tv", "breaking-bad-456");
+      renderNav("tv");
 
-      expect(
-        screen.getByLabelText("Navigate to Overview page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Reviews page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Videos page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Images page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Watch page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Credits page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to More page"),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText("Overview")).toBeInTheDocument();
+      expect(screen.getByLabelText("Reviews")).toBeInTheDocument();
+      expect(screen.getByLabelText("Videos")).toBeInTheDocument();
+      expect(screen.getByLabelText("Images")).toBeInTheDocument();
+      expect(screen.getByLabelText("Watch")).toBeInTheDocument();
+      expect(screen.getByLabelText("Credits")).toBeInTheDocument();
+      expect(screen.getByLabelText("More")).toBeInTheDocument();
     });
 
     it("should use clapperboard icon for TV overview", () => {
-      renderWithRouter("/tv/breaking-bad-456", "tv", "breaking-bad-456");
+      renderNav("tv");
 
-      const overviewButton = screen.getByLabelText("Navigate to Overview page");
-      // The clapperboard icon should be present
-      expect(overviewButton.innerHTML).toContain("svg");
+      const overviewButtons = screen.getAllByLabelText("Overview");
+      expect(overviewButtons[0].innerHTML).toContain("svg");
     });
   });
 
   describe("Person Navigation", () => {
     it("should render person-specific navigation items", () => {
-      renderWithRouter("/person/tom-hanks-789", "person", "tom-hanks-789");
+      renderNav("person");
 
-      expect(
-        screen.getByLabelText("Navigate to Overview page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Movies page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to TV Shows page"),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText("Navigate to Photos page"),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText("Overview")).toBeInTheDocument();
+      expect(screen.getByLabelText("Movies")).toBeInTheDocument();
+      expect(screen.getByLabelText("TV Shows")).toBeInTheDocument();
+      expect(screen.getByLabelText("Photos")).toBeInTheDocument();
     });
 
     it("should not show movie/TV-specific items for person", () => {
-      renderWithRouter("/person/tom-hanks-789", "person", "tom-hanks-789");
+      renderNav("person");
 
-      expect(
-        screen.queryByLabelText("Navigate to Reviews page"),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByLabelText("Navigate to Watch page"),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByLabelText("Navigate to Credits page"),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByLabelText("Navigate to More page"),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByLabelText("Reviews")).not.toBeInTheDocument();
+      expect(screen.queryByLabelText("Watch")).not.toBeInTheDocument();
+      expect(screen.queryByLabelText("Credits")).not.toBeInTheDocument();
+      expect(screen.queryByLabelText("More")).not.toBeInTheDocument();
     });
   });
 
   describe("Accessibility", () => {
     it("should have proper navigation role", () => {
-      renderWithRouter("/movie/inception-123", "movie", "inception-123");
+      renderNav("movie");
 
       const nav = screen.getByRole("navigation");
       expect(nav).toHaveAttribute("aria-label", "Detail page navigation");
     });
 
-    it("should set aria-current on active page", () => {
-      renderWithRouter("/movie/inception-123/videos", "movie", "inception-123");
+    it("should set aria-selected on active tab", () => {
+      renderNav("movie", "videos");
 
-      const activeButton = screen.getByLabelText("Navigate to Videos page");
-      expect(activeButton).toHaveAttribute("aria-current", "page");
+      const activeButtons = screen.getAllByLabelText("Videos");
+      expect(activeButtons[0]).toHaveAttribute("aria-selected", "true");
     });
   });
 
   describe("Responsive Design", () => {
     it("should render mobile navigation", () => {
-      renderWithRouter("/movie/inception-123", "movie", "inception-123");
+      renderNav("movie");
 
-      // Mobile navigation should be present
       const mobileNav = document.querySelector(".md\\:hidden");
       expect(mobileNav).toBeInTheDocument();
     });
