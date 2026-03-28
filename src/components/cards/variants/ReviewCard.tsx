@@ -1,55 +1,45 @@
-import { memo, useMemo } from "react";
-import { motion } from "framer-motion";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { ReviewLayout } from "@/components/shared/Card/CardVariantLayouts";
-import type { CardProps } from "../types";
+/**
+ * ReviewCard Component
+ *
+ * Review card with author, rating, and content preview.
+ * Features:
+ * - Star rating display
+ * - Author name and date
+ * - Truncated review content
+ */
 
-type ReviewCardProps = Pick<CardProps, "review">;
+import { memo } from "react";
+import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { useCardDerivedValues } from "../hooks";
+import type { ReviewCardProps } from "../types";
 
 const ReviewCard = memo(({ review }: ReviewCardProps) => {
-  const formattedDate = useMemo(() => {
-    if (!review?.date) return "";
-    try {
-      return new Date(review.date).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-    } catch {
-      return review.date;
-    }
-  }, [review]);
-
-  const ratingStars = useMemo(() => {
-    if (!review?.rating || review.rating <= 0) return null;
-    return review.rating;
-  }, [review]);
-
-  const truncatedContent = useMemo(() => {
-    if (!review?.content) return "";
-    return review.content.length <= 150
-      ? review.content
-      : review.content.slice(0, 150) + "...";
-  }, [review]);
-
-  if (!review) return null;
+  const { reviewDate, reviewStars, truncatedReview } = useCardDerivedValues({
+    review,
+  });
 
   return (
     <LazyWrapper height={150}>
-      <motion.div transition={{ duration: 0.3, ease: "easeOut" }} className="h-full w-full">
-        <div className="h-full">
-          <ReviewLayout
-            author={review.author}
-            formattedDate={formattedDate}
-            ratingStars={ratingStars}
-            truncatedContent={truncatedContent}
-            content={review.content}
-          />
+      <div className="h-full bg-zinc-900/50 rounded-lg p-4 border border-white/5">
+        <div className="flex items-center justify-between mb-2">
+          <div>
+            <h4 className="text-sm font-semibold text-white">
+              {review.author}
+            </h4>
+            {reviewDate && (
+              <p className="text-xs text-gray-400">{reviewDate}</p>
+            )}
+          </div>
+          {reviewStars}
         </div>
-      </motion.div>
+        <p className="text-xs text-gray-300 line-clamp-3 leading-relaxed">
+          {truncatedReview}
+        </p>
+      </div>
     </LazyWrapper>
   );
 });
 
 ReviewCard.displayName = "ReviewCard";
+
 export default ReviewCard;

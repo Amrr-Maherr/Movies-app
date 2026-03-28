@@ -9,3 +9,6 @@ export {
   getMovieReleaseDate,
   isTvShow,
 } from "./useCardDerivedValues";
+
+// Alias for backward compatibility
+export { useMovieDerivedValues as useCardDerivedValues } from "./useCardDerivedValues";
