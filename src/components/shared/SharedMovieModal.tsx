@@ -4,7 +4,7 @@ import { LoadingFallback } from "@/components/ui";
 
 // FIX: Lazy load MovieModal once at app level instead of per-card instance
 // This reduces bundle size by ~50KB and eliminates 50+ lazy boundaries
-const MovieModal = lazy(() => import("@/components/shared/MovieModal"));
+const MovieModal = lazy(() => import("@/components/shared/MediaModal"));
 
 export default function SharedMovieModal() {
   const { selectedMovie, isOpen, closeModal } = useMovieModal();
