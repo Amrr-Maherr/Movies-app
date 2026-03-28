@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import OptimizedImage from "@/components/ui/OptimizedImage";
@@ -16,6 +16,11 @@ const CompactCard = memo(({ movie, onClick, matchPercentageProp }: CompactCardPr
     useMovieDerivedValues(movie, matchPercentageProp);
   const { handlePlayClick, handleMoreInfoClick } = useCardActions(detailsUrl, movie, onClick);
 
+  // FIX: useCallback prevents new function references on every render,
+  // which would cause memo'd children to re-render unnecessarily.
+  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+  const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+
   if (!movie) return null;
   const isAdult = movie.adult === true;
 
@@ -25,8 +30,8 @@ const CompactCard = memo(({ movie, onClick, matchPercentageProp }: CompactCardPr
         <Link
           to={detailsUrl}
           className="relative group cursor-pointer block"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           <div className="relative aspect-[2/3] rounded-md shadow-lg bg-[var(--background-secondary)]">
             <OptimizedImage

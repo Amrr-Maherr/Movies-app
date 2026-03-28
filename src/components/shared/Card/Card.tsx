@@ -6,7 +6,6 @@ import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import type { HeroMedia, Episode, Season } from "@/types";
-import { Star } from "lucide-react";
 import { useMovieModal } from "@/contexts/MovieModalContext";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addToList, removeFromList, selectIsInList } from "@/store/ListReucer";
@@ -208,8 +207,10 @@ const Card = memo(
       [dispatch, movie, isInList],
     );
 
-    const handleCardMouseEnter = () => setIsHovered(true);
-    const handleCardMouseLeave = () => setIsHovered(false);
+    // FIX: useCallback prevents new function references on every render,
+    // which would break React.memo on CardHoverOverlay and other children.
+    const handleCardMouseEnter = useCallback(() => setIsHovered(true), []);
+    const handleCardMouseLeave = useCallback(() => setIsHovered(false), []);
 
     const formattedReleaseDate = useMemo(() => {
       return releaseDate
@@ -294,23 +295,11 @@ const Card = memo(
       }
     }, [review]);
 
-    const reviewStars = useMemo(() => {
-      if (!review?.rating || review.rating <= 0) return null;
-      const starCount = Math.round(review.rating / 2);
-      return (
-        <div className="flex items-center gap-0.5">
-          {[1, 2, 3, 4, 5].map((s) => (
-            <Star
-              key={s}
-              className={`h-3 w-3 ${s <= starCount ? "fill-yellow-400 text-yellow-400" : "fill-zinc-700 text-zinc-700"}`}
-            />
-          ))}
-          <span className="ml-1 text-[10px] font-medium text-yellow-400">
-            {review.rating.toFixed(1)}
-          </span>
-        </div>
-      );
-    }, [review]);
+    // FIX: Replaced JSX-returning useMemo with a stable rating value.
+    // Returning JSX from useMemo is an anti-pattern — it bypasses React's
+    // reconciliation and can cause subtle bugs. ReviewLayout renders the stars
+    // itself; we just pass the numeric rating.
+    const reviewRating = review?.rating && review.rating > 0 ? review.rating : null;
 
     const truncatedReview = useMemo(() => {
       if (!review?.content) return "";
@@ -759,7 +748,7 @@ const Card = memo(
               <ReviewLayout
                 author={review.author}
                 formattedDate={reviewDate}
-                ratingStars={reviewStars}
+                ratingStars={reviewRating}
                 truncatedContent={truncatedReview}
                 content={review.content}
               />
@@ -806,7 +795,7 @@ const Card = memo(
             <Link
               to={episodeLink}
               className="block group"
-              onClick={onClick ? () => onClick() : undefined}
+              onClick={onClick ? handleNavigate : undefined}
               onMouseEnter={handleCardMouseEnter}
               onMouseLeave={handleCardMouseLeave}
             >
@@ -845,6 +834,7 @@ const Card = memo(
             <CardPoster
               movie={movie}
               title={title}
+              posterUrl={posterUrl}
               rank={rank}
               isAdult={isAdult}
             >

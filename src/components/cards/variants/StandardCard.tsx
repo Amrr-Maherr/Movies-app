@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import CardPoster from "@/components/shared/Card/CardPoster";
@@ -22,6 +22,11 @@ const StandardCard = memo(({ movie, rank, onClick, showBadge = false, badgeType,
     useCardActions(detailsUrl, movie, onClick);
   const { isInList, toggleWatchlist } = useWatchlist(movie);
 
+  // FIX: useCallback prevents new function references on every render,
+  // which would cause CardHoverOverlay (memo'd) to re-render unnecessarily.
+  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+  const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+
   if (!movie) return null;
   const isAdult = movie.adult === true;
 
@@ -30,11 +35,12 @@ const StandardCard = memo(({ movie, rank, onClick, showBadge = false, badgeType,
       <motion.div transition={{ duration: 0.3, ease: "easeOut" }} className="h-full w-full">
         <div
           className="relative group cursor-pointer rounded-md shadow-lg bg-[var(--background-secondary)]"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
           onClick={handleNavigate}
         >
-          <CardPoster movie={movie} title={title} rank={rank} isAdult={isAdult}>
+          {/* FIX: Pass posterUrl as prop — CardPoster no longer re-derives it */}
+          <CardPoster movie={movie} title={title} posterUrl={posterUrl} rank={rank} isAdult={isAdult}>
             <CardBadges
               showBadge={showBadge}
               badgeType={badgeType}

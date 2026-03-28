@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 import logo from "@/assets/logos/vite.svg";
@@ -6,6 +6,9 @@ import logo from "@/assets/logos/vite.svg";
 export interface CardPosterProps {
   movie: HeroMedia;
   title: string;
+  // FIX: Accept pre-computed posterUrl from parent instead of re-deriving it.
+  // Card.tsx already memoizes this value — recomputing it here is redundant work.
+  posterUrl: string;
   rank?: number;
   children?: React.ReactNode;
   className?: string;
@@ -16,16 +19,12 @@ const CardPoster = memo(
   ({
     movie,
     title,
+    posterUrl, // FIX: Use prop — eliminates duplicate useMemo
     rank,
     children,
     className = "",
     isAdult = false,
   }: CardPosterProps) => {
-    const posterUrl = useMemo(() => {
-      return movie.poster_path
-        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-        : "https://via.placeholder.com/500x750?text=No+Image";
-    }, [movie.poster_path]);
 
     return (
       <div className={`relative aspect-[2/3] w-full ${className}`}>

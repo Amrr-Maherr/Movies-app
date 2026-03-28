@@ -23,31 +23,13 @@ const TVShowDetailsPage = lazy(() => import("@/pages/TVShowDetails"));
 const PersonDetailsPage = lazy(() => import("@/pages/PersonDetails"));
 const TagsPage = lazy(() => import("@/pages/Tags"));
 
-// Movie detail sub-pages
-const MovieReviewsPage = lazy(() => import("@/pages/movie/MovieReviewsPage"));
-const MovieVideosPage = lazy(() => import("@/pages/movie/MovieVideosPage"));
-const MovieImagesPage = lazy(() => import("@/pages/movie/MovieImagesPage"));
-const MovieWatchProvidersPage = lazy(
-  () => import("@/pages/movie/MovieWatchProvidersPage"),
-);
-const MovieCreditsPage = lazy(() => import("@/pages/movie/MovieCreditsPage"));
-const MovieRecommendationsPage = lazy(
-  () => import("@/pages/movie/MovieRecommendationsPage"),
-);
+// Movie detail sub-pages — removed (now rendered as tabs inside MovieDetails)
 
-// TV detail sub-pages
-const TVReviewsPage = lazy(() => import("@/pages/tv/TVReviewsPage"));
-const TVVideosPage = lazy(() => import("@/pages/tv/TVVideosPage"));
-const TVImagesPage = lazy(() => import("@/pages/tv/TVImagesPage"));
-const TVWatchProvidersPage = lazy(
-  () => import("@/pages/tv/TVWatchProvidersPage"),
-);
-const TVCreditsPage = lazy(() => import("@/pages/tv/TVCreditsPage"));
-const TVRecommendationsPage = lazy(
-  () => import("@/pages/tv/TVRecommendationsPage"),
-);
 
-// Person detail sub-pages
+// TV detail sub-pages — removed (now rendered as tabs inside TVShowDetails)
+
+// Person detail sub-pages — removed (now rendered as tabs inside PersonDetails)
+
 const PersonMovieCreditsPage = lazy(
   () => import("@/pages/person/PersonMovieCreditsPage"),
 );
@@ -289,108 +271,12 @@ const AppRoutes = memo(function AppRoutes() {
                 </PageTransition>
               }
             />
-            <Route
-              path="/movie/:slugWithId/reviews"
-              element={
-                <PageTransition>
-                  <MovieReviewsPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/movie/:slugWithId/videos"
-              element={
-                <PageTransition>
-                  <MovieVideosPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/movie/:slugWithId/images"
-              element={
-                <PageTransition>
-                  <MovieImagesPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/movie/:slugWithId/watch"
-              element={
-                <PageTransition>
-                  <MovieWatchProvidersPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/movie/:slugWithId/credits"
-              element={
-                <PageTransition>
-                  <MovieCreditsPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/movie/:slugWithId/recommendations"
-              element={
-                <PageTransition>
-                  <MovieRecommendationsPage />
-                </PageTransition>
-              }
-            />
 
             <Route
               path="/tv/:slugWithId"
               element={
                 <PageTransition>
                   <TVShowDetailsPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/tv/:slugWithId/reviews"
-              element={
-                <PageTransition>
-                  <TVReviewsPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/tv/:slugWithId/videos"
-              element={
-                <PageTransition>
-                  <TVVideosPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/tv/:slugWithId/images"
-              element={
-                <PageTransition>
-                  <TVImagesPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/tv/:slugWithId/watch"
-              element={
-                <PageTransition>
-                  <TVWatchProvidersPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/tv/:slugWithId/credits"
-              element={
-                <PageTransition>
-                  <TVCreditsPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/tv/:slugWithId/recommendations"
-              element={
-                <PageTransition>
-                  <TVRecommendationsPage />
                 </PageTransition>
               }
             />
@@ -416,30 +302,6 @@ const AppRoutes = memo(function AppRoutes() {
               element={
                 <PageTransition>
                   <PersonDetailsPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/person/:slugWithId/movies"
-              element={
-                <PageTransition>
-                  <PersonMovieCreditsPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/person/:slugWithId/tv"
-              element={
-                <PageTransition>
-                  <PersonTVCreditsPage />
-                </PageTransition>
-              }
-            />
-            <Route
-              path="/person/:slugWithId/images"
-              element={
-                <PageTransition>
-                  <PersonImagesPage />
                 </PageTransition>
               }
             />
