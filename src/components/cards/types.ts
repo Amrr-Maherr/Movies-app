@@ -65,3 +65,7 @@ export interface CardProps {
   tvShowId?: number;
   seasonNumber?: number;
 }
+
+export interface EpisodeCardProps extends CardProps { }
+export interface PersonCardProps extends CardProps { }
+export interface ReviewCardProps extends CardProps { }

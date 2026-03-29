@@ -12,13 +12,12 @@ import { memo } from "react";
 import { Link } from "react-router-dom";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { useCardDerivedValues } from "../hooks";
+import { usePersonDerivedValues } from "../hooks";
 import type { PersonCardProps } from "../types";
 
 const PersonCard = memo(({ person }: PersonCardProps) => {
-  const { title, personImageUrl, personDetailsUrl } = useCardDerivedValues({
-    person,
-  });
+  const { imageUrl: personImageUrl, detailsUrl: personDetailsUrl } =
+    usePersonDerivedValues(person);
 
   return (
     <LazyWrapper height={350}>

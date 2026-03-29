@@ -205,3 +205,34 @@ export function usePersonDerivedValues(person?: { id: number; name: string; prof
 
   return { imageUrl, detailsUrl };
 }
+
+// ─── Review derived values ───────────────────────────────────────────────────
+
+export function useReviewDerivedValues(review?: {
+  author: string;
+  rating?: number | null;
+  content: string;
+  date: string;
+}) {
+  const reviewDate = useMemo(() => {
+    if (!review?.date) return null;
+    try {
+      return new Date(review.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    } catch {
+      return review.date;
+    }
+  }, [review]);
+
+  const truncatedReview = useMemo(() => {
+    if (!review?.content) return "";
+    return review.content.length > 300
+      ? `${review.content.slice(0, 300)}...`
+      : review.content;
+  }, [review]);
+
+  return { reviewDate, truncatedReview };
+}

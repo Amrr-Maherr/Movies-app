@@ -215,7 +215,7 @@ export default defineConfig({
           // Separate data/state libraries - removed Redux, kept React Query
           'data-vendor': ['@tanstack/react-query', 'axios'],
           // Separate utility libraries
-          'utils-vendor': ['clsx', 'tailwind-merge', 'react-hook-form'],
+          'utils-vendor': ['clsx', 'tailwind-merge'],
           // Separate swiper as its own chunk - consider replacing with embla
           'swiper-vendor': ['swiper'],
           // Page chunks for route-based code splitting

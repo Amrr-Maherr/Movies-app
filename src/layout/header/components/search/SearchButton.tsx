@@ -2,7 +2,7 @@ import { useState, lazy, Suspense } from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const SearchPopup = lazy(() => import("./SearchPopup"));
+// const SearchPopup = lazy(() => import("./SearchPopup"));
 
 interface SearchButtonProps {
   className?: string;
@@ -28,7 +28,12 @@ export default function SearchButton({ className }: SearchButtonProps) {
 
       {isPopupOpen && (
         <Suspense fallback={null}>
-          <SearchPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} />
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100]">
+             <div className="bg-zinc-900 p-8 rounded shadow-xl relative">
+                <button onClick={() => setIsPopupOpen(false)} className="absolute top-2 right-2 text-white">X</button>
+                <p className="text-white">Search popup is currently unavailable</p>
+             </div>
+          </div>
         </Suspense>
       )}
     </>

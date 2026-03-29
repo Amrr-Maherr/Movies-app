@@ -10,13 +10,21 @@
 
 import { memo } from "react";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { useCardDerivedValues } from "../hooks";
+import { useReviewDerivedValues } from "../hooks";
 import type { ReviewCardProps } from "../types";
+import { Star } from "lucide-react";
 
 const ReviewCard = memo(({ review }: ReviewCardProps) => {
-  const { reviewDate, reviewStars, truncatedReview } = useCardDerivedValues({
-    review,
-  });
+  const { reviewDate, truncatedReview } = useReviewDerivedValues(review);
+
+  const reviewStars = review?.rating ? (
+    <div className="flex items-center gap-1">
+      <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+      <span className="text-xs font-medium text-yellow-500">
+        {review.rating.toFixed(1)}
+      </span>
+    </div>
+  ) : null;
 
   return (
     <LazyWrapper height={150}>

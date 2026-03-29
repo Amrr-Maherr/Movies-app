@@ -13,18 +13,19 @@ import { memo } from "react";
 import { Link } from "react-router-dom";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
-import { useCardDerivedValues } from "../hooks";
+import { useEpisodeDerivedValues } from "../hooks";
 import type { EpisodeCardProps } from "../types";
 
 const EpisodeCard = memo(
   ({ episode, tvShowId, seasonNumber, onClick }: EpisodeCardProps) => {
     const {
-      title,
-      episodeImageUrl,
-      episodeLink,
-      episodeAirDate,
-      episodeRuntime,
-    } = useCardDerivedValues({ episode, tvShowId, seasonNumber });
+      imageUrl: episodeImageUrl,
+      link: episodeLink,
+      airDate: episodeAirDate,
+      runtime: episodeRuntime,
+    } = useEpisodeDerivedValues(episode, tvShowId, seasonNumber);
+
+    const title = episode?.name || "Episode";
 
     return (
       <LazyWrapper height={250}>

@@ -5,6 +5,7 @@ export {
   useEpisodeDerivedValues,
   useSeasonDerivedValues,
   usePersonDerivedValues,
+  useReviewDerivedValues,
   getMovieTitle,
   getMovieReleaseDate,
   isTvShow,
