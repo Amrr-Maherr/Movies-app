@@ -43,7 +43,7 @@ export interface LoaderProps {
  * // With custom label for accessibility
  * <Loader label="Loading content..." />
  */
-export const Loader = memo(function Loader({
+const Loader = memo(function Loader({
   className,
   size = "default",
   fullscreen = false,

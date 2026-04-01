@@ -66,7 +66,7 @@ export interface ErrorProps {
  *   onRetry={handleRetry}
  * />
  */
-export const Error = memo(function Error({
+const Error = memo(function Error({
   className,
   title = "Something went wrong",
   message = "We're sorry, but we couldn't load this content. Please try again.",
@@ -162,3 +162,5 @@ export const Error = memo(function Error({
     </div>
   );
 });
+
+export default Error;

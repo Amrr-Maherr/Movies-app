@@ -37,13 +37,6 @@ export interface PopularMoviesResponse {
 }
 
 /**
- * Props for movie action buttons component
- */
-export interface MovieActionButtonsProps {
-  movie: Movie;
-}
-
-/**
  * TV Show data structure from TMDB API
  */
 export interface TvShow {

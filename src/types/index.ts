@@ -7,7 +7,6 @@
 export type {
   Movie,
   PopularMoviesResponse,
-  MovieActionButtonsProps,
   TvShow,
   PopularTvShowsResponse,
   StreamingPlatform,

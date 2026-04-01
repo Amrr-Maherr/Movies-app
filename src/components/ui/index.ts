@@ -1,5 +1,5 @@
-export { Loader } from "./loader"
-export { Error } from "./error"
+export { default as Loader } from "./loader"
+export { default as Error } from "./error"
 export { LoadingFallback } from "./LoadingFallback"
 export { SectionSkeleton, PageSkeleton } from "./SectionSkeleton"
 export {
