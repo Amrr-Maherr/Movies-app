@@ -13,6 +13,7 @@ import { SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import Card from "@/components/shared/Card/Card";
 import type { HeroMedia } from "@/types";
+import NetflixLogo from "@/assets/logos/Netflix_Symbol_RGB.png";
 
 type FilterType = "all" | "movie" | "tv" | "person";
 
@@ -22,7 +23,7 @@ export default function SearchPage() {
   const queryParam = searchParams.get("q") || "";
   const [filter, setFilter] = useState<FilterType>("all");
   const [inputValue, setInputValue] = useState(queryParam);
-  const debouncedQuery = useDebounce(inputValue, 300);
+  const debouncedQuery = useDebounce(inputValue, 800);
 
   const { results, isLoading, error } = useSearch(debouncedQuery);
 
@@ -82,9 +83,14 @@ export default function SearchPage() {
             transition={{ duration: 0.5 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-8 tracking-tight">
-              Search
-            </h1>
+            <motion.img
+              src={NetflixLogo}
+              alt="Netflix"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="h-60 w-auto mx-auto mb-8"
+            />
 
             <form onSubmit={handleSearch} className="relative">
               <div className="relative group">
