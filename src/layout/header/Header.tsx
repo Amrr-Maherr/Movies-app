@@ -1,12 +1,15 @@
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo, lazy, Suspense } from "react";
 import { Bell, ChevronDown } from "lucide-react";
 import Logo from "@/components/shared/logo/Logo";
 import NavLinks from "./components/NavLinks";
 import SearchButton from "./components/search/SearchButton";
-import ProfileMenu from "./components/ProfileMenu";
-import BrowseDropdown from "./components/BrowseDropdown";
+// import ProfileMenu from "./components/ProfileMenu";
+// import BrowseDropdown from "./components/BrowseDropdown";
 import { HeaderLinks } from "@/data/header";
 import { cn } from "@/lib/utils";
+
+const ProfileMenu = lazy(() => import("./components/ProfileMenu"));
+const BrowseDropdown = lazy(() => import("./components/BrowseDropdown"));
 
 const Header = memo(function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -70,11 +73,13 @@ const Header = memo(function Header() {
           </nav>
 
           {/* Mobile Browse Dropdown */}
-          <BrowseDropdown
-            isOpen={isBrowseMenuOpen}
-            onToggle={() => setIsBrowseMenuOpen(!isBrowseMenuOpen)}
-            onClose={() => setIsBrowseMenuOpen(false)}
-          />
+          <Suspense fallback={null}>
+            <BrowseDropdown
+              isOpen={isBrowseMenuOpen}
+              onToggle={() => setIsBrowseMenuOpen(!isBrowseMenuOpen)}
+              onClose={() => setIsBrowseMenuOpen(false)}
+            />
+          </Suspense>
         </div>
 
         {/* Right section: Search + Bell + Profile */}
@@ -103,10 +108,12 @@ const Header = memo(function Header() {
             </div>
 
             {/* Profile Dropdown rendered absolute relative to this container */}
-            <ProfileMenu
-              isOpen={isProfileMenuOpen}
-              onClose={() => setIsProfileMenuOpen(false)}
-            />
+            <Suspense fallback={null}>
+              <ProfileMenu
+                isOpen={isProfileMenuOpen}
+                onClose={() => setIsProfileMenuOpen(false)}
+              />
+            </Suspense>
           </div>
         </div>
       </div>

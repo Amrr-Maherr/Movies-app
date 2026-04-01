@@ -1,6 +1,6 @@
 import { memo, useMemo, lazy, Suspense } from "react";
 import { SectionSkeleton } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import Card from "@/components/shared/Card/Card";
 import { getKnownForItems } from "@/utils";
 import type { CastCredit, CrewCredit } from "@/services/personService";
@@ -34,15 +34,21 @@ const KnownForSection = memo(function KnownForSection({
         <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
           Known For
         </h2>
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-          <LazyWrapper height={350}>
+        <OptimizedSectionWrapper
+          data={knownForItems}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={350}
+          title="Known For"
+        >
+          {(items) => (
             <Slider
               slidesPerView={6}
               slidesPerViewMobile={3}
               spaceBetween={16}
               hideNavigation={false}
             >
-              {knownForItems.map((credit) => (
+              {items.map((credit) => (
                 <Card
                   key={credit.credit_id}
                   movie={{
@@ -68,8 +74,8 @@ const KnownForSection = memo(function KnownForSection({
                 />
               ))}
             </Slider>
-          </LazyWrapper>
-        </Suspense>
+          )}
+        </OptimizedSectionWrapper>
       </div>
     </section>
   );

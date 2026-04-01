@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, lazy, Suspense } from "react";
 import { useCompanyDetails, useCompanyMovies } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Film, MapPin, Globe, Building2 } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
@@ -140,20 +140,22 @@ const Company = memo(function Company() {
                 to={`/company/${company.parent_company.id}`}
                 className="text-white hover:underline font-medium flex items-center gap-2"
               >
-                {company.parent_company && (
-                  <Suspense
-                    fallback={<span className="text-white/60">Loading...</span>}
-                  >
-                    <LazyWrapper height={32}>
-                      <OptimizedImage
-                        src={`${IMAGE_BASE_URL}${company.parent_company.logo_path}`}
-                        alt={company.parent_company.name}
-                        className="h-8 object-contain"
-                        objectFit="contain"
-                      />
-                    </LazyWrapper>
-                  </Suspense>
-                )}
+                <OptimizedSectionWrapper
+                  data={company.parent_company}
+                  isLoading={companyLoading}
+                  fallback={<span className="text-white/60">Loading...</span>}
+                  height={32}
+                  title="Parent Company"
+                >
+                  {(parent) => (
+                    <OptimizedImage
+                      src={`${IMAGE_BASE_URL}${parent.logo_path}`}
+                      alt={parent.name}
+                      className="h-8 object-contain"
+                      objectFit="contain"
+                    />
+                  )}
+                </OptimizedSectionWrapper>
               </Link>
             </div>
           </div>
@@ -166,31 +168,36 @@ const Company = memo(function Company() {
           Movies by {company.name}
         </h2>
 
-        {moviesLoading ? (
-          <SectionSkeleton variant="grid" cardCount={6} />
-        ) : moviesError ? (
+        {moviesError ? (
           <Error
             message="Failed to load movies"
             retryButtonText="Try Again"
             onRetry={() => window.location.reload()}
           />
-        ) : companyMovies?.results && companyMovies.results.length > 0 ? (
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <LazyWrapper height={350}>
+        ) : (
+          <OptimizedSectionWrapper
+            data={companyMovies?.results && companyMovies.results.length > 0 ? companyMovies.results : null}
+            isLoading={moviesLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={350}
+            title="Movies List"
+            isEmptyFallback={
+              <div className="text-center py-12 text-[#737373]">
+                <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                <p className="text-lg">No movies available</p>
+              </div>
+            }
+          >
+            {(movies) => (
               <MediaSection
                 title=""
-                data={companyMovies.results}
+                data={movies}
                 isLoading={false}
                 error={null}
                 onRetry={() => {}}
               />
-            </LazyWrapper>
-          </Suspense>
-        ) : (
-          <div className="text-center py-12 text-[#737373]">
-            <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
-            <p className="text-lg">No movies available</p>
-          </div>
+            )}
+          </OptimizedSectionWrapper>
         )}
       </div>
     </div>

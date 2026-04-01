@@ -1,7 +1,7 @@
 import { memo, useState, useMemo, useCallback, lazy, Suspense } from "react";
 import type { Video } from "@/types";
 import { SectionSkeleton } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Card } from "@/components/shared/Card";
 
 // Lazy-loaded components
@@ -53,15 +53,21 @@ const TrailersSection = memo(function TrailersSection({
           <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
             Trailers
           </h2>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
-            <LazyWrapper height={300}>
+          <OptimizedSectionWrapper
+            data={youtubeTrailers}
+            isLoading={false}
+            fallback={<SectionSkeleton variant="grid" cardCount={4} />}
+            height={300}
+            title="Trailers"
+          >
+            {(trailersData) => (
               <Slider
                 slidesPerView={4}
                 slidesPerViewMobile={2}
                 spaceBetween={16}
                 hideNavigation={false}
               >
-                {youtubeTrailers.map((video) => (
+                {trailersData.map((video) => (
                   <Card
                     key={video.id}
                     variant="trailer"
@@ -74,8 +80,8 @@ const TrailersSection = memo(function TrailersSection({
                   />
                 ))}
               </Slider>
-            </LazyWrapper>
-          </Suspense>
+            )}
+          </OptimizedSectionWrapper>
         </div>
       </section>
 

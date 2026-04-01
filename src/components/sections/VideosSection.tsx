@@ -2,7 +2,7 @@ import { memo, useMemo, useState, useCallback, lazy, Suspense } from "react";
 import { Play } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionSkeleton } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import type { Video } from "@/types";
 
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
@@ -97,15 +97,21 @@ const VideosSection = memo(function VideosSection({
       <section className="bg-[var(--section-bg)] py-10">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
           <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6">{title}</h2>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
-            <LazyWrapper height={280}>
+          <OptimizedSectionWrapper
+            data={validVideos}
+            isLoading={false}
+            fallback={<SectionSkeleton variant="grid" cardCount={4} />}
+            height={280}
+            title={title}
+          >
+            {(videosData) => (
               <Slider slidesPerView={4} slidesPerViewMobile={2} spaceBetween={12} hideNavigation={false}>
-                {validVideos.map((v) => (
+                {videosData.map((v) => (
                   <VideoCard key={v.id || v.key} video={v} onPlay={handlePlay} />
                 ))}
               </Slider>
-            </LazyWrapper>
-          </Suspense>
+            )}
+          </OptimizedSectionWrapper>
           <p className="text-[var(--section-meta-color)] text-xs mt-4">{validVideos.length} videos</p>
         </div>
       </section>

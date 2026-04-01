@@ -1,7 +1,7 @@
 import { memo, useMemo, lazy, Suspense, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchPersonDetails from "@/hooks/shared/FetchPersonDetails";
@@ -103,11 +103,15 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       />
 
       {/* Hero */}
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={500}>
-          <PersonHero person={personData} />
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={personData}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={500}
+        title="Hero"
+      >
+        {(data) => <PersonHero person={data} />}
+      </OptimizedSectionWrapper>
 
       {/* Tabs Nav */}
       <DetailPageNav type="person" activeTab={activeTab} onTabChange={handleTabChange as any} />
@@ -115,48 +119,62 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       {/* Overview */}
       {activeTab === "overview" && (
         <>
-          {externalIdsData && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
-              <LazyWrapper height={150}>
-                <SocialLinksSection
-                  imdbId={externalIdsData.imdb_id}
-                  twitterId={externalIdsData.twitter_id}
-                  instagramId={externalIdsData.instagram_id}
-                  facebookId={externalIdsData.facebook_id}
-                  wikidataId={externalIdsData.wikidata_id}
-                  homepage={personData.homepage}
-                />
-              </LazyWrapper>
-            </Suspense>
-          )}
-
-          {(cast.length > 0 || crew.length > 0) && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
-              <LazyWrapper height={400}>
-                <KnownForSection cast={cast} crew={crew} />
-              </LazyWrapper>
-            </Suspense>
-          )}
-
-          <Suspense fallback={<SectionSkeleton variant="list" cardCount={1} />}>
-            <LazyWrapper height={400}>
-              <BiographySection
-                biography={personData.biography}
-                placeOfBirth={personData.place_of_birth}
-                birthday={personData.birthday}
-                deathday={personData.deathday}
-                knownForDepartment={personData.known_for_department}
+          <OptimizedSectionWrapper
+            data={externalIdsData}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={1} />}
+            height={150}
+            title="Social Links"
+          >
+            {(idsData) => (
+              <SocialLinksSection
+                imdbId={idsData.imdb_id}
+                twitterId={idsData.twitter_id}
+                instagramId={idsData.instagram_id}
+                facebookId={idsData.facebook_id}
+                wikidataId={idsData.wikidata_id}
+                homepage={personData.homepage}
               />
-            </LazyWrapper>
-          </Suspense>
+            )}
+          </OptimizedSectionWrapper>
 
-          {(cast.length > 0 || crew.length > 0) && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-              <LazyWrapper height={600}>
-                <CreditsSection cast={cast} crew={crew} />
-              </LazyWrapper>
-            </Suspense>
-          )}
+          <OptimizedSectionWrapper
+            data={cast.length > 0 || crew.length > 0 ? { cast, crew } : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={4} />}
+            height={400}
+            title="Known For"
+          >
+            {(credits) => <KnownForSection cast={credits.cast} crew={credits.crew} />}
+          </OptimizedSectionWrapper>
+
+          <OptimizedSectionWrapper
+            data={personData}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="list" cardCount={1} />}
+            height={400}
+            title="Biography"
+          >
+            {(data) => (
+              <BiographySection
+                biography={data.biography}
+                placeOfBirth={data.place_of_birth}
+                birthday={data.birthday}
+                deathday={data.deathday}
+                knownForDepartment={data.known_for_department}
+              />
+            )}
+          </OptimizedSectionWrapper>
+
+          <OptimizedSectionWrapper
+            data={cast.length > 0 || crew.length > 0 ? { cast, crew } : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={600}
+            title="Credits"
+          >
+            {(credits) => <CreditsSection cast={credits.cast} crew={credits.crew} />}
+          </OptimizedSectionWrapper>
         </>
       )}
 
@@ -169,9 +187,15 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
                 <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6 flex items-center gap-2">
                   <Film className="w-5 h-5" /> Filmography ({movies.length} movies)
                 </h2>
-                <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
+                <OptimizedSectionWrapper
+                  data={true}
+                  isLoading={false}
+                  fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+                  height={500}
+                  title="Movies Grid"
+                >
                   <MediaGrid items={movies} type="movie" />
-                </Suspense>
+                </OptimizedSectionWrapper>
               </>
             ) : (
               <div className="text-center py-12">
@@ -192,9 +216,15 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
                 <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6 flex items-center gap-2">
                   <Tv className="w-5 h-5" /> TV Filmography ({tvShows.length} shows)
                 </h2>
-                <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
+                <OptimizedSectionWrapper
+                  data={true}
+                  isLoading={false}
+                  fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+                  height={500}
+                  title="TV Grid"
+                >
                   <MediaGrid items={tvShows} type="tv" />
-                </Suspense>
+                </OptimizedSectionWrapper>
               </>
             ) : (
               <div className="text-center py-12">
@@ -208,20 +238,25 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
 
       {/* Images */}
       {activeTab === "images" && (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={800}>
-            {profileImages.length > 0 ? (
-              <ImagesGallery images={profileImages} title="Photo Gallery" type="posters" />
-            ) : (
-              <section className="bg-[var(--section-bg)] py-12">
-                <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
-                  <ImageIcon className="w-16 h-16 text-white/20 mx-auto mb-4" />
-                  <p className="text-[var(--section-meta-color)] text-lg">No profile images available yet.</p>
-                </div>
-              </section>
-            )}
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={800}
+          title="Images Gallery"
+          isEmptyFallback={
+            <section className="bg-[var(--section-bg)] py-12">
+              <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
+                <ImageIcon className="w-16 h-16 text-white/20 mx-auto mb-4" />
+                <p className="text-[var(--section-meta-color)] text-lg">No profile images available yet.</p>
+              </div>
+            </section>
+          }
+        >
+          {profileImages.length > 0 ? (
+            <ImagesGallery images={profileImages} title="Photo Gallery" type="posters" />
+          ) : null}
+        </OptimizedSectionWrapper>
       )}
     </div>
   );

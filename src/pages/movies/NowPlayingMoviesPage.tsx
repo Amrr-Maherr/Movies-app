@@ -1,6 +1,6 @@
 import { memo, useMemo, useCallback, Suspense, useState, lazy } from "react";
 import { Film, Star } from "lucide-react";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import ShadcnPagination from "@/components/shared/Pagination/ShadcnPagination";
@@ -77,18 +77,22 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
       />
 
       {/* Hero Section with Featured Movies */}
-      {featuredMovies.length > 0 && (
-        <LazyWrapper height={600}>
-          <Suspense fallback={<SectionSkeleton variant="hero" />}>
-            <HeroSection
-              data={featuredMovies}
-              isLoading={false}
-              error={null}
-              onRetry={handleRetry}
-            />
-          </Suspense>
-        </LazyWrapper>
-      )}
+      <OptimizedSectionWrapper
+        data={featuredMovies.length > 0 ? featuredMovies : null}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={600}
+        title="Hero Section"
+      >
+        {(data) => (
+          <HeroSection
+            data={data}
+            isLoading={false}
+            error={null}
+            onRetry={handleRetry}
+          />
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Page Header */}
       <section className="bg-black py-8 border-b border-white/10">
@@ -112,21 +116,30 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
       {/* All Now Playing Movies Grid */}
       <section className="bg-black py-8">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-          <Suspense fallback={<SectionSkeleton variant="list" cardCount={1} />}>
+          <OptimizedSectionWrapper
+            data={true}
+            isLoading={false}
+            fallback={<SectionSkeleton variant="list" cardCount={1} />}
+            height={50}
+            title="Section Header"
+          >
             <SectionHeader
               title="All Movies in Theaters"
               subtitle={`Showing ${movies.results.length} movies`}
               icon={Star}
               iconColor="text-yellow-500"
             />
-          </Suspense>
-          <LazyWrapper height={1200}>
-            <Suspense
-              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
-            >
-              <MediaGrid items={movies.results} type="movie" />
-            </Suspense>
-          </LazyWrapper>
+          </OptimizedSectionWrapper>
+
+          <OptimizedSectionWrapper
+            data={movies.results}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+            height={1200}
+            title="Movies Grid"
+          >
+            {(data) => <MediaGrid items={data} type="movie" />}
+          </OptimizedSectionWrapper>
         </div>
       </section>
 

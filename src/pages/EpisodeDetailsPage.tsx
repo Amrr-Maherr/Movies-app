@@ -1,17 +1,13 @@
-import { memo, useMemo, lazy, Suspense } from "react";
+import { memo, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { Clock, Calendar, Star } from "lucide-react";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import FetchEpisodeDetails from "@/hooks/shared/FetchEpisodeDetails";
-
-// Lazy-loaded components
-const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
-const FullCreditsSection = lazy(
-  () => import("@/components/sections/FullCreditsSection"),
-);
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
+import OptimizedImage from "@/components/ui/OptimizedImage";
+import FullCreditsSection from "@/components/sections/FullCreditsSection";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
@@ -108,14 +104,20 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       />
 
       {/* Hero Section with Episode Still */}
-      <LazyWrapper height={500}>
-        <>
+      <OptimizedSectionWrapper
+        data={episode}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={500}
+        title={episode?.name || "Episode Header"}
+      >
+        {(episodeData) => (
           <div className="relative w-full h-[70vh] min-h-[500px]">
             <div className="absolute inset-0 w-full h-full">
               {stillImageUrl ? (
                 <OptimizedImage
                   src={stillImageUrl}
-                  alt={episode.name}
+                  alt={episodeData.name}
                   className="w-full h-full"
                   objectFit="cover"
                   priority
@@ -124,7 +126,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
                 <div className="w-full h-full bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center">
                   <div className="text-center">
                     <h1 className="text-6xl font-bold text-zinc-600">
-                      S{episode.season_number}:E{episode.episode_number}
+                      S{episodeData.season_number}:E{episodeData.episode_number}
                     </h1>
                   </div>
                 </div>
@@ -138,15 +140,15 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
               <div className="flex-1 space-y-4 md:space-y-6">
                 <div className="flex items-center gap-3">
                   <span className="bg-[var(--netflix-red)] text-white px-3 py-1 rounded-md text-sm font-bold">
-                    Season {episode.season_number}
+                    Season {episodeData.season_number}
                   </span>
                   <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-md text-sm font-medium">
-                    Episode {episode.episode_number}
+                    Episode {episodeData.episode_number}
                   </span>
                 </div>
 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg leading-tight max-w-4xl">
-                  {episode.name}
+                  {episodeData.name}
                 </h1>
 
                 <div className="flex items-center gap-4 flex-wrap">
@@ -160,65 +162,75 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
                     <span>{formattedRuntime}</span>
                   </div>
 
-                  {episode.vote_average > 0 && (
+                  {episodeData.vote_average > 0 && (
                     <div className="flex items-center gap-2 text-yellow-400">
                       <Star className="h-5 w-5 fill-yellow-400" />
                       <span className="font-semibold">
-                        {episode.vote_average.toFixed(1)}
+                        {episodeData.vote_average.toFixed(1)}
                       </span>
                       <span className="text-gray-400 text-sm">
-                        ({episode.vote_count} votes)
+                        ({episodeData.vote_count} votes)
                       </span>
                     </div>
                   )}
                 </div>
 
-                {episode.overview && (
+                {episodeData.overview && (
                   <p className="text-gray-200 text-base md:text-lg leading-relaxed max-w-3xl">
-                    {episode.overview}
+                    {episodeData.overview}
                   </p>
                 )}
               </div>
             </div>
           </div>
-        </>
-      </LazyWrapper>
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Guest Stars Section */}
-      {guestStars.length > 0 && (
-        <LazyWrapper>
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <section className="bg-black py-4 md:py-12 border-t border-zinc-800">
-              <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-                <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
-                  Guest Stars
-                </h2>
-                <FullCreditsSection
-                  cast={guestStars.map((guest) => ({
-                    id: guest.id,
-                    name: guest.name,
-                    character: guest.character || "Guest role",
-                    profile_path: guest.profile_path,
-                    order: 0,
-                  }))}
-                  crew={[]}
-                />
-              </div>
-            </section>
-          </Suspense>
-        </LazyWrapper>
-      )}
+      <OptimizedSectionWrapper
+        data={guestStars.length > 0 ? guestStars : null}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+        height={300}
+        title="Guest Stars"
+      >
+        {(stars) => (
+          <section className="bg-black py-4 md:py-12 border-t border-zinc-800">
+            <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
+                Guest Stars
+              </h2>
+              <FullCreditsSection
+                cast={stars.map((guest) => ({
+                  id: guest.id,
+                  name: guest.name,
+                  character: guest.character || "Guest role",
+                  profile_path: guest.profile_path,
+                  order: 0,
+                }))}
+                crew={[]}
+              />
+            </div>
+          </section>
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Key Crew Section */}
-      {keyCrew.length > 0 && (
-        <LazyWrapper>
+      <OptimizedSectionWrapper
+        data={keyCrew.length > 0 ? keyCrew : null}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+        height={300}
+        title="Production Crew"
+      >
+        {(crewData) => (
           <section className="bg-black py-4 md:py-12 border-t border-zinc-800">
             <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
                 Production Crew
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {keyCrew.map((member) => (
+                {crewData.map((member) => (
                   <div
                     key={member.id}
                     className="bg-zinc-900/50 rounded-lg p-4 text-center hover:bg-zinc-800/50 transition-colors"
@@ -244,57 +256,65 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
               </div>
             </div>
           </section>
-        </LazyWrapper>
-      )}
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Episode Info Section */}
-      <LazyWrapper>
-        <section className="bg-black py-4 md:py-12 border-t border-zinc-800">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-            <div className="grid md:grid-cols-1 gap-8">
-              <div className="bg-zinc-900/50 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  Episode Details
-                </h3>
-                <dl className="space-y-3">
-                  <div className="flex justify-between">
-                    <dt className="text-gray-400">Season</dt>
-                    <dd className="text-white font-medium">
-                      {episode.season_number}
-                    </dd>
-                  </div>
-                  <div className="flex justify-between">
-                    <dt className="text-gray-400">Episode</dt>
-                    <dd className="text-white font-medium">
-                      {episode.episode_number}
-                    </dd>
-                  </div>
-                  <div className="flex justify-between">
-                    <dt className="text-gray-400">Air Date</dt>
-                    <dd className="text-white font-medium">
-                      {formattedAirDate}
-                    </dd>
-                  </div>
-                  <div className="flex justify-between">
-                    <dt className="text-gray-400">Runtime</dt>
-                    <dd className="text-white font-medium">
-                      {formattedRuntime}
-                    </dd>
-                  </div>
-                  {episode.production_code && (
+      <OptimizedSectionWrapper
+        data={episode}
+        isLoading={isLoading}
+        fallback={<div className="h-[200px] animate-pulse bg-zinc-900/50 rounded-lg" />}
+        height={300}
+        title="Episode Info"
+      >
+        {(info) => (
+          <section className="bg-black py-4 md:py-12 border-t border-zinc-800">
+            <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+              <div className="grid md:grid-cols-1 gap-8">
+                <div className="bg-zinc-900/50 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-white mb-4">
+                    Episode Details
+                  </h3>
+                  <dl className="space-y-3">
                     <div className="flex justify-between">
-                      <dt className="text-gray-400">Production Code</dt>
+                      <dt className="text-gray-400">Season</dt>
                       <dd className="text-white font-medium">
-                        {episode.production_code}
+                        {info.season_number}
                       </dd>
                     </div>
-                  )}
-                </dl>
+                    <div className="flex justify-between">
+                      <dt className="text-gray-400">Episode</dt>
+                      <dd className="text-white font-medium">
+                        {info.episode_number}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-gray-400">Air Date</dt>
+                      <dd className="text-white font-medium">
+                        {formattedAirDate}
+                      </dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-gray-400">Runtime</dt>
+                      <dd className="text-white font-medium">
+                        {formattedRuntime}
+                      </dd>
+                    </div>
+                    {info.production_code && (
+                      <div className="flex justify-between">
+                        <dt className="text-gray-400">Production Code</dt>
+                        <dd className="text-white font-medium">
+                          {info.production_code}
+                        </dd>
+                      </div>
+                    )}
+                  </dl>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      </LazyWrapper>
+          </section>
+        )}
+      </OptimizedSectionWrapper>
     </div>
   );
 });

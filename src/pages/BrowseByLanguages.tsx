@@ -1,6 +1,5 @@
-import { useState, memo, useMemo, useCallback, lazy, Suspense } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { useState, memo, useMemo, useCallback } from "react";
+import { motion as motionFramer, AnimatePresence as AnimatePresenceFramer } from "framer-motion";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import Pagination from "@/components/shared/Pagination";
@@ -9,8 +8,8 @@ import useMediaByLanguage from "@/hooks/shared/FetchMediaByLanguage";
 import LanguagesFilter, {
   SUPPORTED_LANGUAGES,
 } from "@/components/BrowseByLanguages/LanguagesFilter";
-
-const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
+import MediaGrid from "@/components/shared/MediaGrid";
 
 const BrowseByLanguages = memo(function BrowseByLanguages() {
   const [selectedLanguage, setSelectedLanguage] = useState<string>(
@@ -47,26 +46,36 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
         description="Discover movies and TV shows based on their original language on Netflix."
       />
 
-      <LazyWrapper height={150}>
-        <>
-          <div className="container my-2">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
-              Browse by Languages
-            </h1>
-            <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
-              Discover movies and TV shows based on their original language.
-            </p>
-          </div>
-        </>
-      </LazyWrapper>
+      <OptimizedSectionWrapper
+        data={true}
+        isLoading={false}
+        fallback={<div className="h-[150px] animate-pulse bg-white/5" />}
+        height={150}
+        title="Header"
+      >
+        <div className="container my-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+            Browse by Languages
+          </h1>
+          <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
+            Discover movies and TV shows based on their original language.
+          </p>
+        </div>
+      </OptimizedSectionWrapper>
 
       {/* Language Filter Tags */}
-      <LazyWrapper height={100}>
+      <OptimizedSectionWrapper
+        data={true}
+        isLoading={false}
+        fallback={<div className="h-[100px] animate-pulse bg-white/5" />}
+        height={100}
+        title="Languages Filter"
+      >
         <LanguagesFilter
           selectedLanguage={selectedLanguage}
           onLanguageSelect={handleLanguageSelect}
         />
-      </LazyWrapper>
+      </OptimizedSectionWrapper>
 
       {error ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
@@ -82,30 +91,37 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
         </div>
       ) : (
         <>
-          <Suspense
+          <OptimizedSectionWrapper
+            data={allItems.length > 0 ? allItems : null}
+            isLoading={isLoading}
             fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+            height={600}
+            title="Language Media Grid"
+            isEmptyFallback={
+              <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
+                <p className="text-xl text-white/60 font-medium">
+                  No content available for this language.
+                </p>
+              </div>
+            }
           >
-            <LazyWrapper height={600}>
-              <AnimatePresence mode="wait">
-                {isLoading ? (
-                  <SectionSkeleton variant="grid" cardCount={12} />
-                ) : (
-                  <motion.div
-                    key={`grid-lang-${selectedLanguage}-${currentPage}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <MediaGrid
-                      items={allItems as unknown as HeroMedia[]}
-                      emptyMessage="No content available for this language."
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </LazyWrapper>
-          </Suspense>
+            {(items) => (
+              <AnimatePresenceFramer mode="wait">
+                <motionFramer.div
+                  key={`grid-lang-${selectedLanguage}-${currentPage}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <MediaGrid
+                    items={items as unknown as HeroMedia[]}
+                    emptyMessage="No content available for this language."
+                  />
+                </motionFramer.div>
+              </AnimatePresenceFramer>
+            )}
+          </OptimizedSectionWrapper>
 
           {/* Pagination Component */}
           <Pagination

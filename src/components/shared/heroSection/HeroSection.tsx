@@ -3,7 +3,7 @@ import HeroSlide from "./HeroSlide";
 import { Autoplay } from "swiper/modules";
 import type { HeroMedia } from "@/types";
 import { Error, SectionSkeleton } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { useMovieModal } from "@/contexts/MovieModalContext";
 
 // Lazy-loaded component
@@ -61,8 +61,14 @@ const HeroSection = memo(function HeroSection({
 
   return (
     <section className="relative w-full overflow-hidden">
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={600}>
+      <OptimizedSectionWrapper
+        data={featuredMedia}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={600}
+        title="Hero Slider"
+      >
+        {(mediaItems) => (
           <Slider
             slidesPerView={1}
             slidesPerViewMobile={1}
@@ -85,7 +91,7 @@ const HeroSection = memo(function HeroSection({
             modules={[Autoplay]}
             className="hero-swiper"
           >
-            {featuredMedia.map((media: HeroMedia) => (
+            {mediaItems.map((media: HeroMedia) => (
               <HeroSlide
                 key={media.id}
                 movie={media}
@@ -93,8 +99,8 @@ const HeroSection = memo(function HeroSection({
               />
             ))}
           </Slider>
-        </LazyWrapper>
-      </Suspense>
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Bottom gradient overlay for smooth content blend - Theme-aware */}
       <div className="absolute bottom-0 left-0 right-0 h-24 sm:h-32 bg-gradient-to-t from-[var(--background-primary)] to-transparent z-20 pointer-events-none" />

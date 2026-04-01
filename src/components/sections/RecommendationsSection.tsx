@@ -1,6 +1,6 @@
 import { memo, useMemo, lazy, Suspense } from "react";
 import { SectionSkeleton } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import Card from "@/components/shared/Card/Card";
 import type { HeroMedia } from "@/types";
 
@@ -31,15 +31,21 @@ const RecommendationsSection = memo(function RecommendationsSection({
     <section className="bg-[var(--section-bg)] py-10">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6">{title}</h2>
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-          <LazyWrapper height={350}>
+        <OptimizedSectionWrapper
+          data={items}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={350}
+          title={title}
+        >
+          {(itemsData) => (
             <Slider slidesPerView={6} slidesPerViewMobile={3} spaceBetween={12} hideNavigation={false}>
-              {items.map((m) => (
+              {itemsData.map((m) => (
                 <Card key={m.id} movie={m} variant="standard" showBadge={false} />
               ))}
             </Slider>
-          </LazyWrapper>
-        </Suspense>
+          )}
+        </OptimizedSectionWrapper>
         <p className="text-[var(--section-meta-color)] text-xs mt-4">{items.length} titles</p>
       </div>
     </section>

@@ -3,7 +3,7 @@ import React, { lazy, Suspense } from "react";
 import { useParams } from "react-router-dom";
 import type { HeroMedia } from "@/types";
 import { SectionSkeleton, Error } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
@@ -44,10 +44,16 @@ export default function Tags() {
       {results.length === 0 ? (
         <p className="text-white/70">No results found</p>
       ) : (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={500}>
+        <OptimizedSectionWrapper
+          data={results.length > 0 ? results : null}
+          isLoading={isLoading}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={500}
+          title="Search Results"
+        >
+          {(resultsData) => (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {results.map((result, index) => (
+              {resultsData.map((result, index) => (
                 <Card
                   key={`${result.type}-${result.item.id}-${index}`}
                   movie={result.item as HeroMedia}
@@ -55,8 +61,8 @@ export default function Tags() {
                 />
               ))}
             </div>
-          </LazyWrapper>
-        </Suspense>
+          )}
+        </OptimizedSectionWrapper>
       )}
     </div>
   );

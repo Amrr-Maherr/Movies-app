@@ -1,6 +1,6 @@
 import { memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { Error as ErrorComponent, SectionSkeleton } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import "@/index.css";
 
@@ -126,136 +126,170 @@ const Home = memo(function Home() {
       </Suspense>
 
       {/* Top 10 Movies Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={300}>
-          {trendingMoviesWeek?.results ? (
-            <TopPicksSection
-              movies={trendingMoviesWeek.results}
-              title="Top 6 Movies in Egypt Today"
-            />
-          ) : trendingWeekLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={trendingMoviesWeek?.results}
+        isLoading={trendingWeekLoading}
+        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+        height={300}
+        title="Top 6 Movies"
+      >
+        {(movies) => (
+          <TopPicksSection
+            movies={movies}
+            title="Top 6 Movies in Egypt Today"
+          />
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Trending Now */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={250}>
-          <div className="">
-            <MediaSection
-              title="Trending Now"
-              data={trendingMoviesWeek?.results}
-              isLoading={trendingWeekLoading}
-              error={trendingWeekError}
-              onRetry={trendingWeekRefetch}
-            />
-          </div>
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={trendingMoviesWeek?.results}
+        isLoading={trendingWeekLoading}
+        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+        height={250}
+        title="Trending Now"
+      >
+        {(data) => (
+          <MediaSection
+            title="Trending Now"
+            data={data}
+            isLoading={trendingWeekLoading}
+            error={trendingWeekError}
+            onRetry={trendingWeekRefetch}
+          />
+        )}
+      </OptimizedSectionWrapper>
 
       {/* New Releases Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
-        <LazyWrapper height={350}>
-          {upcomingMovies?.results ? (
-            <NewReleasesSection
-              movies={upcomingMovies.results}
-              title="New Releases This Week"
-            />
-          ) : upcomingLoading ? (
-            <SectionSkeleton variant="grid" cardCount={4} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={upcomingMovies?.results}
+        isLoading={upcomingLoading}
+        fallback={<SectionSkeleton variant="grid" cardCount={4} />}
+        height={350}
+        title="New Releases"
+      >
+        {(movies) => (
+          <NewReleasesSection
+            movies={movies}
+            title="New Releases This Week"
+          />
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Trending TV Shows */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={250}>
-          <div className="">
-            <MediaSection
-              title="Trending TV Shows"
-              data={trendingTvWeek?.results}
-              isLoading={trendingTvWeekLoading}
-              error={trendingTvWeekError}
-              onRetry={trendingTvWeekRefetch}
-            />
-          </div>
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={trendingTvWeek?.results}
+        isLoading={trendingTvWeekLoading}
+        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+        height={250}
+        title="Trending TV Shows"
+      >
+        {(data) => (
+          <MediaSection
+            title="Trending TV Shows"
+            data={data}
+            isLoading={trendingTvWeekLoading}
+            error={trendingTvWeekError}
+            onRetry={trendingTvWeekRefetch}
+          />
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Featured Movie */}
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={500}>
-          {upcomingMovies?.results && upcomingMovies.results[0] ? (
-            <MoviePromo
-              movie={upcomingMovies.results[0]}
-              mediaType="movie"
-              variant="left"
-            />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={upcomingMovies?.results?.[0]}
+        isLoading={upcomingLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={500}
+        title="Featured Movie"
+      >
+        {(movie) => (
+          <MoviePromo
+            movie={movie}
+            mediaType="movie"
+            variant="left"
+          />
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Only on Netflix Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={400}>
-          {popularTv?.results ? (
-            <OnlyOnNetflixSection movies={popularTv.results} mediaType="tv" />
-          ) : popularTvLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={popularTv?.results}
+        isLoading={popularTvLoading}
+        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+        height={400}
+        title="Only on Netflix"
+      >
+        {(movies) => (
+          <OnlyOnNetflixSection movies={movies} mediaType="tv" />
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Platforms Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={350}>
-          {platforms ? (
-            <PlatformsSection
-              platforms={platforms}
-              isLoading={platformsLoading}
-              error={platformsError}
-            />
-          ) : platformsLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={platforms}
+        isLoading={platformsLoading}
+        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+        height={350}
+        title="Platforms"
+      >
+        {(platformsData) => (
+          <PlatformsSection
+            platforms={platformsData}
+            isLoading={platformsLoading}
+            error={platformsError}
+          />
+        )}
+      </OptimizedSectionWrapper>
 
       {/* Award Winners Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-        <LazyWrapper height={350}>
-          {topRatedMovies?.results ? (
-            <AwardWinnersSection
-              movies={topRatedMovies.results}
-              mediaType="movie"
-            />
-          ) : topRatedLoading ? (
-            <SectionSkeleton variant="grid" cardCount={6} />
-          ) : null}
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={topRatedMovies?.results}
+        isLoading={topRatedLoading}
+        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+        height={350}
+        title="Award Winners"
+      >
+        {(movies) => (
+          <AwardWinnersSection
+            movies={movies}
+            mediaType="movie"
+          />
+        )}
+      </OptimizedSectionWrapper>
 
       {/* More Reasons to Join Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={4} />}>
-        <LazyWrapper height={400}>
-          <MoreReasonsSection />
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={true} // Always render once visible
+        isLoading={false}
+        fallback={<SectionSkeleton variant="grid" cardCount={4} />}
+        height={400}
+        title="More Reasons"
+      >
+        <MoreReasonsSection />
+      </OptimizedSectionWrapper>
 
       {/* Pricing Section */}
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={3} />}>
-        <LazyWrapper height={550}>
-          <PricingSection />
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={true} // Always render once visible
+        isLoading={false}
+        fallback={<SectionSkeleton variant="grid" cardCount={3} />}
+        height={550}
+        title="Pricing"
+      >
+        <PricingSection />
+      </OptimizedSectionWrapper>
 
       {/* FAQ Section */}
-      <Suspense fallback={<SectionSkeleton variant="list" cardCount={6} />}>
-        <LazyWrapper height={500}>
-          <AskedQuestions />
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={true} // Always render once visible
+        isLoading={false}
+        fallback={<SectionSkeleton variant="list" cardCount={6} />}
+        height={500}
+        title="FAQ"
+      >
+        <AskedQuestions />
+      </OptimizedSectionWrapper>
     </div>
   );
 });

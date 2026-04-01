@@ -2,7 +2,7 @@ import { memo, lazy, Suspense } from "react";
 import { Tv } from "lucide-react";
 import { useStreamingPlatforms } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
 // Lazy-loaded components
@@ -62,17 +62,23 @@ const Platforms = memo(function Platforms() {
         </div>
 
         {/* Platforms Grid */}
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={400}>
+        <OptimizedSectionWrapper
+          data={platforms}
+          isLoading={isLoading}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={400}
+          title="Platforms Grid"
+        >
+          {(platformsData) => (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-              {platforms.map((platform) => (
+              {platformsData.map((platform) => (
                 <div key={platform.id} className="h-[200px] md:h-[240px]">
                   <PlatformCard platform={platform} />
                 </div>
               ))}
             </div>
-          </LazyWrapper>
-        </Suspense>
+          )}
+        </OptimizedSectionWrapper>
 
         {/* Platform Count */}
         <div className="mt-8 text-center text-[#737373]">

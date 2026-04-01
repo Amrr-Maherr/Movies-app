@@ -1,15 +1,14 @@
-import { memo, lazy, Suspense } from "react";
+import { memo } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { selectList, removeFromList } from "@/store/ListReucer";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { Play, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import { getTitle } from "@/utils";
-
-const Card = lazy(() => import("@/components/shared/Card/Card"));
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
+import Card from "@/components/shared/Card/Card";
 
 const MyList = memo(function MyList() {
   const navigate = useNavigate();
@@ -83,40 +82,46 @@ const MyList = memo(function MyList() {
         </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          <Suspense
+          <OptimizedSectionWrapper
+            data={myList.length > 0 ? myList : null}
+            isLoading={false}
             fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+            height={500}
+            title="My List"
           >
-            <LazyWrapper height={500}>
-              {myList.map((item) => {
-                const mediaType = getMediaType(item);
-                const title = getTitle(item);
+            {(listData) => (
+              <>
+                {listData.map((item) => {
+                  const mediaType = getMediaType(item);
+                  const title = getTitle(item);
 
-                return (
-                  <div key={item.id} className="relative group">
-                    <Card movie={item} variant="standard" />
+                  return (
+                    <div key={item.id} className="relative group">
+                      <Card movie={item} variant="standard" />
 
-                    {/* Remove button overlay */}
-                    <button
-                      onClick={(e) => handleRemove(e, item.id)}
-                      className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 z-10"
-                      title="Remove from My List"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
+                      {/* Remove button overlay */}
+                      <button
+                        onClick={(e) => handleRemove(e, item.id)}
+                        className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 z-10"
+                        title="Remove from My List"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
 
-                    {/* Quick play button overlay */}
-                    <button
-                      onClick={(e) => handlePlay(e, mediaType, item.id, title)}
-                      className="absolute bottom-20 right-2 bg-white/90 backdrop-blur-sm text-black p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
-                      title="Play"
-                    >
-                      <Play className="h-4 w-4 fill-black" />
-                    </button>
-                  </div>
-                );
-              })}
-            </LazyWrapper>
-          </Suspense>
+                      {/* Quick play button overlay */}
+                      <button
+                        onClick={(e) => handlePlay(e, mediaType, item.id, title)}
+                        className="absolute bottom-20 right-2 bg-white/90 backdrop-blur-sm text-black p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
+                        title="Play"
+                      >
+                        <Play className="h-4 w-4 fill-black" />
+                      </button>
+                    </div>
+                  );
+                })}
+              </>
+            )}
+          </OptimizedSectionWrapper>
         </div>
       </div>
     </div>

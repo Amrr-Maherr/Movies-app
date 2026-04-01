@@ -32,9 +32,13 @@ const StandardCard = memo(({ movie, rank, onClick, showBadge = false, badgeType,
 
   return (
     <LazyWrapper height={350}>
-      <motion.div transition={{ duration: 0.3, ease: "easeOut" }} className="h-full w-full">
+      <motion.div
+        whileHover={{ scale: 1.05, zIndex: 50 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="h-full w-full"
+      >
         <div
-          className="relative group cursor-pointer rounded-md shadow-lg bg-[var(--background-secondary)]"
+          className="relative group cursor-pointer rounded-md shadow-xl bg-[var(--background-secondary)] transition-shadow duration-300 hover:shadow-2xl"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onClick={handleNavigate}

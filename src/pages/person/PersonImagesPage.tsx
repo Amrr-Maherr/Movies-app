@@ -2,7 +2,7 @@ import { memo, useMemo, useCallback, Suspense, lazy } from "react";
 import { useParams } from "react-router-dom";
 import { Image as ImageIcon } from "lucide-react";
 import { extractIdFromSlug } from "@/utils/slugify";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchPersonDetails from "@/hooks/shared/FetchPersonDetails";
@@ -88,20 +88,22 @@ const PersonImagesPage = memo(function PersonImagesPage() {
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
           {/* Page Title */}
           <div className="flex items-center gap-4">
-            <Suspense
-              fallback={
-                <div className="w-20 h-28 bg-zinc-800 animate-pulse rounded-lg" />
-              }
+            <OptimizedSectionWrapper
+              data={personData}
+              isLoading={isLoading}
+              fallback={<div className="w-20 h-28 bg-zinc-800 animate-pulse rounded-lg" />}
+              height="100%"
+              title="Profile Image"
             >
-              <LazyWrapper height="100%">
+              {(data) => (
                 <OptimizedImage
-                  src={`https://image.tmdb.org/t/p/w185${personData.profile_path}`}
-                  alt={personData.name}
+                  src={`https://image.tmdb.org/t/p/w185${data.profile_path}`}
+                  alt={data.name}
                   className="w-20 h-28 object-cover rounded-lg shadow-lg"
                   objectFit="cover"
                 />
-              </LazyWrapper>
-            </Suspense>
+              )}
+            </OptimizedSectionWrapper>
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
                 {personData.name}
@@ -135,26 +137,31 @@ const PersonImagesPage = memo(function PersonImagesPage() {
       <DetailPageNav type="person" slugWithId={slugWithId || ""} />
 
       {/* Images Gallery */}
-      <LazyWrapper height={800}>
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          {profileImages.length > 0 ? (
-            <ImagesGallery
-              images={profileImages}
-              title="Complete Photo Gallery"
-              type="posters"
-            />
-          ) : (
-            <section className="bg-black py-12">
-              <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
-                <ImageIcon className="w-16 h-16 text-white/20 mx-auto mb-4" />
-                <p className="text-white/60 text-lg">
-                  No profile images available yet.
-                </p>
-              </div>
-            </section>
-          )}
-        </Suspense>
-      </LazyWrapper>
+      <OptimizedSectionWrapper
+        data={true}
+        isLoading={false}
+        fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+        height={800}
+        title="Images Gallery"
+        isEmptyFallback={
+          <section className="bg-black py-12">
+            <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
+              <ImageIcon className="w-16 h-16 text-white/20 mx-auto mb-4" />
+              <p className="text-white/60 text-lg">
+                No profile images available yet.
+              </p>
+            </div>
+          </section>
+        }
+      >
+        {profileImages.length > 0 ? (
+          <ImagesGallery
+            images={profileImages}
+            title="Complete Photo Gallery"
+            type="posters"
+          />
+        ) : null}
+      </OptimizedSectionWrapper>
 
       {/* Additional Info */}
       <section className="bg-black py-8 border-t border-white/10">

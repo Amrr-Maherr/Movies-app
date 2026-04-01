@@ -1,5 +1,5 @@
 import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import NewPopularFilters, {
@@ -85,38 +85,53 @@ const NewPopular = memo(function NewPopular() {
         description="See what's trending, highly anticipated, and making waves right now on Netflix."
       />
 
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={400}>
+      <OptimizedSectionWrapper
+        data={mediaData}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={400}
+        title="Hero"
+      >
+        {(data) => (
           <HeroSection
-            data={mediaData as HeroMedia[] | undefined}
+            data={data as HeroMedia[] | undefined}
             isLoading={isLoading}
             error={error}
             onRetry={handleRetry}
           />
-        </LazyWrapper>
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
-        <LazyWrapper height={400}>
-          <div className="px-4 sm:px-8 mb-6 mt-8">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
-              New & Popular
-            </h1>
-            <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
-              See what&apos;s trending, highly anticipated, and making waves
-              right now.
-            </p>
-          </div>
-        </LazyWrapper>
-      </Suspense>
+        )}
+      </OptimizedSectionWrapper>
 
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
-        <LazyWrapper height={250}>
-          <NewPopularFilters
-            activeFilter={activeFilter}
-            onFilterChange={handleFilterChange}
-          />
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={true}
+        isLoading={false}
+        fallback={<SectionSkeleton variant="grid" cardCount={1} />}
+        height={400}
+        title="Page Header"
+      >
+        <div className="px-4 sm:px-8 mb-6 mt-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+            New & Popular
+          </h1>
+          <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
+            See what&apos;s trending, highly anticipated, and making waves
+            right now.
+          </p>
+        </div>
+      </OptimizedSectionWrapper>
+
+      <OptimizedSectionWrapper
+        data={true}
+        isLoading={false}
+        fallback={<SectionSkeleton variant="grid" cardCount={1} />}
+        height={250}
+        title="Filters"
+      >
+        <NewPopularFilters
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+        />
+      </OptimizedSectionWrapper>
 
       {error ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
@@ -131,26 +146,30 @@ const NewPopular = memo(function NewPopular() {
           </button>
         </div>
       ) : (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={500}>
-            {isLoading ? (
-              <SectionSkeleton variant="grid" cardCount={12} />
-            ) : (
-              <div className="slide-up">
-                <MediaGrid
-                  items={mediaData}
-                  emptyMessage="No titles found for this filter."
-                />
-              </div>
-            )}
-            <Pagination
-              currentPage={page}
-              totalPages={AllPages}
-              isLoading={isLoading}
-              onPageChange={setPage}
-            />
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={500}
+          title="Media Content"
+        >
+          {isLoading ? (
+            <SectionSkeleton variant="grid" cardCount={12} />
+          ) : (
+            <div className="slide-up">
+              <MediaGrid
+                items={mediaData}
+                emptyMessage="No titles found for this filter."
+              />
+            </div>
+          )}
+          <Pagination
+            currentPage={page}
+            totalPages={AllPages}
+            isLoading={isLoading}
+            onPageChange={setPage}
+          />
+        </OptimizedSectionWrapper>
       )}
     </div>
   );

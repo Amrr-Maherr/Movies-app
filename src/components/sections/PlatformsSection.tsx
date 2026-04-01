@@ -1,7 +1,7 @@
 import { memo, lazy, Suspense } from "react";
 import { Tv } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import PlatformCard from "./PlatformCard";
 import type { StreamingPlatform } from "@/types";
 import { SectionSkeleton } from "@/components/ui";
@@ -66,8 +66,14 @@ const PlatformsSection = memo(function PlatformsSection({
         </Link>
         {/* Horizontal Slider with Platform Cards */}
         <div className="mt-6">
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <LazyWrapper height={400}>
+          <OptimizedSectionWrapper
+            data={platforms}
+            isLoading={isLoading || false}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={400}
+            title="Streaming Platforms"
+          >
+            {(platformsData) => (
               <Slider
                 slidesPerView={6}
                 slidesPerViewMobile={2}
@@ -85,7 +91,7 @@ const PlatformsSection = memo(function PlatformsSection({
                   },
                 }}
               >
-                {platforms.map((platform) => (
+                {platformsData.map((platform) => (
                   <div
                     key={platform.id}
                     className="h-[200px] md:h-[240px] lg:h-[280px]"
@@ -94,8 +100,8 @@ const PlatformsSection = memo(function PlatformsSection({
                   </div>
                 ))}
               </Slider>
-            </LazyWrapper>
-          </Suspense>
+            )}
+          </OptimizedSectionWrapper>
         </div>
       </div>
     </div>

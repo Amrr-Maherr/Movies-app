@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, lazy, Suspense } from "react";
 import { useNetworkDetails, useNetworkTVSeries } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Tv, MapPin, Globe, Building2 } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
@@ -63,20 +63,24 @@ const Network = memo(function Network() {
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8">
             {/* Network Logo */}
             {logoUrl ? (
-              <Suspense
+              <OptimizedSectionWrapper
+                data={logoUrl}
+                isLoading={networkLoading}
                 fallback={<SectionSkeleton variant="grid" cardCount={1} />}
+                height={200}
+                title="Network Logo"
               >
-                <LazyWrapper height={200}>
+                {(url) => (
                   <div className="w-32 h-32 md:w-48 md:h-48 bg-white rounded-lg overflow-hidden flex items-center justify-center flex-shrink-0">
                     <OptimizedImage
-                      src={logoUrl}
+                      src={url}
                       alt={network.name}
                       className="w-full h-full object-contain p-2"
                       objectFit="contain"
                     />
                   </div>
-                </LazyWrapper>
-              </Suspense>
+                )}
+              </OptimizedSectionWrapper>
             ) : (
               <div className="w-32 h-32 md:w-48 md:h-48 bg-[#333] rounded-lg flex items-center justify-center flex-shrink-0">
                 <Tv className="w-16 h-16 md:w-24 md:h-24 text-white" />
@@ -146,20 +150,22 @@ const Network = memo(function Network() {
                 to={`/network/${network.parent_organization.id}`}
                 className="text-white hover:underline font-medium flex items-center gap-2"
               >
-                {network.parent_organization && (
-                  <Suspense
-                    fallback={<span className="text-white/60">Loading...</span>}
-                  >
-                    <LazyWrapper height={32}>
-                      <OptimizedImage
-                        src={`${IMAGE_BASE_URL}${network.parent_organization.logo_path}`}
-                        alt={network.parent_organization.name}
-                        className="h-8 object-contain"
-                        objectFit="contain"
-                      />
-                    </LazyWrapper>
-                  </Suspense>
-                )}
+                <OptimizedSectionWrapper
+                  data={network.parent_organization}
+                  isLoading={networkLoading}
+                  fallback={<span className="text-white/60">Loading...</span>}
+                  height={32}
+                  title="Parent Org"
+                >
+                  {(org) => (
+                    <OptimizedImage
+                      src={`${IMAGE_BASE_URL}${org.logo_path}`}
+                      alt={org.name}
+                      className="h-8 object-contain"
+                      objectFit="contain"
+                    />
+                  )}
+                </OptimizedSectionWrapper>
               </Link>
             </div>
           </div>
@@ -172,19 +178,29 @@ const Network = memo(function Network() {
           TV Shows by {network.name}
         </h2>
 
-        {showsLoading ? (
-          <SectionSkeleton variant="grid" cardCount={6} />
-        ) : showsError ? (
+        {showsError ? (
           <Error
             message="Failed to load TV shows"
             retryButtonText="Try Again"
             onRetry={() => window.location.reload()}
           />
-        ) : networkShows?.results && networkShows.results.length > 0 ? (
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <LazyWrapper height={350}>
+        ) : (
+          <OptimizedSectionWrapper
+            data={networkShows?.results && networkShows.results.length > 0 ? networkShows.results : null}
+            isLoading={showsLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={350}
+            title="TV Shows Grid"
+            isEmptyFallback={
+              <div className="text-center py-12 text-[#737373]">
+                <Tv className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                <p className="text-lg">No TV shows available</p>
+              </div>
+            }
+          >
+            {(shows) => (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                {networkShows.results.map((show: any) => (
+                {shows.map((show: any) => (
                   <Link
                     key={show.id}
                     to={`/tv/${show.id}`}
@@ -212,13 +228,8 @@ const Network = memo(function Network() {
                   </Link>
                 ))}
               </div>
-            </LazyWrapper>
-          </Suspense>
-        ) : (
-          <div className="text-center py-12 text-[#737373]">
-            <Tv className="w-16 h-16 mx-auto mb-4 opacity-50" />
-            <p className="text-lg">No TV shows available</p>
-          </div>
+            )}
+          </OptimizedSectionWrapper>
         )}
       </div>
     </div>

@@ -37,13 +37,6 @@ export interface PopularMoviesResponse {
 }
 
 /**
- * Props for movie metadata display component
- */
-export interface MovieMetaDataProps {
-  movie: Movie;
-}
-
-/**
  * Props for movie action buttons component
  */
 export interface MovieActionButtonsProps {

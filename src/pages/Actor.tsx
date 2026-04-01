@@ -1,6 +1,6 @@
 import { useState, memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import Pagination from "@/components/shared/Pagination";
@@ -68,15 +68,17 @@ const ActorsPage = memo(function ActorsPage() {
             Try Again
           </button>
         </div>
-      ) : isLoading && allItems.length === 0 ? (
-        <SectionSkeleton variant="grid" cardCount={6} />
       ) : (
         <div className="">
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <LazyWrapper height={500}>
-              <MediaGrid items={allItems} type="person" />
-            </LazyWrapper>
-          </Suspense>
+          <OptimizedSectionWrapper
+            data={allItems.length > 0 ? allItems : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={500}
+            title="Actors Grid"
+          >
+            {(items) => <MediaGrid items={items} type="person" />}
+          </OptimizedSectionWrapper>
 
           {/* Pagination Component */}
           <Pagination

@@ -32,7 +32,7 @@ const StandardGrid = memo(({ items, type }: { items: any[]; type: "movie" | "tv"
     return items.map((item) => (
       <div
         key={item.id}
-        className="w-full transition-transform duration-300 hover:scale-105 hover:z-10"
+        className="w-full"
       >
         {type === "person" ? (
           <Card

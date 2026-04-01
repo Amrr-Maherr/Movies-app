@@ -26,10 +26,13 @@ const CompactCard = memo(({ movie, onClick, matchPercentageProp }: CompactCardPr
 
   return (
     <LazyWrapper height={350}>
-      <motion.div transition={{ duration: 0.3, ease: "easeOut" }} className="h-full w-full">
+      <motion.div
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="h-full w-full"
+      >
         <Link
           to={detailsUrl}
-          className="relative group cursor-pointer block"
+          className="relative group cursor-pointer block rounded-md shadow-xl transition-shadow duration-300 hover:shadow-2xl"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >

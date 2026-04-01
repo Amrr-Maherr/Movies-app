@@ -1,5 +1,5 @@
 import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import MovieFilters, {
@@ -76,16 +76,22 @@ const Movie = memo(function Movie() {
         description="Movies move us like nothing else can, whether they're scary, funny, dramatic, romantic or anywhere in-between."
       />
 
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={400}>
+      <OptimizedSectionWrapper
+        data={moviesData}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={400}
+        title="Hero Section"
+      >
+        {(data) => (
           <HeroSection
-            data={moviesData as Movie[] | undefined}
+            data={data as Movie[] | undefined}
             isLoading={isLoading}
             error={error}
             onRetry={handleRetry}
           />
-        </LazyWrapper>
-      </Suspense>
+        )}
+      </OptimizedSectionWrapper>
 
       <div className="px-4 sm:px-8 mb-6 mt-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
@@ -97,14 +103,18 @@ const Movie = memo(function Movie() {
         </p>
       </div>
 
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
-        <LazyWrapper height={250}>
-          <MovieFilters
-            activeFilter={activeFilter}
-            onFilterChange={handleFilterChange}
-          />
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={true}
+        isLoading={false}
+        fallback={<SectionSkeleton variant="grid" cardCount={1} />}
+        height={250}
+        title="Filters"
+      >
+        <MovieFilters
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+        />
+      </OptimizedSectionWrapper>
 
       {error ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
@@ -119,23 +129,27 @@ const Movie = memo(function Movie() {
           </button>
         </div>
       ) : (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={500}>
-            {isLoading ? (
-              <SectionSkeleton variant="grid" cardCount={12} />
-            ) : (
-              <div className="slide-up">
-                <MediaGrid items={moviesData} emptyMessage="No Movies found." />
-              </div>
-            )}
-            <Pagination
-              currentPage={page}
-              totalPages={AllPages}
-              isLoading={isLoading}
-              onPageChange={setPage}
-            />
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={500}
+          title="Movies Grid"
+        >
+          {isLoading ? (
+            <SectionSkeleton variant="grid" cardCount={12} />
+          ) : (
+            <div className="slide-up">
+              <MediaGrid items={moviesData} emptyMessage="No Movies found." />
+            </div>
+          )}
+          <Pagination
+            currentPage={page}
+            totalPages={AllPages}
+            isLoading={isLoading}
+            onPageChange={setPage}
+          />
+        </OptimizedSectionWrapper>
       )}
     </div>
   );

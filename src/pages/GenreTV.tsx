@@ -1,15 +1,13 @@
 import { useParams } from "react-router-dom";
-import { memo, useMemo, useState, lazy, Suspense } from "react";
+import { memo, useMemo, useState } from "react";
 import { useTvShowsByGenre, useTvGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Tv } from "lucide-react";
 import Pagination from "@/components/shared/Pagination";
 import type { HeroMedia } from "@/types";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-
-// Lazy-loaded components
-const Card = lazy(() => import("@/components/shared/Card/Card"));
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
+import Card from "@/components/shared/Card/Card";
 
 const GenreTV = memo(function GenreTV() {
   const { id } = useParams<{ id: string }>();
@@ -70,34 +68,37 @@ const GenreTV = memo(function GenreTV() {
         </div>
 
         {/* TV Shows Grid */}
-        {tvShows.length > 0 ? (
-          <>
-            <Suspense
-              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
-            >
-              <LazyWrapper height={500}>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
-                  {tvShows.map((show: HeroMedia) => (
-                    <Card key={show.id} movie={show} variant="compact" />
-                  ))}
-                </div>
-              </LazyWrapper>
-            </Suspense>
+        <OptimizedSectionWrapper
+          data={tvShows.length > 0 ? tvShows : null}
+          isLoading={isLoading}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={500}
+          title={`${genreName} TV Shows`}
+          isEmptyFallback={
+            <div className="text-center py-12 text-[var(--text-muted)]">
+              <Tv className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p className="text-lg">No TV shows available in this genre</p>
+            </div>
+          }
+        >
+          {(tvShowsData) => (
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
+                {tvShowsData.map((show: HeroMedia) => (
+                  <Card key={show.id} movie={show} variant="compact" />
+                ))}
+              </div>
 
-            {/* Pagination */}
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              isLoading={isLoading}
-              onPageChange={setPage}
-            />
-          </>
-        ) : (
-          <div className="text-center py-12 text-[var(--text-muted)]">
-            <Tv className="w-16 h-16 mx-auto mb-4 opacity-50" />
-            <p className="text-lg">No TV shows available in this genre</p>
-          </div>
-        )}
+              {/* Pagination */}
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                isLoading={isLoading}
+                onPageChange={setPage}
+              />
+            </>
+          )}
+        </OptimizedSectionWrapper>
       </div>
     </div>
   );

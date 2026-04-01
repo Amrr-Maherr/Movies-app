@@ -1,7 +1,7 @@
 import { memo, useMemo, lazy, Suspense, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton, PageSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchTvShowDetails from "@/hooks/shared/FetchTvShowDetails";
@@ -107,11 +107,15 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       />
 
       {/* Hero */}
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={500}>
-          <MediaHero media={data as any} />
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={data}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={500}
+        title="Hero"
+      >
+        {(mediaData) => <MediaHero media={mediaData as any} />}
+      </OptimizedSectionWrapper>
 
       {/* Tabs Nav */}
       <DetailPageNav type="tv" activeTab={activeTab} onTabChange={handleTabChange as any} />
@@ -119,132 +123,171 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
       {/* Overview */}
       {activeTab === "overview" && (
         <>
-          <Suspense fallback={<SectionSkeleton variant="grid" />}>
-            <LazyWrapper height={300}>
-              <MediaInfoSection media={data as any} />
-            </LazyWrapper>
-          </Suspense>
+          <OptimizedSectionWrapper
+            data={data}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" />}
+            height={300}
+            title="Media Info"
+          >
+            {(mediaData) => <MediaInfoSection media={mediaData as any} />}
+          </OptimizedSectionWrapper>
 
-          {seasons.length > 0 && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-              <LazyWrapper height={500}>
-                <EpisodesSection seasons={seasons} tvShowId={data.id} />
-              </LazyWrapper>
-            </Suspense>
-          )}
+          <OptimizedSectionWrapper
+            data={seasons.length > 0 ? seasons : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={500}
+            title="Episodes"
+          >
+            {(seasonsData) => <EpisodesSection seasons={seasonsData} tvShowId={data.id} />}
+          </OptimizedSectionWrapper>
 
-          {trailers.length > 0 && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={3} />}>
-              <LazyWrapper height={400}>
-                <TrailersSection videos={trailers} />
-              </LazyWrapper>
-            </Suspense>
-          )}
+          <OptimizedSectionWrapper
+            data={trailers.length > 0 ? trailers : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={3} />}
+            height={400}
+            title="Trailers"
+          >
+            {(trailersData) => <TrailersSection videos={trailersData} />}
+          </OptimizedSectionWrapper>
 
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <LazyWrapper height={400}>
-              <BehindTheScenesSection images={backdrops} />
-            </LazyWrapper>
-          </Suspense>
+          <OptimizedSectionWrapper
+            data={backdrops}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={400}
+            title="Behind The Scenes"
+          >
+            <BehindTheScenesSection images={backdrops} />
+          </OptimizedSectionWrapper>
 
-          {keywords.length > 0 && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
-              <LazyWrapper height={200}>
-                <section className="bg-black py-4 md:py-12">
-                  <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-4">Tags</h3>
-                    <KeywordsSection keywords={keywords} />
-                  </div>
-                </section>
-              </LazyWrapper>
-            </Suspense>
-          )}
+          <OptimizedSectionWrapper
+            data={keywords.length > 0 ? keywords : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={1} />}
+            height={200}
+            title="Tags"
+          >
+            {(keywordsData) => (
+              <section className="bg-black py-4 md:py-12">
+                <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-4">Tags</h3>
+                  <KeywordsSection keywords={keywordsData} />
+                </div>
+              </section>
+            )}
+          </OptimizedSectionWrapper>
 
-          {watchProviders.length > 0 && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
-              <LazyWrapper height={300}>
-                <WatchProvidersSection providers={watchProviders} />
-              </LazyWrapper>
-            </Suspense>
-          )}
+          <OptimizedSectionWrapper
+            data={watchProviders.length > 0 ? watchProviders : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={1} />}
+            height={300}
+            title="Watch Providers"
+          >
+            {(providers) => <WatchProvidersSection providers={providers} />}
+          </OptimizedSectionWrapper>
 
-          {similar.length > 0 && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-              <LazyWrapper height={500}>
-                <MoreLikeThisSection similar={similar} />
-              </LazyWrapper>
-            </Suspense>
-          )}
+          <OptimizedSectionWrapper
+            data={similar.length > 0 ? similar : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={500}
+            title="More Like This"
+          >
+            {(similarData) => <MoreLikeThisSection similar={similarData} />}
+          </OptimizedSectionWrapper>
         </>
       )}
 
       {/* Reviews */}
       {activeTab === "reviews" && (
-        <Suspense fallback={<SectionSkeleton variant="list" cardCount={5} />}>
-          <LazyWrapper height={600}>
-            {reviews.length > 0 ? (
-              <ReviewsSection reviews={reviews} />
-            ) : (
-              <EmptyState message="No reviews available for this TV show yet." />
-            )}
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="list" cardCount={5} />}
+          height={600}
+          title="Reviews"
+          isEmptyFallback={<EmptyState message="No reviews available for this TV show yet." />}
+        >
+          {reviews.length > 0 ? (
+            <ReviewsSection reviews={reviews} />
+          ) : null}
+        </OptimizedSectionWrapper>
       )}
 
       {/* Videos */}
       {activeTab === "videos" && (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-          <LazyWrapper height={600}>
-            {tabVideos.length > 0 ? (
-              <VideosSection videos={tabVideos} title="All Videos & Trailers" />
-            ) : (
-              <EmptyState message="No videos available for this TV show yet." />
-            )}
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={600}
+          title="Videos"
+          isEmptyFallback={<EmptyState message="No videos available for this TV show yet." />}
+        >
+          {tabVideos.length > 0 ? (
+            <VideosSection videos={tabVideos} title="All Videos & Trailers" />
+          ) : null}
+        </OptimizedSectionWrapper>
       )}
 
       {/* Images */}
       {activeTab === "images" && (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={800}>
-            {allImages.length > 0 ? (
-              <ImagesGallery images={allImages} title="Complete Image Gallery" type="all" />
-            ) : (
-              <EmptyState message="No images available for this TV show yet." />
-            )}
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={800}
+          title="Images"
+          isEmptyFallback={<EmptyState message="No images available for this TV show yet." />}
+        >
+          {allImages.length > 0 ? (
+            <ImagesGallery images={allImages} title="Complete Image Gallery" type="all" />
+          ) : null}
+        </OptimizedSectionWrapper>
       )}
 
       {/* Watch */}
       {activeTab === "watch" && (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-          <LazyWrapper height={600}>
-            <WatchProvidersDetail providers={usProviders} region="US" title="Streaming Providers" />
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={600}
+          title="Watch Providers"
+        >
+          <WatchProvidersDetail providers={usProviders} region="US" title="Streaming Providers" />
+        </OptimizedSectionWrapper>
       )}
 
       {/* Credits */}
       {activeTab === "credits" && (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={1200}>
-            {cast.length > 0 || crew.length > 0 ? (
-              <FullCreditsDetail cast={cast} crew={crew} title="Complete Cast & Crew" />
-            ) : (
-              <EmptyState message="No cast or crew information available for this TV show yet." />
-            )}
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={1200}
+          title="Credits"
+          isEmptyFallback={<EmptyState message="No cast or crew information available for this TV show yet." />}
+        >
+          {cast.length > 0 || crew.length > 0 ? (
+            <FullCreditsDetail cast={cast} crew={crew} title="Complete Cast & Crew" />
+          ) : null}
+        </OptimizedSectionWrapper>
       )}
 
       {/* Recommendations */}
       {activeTab === "recommendations" && (
-        <LazyWrapper height={600}>
-          {recommendations.length > 0 ? (
-            <RecommendationsSection recommendations={recommendations} title="More Like This" variant="recommendations" />
-          ) : (
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={600}
+          title="Recommendations"
+          isEmptyFallback={
             <section className="bg-[var(--section-bg)] py-16">
               <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
                 <Heart className="w-20 h-20 text-white/20 mx-auto mb-4" />
@@ -252,8 +295,12 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
                 <p className="text-[var(--section-meta-color)] text-lg">We don't have enough data to recommend similar shows yet.</p>
               </div>
             </section>
-          )}
-        </LazyWrapper>
+          }
+        >
+          {recommendations.length > 0 ? (
+            <RecommendationsSection recommendations={recommendations} title="More Like This" variant="recommendations" />
+          ) : null}
+        </OptimizedSectionWrapper>
       )}
     </div>
   );

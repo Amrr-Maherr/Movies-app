@@ -1,15 +1,13 @@
 import { useParams } from "react-router-dom";
-import { memo, useMemo, useState, lazy, Suspense } from "react";
+import { memo, useMemo, useState } from "react";
 import { useMoviesByGenre, useMovieGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film } from "lucide-react";
 import Pagination from "@/components/shared/Pagination";
 import type { HeroMedia } from "@/types";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-
-// Lazy-loaded components
-const Card = lazy(() => import("@/components/shared/Card/Card"));
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
+import Card from "@/components/shared/Card/Card";
 
 const GenreMovies = memo(function GenreMovies() {
   const { id } = useParams<{ id: string }>();
@@ -77,34 +75,37 @@ const GenreMovies = memo(function GenreMovies() {
         </div>
 
         {/* Movies Grid */}
-        {movies.length > 0 ? (
-          <>
-            <Suspense
-              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
-            >
-              <LazyWrapper height={500}>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
-                  {movies.map((movie: HeroMedia) => (
-                    <Card key={movie.id} movie={movie} variant="compact" />
-                  ))}
-                </div>
-              </LazyWrapper>
-            </Suspense>
+        <OptimizedSectionWrapper
+          data={movies.length > 0 ? movies : null}
+          isLoading={isLoading}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={500}
+          title={`${genreName} Movies`}
+          isEmptyFallback={
+            <div className="text-center py-12 text-[var(--text-muted)]">
+              <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p className="text-lg">No movies available in this genre</p>
+            </div>
+          }
+        >
+          {(moviesData) => (
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
+                {moviesData.map((movie: HeroMedia) => (
+                  <Card key={movie.id} movie={movie} variant="compact" />
+                ))}
+              </div>
 
-            {/* Pagination */}
-            <Pagination
-              currentPage={page}
-              totalPages={totalPages}
-              onPageChange={setPage}
-              isLoading={isLoading}
-            />
-          </>
-        ) : (
-          <div className="text-center py-12 text-[var(--text-muted)]">
-            <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
-            <p className="text-lg">No movies available in this genre</p>
-          </div>
-        )}
+              {/* Pagination */}
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+                isLoading={isLoading}
+              />
+            </>
+          )}
+        </OptimizedSectionWrapper>
       </div>
     </div>
   );

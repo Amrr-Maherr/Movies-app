@@ -1,6 +1,6 @@
 import { memo, lazy, Suspense, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import type { Movie, HeroMedia } from "@/types";
@@ -34,16 +34,22 @@ const Kids = memo(function Kids() {
         description="Discover movies that are perfect for the whole family on Netflix."
       />
 
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={400}>
+      <OptimizedSectionWrapper
+        data={moviesData}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={400}
+        title="Hero Section"
+      >
+        {(data) => (
           <HeroSection
-            data={moviesData as Movie[] | undefined}
+            data={data as Movie[] | undefined}
             isLoading={isLoading}
             error={error}
             onRetry={handleRetry}
           />
-        </LazyWrapper>
-      </Suspense>
+        )}
+      </OptimizedSectionWrapper>
 
       <div className="px-4 sm:px-8 mb-6 mt-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
@@ -67,28 +73,32 @@ const Kids = memo(function Kids() {
           </button>
         </div>
       ) : (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={500}>
-            <AnimatePresence mode="wait">
-              {isLoading ? (
-                <SectionSkeleton variant="grid" cardCount={12} />
-              ) : (
-                <motion.div
-                  key="grid-kids"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <MediaGrid
-                    items={moviesData}
-                    emptyMessage="No Kids Movies found."
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={500}
+          title="Kids Movies Grid"
+        >
+          <AnimatePresence mode="wait">
+            {isLoading ? (
+              <SectionSkeleton variant="grid" cardCount={12} />
+            ) : (
+              <motion.div
+                key="grid-kids"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <MediaGrid
+                  items={moviesData}
+                  emptyMessage="No Kids Movies found."
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </OptimizedSectionWrapper>
       )}
     </div>
   );

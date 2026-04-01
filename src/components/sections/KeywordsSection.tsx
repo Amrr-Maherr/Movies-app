@@ -13,7 +13,7 @@ export interface KeywordsSectionProps {
  * Netflix-style Keywords/Tags section
  * Displays keywords as clickable badges/pills in a grid layout
  */
-export const KeywordsSection = memo(function KeywordsSection({
+const KeywordsSection = memo(function KeywordsSection({
   keywords,
   onKeywordClick,
   className,
@@ -78,4 +78,5 @@ export const KeywordsSection = memo(function KeywordsSection({
   );
 });
 
+export { KeywordsSection };
 export default KeywordsSection;

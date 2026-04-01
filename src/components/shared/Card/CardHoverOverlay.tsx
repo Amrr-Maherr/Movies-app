@@ -80,9 +80,11 @@ const CardHoverOverlay = memo(
             )} */}
           </div>
           <div className="flex items-center gap-2 text-[10px]">
-            <span className="text-[var(--success)] font-bold">
-              {matchScore}% Match
-            </span>
+            {matchScore > 0 && (
+              <span className="text-[var(--success)] font-bold">
+                {matchScore}% Match
+              </span>
+            )}
             <span className="text-gray-300">{year}</span>
             <span className="border border-gray-500 px-1 rounded text-gray-300">
               {ageRating}

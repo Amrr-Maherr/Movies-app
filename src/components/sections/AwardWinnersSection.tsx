@@ -1,7 +1,7 @@
 import { memo, useMemo, lazy, Suspense } from "react";
 import { Award } from "lucide-react";
 import { SectionSkeleton } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import Card from "@/components/shared/Card/Card";
 import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
@@ -30,20 +30,26 @@ const AwardWinnersSection = memo(function AwardWinnersSection({
           icon={Award}
           iconColor="text-yellow-500"
         />
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-          <LazyWrapper height={350}>
+        <OptimizedSectionWrapper
+          data={items}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={350}
+          title="Award Winners"
+        >
+          {(moviesData) => (
             <Slider
               slidesPerView={6}
               hideNavigation={false}
               slidesPerViewMobile={1.5}
             >
               {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4"> */}
-              {items.map((movie) => (
+              {moviesData.map((movie) => (
                 <Card key={movie.id} movie={movie} variant="awardWinner" />
               ))}
             </Slider>
-          </LazyWrapper>
-        </Suspense>
+          )}
+        </OptimizedSectionWrapper>
         {/* </div> */}
       </div>
     </div>

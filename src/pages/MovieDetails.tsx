@@ -1,7 +1,7 @@
 import { memo, useMemo, lazy, Suspense, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { PageSkeleton, Error, SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchMovieDetails from "@/hooks/shared/FetchMovieDetails";
@@ -99,11 +99,15 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       />
 
       {/* Hero */}
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={500}>
-          <MediaHero media={data as any} />
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={data}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={500}
+        title="Hero"
+      >
+        {(mediaData) => <MediaHero media={mediaData as any} />}
+      </OptimizedSectionWrapper>
 
       {/* Tabs Nav */}
       <DetailPageNav type="movie" activeTab={activeTab} onTabChange={handleTabChange as any} />
@@ -113,115 +117,140 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
       {/* Overview */}
       {activeTab === "overview" && (
         <>
-          <Suspense fallback={<SectionSkeleton variant="grid" />}>
-            <LazyWrapper height={300}>
-              <MediaInfoSection media={data as any} />
-            </LazyWrapper>
-          </Suspense>
+          <OptimizedSectionWrapper
+            data={data}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" />}
+            height={300}
+            title="Media Info"
+          >
+            {(mediaData) => <MediaInfoSection media={mediaData as any} />}
+          </OptimizedSectionWrapper>
 
-          {videos.length > 0 && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={3} />}>
-              <LazyWrapper height={400}>
-                <TrailersSection videos={videos} />
-              </LazyWrapper>
-            </Suspense>
-          )}
+          <OptimizedSectionWrapper
+            data={videos.length > 0 ? videos : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={3} />}
+            height={400}
+            title="Trailers"
+          >
+            {(videosData) => <TrailersSection videos={videosData} />}
+          </OptimizedSectionWrapper>
 
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <LazyWrapper height={400}>
-              <BehindTheScenesSection images={images} />
-            </LazyWrapper>
-          </Suspense>
+          <OptimizedSectionWrapper
+            data={images}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={400}
+            title="Behind The Scenes"
+          >
+            <BehindTheScenesSection images={images} />
+          </OptimizedSectionWrapper>
 
-          {similar.length > 0 && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-              <LazyWrapper height={500}>
-                <MoreLikeThisSection similar={similar} />
-              </LazyWrapper>
-            </Suspense>
-          )}
+          <OptimizedSectionWrapper
+            data={similar.length > 0 ? similar : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={500}
+            title="More Like This"
+          >
+            {(similarData) => <MoreLikeThisSection similar={similarData} />}
+          </OptimizedSectionWrapper>
 
-          {(credits.cast.length > 0 || credits.crew.length > 0) && (
-            <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-              <LazyWrapper height={500}>
-                <FullCreditsSection cast={credits.cast} crew={credits.crew} />
-              </LazyWrapper>
-            </Suspense>
-          )}
+          <OptimizedSectionWrapper
+            data={credits.cast.length > 0 || credits.crew.length > 0 ? credits : null}
+            isLoading={isLoading}
+            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+            height={500}
+            title="Credits"
+          >
+            {(creditsData) => <FullCreditsSection cast={creditsData.cast} crew={creditsData.crew} />}
+          </OptimizedSectionWrapper>
         </>
       )}
 
       {/* Reviews */}
       {activeTab === "reviews" && (
-        <Suspense fallback={<SectionSkeleton variant="list" cardCount={5} />}>
-          <LazyWrapper height={600}>
-            {reviews.length > 0 ? (
-              <ReviewsSection reviews={reviews} />
-            ) : (
-              <EmptyState message="No reviews available for this movie yet." />
-            )}
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="list" cardCount={5} />}
+          height={600}
+          title="Reviews"
+          isEmptyFallback={<EmptyState message="No reviews available for this movie yet." />}
+        >
+          {reviews.length > 0 ? <ReviewsSection reviews={reviews} /> : null}
+        </OptimizedSectionWrapper>
       )}
 
       {/* Videos */}
       {activeTab === "videos" && (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-          <LazyWrapper height={600}>
-            {tabVideos.length > 0 ? (
-              <VideosSection videos={tabVideos} title="All Videos & Trailers" />
-            ) : (
-              <EmptyState message="No videos available for this movie yet." />
-            )}
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={600}
+          title="Videos"
+          isEmptyFallback={<EmptyState message="No videos available for this movie yet." />}
+        >
+          {tabVideos.length > 0 ? <VideosSection videos={tabVideos} title="All Videos & Trailers" /> : null}
+        </OptimizedSectionWrapper>
       )}
 
       {/* Images */}
       {activeTab === "images" && (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={800}>
-            {allImages.length > 0 ? (
-              <ImagesGallery images={allImages} title="Complete Image Gallery" type="all" />
-            ) : (
-              <EmptyState message="No images available for this movie yet." />
-            )}
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={800}
+          title="Images"
+          isEmptyFallback={<EmptyState message="No images available for this movie yet." />}
+        >
+          {allImages.length > 0 ? (
+            <ImagesGallery images={allImages} title="Complete Image Gallery" type="all" />
+          ) : null}
+        </OptimizedSectionWrapper>
       )}
 
       {/* Watch Providers */}
       {activeTab === "watch" && (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-          <LazyWrapper height={600}>
-            <WatchProvidersDetail providers={usProviders} region="US" title="Streaming Providers" />
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={600}
+          title="Watch Providers"
+        >
+          <WatchProvidersDetail providers={usProviders} region="US" title="Streaming Providers" />
+        </OptimizedSectionWrapper>
       )}
 
       {/* Credits */}
       {activeTab === "credits" && (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={1200}>
-            {cast.length > 0 || crew.length > 0 ? (
-              <FullCreditsDetail cast={cast} crew={crew} title="Complete Cast & Crew" />
-            ) : (
-              <EmptyState message="No cast or crew information available for this movie yet." />
-            )}
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={1200}
+          title="Credits"
+          isEmptyFallback={<EmptyState message="No cast or crew information available for this movie yet." />}
+        >
+          {cast.length > 0 || crew.length > 0 ? (
+            <FullCreditsDetail cast={cast} crew={crew} title="Complete Cast & Crew" />
+          ) : null}
+        </OptimizedSectionWrapper>
       )}
 
       {/* Recommendations */}
       {activeTab === "recommendations" && (
-        <LazyWrapper height={600}>
-          {recommendations.length > 0 ? (
-            <RecommendationsSection
-              recommendations={recommendations}
-              title="More Like This"
-              variant="recommendations"
-            />
-          ) : (
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={600}
+          title="Recommendations"
+          isEmptyFallback={
             <section className="bg-black py-16">
               <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
                 <Heart className="w-20 h-20 text-white/20 mx-auto mb-4" />
@@ -229,8 +258,12 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
                 <p className="text-white/60 text-lg">We don't have enough data to recommend similar movies yet.</p>
               </div>
             </section>
-          )}
-        </LazyWrapper>
+          }
+        >
+          {recommendations.length > 0 ? (
+            <RecommendationsSection recommendations={recommendations} title="More Like This" variant="recommendations" />
+          ) : null}
+        </OptimizedSectionWrapper>
       )}
     </div>
   );

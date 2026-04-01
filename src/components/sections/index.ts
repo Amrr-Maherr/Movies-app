@@ -1,4 +1,4 @@
-export { KeywordsSection } from "./KeywordsSection";
+export { default as KeywordsSection } from "./KeywordsSection";
 export type { KeywordsSectionProps } from "./KeywordsSection";
 
 export { default as CollectionSection } from "./CollectionSection";

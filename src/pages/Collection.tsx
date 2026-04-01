@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { memo, useMemo, lazy, Suspense } from "react";
 import { useCollectionDetails } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Film, Star } from "lucide-react";
 import type { HeroMedia } from "@/types";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -163,26 +163,31 @@ const Collection = memo(function Collection() {
           All Movies in Collection
         </h2>
 
-        {collection.parts && collection.parts.length > 0 ? (
-          <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-            <LazyWrapper height={350}>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                {collection.parts.map((movie) => (
-                  <Card
-                    key={movie.id}
-                    movie={movie as HeroMedia}
-                    variant="compact"
-                  />
-                ))}
-              </div>
-            </LazyWrapper>
-          </Suspense>
-        ) : (
-          <div className="text-center py-12 text-[#737373]">
-            <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
-            <p className="text-lg">No movies in this collection</p>
-          </div>
-        )}
+        <OptimizedSectionWrapper
+          data={collection.parts && collection.parts.length > 0 ? collection.parts : null}
+          isLoading={collectionLoading}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={350}
+          title="Collection Movies"
+          isEmptyFallback={
+            <div className="text-center py-12 text-[#737373]">
+              <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
+              <p className="text-lg">No movies in this collection</p>
+            </div>
+          }
+        >
+          {(parts) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
+              {parts.map((movie) => (
+                <Card
+                  key={movie.id}
+                  movie={movie as HeroMedia}
+                  variant="compact"
+                />
+              ))}
+            </div>
+          )}
+        </OptimizedSectionWrapper>
       </div>
     </div>
   );

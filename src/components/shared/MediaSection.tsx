@@ -1,6 +1,6 @@
 import { memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { SectionSkeleton } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import Card from "@/components/shared/Card/Card";
 import { Error } from "@/components/ui";
 import type { HeroMedia } from "@/types";
@@ -21,6 +21,7 @@ interface MediaSectionProps {
 const MediaSection = memo(function MediaSection({
   title,
   data,
+  isLoading,
   error,
   onRetry,
   slidesPerView = 6,
@@ -52,8 +53,14 @@ const MediaSection = memo(function MediaSection({
         </h2>
 
         {/* Horizontal Carousel */}
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={6} />}>
-          <LazyWrapper height={300}>
+        <OptimizedSectionWrapper
+          data={media}
+          isLoading={isLoading}
+          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+          height={300}
+          title={title}
+        >
+          {(mediaData) => (
             <Slider
               slidesPerView={slidesPerView}
               slidesPerViewMobile={1.5}
@@ -64,12 +71,12 @@ const MediaSection = memo(function MediaSection({
                 autoplay: true,
               }}
             >
-              {media.map((item: HeroMedia) => (
+              {mediaData.map((item: HeroMedia) => (
                 <Card key={item.id} movie={item} variant="compact" />
               ))}
             </Slider>
-          </LazyWrapper>
-        </Suspense>
+          )}
+        </OptimizedSectionWrapper>
       </div>
     </section>
   );

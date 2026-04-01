@@ -1,5 +1,5 @@
 import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import TVShowFilters, {
@@ -76,16 +76,22 @@ const TVShow = memo(function TVShow() {
         description="Browse the most popular, highly-rated, and currently airing TV series on Netflix."
       />
 
-      <Suspense fallback={<SectionSkeleton variant="hero" />}>
-        <LazyWrapper height={400}>
+      <OptimizedSectionWrapper
+        data={tvShowsData}
+        isLoading={isLoading}
+        fallback={<SectionSkeleton variant="hero" />}
+        height={400}
+        title="Hero Section"
+      >
+        {(data) => (
           <HeroSection
-            data={tvShowsData as TvShow[] | undefined}
+            data={data as TvShow[] | undefined}
             isLoading={isLoading}
             error={error}
             onRetry={handleRetry}
           />
-        </LazyWrapper>
-      </Suspense>
+        )}
+      </OptimizedSectionWrapper>
 
       <div className="px-4 sm:px-8 mb-6 mt-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
@@ -96,14 +102,18 @@ const TVShow = memo(function TVShow() {
         </p>
       </div>
 
-      <Suspense fallback={<SectionSkeleton variant="grid" cardCount={1} />}>
-        <LazyWrapper height={250}>
-          <TVShowFilters
-            activeFilter={activeFilter}
-            onFilterChange={handleFilterChange}
-          />
-        </LazyWrapper>
-      </Suspense>
+      <OptimizedSectionWrapper
+        data={true}
+        isLoading={false}
+        fallback={<SectionSkeleton variant="grid" cardCount={1} />}
+        height={250}
+        title="Filters"
+      >
+        <TVShowFilters
+          activeFilter={activeFilter}
+          onFilterChange={handleFilterChange}
+        />
+      </OptimizedSectionWrapper>
 
       {error ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
@@ -118,26 +128,30 @@ const TVShow = memo(function TVShow() {
           </button>
         </div>
       ) : (
-        <Suspense fallback={<SectionSkeleton variant="grid" cardCount={12} />}>
-          <LazyWrapper height={500}>
-            {isLoading ? (
-              <SectionSkeleton variant="grid" cardCount={12} />
-            ) : (
-              <div className="slide-up">
-                <MediaGrid
-                  items={tvShowsData}
-                  emptyMessage="No TV Shows found for this filter."
-                />
-              </div>
-            )}
-            <Pagination
-              currentPage={page}
-              totalPages={AllPages}
-              isLoading={isLoading}
-              onPageChange={setPage}
-            />
-          </LazyWrapper>
-        </Suspense>
+        <OptimizedSectionWrapper
+          data={true}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+          height={500}
+          title="TV Shows Grid"
+        >
+          {isLoading ? (
+            <SectionSkeleton variant="grid" cardCount={12} />
+          ) : (
+            <div className="slide-up">
+              <MediaGrid
+                items={tvShowsData}
+                emptyMessage="No TV Shows found for this filter."
+              />
+            </div>
+          )}
+          <Pagination
+            currentPage={page}
+            totalPages={AllPages}
+            isLoading={isLoading}
+            onPageChange={setPage}
+          />
+        </OptimizedSectionWrapper>
       )}
     </div>
   );

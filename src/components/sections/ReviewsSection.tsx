@@ -1,6 +1,6 @@
 import { memo, useMemo, lazy, Suspense } from "react";
 import { SectionSkeleton } from "@/components/ui";
-import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Card } from "@/components/shared/Card";
 
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
@@ -27,10 +27,16 @@ const ReviewsSection = memo(function ReviewsSection({ reviews }: ReviewsSectionP
     <section className="bg-[var(--section-bg)] py-10">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         <h3 className="text-xl font-semibold text-[var(--section-title-color)] mb-6">User Reviews</h3>
-        <Suspense fallback={<SectionSkeleton variant="list" cardCount={4} />}>
-          <LazyWrapper height={400}>
+        <OptimizedSectionWrapper
+          data={validReviews}
+          isLoading={false}
+          fallback={<SectionSkeleton variant="list" cardCount={4} />}
+          height={400}
+          title="User Reviews"
+        >
+          {(reviewsData) => (
             <Slider slidesPerView={3} slidesPerViewMobile={1} spaceBetween={16} hideNavigation={false}>
-              {validReviews.map((review) => (
+              {reviewsData.map((review) => (
                 <Card
                   key={review.id || review.author}
                   variant="review"
@@ -43,8 +49,8 @@ const ReviewsSection = memo(function ReviewsSection({ reviews }: ReviewsSectionP
                 />
               ))}
             </Slider>
-          </LazyWrapper>
-        </Suspense>
+          )}
+        </OptimizedSectionWrapper>
         <p className="text-[var(--section-meta-color)] text-xs mt-4">{validReviews.length} reviews</p>
       </div>
     </section>
