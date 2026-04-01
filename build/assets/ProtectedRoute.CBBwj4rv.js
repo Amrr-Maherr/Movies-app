@@ -1,0 +1,1 @@
+import{j as t}from"./animation-vendor.CZQS52oK.js";import{N as e,O as a}from"./react-vendor.DSgnkbHN.js";function o(){return localStorage.getItem("token"),"success"!==localStorage.getItem("paymentStatus")?t.jsx(e,{to:"/subscribe",replace:!0}):t.jsx(a,{})}export{o as default};

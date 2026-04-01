@@ -130,7 +130,7 @@ export default function SearchPage() {
       {/* Filter Tabs */}
       <div className="sticky top-0 z-40 bg-[var(--background-primary)]/95 backdrop-blur-md border-b border-white/5">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-2 py-4 overflow-x-auto">
+          <div className="flex items-center justify-center gap-2 py-4 overflow-x-auto flex-wrap">
             <FilterButton
               active={filter === "all"}
               onClick={() => setFilter("all")}
