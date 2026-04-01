@@ -1,12 +1,27 @@
 import { useQuery } from "@tanstack/react-query";
 import { multiSearch } from "@/services";
-import type { Movie, TvShow } from "@/types/movies";
+import type { Movie, TvShow, PersonSearchResult } from "@/types";
 import type { MultiSearchResult } from "@/services/searchService";
 
-export interface SearchResult {
-  item: Movie | TvShow | MultiSearchResult;
-  type: "movie" | "tv" | "person";
+export interface MovieSearchResult {
+  item: Movie;
+  type: "movie";
 }
+
+export interface TvShowSearchResult {
+  item: TvShow;
+  type: "tv";
+}
+
+export interface PersonSearchResultItem {
+  item: PersonSearchResult;
+  type: "person";
+}
+
+export type SearchResult =
+  | MovieSearchResult
+  | TvShowSearchResult
+  | PersonSearchResultItem;
 
 /**
  * Hook for searching movies, TV shows, and people using multi-search
@@ -26,11 +41,24 @@ export function useSearch(query: string) {
 
   // Filter and map results with type information
   const mappedResults: SearchResult[] = results
-    .filter((item) => item.media_type === "movie" || item.media_type === "tv" || item.media_type === "person")
-    .map((item) => ({
-      item: item as Movie | TvShow | MultiSearchResult,
-      type: item.media_type as "movie" | "tv" | "person",
-    }));
+    .filter(
+      (item) =>
+        item.media_type === "movie" ||
+        item.media_type === "tv" ||
+        item.media_type === "person",
+    )
+    .map((item) => {
+      if (item.media_type === "movie") {
+        return { item: item as unknown as Movie, type: "movie" as const };
+      }
+      if (item.media_type === "tv") {
+        return { item: item as unknown as TvShow, type: "tv" as const };
+      }
+      return {
+        item: item as unknown as PersonSearchResult,
+        type: "person" as const,
+      };
+    });
 
   return {
     results: mappedResults,

@@ -1,2 +1,2 @@
 export { default as SearchButton } from './SearchButton';
-// export { SearchPopup, SearchResultCard } from '@/features/search/components';
+export { default as SearchPopup } from '@/features/search/components/SearchPopup';

@@ -22,9 +22,9 @@ const ProtectedRoute = lazy(() => import("@/guards/ProtectedRoute"));
 const TVShowDetailsPage = lazy(() => import("@/pages/TVShowDetails"));
 const PersonDetailsPage = lazy(() => import("@/pages/PersonDetails"));
 const TagsPage = lazy(() => import("@/pages/Tags"));
+const SearchPage = lazy(() => import("@/pages/SearchPage"));
 
 // Movie detail sub-pages — removed (now rendered as tabs inside MovieDetails)
-
 
 // TV detail sub-pages — removed (now rendered as tabs inside TVShowDetails)
 
@@ -120,6 +120,14 @@ const AppRoutes = memo(function AppRoutes() {
               element={
                 <PageTransition>
                   <TagsPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/search"
+              element={
+                <PageTransition>
+                  <SearchPage />
                 </PageTransition>
               }
             />
