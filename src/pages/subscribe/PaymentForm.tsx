@@ -1,180 +1,161 @@
 "use client";
 
-import { loadStripe } from "@stripe/stripe-js";
-import {
-  Elements,
-  CardElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
-import { useState, FormEvent } from "react";
-import { Lock } from "lucide-react";
+import { useState, FormEvent, useEffect } from "react";
+import { Lock, CreditCard, Calendar, ShieldCheck, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2Icon } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-
-const stripePromise = loadStripe(
-  "pk_test_51S3dQaJyhK1JCMi8Znjoo5NoLzEcgBIQ3C0xPnT2KG8yt88Tf0i5tJgLnu9EspJ3Nc6xmugxQ0a0jp51gWRSWRG400A2YuzVzP",
-);
-
-interface CheckoutFormProps {
-  onSuccess: () => void;
-}
-
-function CheckoutForm({ onSuccess }: CheckoutFormProps) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!stripe || !elements) return;
-
-    setLoading(true);
-    const card = elements.getElement(CardElement);
-
-    const { error } = await stripe.createToken(card);
-    setLoading(false);
-
-    if (error) {
-      setMessage(error.message);
-    } else {
-      localStorage.setItem("paymentStatus", "success");
-      setMessage("Payment successful! ✅");
-      setTimeout(() => onSuccess(), 1000);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Card Element */}
-      <div className="relative">
-        <div className="bg-black rounded-md px-4 py-3 border border-neutral-700 focus-within:border-white transition-colors">
-          <CardElement
-            options={{
-              style: {
-                base: {
-                  fontSize: "16px",
-                  color: "#ffffff",
-                  fontFamily:
-                    '"Netflix Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                  fontSmoothing: "antialiased",
-                  "::placeholder": {
-                    color: "#737373",
-                  },
-                },
-              },
-              hidePostalCode: false,
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Alert Message */}
-      {message && (
-        <div className="w-full">
-          <Alert className="bg-transparent border-neutral-700 text-white">
-            <CheckCircle2Icon className="h-4 w-4 text-white" />
-            <AlertDescription className="ml-2 text-white">
-              {message}
-            </AlertDescription>
-          </Alert>
-        </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="pt-2">
-        <Button
-          type="submit"
-          disabled={!stripe || loading}
-          className="w-full bg-[#E50914] hover:bg-[#f40612] text-white h-12 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {loading ? (
-            <span className="flex items-center gap-2">
-              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              Processing...
-            </span>
-          ) : (
-            "Pay Now"
-          )}
-        </Button>
-      </div>
-    </form>
-  );
-}
 
 interface PaymentFormProps {
   onSuccess: () => void;
 }
 
 export default function PaymentForm({ onSuccess }: PaymentFormProps) {
+  const [formData, setPaymentData] = useState({
+    cardNumber: "4242 4242 4242 4242",
+    expiryDate: "12/26",
+    cvv: "123",
+    name: "Emily Johnson",
+  });
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Simulate payment processing
+    setTimeout(() => {
+      setLoading(false);
+      localStorage.setItem("paymentStatus", "success");
+      setMessage("Payment successful! Welcome to Netflix. ✅");
+      setTimeout(() => onSuccess(), 1500);
+    }, 2000);
+  };
+
   return (
-    <div className="w-full max-w-[500px] mx-auto px-6 py-8">
+    <div className="w-full max-w-[500px] mx-auto px-6 py-8 bg-black text-white">
       <HelmetMeta
-        name="Payment"
-        description="Secure payment for your Netflix subscription. Enter your card details to complete your subscription."
+        name="Payment Method"
+        description="Set up your payment method to start your Netflix subscription."
       />
+
       {/* Header */}
-      <div className="flex items-center gap-3 mb-8">
-        <div className="w-10 h-10 rounded-full bg-neutral-900 flex items-center justify-center flex-shrink-0">
-          <Lock className="h-5 w-5 text-neutral-400" />
+      <div className="mb-8">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs text-neutral-400 uppercase tracking-wider font-bold">
+            Step 4 of 4
+          </span>
         </div>
-        <div>
-          <h2 className="text-xl font-semibold text-white">Payment Details</h2>
-          <p className="text-sm text-neutral-400">
-            Secure payment powered by Stripe
+        <h1 className="text-3xl font-bold mb-3">Set up your credit or debit card</h1>
+        <div className="flex gap-2 mb-6">
+          <img src="https://assets.nflxext.com/siteui/acquisition/payment/icp/visa.png" alt="Visa" className="h-6" />
+          <img src="https://assets.nflxext.com/siteui/acquisition/payment/icp/mastercard.png" alt="Mastercard" className="h-6" />
+          <img src="https://assets.nflxext.com/siteui/acquisition/payment/icp/amex.png" alt="Amex" className="h-6" />
+        </div>
+      </div>
+
+      {/* Demo Credentials Box */}
+      <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-4 mb-8">
+        <p className="text-sm font-medium text-white mb-2 flex items-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-blue-500" />
+          Demo Payment Data:
+        </p>
+        <div className="text-xs text-neutral-400 space-y-1 font-mono">
+          <p>Card: <span className="text-white">4242 4242 4242 4242</span></p>
+          <p>Expiry: <span className="text-white">12/26</span> | CVV: <span className="text-white">123</span></p>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Card Number */}
+        <div className="relative group">
+          <Input
+            type="text"
+            placeholder="Card Number"
+            value={formData.cardNumber}
+            onChange={(e) => setPaymentData({ ...formData, cardNumber: e.target.value })}
+            className="h-14 bg-neutral-800/50 border-neutral-700 text-white placeholder:text-neutral-500 focus:border-white focus:ring-0 pl-12"
+          />
+          <CreditCard className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500 group-focus-within:text-white transition-colors" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          {/* Expiry Date */}
+          <div className="relative group">
+            <Input
+              type="text"
+              placeholder="Expiration Date (MM/YY)"
+              value={formData.expiryDate}
+              onChange={(e) => setPaymentData({ ...formData, expiryDate: e.target.value })}
+              className="h-14 bg-neutral-800/50 border-neutral-700 text-white placeholder:text-neutral-500 focus:border-white focus:ring-0 pl-12"
+            />
+            <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500 group-focus-within:text-white transition-colors" />
+          </div>
+
+          {/* CVV */}
+          <div className="relative group">
+            <Input
+              type="text"
+              placeholder="CVV"
+              value={formData.cvv}
+              onChange={(e) => setPaymentData({ ...formData, cvv: e.target.value })}
+              className="h-14 bg-neutral-800/50 border-neutral-700 text-white placeholder:text-neutral-500 focus:border-white focus:ring-0 pl-12"
+            />
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500 group-focus-within:text-white transition-colors" />
+          </div>
+        </div>
+
+        {/* Full Name */}
+        <div className="relative group">
+          <Input
+            type="text"
+            placeholder="First Name & Last Name"
+            value={formData.name}
+            onChange={(e) => setPaymentData({ ...formData, name: e.target.value })}
+            className="h-14 bg-neutral-800/50 border-neutral-700 text-white placeholder:text-neutral-500 focus:border-white focus:ring-0 pl-12"
+          />
+          <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500 group-focus-within:text-white transition-colors" />
+        </div>
+
+        {/* Info Text */}
+        <div className="py-4 space-y-3">
+          <p className="text-xs text-neutral-400 leading-relaxed">
+            By clicking the "Start Membership" button below, you agree to our Terms of Use, Privacy Statement, and that you are over 18.
+          </p>
+          <p className="text-xs text-neutral-400 leading-relaxed">
+            Netflix will automatically continue your membership and charge the monthly membership fee to your payment method until you cancel. You may cancel at any time to avoid future charges.
           </p>
         </div>
-      </div>
 
-      {/* Test Credentials */}
-      <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-4 mb-6">
-        <p className="text-sm font-medium text-white mb-2">Test Credentials:</p>
-        <div className="text-sm text-neutral-400 space-y-1">
-          <p>
-            <span className="text-neutral-500">Username:</span>{" "}
-            <span className="text-white font-mono">emilys</span>
-          </p>
-          <p>
-            <span className="text-neutral-500">Password:</span>{" "}
-            <span className="text-white font-mono">emilyspass</span>
-          </p>
-        </div>
-      </div>
+        {/* Alert Message */}
+        {message && (
+          <Alert className="bg-green-900/20 border-green-900/50 text-green-400">
+            <CheckCircle2Icon className="h-4 w-4" />
+            <AlertDescription className="ml-2">
+              {message}
+            </AlertDescription>
+          </Alert>
+        )}
 
-      {/* Payment Form Card */}
-      <div className="bg-black border border-neutral-800 rounded-lg p-6 mb-6">
-        <Elements stripe={stripePromise}>
-          <CheckoutForm onSuccess={onSuccess} />
-        </Elements>
-      </div>
-
-      {/* Security & Payment Methods */}
-      <div className="space-y-4">
-        {/* Security Badge */}
-        <div className="flex items-center justify-center gap-2 text-xs text-neutral-500">
-          <Lock className="h-3.5 w-3.5" />
-          <span>Your information is secure and encrypted</span>
-        </div>
-
-        {/* Payment Methods Icons */}
-        <div className="flex items-center justify-center gap-4 opacity-60">
-          <div className="h-6 px-3 border border-neutral-600 rounded flex items-center justify-center">
-            <span className="text-white font-bold text-xs">VISA</span>
-          </div>
-          <div className="h-6 px-3 border border-neutral-600 rounded flex items-center justify-center">
-            <span className="text-white font-bold text-[10px]">Mastercard</span>
-          </div>
-          <div className="h-6 px-3 border border-neutral-600 rounded flex items-center justify-center">
-            <span className="text-white font-bold text-[10px]">AMEX</span>
-          </div>
-          <div className="h-6 px-3 border border-neutral-600 rounded flex items-center justify-center">
-            <span className="text-white font-bold text-[10px]">Discover</span>
-          </div>
-        </div>
-      </div>
+        {/* Submit Button */}
+        <Button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-[#E50914] hover:bg-[#f40612] text-white h-14 text-lg font-semibold transition-all active:scale-[0.98] disabled:opacity-50"
+        >
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <span className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+              Processing...
+            </span>
+          ) : (
+            "Start Membership"
+          )}
+        </Button>
+      </form>
     </div>
   );
 }

@@ -1,161 +1,133 @@
 "use client";
 
-import { Check, Star } from "lucide-react";
+import { Check, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
-const PLANS = [
+const plans = [
   {
-    id: "tier-basic",
+    id: "basic",
     name: "Basic",
-    price: "$9.99",
-    features: ["1 screen", "SD 480p", "Unlimited movies"],
+    price: "7.99",
+    quality: "Good",
+    resolution: "720p",
+    devices: ["Phone", "Tablet", "Computer", "TV"],
   },
   {
-    id: "tier-standard",
+    id: "standard",
     name: "Standard",
-    price: "$15.99",
-    badge: "Most Popular",
-    features: ["2 screens", "HD 1080p", "Downloads included"],
+    price: "12.99",
+    quality: "Better",
+    resolution: "1080p",
+    devices: ["Phone", "Tablet", "Computer", "TV"],
   },
   {
-    id: "tier-premium",
+    id: "premium",
     name: "Premium",
-    price: "$19.99",
-    features: ["4 screens", "4K + HDR", "Priority support"],
+    price: "17.99",
+    quality: "Best",
+    resolution: "4K + HDR",
+    devices: ["Phone", "Tablet", "Computer", "TV"],
   },
 ];
 
-export default function Step2ChoosePlan({
-  selectedPlanId,
-  onSelectPlan,
-  onNext,
-}) {
+export default function Step2ChoosePlan({ selectedPlanId, onSelectPlan, onNext }) {
   return (
-    <div className="w-full max-w-[900px] mx-auto px-6 py-8">
+    <div className="w-full max-w-[1000px] mx-auto px-6 py-12 bg-black text-white">
       <HelmetMeta
         name="Choose Your Plan"
-        description="Select the perfect Netflix subscription plan for your needs. Basic, Standard, or Premium."
+        description="Choose the Netflix plan that's right for you."
       />
+
       {/* Header */}
-      <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-white mb-2">
-          Choose the plan that's right for you
-        </h1>
-        <p className="text-neutral-400 text-sm">
-          Join Netflix and select your monthly subscription
+      <div className="mb-10 max-w-[600px]">
+        <div className="flex items-center gap-2 mb-2 text-neutral-400">
+          <span className="text-xs uppercase tracking-widest font-bold">Step 2 of 4</span>
+        </div>
+        <h1 className="text-3xl font-bold mb-4">Choose the plan that's right for you</h1>
+        <ul className="space-y-3">
+          <li className="flex items-center gap-3 text-lg text-neutral-200">
+            <Check className="w-6 h-6 text-[#E50914] flex-shrink-0" />
+            Watch all you want. Ad-free.
+          </li>
+          <li className="flex items-center gap-3 text-lg text-neutral-200">
+            <Check className="w-6 h-6 text-[#E50914] flex-shrink-0" />
+            Recommendations just for you.
+          </li>
+          <li className="flex items-center gap-3 text-lg text-neutral-200">
+            <Check className="w-6 h-6 text-[#E50914] flex-shrink-0" />
+            Change or cancel your plan anytime.
+          </li>
+        </ul>
+      </div>
+
+      {/* Plans Selection */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        {plans.map((plan) => (
+          <div
+            key={plan.id}
+            onClick={() => onSelectPlan(plan.id)}
+            className={cn(
+              "relative cursor-pointer p-6 rounded-xl border-2 transition-all duration-300 group",
+              selectedPlanId === plan.id
+                ? "bg-neutral-900 border-[#E50914] ring-1 ring-[#E50914]"
+                : "bg-neutral-900/40 border-neutral-800 hover:border-neutral-600"
+            )}
+          >
+            {/* Selection indicator */}
+            <div className={cn(
+              "absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold transition-all",
+              selectedPlanId === plan.id ? "bg-[#E50914] text-white opacity-100" : "bg-neutral-800 text-neutral-400 opacity-0 group-hover:opacity-100"
+            )}>
+              {selectedPlanId === plan.id ? "SELECTED" : "SELECT"}
+            </div>
+
+            <div className="text-center mb-6">
+              <h3 className={cn(
+                "text-2xl font-bold mb-2",
+                selectedPlanId === plan.id ? "text-white" : "text-neutral-400"
+              )}>{plan.name}</h3>
+              <p className="text-3xl font-bold">${plan.price}<span className="text-sm font-normal text-neutral-500">/mo</span></p>
+            </div>
+
+            <div className="space-y-4 pt-6 border-t border-neutral-800">
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Video Quality</span>
+                <span className="text-sm font-medium">{plan.quality}</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Resolution</span>
+                <span className="text-sm font-medium">{plan.resolution}</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Devices</span>
+                <span className="text-xs text-neutral-300 leading-relaxed">
+                  {plan.devices.join(", ")}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Info Footer */}
+      <div className="bg-neutral-900/50 p-6 rounded-lg border border-neutral-800 mb-10 flex gap-4">
+        <Info className="w-6 h-6 text-neutral-500 flex-shrink-0" />
+        <p className="text-xs text-neutral-400 leading-relaxed">
+          Full HD (1080p), Ultra HD (4K) and HDR availability subject to your internet service and device capabilities. Not all content is available in all resolutions. See our Terms of Use for more details. Only people who live with you may use your account. Watch on 4 different devices at the same time with Premium, 2 with Standard and 1 with Basic.
         </p>
       </div>
 
-      {/* Plan Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-        {PLANS.map((plan) => {
-          const isSelected = plan.id === selectedPlanId;
-
-          return (
-            <div
-              key={plan.id}
-              onClick={() => onSelectPlan(plan.id)}
-              className={`cursor-pointer relative overflow-hidden rounded-lg border transition-all ${
-                isSelected
-                  ? "border-white bg-neutral-900"
-                  : "border-neutral-800 bg-black hover:border-neutral-600"
-              }`}
-            >
-              {/* Badge */}
-              {plan.badge && (
-                <div className="absolute top-3 right-3 z-10">
-                  <Badge className="bg-[#E50914] text-white border-0 text-xs px-2 py-0.5">
-                    <Star className="h-2.5 w-2.5 mr-1 fill-current" />
-                    {plan.badge}
-                  </Badge>
-                </div>
-              )}
-
-              <div className="p-5 space-y-4">
-                {/* Plan Name & Price */}
-                <div className="text-center">
-                  <h3 className="text-lg font-semibold text-white mb-1">
-                    {plan.name}
-                  </h3>
-                  <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-3xl font-bold text-white">
-                      {plan.price}
-                    </span>
-                    <span className="text-neutral-400 text-xs">/month</span>
-                  </div>
-                </div>
-
-                {/* Features */}
-                <ul className="space-y-3 pt-4 border-t border-neutral-800">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-center gap-3 text-sm">
-                      <div
-                        className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          isSelected ? "bg-white" : "bg-neutral-800"
-                        }`}
-                      >
-                        <Check
-                          className={`h-3 w-3 ${
-                            isSelected ? "text-black" : "text-neutral-400"
-                          }`}
-                        />
-                      </div>
-                      <span
-                        className={
-                          isSelected ? "text-white" : "text-neutral-400"
-                        }
-                      >
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Select Indicator */}
-                <div
-                  className={`pt-4 text-center text-sm font-medium ${
-                    isSelected ? "text-white" : "text-neutral-500"
-                  }`}
-                >
-                  {isSelected ? "Selected" : "Select Plan"}
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Continue Button */}
+      {/* Action Button */}
       <div className="flex justify-center">
         <Button
           onClick={onNext}
-          className="bg-[#E50914] hover:bg-[#f40612] text-white font-medium px-10 h-12 disabled:opacity-50"
-          size="lg"
+          disabled={!selectedPlanId}
+          className="w-full max-w-[400px] bg-[#E50914] hover:bg-[#f40612] text-white h-16 text-xl font-bold rounded-md shadow-lg transition-transform active:scale-[0.98]"
         >
-          Continue
+          Next
         </Button>
-      </div>
-
-      {/* Features List */}
-      <div className="mt-12 space-y-4">
-        <h3 className="text-lg font-semibold text-white text-center mb-6">
-          What's included with your subscription
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-          {[
-            "Unlimited movies and TV shows",
-            "Download & watch offline",
-            "Watch on any device",
-            "Cancel anytime",
-          ].map((feature, idx) => (
-            <div key={idx} className="flex items-center gap-3">
-              <Check className="h-5 w-5 text-white flex-shrink-0" />
-              <span className="text-neutral-300 text-sm">{feature}</span>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
