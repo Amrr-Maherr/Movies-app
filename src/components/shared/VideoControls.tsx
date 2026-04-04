@@ -36,11 +36,18 @@ const VideoControls = memo(function VideoControls({
   const handleFullscreen = useCallback(() => {
     if (onToggleFullscreen) {
       onToggleFullscreen();
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
     }
   }, [onToggleFullscreen]);
 
   return (
-    <div className="flex gap-2">
+    <div
+      className={`flex gap-2 ${
+        isFullscreen ? "fixed bottom-4 right-4 z-50" : ""
+      }`}
+    >
       {/* Play/Pause Button */}
       <button
         onClick={onTogglePlay}
