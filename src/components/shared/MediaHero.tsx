@@ -93,8 +93,14 @@ const MediaHero = memo(function MediaHero({
     if (!playerRef.current) return;
     const newMuted = !isMuted;
     setIsMuted(newMuted);
+    if (navigator.vibrate) {
+      navigator.vibrate(50);
+    }
     if (newMuted) {
       playerRef.current.mute();
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
     } else {
       playerRef.current.unMute();
     }
@@ -104,8 +110,14 @@ const MediaHero = memo(function MediaHero({
     if (!playerRef.current) return;
     if (isPlaying) {
       playerRef.current.pauseVideo();
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
     } else {
       playerRef.current.playVideo();
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
     }
     setIsPlaying(!isPlaying);
   }, [isPlaying]);
