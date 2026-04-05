@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { multiSearch } from "@/services";
 import type { Movie, TvShow, PersonSearchResult } from "@/types";
 import type { MultiSearchResult } from "@/services/searchService";
@@ -35,8 +35,8 @@ export function useSearch(query: string) {
   } = useQuery({
     queryKey: ["search", "multi", query],
     queryFn: () => multiSearch(query) as Promise<MultiSearchResult[]>,
-    enabled: query.length >= 2,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    enabled: !!query,
+    placeholderData: keepPreviousData,
   });
 
   // Filter and map results with type information
