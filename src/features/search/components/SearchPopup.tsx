@@ -1,6 +1,31 @@
-import { useState, useEffect, useCallback, memo } from "react";
+﻿import { useState, useEffect, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, Search, Film, Tv, User, ArrowRight } from "lucide-react";
+import {
+  X,
+  Search,
+  Film,
+  Tv,
+  User,
+  ArrowRight,
+  Swords,
+  Smile,
+  Drama,
+  Ghost,
+  Rocket,
+  Heart,
+  Flame,
+  BookOpen,
+  Sparkles,
+  Search as SearchIcon,
+  Sword,
+  Bomb,
+  Globe,
+  Music,
+  Users,
+  Zap,
+  Palette,
+  Clapperboard,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   useSearch,
@@ -16,6 +41,72 @@ export interface SearchPopupProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+// Quick search genre suggestions — add more genres easily here
+const QUICK_SUGGESTIONS: {
+  icon: React.ReactNode;
+  text: string;
+  query: string;
+}[] = [
+  { icon: <Swords className="w-3.5 h-3.5" />, text: "Action", query: "action" },
+  { icon: <Smile className="w-3.5 h-3.5" />, text: "Comedy", query: "comedy" },
+  { icon: <Drama className="w-3.5 h-3.5" />, text: "Drama", query: "drama" },
+  { icon: <Ghost className="w-3.5 h-3.5" />, text: "Horror", query: "horror" },
+  {
+    icon: <Rocket className="w-3.5 h-3.5" />,
+    text: "Sci-Fi",
+    query: "science fiction",
+  },
+  {
+    icon: <Heart className="w-3.5 h-3.5" />,
+    text: "Romance",
+    query: "romance",
+  },
+  {
+    icon: <Flame className="w-3.5 h-3.5" />,
+    text: "Thriller",
+    query: "thriller",
+  },
+  {
+    icon: <BookOpen className="w-3.5 h-3.5" />,
+    text: "Documentary",
+    query: "documentary",
+  },
+  {
+    icon: <Sparkles className="w-3.5 h-3.5" />,
+    text: "Animation",
+    query: "animation",
+  },
+  {
+    icon: <SearchIcon className="w-3.5 h-3.5" />,
+    text: "Mystery",
+    query: "mystery",
+  },
+  {
+    icon: <Sword className="w-3.5 h-3.5" />,
+    text: "Fantasy",
+    query: "fantasy",
+  },
+  { icon: <Bomb className="w-3.5 h-3.5" />, text: "Crime", query: "crime" },
+  {
+    icon: <Globe className="w-3.5 h-3.5" />,
+    text: "Adventure",
+    query: "adventure",
+  },
+  { icon: <Music className="w-3.5 h-3.5" />, text: "Musical", query: "music" },
+  { icon: <Users className="w-3.5 h-3.5" />, text: "Family", query: "family" },
+  {
+    icon: <Zap className="w-3.5 h-3.5" />,
+    text: "Superhero",
+    query: "superhero",
+  },
+  { icon: <Palette className="w-3.5 h-3.5" />, text: "Anime", query: "anime" },
+  {
+    icon: <Clapperboard className="w-3.5 h-3.5" />,
+    text: "Korean Drama",
+    query: "korean drama",
+  },
+];
 
 /**
  * Netflix-style Search Popup Component
@@ -138,18 +229,14 @@ export const SearchPopup = memo(function SearchPopup({
                   Start typing to search for movies, TV shows, and people
                 </p>
                 <div className="flex flex-wrap justify-center gap-2 mt-8">
-                  <QuickSearchChip
-                    text="🎬 Action"
-                    onClick={() => setQuery("action")}
-                  />
-                  <QuickSearchChip
-                    text="🎭 Comedy"
-                    onClick={() => setQuery("comedy")}
-                  />
-                  <QuickSearchChip
-                    text="📺 Drama"
-                    onClick={() => setQuery("drama")}
-                  />
+                  {QUICK_SUGGESTIONS.map((suggestion) => (
+                    <QuickSearchChip
+                      key={suggestion.query}
+                      icon={suggestion.icon}
+                      text={suggestion.text}
+                      onClick={() => setQuery(suggestion.query)}
+                    />
+                  ))}
                 </div>
               </div>
             )}
@@ -322,18 +409,20 @@ export default SearchPopup;
 
 // Quick Search Chip Component
 interface QuickSearchChipProps {
+  icon: React.ReactNode;
   text: string;
   onClick: () => void;
 }
 
-function QuickSearchChip({ text, onClick }: QuickSearchChipProps) {
+function QuickSearchChip({ icon, text, onClick }: QuickSearchChipProps) {
   return (
     <motion.button
       onClick={onClick}
       whileHover={{ scale: 1.05, y: -2 }}
       whileTap={{ scale: 0.95 }}
-      className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 hover:text-white hover:border-netflix-red/50 transition-all duration-200 text-sm font-medium"
+      className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/60 hover:bg-white/10 hover:text-white hover:border-netflix-red/50 transition-all duration-200 text-sm font-medium flex items-center gap-2"
     >
+      {icon}
       {text}
     </motion.button>
   );

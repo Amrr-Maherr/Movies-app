@@ -9,6 +9,35 @@
    CUSTOM UTILITIES
    ============================================ */
 
+/* ============================================
+   GLOBAL SCROLLBAR STYLING
+   Applied to all scrollable elements in the app
+   ============================================ */
+*,
+*::before,
+*::after {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(229, 9, 20, 0.5) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(229, 9, 20, 0.5);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(229, 9, 20, 0.8);
+}
+
 /* Hide scrollbar but keep functionality */
 .scrollbar-hide {
   -ms-overflow-style: none;
@@ -91,18 +120,18 @@
   /* ── Detail page / Tab sections ── */
   --section-bg: #141414;
   --section-title-color: #ffffff;
-  --section-meta-color: rgba(255,255,255,0.4);
+  --section-meta-color: rgba(255, 255, 255, 0.4);
   --tab-active-color: #ffffff;
-  --tab-inactive-color: rgba(255,255,255,0.5);
+  --tab-inactive-color: rgba(255, 255, 255, 0.5);
   --tab-indicator: #e50914;
-  --tab-border: rgba(255,255,255,0.1);
+  --tab-border: rgba(255, 255, 255, 0.1);
   --provider-logo-bg: #2a2a2a;
   --badge-trailer: #e50914;
   --badge-teaser: #1d4ed8;
   --badge-clip: #15803d;
   --badge-featurette: #7e22ce;
-  --lightbox-bg: rgba(0,0,0,0.95);
-  --input-search-bg: rgba(255,255,255,0.08);
+  --lightbox-bg: rgba(0, 0, 0, 0.95);
+  --input-search-bg: rgba(255, 255, 255, 0.08);
 
   /* shadcn compatibility */
   --radius: 0.625rem;
