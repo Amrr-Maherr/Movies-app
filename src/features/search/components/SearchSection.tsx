@@ -5,12 +5,6 @@ import { motion } from "framer-motion";
 import Card from "@/components/shared/Card/Card";
 import type { HeroMedia } from "@/types";
 
-// ── Generic search result item ──────────────────────────────────
-
-interface SearchResultItem {
-  item: Record<string, unknown>;
-}
-
 // ── Section-specific configuration ─────────────────────────────
 
 interface SearchSectionConfig {
@@ -40,7 +34,13 @@ const CONFIGS: Record<string, SearchSectionConfig> = {
   movie: {
     title: "Movies",
     icon: (
-      <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg
+        className="w-4 h-4 text-white"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
         <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
         <line x1="7" y1="2" x2="7" y2="22" />
         <line x1="17" y1="2" x2="17" y2="22" />
@@ -63,7 +63,13 @@ const CONFIGS: Record<string, SearchSectionConfig> = {
   tv: {
     title: "TV Shows",
     icon: (
-      <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg
+        className="w-4 h-4 text-white"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
         <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
         <polyline points="17 2 12 7 7 2" />
       </svg>
@@ -80,7 +86,13 @@ const CONFIGS: Record<string, SearchSectionConfig> = {
   person: {
     title: "People",
     icon: (
-      <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg
+        className="w-4 h-4 text-white"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
         <circle cx="12" cy="7" r="4" />
       </svg>
@@ -100,7 +112,8 @@ const CONFIGS: Record<string, SearchSectionConfig> = {
 
 interface SearchSectionProps {
   type: "movie" | "tv" | "person";
-  results: SearchResultItem[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  results: { item: any }[];
   query: string;
   onClose: () => void;
 }
