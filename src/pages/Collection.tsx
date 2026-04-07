@@ -1,17 +1,13 @@
 import { useParams } from "react-router-dom";
-import { memo, useMemo, lazy, Suspense } from "react";
+import { memo, useMemo, Suspense } from "react";
 import { useCollectionDetails } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Film, Star } from "lucide-react";
 import type { HeroMedia } from "@/types";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-
-// Lazy-loaded components
-const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
-const Card = lazy(() =>
-  import("@/components/shared/Card").then((m) => ({ default: m.Card })),
-);
+import { Card } from "@/components/shared/Card";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/original";
@@ -164,7 +160,11 @@ const Collection = memo(function Collection() {
         </h2>
 
         <OptimizedSectionWrapper
-          data={collection.parts && collection.parts.length > 0 ? collection.parts : null}
+          data={
+            collection.parts && collection.parts.length > 0
+              ? collection.parts
+              : null
+          }
           isLoading={collectionLoading}
           fallback={<SectionSkeleton variant="grid" cardCount={6} />}
           height={350}
