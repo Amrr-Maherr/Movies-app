@@ -39,7 +39,7 @@ const AwardWinnersSection = memo(function AwardWinnersSection({
         >
           {(moviesData) => (
             <Slider
-              slidesPerView={6}
+              slidesPerView={4}
               hideNavigation={false}
               slidesPerViewMobile={1.5}
             >

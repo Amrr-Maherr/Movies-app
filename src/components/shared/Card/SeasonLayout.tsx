@@ -19,7 +19,7 @@ const SeasonLayout = memo(
   ({ season, title, imageUrl, formattedAirDate }: SeasonLayoutProps) => {
     return (
       <div className="relative">
-        <div className="relative rounded-lg bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:scale-[1.02] group-hover:shadow-2xl">
+        <div className="relative rounded-lg bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-2xl">
           <div className="relative aspect-[2/3]">
             {imageUrl ? (
               <>

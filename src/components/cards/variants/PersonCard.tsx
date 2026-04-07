@@ -32,7 +32,7 @@ const PersonCard = memo(({ person }: PersonCardProps) => {
             <OptimizedImage
               src={personImageUrl}
               alt={person.name}
-              className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full"
               objectFit="cover"
             />
           ) : (

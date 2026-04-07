@@ -45,7 +45,6 @@ const HorizontalLayout = memo(
         className={`cursor-pointer bg-zinc-900/80 rounded-xl flex gap-3 border border-white/5 shadow-lg min-h-[48px] ${
           !plainLayout ? "flex-col md:flex-row" : "hover:bg-zinc-700/80"
         }`}
-        whileHover={{ y: -2, boxShadow: "0 20px 40px rgba(0,0,0,0.5)" }}
         transition={{ duration: 0.25, ease: "easeOut" }}
         role="article"
         tabIndex={0}
@@ -65,7 +64,6 @@ const HorizontalLayout = memo(
         >
           <motion.div
             className="absolute inset-0"
-            whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           >
             <OptimizedImage

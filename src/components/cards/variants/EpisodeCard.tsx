@@ -39,7 +39,7 @@ const EpisodeCard = memo(
               <OptimizedImage
                 src={episodeImageUrl}
                 alt={title}
-                className="w-full h-full transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-full"
                 objectFit="cover"
               />
             ) : (

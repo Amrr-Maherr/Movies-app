@@ -44,7 +44,6 @@ const ShowcaseLayout = memo(
     >
       <motion.div
         className={`relative ${aspectRatio} rounded-xl cursor-pointer shadow-2xl min-h-[48px]`}
-        whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
         role="article"
         tabIndex={0}
@@ -55,18 +54,14 @@ const ShowcaseLayout = memo(
           }
         }}
       >
-        <motion.div
-          className="absolute inset-0"
-          whileHover={{ scale: 1.06 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-        >
+        <div className="absolute inset-0">
           <OptimizedImage
             src={imageUrl}
             alt={title}
             className="w-full h-full"
             objectFit="cover"
           />
-        </motion.div>
+        </div>
         {/* Multi-layer gradient for depth */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />

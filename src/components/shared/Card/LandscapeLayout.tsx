@@ -45,7 +45,6 @@ const LandscapeLayout = memo(
     >
       <motion.div
         className="relative rounded-xl w-full shadow-xl cursor-pointer min-h-[48px]"
-        whileHover={{ scale: 1.03 }}
         transition={{ duration: 0.35, ease: "easeOut" }}
         role="article"
         tabIndex={0}
@@ -57,11 +56,7 @@ const LandscapeLayout = memo(
         }}
       >
         <div className="relative aspect-video">
-          <motion.div
-            className="absolute inset-0"
-            whileHover={{ scale: 1.08 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
+          <div className="absolute inset-0">
             {/* Image with blur for adult content */}
             <OptimizedImage
               src={imageUrl}
@@ -71,7 +66,7 @@ const LandscapeLayout = memo(
               }`}
               objectFit="cover"
             />
-          </motion.div>
+          </div>
 
           {/* Dark overlay for adult content */}
           {isAdult && <div className="absolute inset-0 bg-black/60 z-10" />}

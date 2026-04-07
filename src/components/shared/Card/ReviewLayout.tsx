@@ -27,7 +27,7 @@ const ReviewLayout = memo(
 
     return (
       <div className="group h-full w-full">
-        <div className="relative h-full rounded-lg bg-zinc-900/90 p-4 shadow-lg transition-all duration-300 ease-in-out group-hover:scale-[1.02] group-hover:shadow-xl group-hover:bg-zinc-800/90 border border-zinc-800/50">
+        <div className="relative h-full rounded-lg bg-zinc-900/90 p-4 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-xl group-hover:bg-zinc-800/90 border border-zinc-800/50">
           <div className="mb-3 flex items-start justify-between gap-2">
             <div className="flex-1">
               <h4 className="text-base font-bold text-white group-hover:text-[var(--netflix-red)] transition-colors duration-300">

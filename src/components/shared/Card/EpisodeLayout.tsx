@@ -26,7 +26,7 @@ const EpisodeLayout = memo(
   }: EpisodeLayoutProps) => {
     return (
       <div className="relative">
-        <div className="relative rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:scale-[1.02] group-hover:shadow-2xl">
+        <div className="relative rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-2xl">
           <div className="relative aspect-video">
             {imageUrl ? (
               <>

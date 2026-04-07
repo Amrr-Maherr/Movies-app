@@ -34,7 +34,7 @@ const TopPicksSection = memo(function TopPicksSection({
         >
           {(moviesData) => (
             <Slider
-              slidesPerView={6}
+              slidesPerView={4}
               hideNavigation={false}
               slidesPerViewMobile={1.5}
             >

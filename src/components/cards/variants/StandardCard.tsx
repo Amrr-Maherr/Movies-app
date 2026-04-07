@@ -11,64 +11,83 @@ import type { CardProps } from "../types";
 
 type StandardCardProps = Pick<
   CardProps,
-  "movie" | "rank" | "onClick" | "showBadge" | "badgeType" | "matchPercentageProp"
+  | "movie"
+  | "rank"
+  | "onClick"
+  | "showBadge"
+  | "badgeType"
+  | "matchPercentageProp"
 >;
 
-const StandardCard = memo(({ movie, rank, onClick, showBadge = false, badgeType, matchPercentageProp }: StandardCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const { title, posterUrl, matchScore, year, ageRating, detailsUrl } =
-    useMovieDerivedValues(movie, matchPercentageProp);
-  const { handleNavigate, handlePlayClick, handleMoreInfoClick } =
-    useCardActions(detailsUrl, movie, onClick);
-  const { isInList, toggleWatchlist } = useWatchlist(movie);
+const StandardCard = memo(
+  ({
+    movie,
+    rank,
+    onClick,
+    showBadge = false,
+    badgeType,
+    matchPercentageProp,
+  }: StandardCardProps) => {
+    const [isHovered, setIsHovered] = useState(false);
+    const { title, posterUrl, matchScore, year, ageRating, detailsUrl } =
+      useMovieDerivedValues(movie, matchPercentageProp);
+    const { handleNavigate, handlePlayClick, handleMoreInfoClick } =
+      useCardActions(detailsUrl, movie, onClick);
+    const { isInList, toggleWatchlist } = useWatchlist(movie);
 
-  // FIX: useCallback prevents new function references on every render,
-  // which would cause CardHoverOverlay (memo'd) to re-render unnecessarily.
-  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
-  const handleMouseLeave = useCallback(() => setIsHovered(false), []);
+    // FIX: useCallback prevents new function references on every render,
+    // which would cause CardHoverOverlay (memo'd) to re-render unnecessarily.
+    const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+    const handleMouseLeave = useCallback(() => setIsHovered(false), []);
 
-  if (!movie) return null;
-  const isAdult = movie.adult === true;
+    if (!movie) return null;
+    const isAdult = movie.adult === true;
 
-  return (
-    <LazyWrapper height={350}>
-      <motion.div
-        whileHover={{ scale: 1.05, zIndex: 50 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        className="h-full w-full"
-      >
-        <div
-          className="relative group cursor-pointer rounded-md shadow-xl bg-[var(--background-secondary)] transition-shadow duration-300 hover:shadow-2xl"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          onClick={handleNavigate}
+    return (
+      <LazyWrapper height={350}>
+        <motion.div
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="h-full w-full"
         >
-          {/* FIX: Pass posterUrl as prop — CardPoster no longer re-derives it */}
-          <CardPoster movie={movie} title={title} posterUrl={posterUrl} rank={rank} isAdult={isAdult}>
-            <CardBadges
-              showBadge={showBadge}
-              badgeType={badgeType}
-              showMatchScore={!isAdult}
-              matchScore={matchScore}
-              isAdult={isAdult}
-            />
-            <CardHoverOverlay
+          <div
+            className="relative group cursor-pointer rounded-md shadow-xl bg-[var(--background-secondary)] transition-shadow duration-300 hover:shadow-2xl"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleNavigate}
+          >
+            {/* FIX: Pass posterUrl as prop — CardPoster no longer re-derives it */}
+            <CardPoster
+              movie={movie}
               title={title}
-              matchScore={matchScore}
-              year={year}
-              ageRating={ageRating}
-              isHovered={isHovered}
-              onPlay={handlePlayClick}
-              onMoreInfo={handleMoreInfoClick}
-              onAddToList={toggleWatchlist}
-              isInList={isInList}
-            />
-          </CardPoster>
-        </div>
-      </motion.div>
-    </LazyWrapper>
-  );
-});
+              posterUrl={posterUrl}
+              rank={rank}
+              isAdult={isAdult}
+            >
+              <CardBadges
+                showBadge={showBadge}
+                badgeType={badgeType}
+                showMatchScore={!isAdult}
+                matchScore={matchScore}
+                isAdult={isAdult}
+              />
+              <CardHoverOverlay
+                title={title}
+                matchScore={matchScore}
+                year={year}
+                ageRating={ageRating}
+                isHovered={isHovered}
+                onPlay={handlePlayClick}
+                onMoreInfo={handleMoreInfoClick}
+                onAddToList={toggleWatchlist}
+                isInList={isInList}
+              />
+            </CardPoster>
+          </div>
+        </motion.div>
+      </LazyWrapper>
+    );
+  },
+);
 
 StandardCard.displayName = "StandardCard";
 export default StandardCard;

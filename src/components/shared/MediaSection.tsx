@@ -24,7 +24,7 @@ const MediaSection = memo(function MediaSection({
   isLoading,
   error,
   onRetry,
-  slidesPerView = 6,
+  slidesPerView = 4,
 }: MediaSectionProps) {
   // Memoize media array to prevent unnecessary re-renders
   const media = useMemo(() => data || [], [data]);
