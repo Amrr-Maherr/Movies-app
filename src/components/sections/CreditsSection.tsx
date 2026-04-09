@@ -126,7 +126,7 @@ const CreditsSection = memo(function CreditsSection({
             >
               <LazyWrapper height={350}>
                 <Slider
-                  slidesPerView={6}
+                  slidesPerView={4}
                   slidesPerViewMobile={3}
                   spaceBetween={16}
                   hideNavigation={false}
@@ -179,7 +179,7 @@ const CreditsSection = memo(function CreditsSection({
             >
               <LazyWrapper height={350}>
                 <Slider
-                  slidesPerView={6}
+                  slidesPerView={4}
                   slidesPerViewMobile={3}
                   spaceBetween={16}
                   hideNavigation={false}

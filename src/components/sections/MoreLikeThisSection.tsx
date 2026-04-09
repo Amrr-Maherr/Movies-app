@@ -40,7 +40,7 @@ const MoreLikeThisSection = memo(function MoreLikeThisSection({
         >
           {(similarData) => (
             <Slider
-              slidesPerView={6}
+              slidesPerView={4}
               slidesPerViewMobile={3}
               spaceBetween={16}
               hideNavigation={false}

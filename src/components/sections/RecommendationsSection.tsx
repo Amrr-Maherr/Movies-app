@@ -30,7 +30,9 @@ const RecommendationsSection = memo(function RecommendationsSection({
   return (
     <section className="bg-[var(--section-bg)] py-10">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-        <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6">{title}</h2>
+        <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6">
+          {title}
+        </h2>
         <OptimizedSectionWrapper
           data={items}
           isLoading={false}
@@ -39,14 +41,26 @@ const RecommendationsSection = memo(function RecommendationsSection({
           title={title}
         >
           {(itemsData) => (
-            <Slider slidesPerView={6} slidesPerViewMobile={3} spaceBetween={12} hideNavigation={false}>
+            <Slider
+              slidesPerView={4}
+              slidesPerViewMobile={3}
+              spaceBetween={12}
+              hideNavigation={false}
+            >
               {itemsData.map((m) => (
-                <Card key={m.id} movie={m} variant="standard" showBadge={false} />
+                <Card
+                  key={m.id}
+                  movie={m}
+                  variant="standard"
+                  showBadge={false}
+                />
               ))}
             </Slider>
           )}
         </OptimizedSectionWrapper>
-        <p className="text-[var(--section-meta-color)] text-xs mt-4">{items.length} titles</p>
+        <p className="text-[var(--section-meta-color)] text-xs mt-4">
+          {items.length} titles
+        </p>
       </div>
     </section>
   );

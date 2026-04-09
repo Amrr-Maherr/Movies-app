@@ -43,7 +43,7 @@ const FullCreditsSection = memo(function FullCreditsSection({
             >
               <LazyWrapper height={350}>
                 <Slider
-                  slidesPerView={6}
+                  slidesPerView={4}
                   slidesPerViewMobile={3}
                   spaceBetween={16}
                   hideNavigation={false}
@@ -77,7 +77,7 @@ const FullCreditsSection = memo(function FullCreditsSection({
             >
               <LazyWrapper height={350}>
                 <Slider
-                  slidesPerView={6}
+                  slidesPerView={4}
                   slidesPerViewMobile={3}
                   spaceBetween={16}
                   hideNavigation={false}

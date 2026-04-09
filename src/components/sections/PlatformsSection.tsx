@@ -75,7 +75,7 @@ const PlatformsSection = memo(function PlatformsSection({
           >
             {(platformsData) => (
               <Slider
-                slidesPerView={6}
+                slidesPerView={4}
                 slidesPerViewMobile={2}
                 spaceBetween={16}
                 hideNavigation={false}

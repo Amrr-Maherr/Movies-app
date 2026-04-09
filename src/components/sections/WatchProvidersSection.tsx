@@ -165,7 +165,7 @@ const WatchProvidersSection = memo(function WatchProvidersSection({
         >
           {(providersData) => (
             <Slider
-              slidesPerView={6}
+              slidesPerView={4}
               slidesPerViewMobile={2}
               spaceBetween={16}
               hideNavigation={false}

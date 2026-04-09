@@ -66,7 +66,7 @@ const ProductionSection = memo(function ProductionSection({
 
             {/* Slider with Company/Network Cards */}
             <Slider
-              slidesPerView={6}
+              slidesPerView={4}
               slidesPerViewMobile={1.5}
               spaceBetween={16}
               hideNavigation={true}
