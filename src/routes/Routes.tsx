@@ -28,16 +28,6 @@ const SearchPage = lazy(() => import("@/pages/SearchPage"));
 
 // TV detail sub-pages — removed (now rendered as tabs inside TVShowDetails)
 
-// Person detail sub-pages — removed (now rendered as tabs inside PersonDetails)
-
-const PersonMovieCreditsPage = lazy(
-  () => import("@/pages/person/PersonMovieCreditsPage"),
-);
-const PersonTVCreditsPage = lazy(
-  () => import("@/pages/person/PersonTVCreditsPage"),
-);
-const PersonImagesPage = lazy(() => import("@/pages/person/PersonImagesPage"));
-
 // Movies list pages
 const NowPlayingMoviesPage = lazy(
   () => import("@/pages/movies/NowPlayingMoviesPage"),

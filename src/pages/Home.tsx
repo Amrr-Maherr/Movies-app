@@ -104,7 +104,6 @@ const Home = memo(function Home() {
       </div>
     );
   }
-
   return (
     <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
