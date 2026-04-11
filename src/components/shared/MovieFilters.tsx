@@ -43,7 +43,7 @@ const MovieFilters = memo(function MovieFilters({
   );
 
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-4 pt-2 no-scrollbar px-4 sm:px-8">
+    <div className="flex items-center gap-2 overflow-x-auto pb-4 pt-2 no-scrollbar container">
       {filters.map((filter) => {
         const isActive = activeFilter === filter.id;
         return (

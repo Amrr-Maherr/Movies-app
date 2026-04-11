@@ -109,13 +109,13 @@ const NewPopular = memo(function NewPopular() {
         height={400}
         title="Page Header"
       >
-        <div className="px-4 sm:px-8 mb-6 mt-8">
+        <div className="container !mb-6 !mt-8">
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
             New & Popular
           </h1>
           <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
-            See what&apos;s trending, highly anticipated, and making waves
-            right now.
+            See what&apos;s trending, highly anticipated, and making waves right
+            now.
           </p>
         </div>
       </OptimizedSectionWrapper>

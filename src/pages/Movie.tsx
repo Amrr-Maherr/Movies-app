@@ -5,7 +5,7 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 import MovieFilters, {
   MovieFilterOption,
 } from "@/components/shared/MovieFilters";
-import type { Movie, HeroMedia, PopularMoviesResponse } from "@/types";
+import type { Movie, HeroMedia} from "@/types";
 import Pagination from "@/components/shared/Pagination";
 
 // Hooks
@@ -93,7 +93,7 @@ const Movie = memo(function Movie() {
         )}
       </OptimizedSectionWrapper>
 
-      <div className="px-4 sm:px-8 mb-6 mt-8">
+      <div className="container !mb-6 !mt-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
           Movies
         </h1>
