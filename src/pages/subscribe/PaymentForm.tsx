@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent} from "react";
 import { Lock, CreditCard, Calendar, ShieldCheck, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2Icon } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import PaymentIcons from "./PaymentIcons";
 
 interface PaymentFormProps {
   onSuccess: () => void;
@@ -50,11 +51,7 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
           </span>
         </div>
         <h1 className="text-3xl font-bold mb-3">Set up your credit or debit card</h1>
-        <div className="flex gap-2 mb-6">
-          <img src="https://assets.nflxext.com/siteui/acquisition/payment/icp/visa.png" alt="Visa" className="h-6" />
-          <img src="https://assets.nflxext.com/siteui/acquisition/payment/icp/mastercard.png" alt="Mastercard" className="h-6" />
-          <img src="https://assets.nflxext.com/siteui/acquisition/payment/icp/amex.png" alt="Amex" className="h-6" />
-        </div>
+        <PaymentIcons/>
       </div>
 
       {/* Demo Credentials Box */}
