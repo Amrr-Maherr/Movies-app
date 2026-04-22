@@ -65,7 +65,7 @@ export function LenisProvider({ children, options }: LenisProviderProps) {
       smoothWheel: options?.smoothWheel ?? true,
 
       // How much to multiply wheel delta (higher = faster scroll)
-      wheelMultiplier: options?.wheelMultiplier ?? 4.5,
+      wheelMultiplier: options?.wheelMultiplier ?? 1.5,
 
       // Touch scroll is naturally smoother, so we multiply it more
       touchMultiplier: options?.touchMultiplier ?? 2,
