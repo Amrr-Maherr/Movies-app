@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-import SearchPopup from "@/features/search/components/SearchPopup";
+import SearchPopup from "@/components/shared/search/SearchPopup";
 
 interface SearchButtonProps {
   className?: string;
