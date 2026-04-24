@@ -1,6 +1,6 @@
 /**
  * Card Component Exports
- * 
+ *
  * Central export file for Card and its sub-components.
  * Import from this file for cleaner imports throughout the project.
  */
@@ -8,6 +8,14 @@
 // Main Card component
 export { default as Card } from "./Card";
 export type { CardProps } from "./Card";
+
+// Variant components
+export { MovieCardVariants } from "./MovieCardVariants";
+export { SpecialCardVariants } from "./SpecialCardVariants";
+export { ContentCardVariants } from "./ContentCardVariants";
+
+// Custom hook
+export { useCardLogic } from "./useCardLogic";
 
 // Sub-components
 export { default as CardPoster } from "./CardPoster";
