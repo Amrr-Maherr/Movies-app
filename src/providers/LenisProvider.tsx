@@ -19,13 +19,17 @@ interface LenisProviderProps {
   options?: {
     /** Duration of the scroll animation in seconds (default: 1.2) */
     duration?: number;
+    /** Linear interpolation (0 to 1). If set, duration is ignored. (default: undefined) */
+    lerp?: number;
     /** Easing function for scroll animation (default: exponential ease-out) */
     easing?: (t: number) => number;
     /** Enable smooth scrolling on wheel events (default: true) */
     smoothWheel?: boolean;
+    /** Enable smooth scrolling on touch events (default: false) */
+    smoothTouch?: boolean;
     /** Multiplier for wheel scroll speed (default: 1) */
     wheelMultiplier?: number;
-    /** Multiplier for touch scroll speed on mobile (default: 2) */
+    /** Multiplier for touch scroll speed on mobile (default: 1.2) */
     touchMultiplier?: number;
     /** Enable infinite scrolling loop (default: false) */
     infinite?: boolean;
@@ -40,7 +44,7 @@ interface LenisProviderProps {
  * creating buttery-smooth scrolling throughout the application.
  *
  * Usage:
- * <LenisProvider options={{ duration: 1.2 }}>
+ * <LenisProvider options={{ duration: 1.2, touchMultiplier: 1.2 }}>
  *   {children}
  * </LenisProvider>
  */
@@ -53,7 +57,12 @@ export function LenisProvider({ children, options }: LenisProviderProps) {
     // Lenis intercepts native scroll events and applies smooth interpolation
     const lenis = new Lenis({
       // How long the scroll animation takes (higher = smoother but slower)
-      duration: options?.duration ?? 3,
+      // 1.2s is the industry standard for a balanced smooth feel
+      duration: options?.duration ?? 1.2,
+
+      // Linear interpolation (0-1). If defined, duration is ignored.
+      // 0.1 is a good value for a very "connected" feel
+      lerp: options?.lerp,
 
       // Easing function: controls the acceleration curve of the scroll
       // This creates a deceleration effect (fast start, slow end)
@@ -64,11 +73,16 @@ export function LenisProvider({ children, options }: LenisProviderProps) {
       // Enable smooth scrolling on mouse wheel events
       smoothWheel: options?.smoothWheel ?? true,
 
-      // How much to multiply wheel delta (higher = faster scroll)
-      wheelMultiplier: options?.wheelMultiplier ?? 1.5,
+      // Smooth touch can feel laggy on mobile if not tuned perfectly.
+      // Usually better to keep false for native feel, or 1.2 multiplier if true.
+      smoothTouch: options?.smoothTouch ?? false,
 
-      // Touch scroll is naturally smoother, so we multiply it more
-      touchMultiplier: options?.touchMultiplier ?? 2,
+      // How much to multiply wheel delta (higher = faster scroll)
+      wheelMultiplier: options?.wheelMultiplier ?? 1,
+
+      // Touch scroll multiplier. 1.2-1.5 is ideal for "enhanced" native feel.
+      // 2.0 (previous) often feels too fast and jumpy.
+      touchMultiplier: options?.touchMultiplier ?? 1.2,
 
       // Infinite scroll creates a looping effect (useful for carousels)
       infinite: options?.infinite ?? false,
