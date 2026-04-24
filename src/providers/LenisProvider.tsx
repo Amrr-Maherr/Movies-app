@@ -73,10 +73,6 @@ export function LenisProvider({ children, options }: LenisProviderProps) {
       // Enable smooth scrolling on mouse wheel events
       smoothWheel: options?.smoothWheel ?? true,
 
-      // Smooth touch can feel laggy on mobile if not tuned perfectly.
-      // Usually better to keep false for native feel, or 1.2 multiplier if true.
-      smoothTouch: options?.smoothTouch ?? false,
-
       // How much to multiply wheel delta (higher = faster scroll)
       wheelMultiplier: options?.wheelMultiplier ?? 1,
 
