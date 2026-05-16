@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
+import { memo, useState, useCallback, lazy, Suspense, useMemo, useEffect } from "react";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -7,6 +7,7 @@ import MovieFilters, {
 } from "@/components/shared/MovieFilters";
 import type { Movie, HeroMedia} from "@/types";
 import Pagination from "@/components/shared/Pagination";
+import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 
 // Hooks
 import usePopularMovies from "@/hooks/shared/FetchPopularMovies";
@@ -20,6 +21,7 @@ const HeroSection = lazy(
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const Movie = memo(function Movie() {
+  const { startTour } = useOnboarding();
   const [page, setPage] = useState(1);
   const [activeFilter, setActiveFilter] =
     useState<MovieFilterOption>("popular");
@@ -69,6 +71,15 @@ const Movie = memo(function Movie() {
     setActiveFilter(filter);
   }, []);
 
+  useEffect(() => {
+    if (moviesData.length > 0) {
+      const timer = setTimeout(() => {
+        startTour("movies");
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [moviesData.length, startTour]);
+
   return (
     <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
@@ -93,7 +104,7 @@ const Movie = memo(function Movie() {
         )}
       </OptimizedSectionWrapper>
 
-      <div className="container !mb-6 !mt-8">
+      <div className="container !mb-6 !mt-8 movie-filters media-grid">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
           Movies
         </h1>
@@ -129,27 +140,29 @@ const Movie = memo(function Movie() {
           </button>
         </div>
       ) : (
-        <OptimizedSectionWrapper
-          data={true}
-          isLoading={false}
-          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
-          height={500}
-          title="Movies Grid"
-        >
-          {isLoading ? (
-            <SectionSkeleton variant="grid" cardCount={12} />
-          ) : (
-            <div className="slide-up">
-              <MediaGrid items={moviesData} emptyMessage="No Movies found." />
-            </div>
-          )}
-          <Pagination
-            currentPage={page}
-            totalPages={AllPages}
-            isLoading={isLoading}
-            onPageChange={setPage}
-          />
-        </OptimizedSectionWrapper>
+        <div className="container pb-20 media-grid">
+          <OptimizedSectionWrapper
+            data={true}
+            isLoading={false}
+            fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+            height={500}
+            title="Movies Grid"
+          >
+            {isLoading ? (
+              <SectionSkeleton variant="grid" cardCount={12} />
+            ) : (
+              <div className="slide-up">
+                <MediaGrid items={moviesData} emptyMessage="No Movies found." />
+              </div>
+            )}
+            <Pagination
+              currentPage={page}
+              totalPages={AllPages}
+              isLoading={isLoading}
+              onPageChange={setPage}
+            />
+          </OptimizedSectionWrapper>
+        </div>
       )}
     </div>
   );

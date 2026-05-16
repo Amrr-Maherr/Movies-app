@@ -235,7 +235,7 @@ const MediaHero = memo(function MediaHero({
       {/* ========================================
           CONTENT - Netflix style layout
           ======================================== */}
-      <div className="absolute inset-0 z-10 flex items-center">
+      <div className="absolute inset-0 z-10 flex items-center media-hero-content">
         <div className="container">
           <div className="max-w-2xl">
             {/* Title - Big, dramatic, Netflix style */}

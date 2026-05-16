@@ -1,8 +1,9 @@
-import { memo, useMemo, useCallback, lazy, Suspense } from "react";
+import { memo, useMemo, useCallback, lazy, Suspense, useEffect } from "react";
 import { Error as ErrorComponent, SectionSkeleton } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import "@/index.css";
+import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 
 import useTrendingMoviesWeek from '@/hooks/shared/FetchTrendingMoviesWeek';
 import useTrendingTvWeek from '@/hooks/shared/FetchTrendingTvWeek';
@@ -42,6 +43,7 @@ const MoreReasonsSection = lazy(
 );
 
 const Home = memo(function Home() {
+  const { startTour } = useOnboarding();
   const {
     data: trendingMoviesWeek,
     isLoading: trendingWeekLoading,
@@ -81,6 +83,20 @@ const Home = memo(function Home() {
     ],
     [trendingMoviesWeek, trendingTvWeek],
   );
+
+  useEffect(() => {
+    if (heroData.length > 0) {
+      const isSubscribed = localStorage.getItem("paymentStatus") === "success";
+      const timer = setTimeout(() => {
+        if (!isSubscribed) {
+          startTour("subscription-warning");
+        } else {
+          startTour("home");
+        }
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [heroData.length, startTour]);
 
   const handleRetry = useCallback(() => {
     trendingWeekRefetch();

@@ -65,7 +65,7 @@ const DetailPageNav = memo(function DetailPageNav({
 
   return (
     <nav
-      className="sticky top-[56px] md:top-[64px] z-40 bg-black/95 backdrop-blur-md shadow-md border-b border-white/10"
+      className="sticky top-[56px] md:top-[64px] z-40 bg-black/95 backdrop-blur-md shadow-md border-b border-white/10 detail-nav-tabs"
       role="tablist"
       aria-label="Detail page navigation"
     >

@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, lazy, Suspense, useMemo } from "react";
+import { memo, useState, useCallback, lazy, Suspense, useMemo, useEffect } from "react";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -7,6 +7,7 @@ import TVShowFilters, {
 } from "@/components/shared/TVShowFilters";
 import type { TvShow, HeroMedia, PopularTvShowsResponse } from "@/types";
 import Pagination from "@/components/shared/Pagination";
+import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 
 // Hooks
 import usePopularTvShows from "@/hooks/shared/FetchPopularTvShows";
@@ -20,6 +21,7 @@ const HeroSection = lazy(
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const TVShow = memo(function TVShow() {
+  const { startTour } = useOnboarding();
   const [page, setPage] = useState(1);
   const [activeFilter, setActiveFilter] =
     useState<TVShowFilterOption>("popular");
@@ -69,6 +71,15 @@ const TVShow = memo(function TVShow() {
     setActiveFilter(filter);
   }, []);
 
+  useEffect(() => {
+    if (tvShowsData.length > 0) {
+      const timer = setTimeout(() => {
+        startTour("tv-shows");
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [tvShowsData.length, startTour]);
+
   return (
     <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
@@ -93,7 +104,7 @@ const TVShow = memo(function TVShow() {
         )}
       </OptimizedSectionWrapper>
 
-      <div className="container !mb-6 !mt-8">
+      <div className="container !mb-6 !mt-8 movie-filters">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
           TV Shows
         </h1>
@@ -128,30 +139,29 @@ const TVShow = memo(function TVShow() {
           </button>
         </div>
       ) : (
-        <OptimizedSectionWrapper
-          data={true}
-          isLoading={false}
-          fallback={<SectionSkeleton variant="grid" cardCount={12} />}
-          height={500}
-          title="TV Shows Grid"
-        >
-          {isLoading ? (
-            <SectionSkeleton variant="grid" cardCount={12} />
-          ) : (
-            <div className="slide-up">
-              <MediaGrid
-                items={tvShowsData}
-                emptyMessage="No TV Shows found for this filter."
+        <div className="container pb-20 media-grid">
+            <OptimizedSectionWrapper
+              data={true}
+              isLoading={false}
+              fallback={<SectionSkeleton variant="grid" cardCount={12} />}
+              height={500}
+              title="TV Shows Grid"
+            >
+              {isLoading ? (
+                <SectionSkeleton variant="grid" cardCount={12} />
+              ) : (
+                <div className="slide-up">
+                  <MediaGrid items={tvShowsData} emptyMessage="No TV shows found." />
+                </div>
+              )}
+              <Pagination
+                currentPage={page}
+                totalPages={AllPages}
+                isLoading={isLoading}
+                onPageChange={setPage}
               />
-            </div>
-          )}
-          <Pagination
-            currentPage={page}
-            totalPages={AllPages}
-            isLoading={isLoading}
-            onPageChange={setPage}
-          />
-        </OptimizedSectionWrapper>
+            </OptimizedSectionWrapper>
+          </div>
       )}
     </div>
   );

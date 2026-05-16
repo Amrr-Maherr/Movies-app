@@ -6,6 +6,8 @@ import { MovieModalProvider } from "@/contexts/MovieModalContext";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { LenisProvider } from "./LenisProvider";
+import { OnboardingProvider } from "@/features/onboarding/providers/OnboardingProvider";
+
 // FIX: Create QueryClient instance outside component to prevent recreation on every render
 // This ensures the query cache persists across re-renders and avoids unnecessary refetches
 const queryClient = new QueryClient({
@@ -24,7 +26,9 @@ export default function Providers({ children }: { children: ReactNode }) {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <LenisProvider>
-            <MovieModalProvider>{children}</MovieModalProvider>
+            <OnboardingProvider>
+              <MovieModalProvider>{children}</MovieModalProvider>
+            </OnboardingProvider>
           </LenisProvider>
         </BrowserRouter>
         {/* React Query Devtools for debugging - only in development */}

@@ -1,4 +1,4 @@
-import { memo, useMemo, lazy, Suspense, useCallback, useState } from "react";
+import { memo, useMemo, lazy, Suspense, useCallback, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
@@ -6,6 +6,7 @@ import { PageSkeleton, Error, SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchMovieDetails from "@/hooks/shared/FetchMovieDetails";
 import DetailPageNav, { type MovieTab } from "@/components/shared/DetailPageNav";
+import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 import {
   useMovieReviews,
   useMovieVideos,
@@ -30,6 +31,7 @@ const FullCreditsDetail = lazy(() => import("@/components/sections/FullCreditsDe
 const RecommendationsSection = lazy(() => import("@/components/sections/RecommendationsSection"));
 
 const MovieDetailsPage = memo(function MovieDetailsPage() {
+  const { startTour } = useOnboarding();
   const { slugWithId } = useParams<{ slugWithId: string }>();
   const id = extractIdFromSlug(slugWithId);
   const numericId = Number(id);
@@ -74,6 +76,15 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
     [creditsData],
   );
   const recommendations = useMemo(() => recommendationsData?.results || [], [recommendationsData]);
+
+  useEffect(() => {
+    if (data) {
+      const timer = setTimeout(() => {
+        startTour("movie-details");
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [data, startTour]);
 
   if (isLoading) return <PageSkeleton />;
 

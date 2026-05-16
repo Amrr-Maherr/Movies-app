@@ -1,4 +1,4 @@
-import { memo, useMemo, lazy, Suspense, useCallback, useState } from "react";
+import { memo, useMemo, lazy, Suspense, useCallback, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { extractIdFromSlug } from "@/utils/slugify";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
@@ -6,6 +6,7 @@ import { SectionSkeleton, PageSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchTvShowDetails from "@/hooks/shared/FetchTvShowDetails";
 import DetailPageNav, { type MovieTab } from "@/components/shared/DetailPageNav";
+import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 import { extractKeywords, extractWatchProviders } from "@/utils";
 import {
   useTVReviews,
@@ -34,6 +35,7 @@ const FullCreditsDetail = lazy(() => import("@/components/sections/FullCreditsDe
 const RecommendationsSection = lazy(() => import("@/components/sections/RecommendationsSection"));
 
 const TVShowDetailsPage = memo(function TVShowDetailsPage() {
+  const { startTour } = useOnboarding();
   const { slugWithId } = useParams<{ slugWithId: string }>();
   const id = extractIdFromSlug(slugWithId);
   const numericId = Number(id);
@@ -82,6 +84,15 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
     [creditsData],
   );
   const recommendations = useMemo(() => recommendationsData?.results || [], [recommendationsData]);
+
+  useEffect(() => {
+    if (data) {
+      const timer = setTimeout(() => {
+        startTour("tv-details");
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [data, startTour]);
 
   if (isLoading) return <PageSkeleton />;
 

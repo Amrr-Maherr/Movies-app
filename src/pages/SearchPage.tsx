@@ -1,7 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Film, Tv, User, Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 import {
   useSearch,
   type MovieSearchResult,
@@ -18,6 +19,7 @@ import NetflixLogo from "@/assets/logos/Netflix_Symbol_RGB.png";
 type FilterType = "all" | "movie" | "tv" | "person";
 
 export default function SearchPage() {
+  const { startTour } = useOnboarding();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const queryParam = searchParams.get("q") || "";
@@ -58,6 +60,13 @@ export default function SearchPage() {
     setInputValue("");
     navigate("/search");
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      startTour("search");
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [startTour]);
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)]">
@@ -134,7 +143,7 @@ export default function SearchPage() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="sticky top-0 z-40 bg-[var(--background-primary)]/95 backdrop-blur-md border-b border-white/5">
+      <div className="sticky top-0 z-40 bg-[var(--background-primary)]/95 backdrop-blur-md border-b border-white/5 search-filters">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-center gap-2 py-4 overflow-x-auto flex-wrap">
             <FilterButton

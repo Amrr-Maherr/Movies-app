@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { selectList, removeFromList } from "@/store/ListReucer";
 import { SectionSkeleton } from "@/components/ui";
@@ -9,8 +9,10 @@ import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import { getTitle } from "@/utils";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import Card from "@/components/shared/Card/Card";
+import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 
 const MyList = memo(function MyList() {
+  const { startTour } = useOnboarding();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const myList = useAppSelector(selectList);
@@ -45,6 +47,15 @@ const MyList = memo(function MyList() {
     return isTvShow(item) ? "tv" : "movie";
   };
 
+  useEffect(() => {
+    if (myList.length > 0) {
+      const timer = setTimeout(() => {
+        startTour("my-list");
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [myList.length, startTour]);
+
   if (myList.length === 0) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background-primary)] text-[var(--text-primary)]">
@@ -69,7 +80,7 @@ const MyList = memo(function MyList() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] my-list-container">
       <HelmetMeta
         name="My List"
         description="Your personal list of saved movies and TV shows on Netflix."

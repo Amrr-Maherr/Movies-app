@@ -13,6 +13,7 @@ export default function SearchButton({ className }: SearchButtonProps) {
   return (
     <>
       <button
+        data-search-button
         className={cn(
           "cursor-pointer flex items-center justify-center w-9 h-9 rounded-full",
           "text-[var(--text-primary)] hover:bg-[var(--hover-overlay)]",
