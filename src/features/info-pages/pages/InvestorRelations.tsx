@@ -61,7 +61,7 @@ export default function InvestorRelations() {
             </div>
             <div>
               <p className="text-[var(--text-secondary)] mb-2">Current Price</p>
-              <p className="text-2xl font-bold text-[#46d369]">$485.23 (+2.4%)</p>
+              <p className="text-2xl font-bold text-[var(--success)]">$485.23 (+2.4%)</p>
             </div>
           </div>
         </div>

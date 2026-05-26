@@ -59,7 +59,7 @@ const LazyWrapper = memo(({ children, placeholder = null, height }: LazyWrapperP
         <div 
           style={{ 
             height: typeof height === "number" ? `${height}px` : height || "200px",
-            background: "#000" 
+            background: "var(--background-primary)" 
           }} 
           aria-hidden="true"
         />

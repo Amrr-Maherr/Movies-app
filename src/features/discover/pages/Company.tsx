@@ -74,8 +74,8 @@ const Company = memo(function Company() {
                 />
               </div>
             ) : (
-              <div className="w-32 h-32 md:w-48 md:h-48 bg-[#333] rounded-lg flex items-center justify-center flex-shrink-0">
-                <Building2 className="w-16 h-16 md:w-24 md:h-24 text-white" />
+              <div className="w-32 h-32 md:w-48 md:h-48 bg-[var(--background-tertiary)] rounded-lg flex items-center justify-center flex-shrink-0">
+                <Building2 className="w-16 h-16 md:w-24 md:h-24 text-[var(--text-primary)]" />
               </div>
             )}
 
@@ -85,7 +85,7 @@ const Company = memo(function Company() {
                 {company.name}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-4 text-sm md:text-base text-[#737373]">
+              <div className="flex flex-wrap items-center gap-4 text-sm md:text-base text-[var(--text-muted)]">
                 {company.origin_country && (
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4" />
@@ -112,7 +112,7 @@ const Company = memo(function Company() {
                     href={company.homepage}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-blue-400 hover:underline"
+                    className="flex items-center gap-2 text-[var(--info)] hover:underline"
                   >
                     <Globe className="w-4 h-4" />
                     <span>Official Website</span>
@@ -121,7 +121,7 @@ const Company = memo(function Company() {
               </div>
 
               {company.description && (
-                <p className="mt-4 text-sm md:text-base text-[#b3b3b3] line-clamp-3 max-w-3xl">
+                <p className="mt-4 text-sm md:text-base text-[var(--text-secondary)] line-clamp-3 max-w-3xl">
                   {company.description}
                 </p>
               )}
@@ -132,18 +132,18 @@ const Company = memo(function Company() {
 
       {/* Parent Company Section */}
       {company.parent_company && (
-        <div className="border-y border-[#222] bg-black/40">
+        <div className="border-y border-[var(--card-border)] bg-[var(--background-primary)]/40">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6">
             <div className="flex items-center gap-4">
-              <span className="text-[#737373] text-sm">Parent Company:</span>
+              <span className="text-[var(--text-muted)] text-sm">Parent Company:</span>
               <Link
                 to={`/company/${company.parent_company.id}`}
-                className="text-white hover:underline font-medium flex items-center gap-2"
+                className="text-[var(--text-primary)] hover:underline font-medium flex items-center gap-2"
               >
                 <OptimizedSectionWrapper
                   data={company.parent_company}
                   isLoading={companyLoading}
-                  fallback={<span className="text-white/60">Loading...</span>}
+                  fallback={<span className="text-[var(--text-primary)]/60">Loading...</span>}
                   height={32}
                   title="Parent Company"
                 >
@@ -182,7 +182,7 @@ const Company = memo(function Company() {
             height={350}
             title="Movies List"
             isEmptyFallback={
-              <div className="text-center py-12 text-[#737373]">
+              <div className="text-center py-12 text-[var(--text-muted)]">
                 <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
                 <p className="text-lg">No movies available</p>
               </div>

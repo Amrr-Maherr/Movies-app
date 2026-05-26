@@ -57,7 +57,7 @@ const LanguageDropdown = memo(function LanguageDropdown() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-48 bg-[#141414] border border-white/20 rounded-lg shadow-xl py-2 z-50">
+        <div className="absolute right-0 top-full mt-2 w-48 bg-[var(--background-primary)] border border-white/20 rounded-lg shadow-xl py-2 z-50">
           {SUPPORTED_LANGUAGES.map((lang) => (
             <button
               key={lang.code}

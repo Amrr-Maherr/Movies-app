@@ -48,15 +48,15 @@ export default function Step2ChoosePlan({ selectedPlanId, onSelectPlan, onNext }
         <h1 className="text-3xl font-bold mb-4">Choose the plan that's right for you</h1>
         <ul className="space-y-3">
           <li className="flex items-center gap-3 text-lg text-neutral-200">
-            <Check className="w-6 h-6 text-[#E50914] flex-shrink-0" />
+            <Check className="w-6 h-6 text-[var(--netflix-red)] flex-shrink-0" />
             Watch all you want. Ad-free.
           </li>
           <li className="flex items-center gap-3 text-lg text-neutral-200">
-            <Check className="w-6 h-6 text-[#E50914] flex-shrink-0" />
+            <Check className="w-6 h-6 text-[var(--netflix-red)] flex-shrink-0" />
             Recommendations just for you.
           </li>
           <li className="flex items-center gap-3 text-lg text-neutral-200">
-            <Check className="w-6 h-6 text-[#E50914] flex-shrink-0" />
+            <Check className="w-6 h-6 text-[var(--netflix-red)] flex-shrink-0" />
             Change or cancel your plan anytime.
           </li>
         </ul>
@@ -71,14 +71,14 @@ export default function Step2ChoosePlan({ selectedPlanId, onSelectPlan, onNext }
             className={cn(
               "relative cursor-pointer p-6 rounded-xl border-2 transition-all duration-300 group",
               selectedPlanId === plan.id
-                ? "bg-neutral-900 border-[#E50914] ring-1 ring-[#E50914]"
+                ? "bg-neutral-900 border-[var(--netflix-red)] ring-1 ring-[var(--netflix-red)]"
                 : "bg-neutral-900/40 border-neutral-800 hover:border-neutral-600"
             )}
           >
             {/* Selection indicator */}
             <div className={cn(
               "absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold transition-all",
-              selectedPlanId === plan.id ? "bg-[#E50914] text-white opacity-100" : "bg-neutral-800 text-neutral-400 opacity-0 group-hover:opacity-100"
+              selectedPlanId === plan.id ? "bg-[var(--netflix-red)] text-white opacity-100" : "bg-neutral-800 text-neutral-400 opacity-0 group-hover:opacity-100"
             )}>
               {selectedPlanId === plan.id ? "SELECTED" : "SELECT"}
             </div>
@@ -124,7 +124,7 @@ export default function Step2ChoosePlan({ selectedPlanId, onSelectPlan, onNext }
         <Button
           onClick={onNext}
           disabled={!selectedPlanId}
-          className="w-full max-w-[400px] bg-[#E50914] hover:bg-[#f40612] text-white h-16 text-xl font-bold rounded-md shadow-lg transition-transform active:scale-[0.98]"
+          className="w-full max-w-[400px] bg-[var(--netflix-red)] hover:bg-[var(--netflix-red-hover)] text-white h-16 text-xl font-bold rounded-md shadow-lg transition-transform active:scale-[0.98]"
         >
           Next
         </Button>

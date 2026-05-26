@@ -141,7 +141,7 @@ export default function PaymentForm({ onSuccess }: PaymentFormProps) {
         <Button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#E50914] hover:bg-[#f40612] text-white h-14 text-lg font-semibold transition-all active:scale-[0.98] disabled:opacity-50"
+          className="w-full bg-[var(--netflix-red)] hover:bg-[var(--netflix-red-hover)] text-white h-14 text-lg font-semibold transition-all active:scale-[0.98] disabled:opacity-50"
         >
           {loading ? (
             <span className="flex items-center gap-2">

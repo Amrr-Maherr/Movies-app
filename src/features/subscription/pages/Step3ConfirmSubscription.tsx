@@ -22,7 +22,7 @@ export default function Step3ConfirmSubscription({ accountData, selectedPlanId, 
 
       {/* Header */}
       <div className="text-center mb-10">
-        <CheckCircle2 className="w-16 h-16 text-[#E50914] mx-auto mb-4" />
+        <CheckCircle2 className="w-16 h-16 text-[var(--netflix-red)] mx-auto mb-4" />
         <div className="flex items-center justify-center gap-2 mb-2 text-neutral-400">
           <span className="text-xs uppercase tracking-widest font-bold">Step 3 of 4</span>
         </div>
@@ -34,7 +34,7 @@ export default function Step3ConfirmSubscription({ accountData, selectedPlanId, 
         <div className="p-6 border-b border-neutral-800">
           <div className="flex justify-between items-center mb-4">
             <span className="text-neutral-400 text-sm font-medium uppercase tracking-wider">Account</span>
-            <span className="text-[#E50914] text-sm font-bold cursor-pointer hover:underline">Change</span>
+            <span className="text-[var(--netflix-red)] text-sm font-bold cursor-pointer hover:underline">Change</span>
           </div>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center">
@@ -50,7 +50,7 @@ export default function Step3ConfirmSubscription({ accountData, selectedPlanId, 
         <div className="p-6 bg-neutral-800/30">
           <div className="flex justify-between items-center mb-4">
             <span className="text-neutral-400 text-sm font-medium uppercase tracking-wider">Plan Details</span>
-            <span className="text-[#E50914] text-sm font-bold cursor-pointer hover:underline">Change</span>
+            <span className="text-[var(--netflix-red)] text-sm font-bold cursor-pointer hover:underline">Change</span>
           </div>
           <div className="flex justify-between items-end">
             <div>
@@ -79,7 +79,7 @@ export default function Step3ConfirmSubscription({ accountData, selectedPlanId, 
       {/* Action Button */}
       <Button
         onClick={onConfirm}
-        className="w-full bg-[#E50914] hover:bg-[#f40612] text-white h-14 text-lg font-bold rounded-md shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 group"
+        className="w-full bg-[var(--netflix-red)] hover:bg-[var(--netflix-red-hover)] text-white h-14 text-lg font-bold rounded-md shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 group"
       >
         Next <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
       </Button>

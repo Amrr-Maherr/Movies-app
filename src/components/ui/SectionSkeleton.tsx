@@ -126,7 +126,7 @@ export const SectionSkeleton = memo(function SectionSkeleton({
   })();
 
   return (
-    <SkeletonTheme baseColor="#1a1a1a" highlightColor="#2a2a2a">
+    <SkeletonTheme baseColor="var(--background-tertiary)" highlightColor="var(--background-secondary)">
       {content}
     </SkeletonTheme>
   );

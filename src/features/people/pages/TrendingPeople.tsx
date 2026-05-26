@@ -87,19 +87,19 @@ const TrendingPeople = memo(function TrendingPeople() {
               Trending People
             </h1>
           </div>
-          <p className="text-base text-[#b3b3b3]">
+          <p className="text-base text-[var(--text-secondary)]">
             The most popular actors and directors right now
           </p>
         </div>
 
         {/* Time Window Tabs */}
-        <div className="flex items-center gap-4 mb-8 border-b border-[#222]">
+        <div className="flex items-center gap-4 mb-8 border-b border-[var(--card-border)]">
           <button
             onClick={() => setTimeWindow("day")}
             className={`px-6 py-3 font-semibold transition-colors flex items-center gap-2 ${
               timeWindow === "day"
                 ? "text-white border-b-2 border-[var(--netflix-red)]"
-                : "text-[#737373] hover:text-white"
+                : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
             <TrendingUp className="w-5 h-5" />
@@ -110,7 +110,7 @@ const TrendingPeople = memo(function TrendingPeople() {
             className={`px-6 py-3 font-semibold transition-colors flex items-center gap-2 ${
               timeWindow === "week"
                 ? "text-white border-b-2 border-[var(--netflix-red)]"
-                : "text-[#737373] hover:text-white"
+                : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
             <Star className="w-5 h-5" />
@@ -126,7 +126,7 @@ const TrendingPeople = memo(function TrendingPeople() {
           height={400}
           title="Trending People"
           isEmptyFallback={
-            <div className="text-center py-12 text-[#737373]">
+            <div className="text-center py-12 text-[var(--text-muted)]">
               <TrendingUp className="w-16 h-16 mx-auto mb-4 opacity-50" />
               <p className="text-lg">No trending people available</p>
             </div>
@@ -140,7 +140,7 @@ const TrendingPeople = memo(function TrendingPeople() {
                   to={`/person/${person.id}`}
                   className="group cursor-pointer block"
                 >
-                  <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
+                  <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[var(--background-tertiary)] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
                     {person.profile_path ? (
                       <OptimizedImage
                         src={`${IMAGE_BASE_URL}${person.profile_path}`}
@@ -149,8 +149,8 @@ const TrendingPeople = memo(function TrendingPeople() {
                         objectFit="cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-[#333]">
-                        <span className="text-4xl text-[#555]">👤</span>
+                      <div className="w-full h-full flex items-center justify-center bg-[var(--background-tertiary)]">
+                        <span className="text-4xl text-[var(--text-muted)]">👤</span>
                       </div>
                     )}
 
@@ -160,8 +160,8 @@ const TrendingPeople = memo(function TrendingPeople() {
                     </div>
 
                     {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <span className="text-white text-sm font-medium px-2 text-center">
+                    <div className="absolute inset-0 bg-[var(--background-primary)]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <span className="text-[var(--text-primary)] text-sm font-medium px-2 text-center">
                         View Profile
                       </span>
                     </div>
@@ -169,11 +169,11 @@ const TrendingPeople = memo(function TrendingPeople() {
 
                   {/* Person Info */}
                   <div className="mt-2 md:mt-3">
-                    <h3 className="text-xs md:text-sm text-white font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
+                    <h3 className="text-xs md:text-sm text-[var(--text-primary)] font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
                       {person.name}
                     </h3>
                     {person.known_for_department && (
-                      <p className="text-[#737373] text-xs mt-1">
+                      <p className="text-[var(--text-muted)] text-xs mt-1">
                         {person.known_for_department}
                       </p>
                     )}

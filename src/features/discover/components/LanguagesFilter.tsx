@@ -87,7 +87,7 @@ const LanguagesFilter = memo(function LanguagesFilter({
                   "w-full px-2 py-2 cursor-pointer sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition-all duration-300 border",
                   isActive
                     ? "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.3)]"
-                    : "bg-[#141414] text-white border-[#404040] hover:border-white hover:bg-[#202020]",
+                    : "bg-[var(--background-primary)] text-white border-[var(--card-border)] hover:border-white hover:bg-[var(--background-tertiary)]",
                 )}
               >
                 {lang.name}

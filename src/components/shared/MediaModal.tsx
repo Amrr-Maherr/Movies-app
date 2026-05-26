@@ -63,7 +63,7 @@ const MediaModal = memo(function MovieModal({ movie, isOpen, onClose }: MediaMod
           className="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 w-full max-w-[850px] max-h-[90vh] outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
           style={{ width: "min(850px, 95vw)" }}
         >
-          <div className="relative bg-[#181818] rounded-md overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)] flex flex-col max-h-[90vh]">
+          <div className="relative bg-[var(--background-secondary)] rounded-md overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)] flex flex-col max-h-[90vh]">
 
             {/* ── Hero backdrop ── */}
             <div className="relative w-full aspect-video flex-shrink-0">
@@ -75,7 +75,7 @@ const MediaModal = memo(function MovieModal({ movie, isOpen, onClose }: MediaMod
                 priority
               />
               {/* bottom gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#181818] via-[#181818]/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-secondary)] via-[var(--background-secondary)]/20 to-transparent" />
 
               {/* title over backdrop */}
               <div className="absolute bottom-0 left-0 right-0 px-10 pb-6">
@@ -88,7 +88,7 @@ const MediaModal = memo(function MovieModal({ movie, isOpen, onClose }: MediaMod
               {/* Close button */}
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 z-10 flex items-center justify-center w-9 h-9 rounded-full bg-[#181818] hover:bg-[#2a2a2a] border border-white/20 text-white transition-colors"
+                className="absolute top-4 right-4 z-10 flex items-center justify-center w-9 h-9 rounded-full bg-[var(--background-secondary)] hover:bg-[var(--background-tertiary)] border border-white/20 text-white transition-colors"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -139,7 +139,7 @@ const MediaModal = memo(function MovieModal({ movie, isOpen, onClose }: MediaMod
                 <div className="flex-1 min-w-0">
                   {/* Match / year / rating / HD */}
                   <div className="flex items-center gap-2 flex-wrap mb-3">
-                    <span className="text-[#46d369] font-semibold text-sm">{matchScore}% Match</span>
+                    <span className="text-[var(--success)] font-semibold text-sm">{matchScore}% Match</span>
                     <span className="text-white/70 text-sm">{year}</span>
                     <span className="border border-white/40 text-white/70 text-[11px] px-1.5 py-0.5 rounded-sm">
                       {ageRating}

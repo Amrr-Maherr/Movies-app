@@ -101,7 +101,7 @@ export default function Step1CreateAccount({ onNext }) {
         </div>
 
         {error && (
-          <div className="bg-[#e87c03] text-white text-sm py-3 px-4 rounded-md animate-in fade-in slide-in-from-top-2">
+          <div className="bg-[var(--warning)] text-white text-sm py-3 px-4 rounded-md animate-in fade-in slide-in-from-top-2">
             {error}
           </div>
         )}
@@ -109,7 +109,7 @@ export default function Step1CreateAccount({ onNext }) {
         <Button
           type="submit"
           disabled={isPending}
-          className="w-full bg-[#E50914] hover:bg-[#f40612] text-white h-14 text-lg font-semibold transition-all active:scale-[0.98]"
+          className="w-full bg-[var(--netflix-red)] hover:bg-[var(--netflix-red-hover)] text-white h-14 text-lg font-semibold transition-all active:scale-[0.98]"
         >
           {isPending ? (
             <span className="flex items-center gap-2">
@@ -125,7 +125,7 @@ export default function Step1CreateAccount({ onNext }) {
 
         <div className="flex items-center justify-between text-sm text-neutral-500 pt-2">
           <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" className="w-4 h-4 rounded bg-neutral-800 border-neutral-700 accent-[#E50914]" defaultChecked />
+            <input type="checkbox" className="w-4 h-4 rounded bg-neutral-800 border-neutral-700 accent-[var(--netflix-red)]" defaultChecked />
             <span>Remember me</span>
           </label>
           <a href="#" className="hover:underline">Need help?</a>

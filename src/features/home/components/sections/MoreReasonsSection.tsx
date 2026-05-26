@@ -27,7 +27,7 @@ const FeatureBox = memo(function FeatureBox({
       <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">
         {title}
       </h3>
-      <p className="text-sm md:text-base text-[#737373] leading-relaxed">
+      <p className="text-sm md:text-base text-[var(--text-muted)] leading-relaxed">
         {description}
       </p>
     </div>
@@ -69,7 +69,7 @@ const features = [
  */
 const MoreReasonsSection = memo(function MoreReasonsSection() {
   return (
-    <section className="py-12 md:py-20 bg-black border-t border-[#222]">
+    <section className="py-12 md:py-20 bg-[var(--background-primary)] border-t border-[var(--card-border)]">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         <h2 className="text-2xl md:text-4xl font-bold text-white text-center mb-8 md:mb-12">
           More Reasons to Join

@@ -82,8 +82,8 @@ const Network = memo(function Network() {
                 )}
               </OptimizedSectionWrapper>
             ) : (
-              <div className="w-32 h-32 md:w-48 md:h-48 bg-[#333] rounded-lg flex items-center justify-center flex-shrink-0">
-                <Tv className="w-16 h-16 md:w-24 md:h-24 text-white" />
+              <div className="w-32 h-32 md:w-48 md:h-48 bg-[var(--background-tertiary)] rounded-lg flex items-center justify-center flex-shrink-0">
+                <Tv className="w-16 h-16 md:w-24 md:h-24 text-[var(--text-primary)]" />
               </div>
             )}
 
@@ -93,7 +93,7 @@ const Network = memo(function Network() {
                 {network.name}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-4 text-sm md:text-base text-[#737373]">
+              <div className="flex flex-wrap items-center gap-4 text-sm md:text-base text-[var(--text-muted)]">
                 {network.origin_country && (
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4" />
@@ -120,7 +120,7 @@ const Network = memo(function Network() {
                     href={network.homepage}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-blue-400 hover:underline"
+                    className="flex items-center gap-2 text-[var(--info)] hover:underline"
                   >
                     <Globe className="w-4 h-4" />
                     <span>Official Website</span>
@@ -129,7 +129,7 @@ const Network = memo(function Network() {
               </div>
 
               {network.description && (
-                <p className="mt-4 text-sm md:text-base text-[#b3b3b3] line-clamp-3 max-w-3xl">
+                <p className="mt-4 text-sm md:text-base text-[var(--text-secondary)] line-clamp-3 max-w-3xl">
                   {network.description}
                 </p>
               )}
@@ -140,20 +140,20 @@ const Network = memo(function Network() {
 
       {/* Parent Organization Section */}
       {network.parent_organization && (
-        <div className="border-y border-[#222] bg-black/40">
+        <div className="border-y border-[var(--card-border)] bg-[var(--background-primary)]/40">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6">
             <div className="flex items-center gap-4">
-              <span className="text-[#737373] text-sm">
+              <span className="text-[var(--text-muted)] text-sm">
                 Parent Organization:
               </span>
               <Link
                 to={`/network/${network.parent_organization.id}`}
-                className="text-white hover:underline font-medium flex items-center gap-2"
+                className="text-[var(--text-primary)] hover:underline font-medium flex items-center gap-2"
               >
                 <OptimizedSectionWrapper
                   data={network.parent_organization}
                   isLoading={networkLoading}
-                  fallback={<span className="text-white/60">Loading...</span>}
+                  fallback={<span className="text-[var(--text-primary)]/60">Loading...</span>}
                   height={32}
                   title="Parent Org"
                 >
@@ -192,7 +192,7 @@ const Network = memo(function Network() {
             height={350}
             title="TV Shows Grid"
             isEmptyFallback={
-              <div className="text-center py-12 text-[#737373]">
+              <div className="text-center py-12 text-[var(--text-muted)]">
                 <Tv className="w-16 h-16 mx-auto mb-4 opacity-50" />
                 <p className="text-lg">No TV shows available</p>
               </div>
@@ -206,7 +206,7 @@ const Network = memo(function Network() {
                     to={`/tv/${show.id}`}
                     className="group cursor-pointer block"
                   >
-                    <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
+                    <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[var(--background-tertiary)] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
                       {show.poster_path ? (
                         <OptimizedImage
                           src={`${IMAGE_BASE_URL}${show.poster_path}`}
@@ -215,13 +215,13 @@ const Network = memo(function Network() {
                           objectFit="cover"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-[#333]">
-                          <Tv className="w-12 h-12 text-[#555]" />
+                        <div className="w-full h-full flex items-center justify-center bg-[var(--background-tertiary)]">
+                          <Tv className="w-12 h-12 text-[var(--text-muted)]" />
                         </div>
                       )}
                     </div>
                     <div className="mt-2 md:mt-3">
-                      <h3 className="text-xs md:text-sm text-white font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
+                      <h3 className="text-xs md:text-sm text-[var(--text-primary)] font-medium line-clamp-2 group-hover:text-[var(--netflix-red)] transition-colors">
                         {show.name}
                       </h3>
                     </div>

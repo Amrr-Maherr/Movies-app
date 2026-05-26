@@ -134,10 +134,10 @@ const Platform = memo(function Platform() {
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
                 {displayName}
               </h1>
-              <p className="text-base md:text-lg text-[#b3b3b3] mb-3">
+              <p className="text-base md:text-lg text-[var(--text-secondary)] mb-3">
                 {displayDescription}
               </p>
-              <div className="flex items-center gap-2 text-sm text-[#737373]">
+              <div className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
                 <Globe className="w-4 h-4" />
                 <span>Available in {displayCountry}</span>
               </div>
@@ -146,7 +146,7 @@ const Platform = memo(function Platform() {
         </div>
 
         {/* Tabs */}
-        <div className="flex items-center gap-4 mb-8 border-b border-[#222]">
+        <div className="flex items-center gap-4 mb-8 border-b border-[var(--card-border)]">
           <button
             onClick={() => {
               setActiveTab("movies");
@@ -155,7 +155,7 @@ const Platform = memo(function Platform() {
             className={`px-6 py-3 font-semibold transition-colors flex items-center gap-2 ${
               activeTab === "movies"
                 ? "text-white border-b-2 border-[var(--netflix-red)]"
-                : "text-[#737373] hover:text-white"
+                : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
             <Film className="w-5 h-5" />
@@ -169,13 +169,13 @@ const Platform = memo(function Platform() {
             className={`px-6 py-3 font-semibold transition-colors flex items-center gap-2 ${
               activeTab === "tv"
                 ? "text-white border-b-2 border-[var(--netflix-red)]"
-                : "text-[#737373] hover:text-white"
+                : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
             }`}
           >
             <Tv className="w-5 h-5" />
             TV Shows
           </button>
-          <span className="ml-auto text-[#737373]">{totalResults} titles</span>
+          <span className="ml-auto text-[var(--text-muted)]">{totalResults} titles</span>
         </div>
 
         {/* Content Grid */}
@@ -186,7 +186,7 @@ const Platform = memo(function Platform() {
           height={500}
           title={`${displayName} Content`}
           isEmptyFallback={
-            <div className="text-center py-12 text-[#737373]">
+            <div className="text-center py-12 text-[var(--text-muted)]">
               {activeTab === "movies" ? (
                 <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
               ) : (

@@ -55,7 +55,7 @@ const Platforms = memo(function Platforms() {
             </h1>
           </div>
 
-          <p className="text-lg text-[#b3b3b3] max-w-2xl">
+          <p className="text-lg text-[var(--text-secondary)] max-w-2xl">
             Browse all available streaming platforms and discover movies and TV
             shows available on each service.
           </p>
@@ -81,7 +81,7 @@ const Platforms = memo(function Platforms() {
         </OptimizedSectionWrapper>
 
         {/* Platform Count */}
-        <div className="mt-8 text-center text-[#737373]">
+        <div className="mt-8 text-center text-[var(--text-muted)]">
           <p className="text-sm">
             Showing {platforms.length} streaming platforms
           </p>

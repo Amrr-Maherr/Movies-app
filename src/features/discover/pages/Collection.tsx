@@ -91,7 +91,7 @@ const Collection = memo(function Collection() {
             />
           </Suspense>
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#1a1a2e] to-[#16213e]" />
+          <div className="w-full h-full bg-gradient-to-br from-[var(--background-tertiary)] to-[var(--background-secondary)]" />
         )}
 
         {/* Gradient Overlay */}
@@ -141,12 +141,12 @@ const Collection = memo(function Collection() {
 
       {/* Overview Section */}
       {collection.overview && (
-        <div className="border-y border-[#222] bg-black/40">
+        <div className="border-y border-[var(--card-border)] bg-[var(--background-primary)]/40">
           <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6 md:py-8">
             <h2 className="text-lg md:text-xl font-semibold text-white mb-3">
               About the Collection
             </h2>
-            <p className="text-sm md:text-base text-[#b3b3b3] leading-relaxed">
+            <p className="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed">
               {collection.overview}
             </p>
           </div>
@@ -170,7 +170,7 @@ const Collection = memo(function Collection() {
           height={350}
           title="Collection Movies"
           isEmptyFallback={
-            <div className="text-center py-12 text-[#737373]">
+            <div className="text-center py-12 text-[var(--text-muted)]">
               <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
               <p className="text-lg">No movies in this collection</p>
             </div>

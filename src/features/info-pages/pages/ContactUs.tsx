@@ -74,7 +74,7 @@ export default function ContactUs() {
                 {method.action}
               </button>
               {method.available && (
-                <span className="inline-block mt-4 text-sm text-[#46d369]">
+                <span className="inline-block mt-4 text-sm text-[var(--success)]">
                   ● Available 24/7
                 </span>
               )}

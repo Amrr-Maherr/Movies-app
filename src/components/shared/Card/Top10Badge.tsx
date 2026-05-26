@@ -14,7 +14,7 @@ const Top10Badge = memo(({ rank }: Top10BadgeProps) => {
       <div className="relative">
         <span
           className="text-6xl md:text-8xl lg:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-800 to-black"
-          style={{ WebkitTextStroke: "2px #ddd" }}
+          style={{ WebkitTextStroke: "2px var(--text-muted)" }}
         >
           {rank}
         </span>
