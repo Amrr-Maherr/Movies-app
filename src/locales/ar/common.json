@@ -1,0 +1,120 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "tvShows": "مسلسلات تلفزيونية",
+    "movies": "أفلام",
+    "newAndPopular": "جديد وشائع",
+    "myList": "قائمتي"
+  },
+  "header": {
+    "search": "بحث",
+    "notifications": "إشعارات",
+    "language": "اللغة"
+  },
+  "auth": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "signIn": "تسجيل الدخول",
+      "signUp": "إنشاء حساب",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "noAccount": "جديد على نتفليكس؟",
+      "signUpNow": "سجل الآن"
+    },
+    "signup": {
+      "title": "إنشاء حساب",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "createAccount": "إنشاء حساب",
+      "alreadyHaveAccount": "لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول"
+    }
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "retry": "إعادة المحاولة",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "close": "إغلاق",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "viewAll": "عرض الكل",
+    "showMore": "عرض المزيد",
+    "showLess": "عرض أقل"
+  },
+  "errors": {
+    "required": "هذا الحقل مطلوب",
+    "invalidEmail": "عنوان بريد إلكتروني غير صالح",
+    "passwordTooShort": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+    "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+    "somethingWentWrong": "حدث خطأ ما",
+    "networkError": "خطأ في الشبكة. يرجى التحقق من اتصالك",
+    "notFound": "غير موجود",
+    "unauthorized": "غير مصرح"
+  },
+  "buttons": {
+    "play": "تشغيل",
+    "addToList": "إضافة إلى القائمة",
+    "removeFromList": "إزالة من القائمة",
+    "watchNow": "شاهد الآن",
+    "trailer": "الإعلان",
+    "moreInfo": "المزيد من المعلومات",
+    "share": "مشاركة"
+  },
+  "movies": {
+    "popular": "شائع",
+    "topRated": "الأعلى تقييماً",
+    "upcoming": "قريباً",
+    "nowPlaying": "يعرض الآن",
+    "similar": "أفلام مشابهة",
+    "recommendations": "توصيات"
+  },
+  "tv": {
+    "popular": "شائع",
+    "topRated": "الأعلى تقييماً",
+    "airingToday": "يعرض اليوم",
+    "onTheAir": "يُبث الآن",
+    "similar": "مسلسلات مشابهة",
+    "recommendations": "توصيات"
+  },
+  "discover": {
+    "title": "اكتشف",
+    "movies": "أفلام",
+    "tvShows": "مسلسلات تلفزيونية",
+    "genres": "الأنواع",
+    "languages": "اللغات",
+    "kids": "أطفال وعائلة",
+    "newPopular": "جديد وشائع"
+  },
+  "people": {
+    "knownFor": "معروف بـ",
+    "biography": "السيرة الذاتية",
+    "filmography": "الأعمال",
+    "cast": "طاقم التمثيل",
+    "crew": "الطاقم"
+  },
+  "search": {
+    "title": "بحث",
+    "results": "النتائج",
+    "noResults": "لم يتم العثور على نتائج",
+    "searchPlaceholder": "ابحث عن أفلام، مسلسلات تلفزيونية، أشخاص..."
+  },
+  "footer": {
+    "contact": "اتصل بنا",
+    "about": "من نحن",
+    "privacy": "سياسة الخصوصية",
+    "terms": "شروط الخدمة",
+    "help": "مركز المساعدة"
+  }
+}

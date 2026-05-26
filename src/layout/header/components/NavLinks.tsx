@@ -2,6 +2,7 @@ import { HeaderLink } from "@/layout/types";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 
 interface NavLinksProps {
   link: HeaderLink;
@@ -15,6 +16,8 @@ interface NavLinksProps {
  * Memoized to prevent unnecessary re-renders when header updates.
  */
 const NavLinks = memo(function NavLinks({ link, onClick }: NavLinksProps) {
+  const { t } = useTranslation('common');
+  
   return (
     <NavLink
       to={link.link}
@@ -29,7 +32,7 @@ const NavLinks = memo(function NavLinks({ link, onClick }: NavLinksProps) {
         )
       }
     >
-      {link.title}
+      {t(link.title)}
     </NavLink>
   );
 });

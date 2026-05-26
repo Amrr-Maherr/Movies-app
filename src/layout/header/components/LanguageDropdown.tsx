@@ -1,4 +1,5 @@
 import { useState, memo } from "react";
+import { useTranslation } from "react-i18next";
 import { Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -19,30 +20,16 @@ const SUPPORTED_LANGUAGES: Language[] = [
 ];
 
 const LanguageDropdown = memo(function LanguageDropdown() {
+  const { t, i18n } = useTranslation('common');
   const [isOpen, setIsOpen] = useState(false);
   
-  const getCurrentLanguage = () => {
-    // Try URL params first
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlLang = urlParams.get('lang');
-    if (urlLang) return urlLang;
-
-    // Try localStorage
-    const storedLang = localStorage.getItem('app_language');
-    if (storedLang) return storedLang;
-
-    // Default to English
-    return 'en';
-  };
-
-  const currentLanguage = getCurrentLanguage();
+  const currentLanguage = i18n.language || 'en';
   const currentLangName = SUPPORTED_LANGUAGES.find(lang => lang.code === currentLanguage)?.name || 'English';
 
   const handleLanguageChange = (langCode: string) => {
     localStorage.setItem('app_language', langCode);
+    i18n.changeLanguage(langCode);
     setIsOpen(false);
-    // Reload page to apply new language
-    window.location.reload();
   };
 
   return (
@@ -50,7 +37,7 @@ const LanguageDropdown = memo(function LanguageDropdown() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
-        aria-label="Select language"
+        aria-label={t('header.language')}
       >
         <Globe className="w-5 h-5 sm:w-6 sm:h-6" />
         <span className="hidden sm:inline text-sm">{currentLangName}</span>

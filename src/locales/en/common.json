@@ -1,0 +1,120 @@
+{
+  "nav": {
+    "home": "Home",
+    "tvShows": "TV Shows",
+    "movies": "Movies",
+    "newAndPopular": "New & Popular",
+    "myList": "My List"
+  },
+  "header": {
+    "search": "Search",
+    "notifications": "Notifications",
+    "language": "Language"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign In",
+      "email": "Email",
+      "password": "Password",
+      "signIn": "Sign In",
+      "signUp": "Sign Up",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "New to Netflix?",
+      "signUpNow": "Sign up now"
+    },
+    "signup": {
+      "title": "Create Account",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "createAccount": "Create Account",
+      "alreadyHaveAccount": "Already have an account?",
+      "signIn": "Sign In"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "viewAll": "View All",
+    "showMore": "Show More",
+    "showLess": "Show Less"
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "somethingWentWrong": "Something went wrong",
+    "networkError": "Network error. Please check your connection",
+    "notFound": "Not found",
+    "unauthorized": "Unauthorized"
+  },
+  "buttons": {
+    "play": "Play",
+    "addToList": "Add to List",
+    "removeFromList": "Remove from List",
+    "watchNow": "Watch Now",
+    "trailer": "Trailer",
+    "moreInfo": "More Info",
+    "share": "Share"
+  },
+  "movies": {
+    "popular": "Popular",
+    "topRated": "Top Rated",
+    "upcoming": "Upcoming",
+    "nowPlaying": "Now Playing",
+    "similar": "Similar Movies",
+    "recommendations": "Recommendations"
+  },
+  "tv": {
+    "popular": "Popular",
+    "topRated": "Top Rated",
+    "airingToday": "Airing Today",
+    "onTheAir": "On The Air",
+    "similar": "Similar TV Shows",
+    "recommendations": "Recommendations"
+  },
+  "discover": {
+    "title": "Discover",
+    "movies": "Movies",
+    "tvShows": "TV Shows",
+    "genres": "Genres",
+    "languages": "Languages",
+    "kids": "Kids & Family",
+    "newPopular": "New & Popular"
+  },
+  "people": {
+    "knownFor": "Known For",
+    "biography": "Biography",
+    "filmography": "Filmography",
+    "cast": "Cast",
+    "crew": "Crew"
+  },
+  "search": {
+    "title": "Search",
+    "results": "Results",
+    "noResults": "No results found",
+    "searchPlaceholder": "Search for movies, TV shows, people..."
+  },
+  "footer": {
+    "contact": "Contact Us",
+    "about": "About Us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "help": "Help Center"
+  }
+}
