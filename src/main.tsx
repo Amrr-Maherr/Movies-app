@@ -3,6 +3,7 @@ import "./index.css";
 import App from "./App.tsx";
 import Providers from "./providers/Providers.tsx";
 import { registerSW } from "virtual:pwa-register";
+import "@/lib/axios";
 
 // Register service worker for PWA
 const updateSW = registerSW({
