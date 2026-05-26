@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import { useMovieModal } from "@/contexts/MovieModalContext";
+import { useMovieModal } from "@/shared/contexts/MovieModalContext";
 import { LoadingFallback } from "@/components/ui";
 
 // FIX: Lazy load MovieModal once at app level instead of per-card instance

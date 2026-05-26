@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from "react-router-dom";
 import { ReactNode } from "react";
-import { MovieModalProvider } from "@/contexts/MovieModalContext";
+import { MovieModalProvider } from "@/shared/contexts/MovieModalContext";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { LenisProvider } from "./LenisProvider";

@@ -4,7 +4,7 @@ import { Autoplay } from "swiper/modules";
 import type { HeroMedia } from "@/types";
 import { Error, SectionSkeleton } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
-import { useMovieModal } from "@/contexts/MovieModalContext";
+import { useMovieModal } from "@/shared/contexts/MovieModalContext";
 
 // Lazy-loaded component
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
