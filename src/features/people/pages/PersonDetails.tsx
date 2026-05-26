@@ -12,7 +12,7 @@ import MediaGrid from "@/components/shared/MediaGrid";
 import { Film, Tv, Image as ImageIcon } from "lucide-react";
 import { getYear } from "@/utils";
 
-const PersonHero = lazy(() => import("@/components/shared/PersonHero"));
+const PersonHero = lazy(() => import("@/features/people/components/PersonHero"));
 const BiographySection = lazy(() => import("@/components/sections/BiographySection"));
 const KnownForSection = lazy(() => import("@/components/sections/KnownForSection"));
 const CreditsSection = lazy(() => import("@/components/sections/CreditsSection"));

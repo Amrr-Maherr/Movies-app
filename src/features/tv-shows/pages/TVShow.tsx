@@ -4,7 +4,7 @@ import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import TVShowFilters, {
   TVShowFilterOption,
-} from "@/components/shared/TVShowFilters";
+} from "@/features/tv-shows/components/TVShowFilters";
 import type { TvShow, HeroMedia, PopularTvShowsResponse } from "@/types";
 import Pagination from "@/components/shared/Pagination";
 import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";

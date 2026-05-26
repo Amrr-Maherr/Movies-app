@@ -4,7 +4,7 @@ import { SectionSkeleton, Error } from "@/components/ui";
 import { Film, Tv } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
-import GenreCard from "@/components/GenreCard";
+import GenreCard from "@/features/discover/components/GenreCard";
 
 const Genres = memo(function Genres() {
   const {

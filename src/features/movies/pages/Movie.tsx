@@ -4,7 +4,7 @@ import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import MovieFilters, {
   MovieFilterOption,
-} from "@/components/shared/MovieFilters";
+} from "@/features/movies/components/MovieFilters";
 import type { Movie, HeroMedia} from "@/types";
 import Pagination from "@/components/shared/Pagination";
 import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";

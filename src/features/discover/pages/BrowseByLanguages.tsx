@@ -7,7 +7,7 @@ import type { HeroMedia } from "@/types";
 import useMediaByLanguage from "@/features/discover/hooks/FetchMediaByLanguage";
 import LanguagesFilter, {
   SUPPORTED_LANGUAGES,
-} from "@/components/BrowseByLanguages/LanguagesFilter";
+} from "@/features/discover/components/LanguagesFilter";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import MediaGrid from "@/components/shared/MediaGrid";
 

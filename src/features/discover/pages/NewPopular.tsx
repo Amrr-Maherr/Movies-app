@@ -4,7 +4,7 @@ import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import NewPopularFilters, {
   NewPopularFilterOption,
-} from "@/components/shared/NewPopularFilters";
+} from "@/features/discover/components/NewPopularFilters";
 import type {
   HeroMedia,
   PopularMoviesResponse,
