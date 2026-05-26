@@ -2,7 +2,7 @@ import { memo, lazy, Suspense } from "react";
 import { Tv } from "lucide-react";
 import SectionHeader from "@/components/shared/SectionHeader";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
-import PlatformCard from "./PlatformCard";
+import PlatformCard from "@/components/sections/PlatformCard";
 import type { StreamingPlatform } from "@/types";
 import { SectionSkeleton } from "@/components/ui";
 import { Link } from "react-router-dom";

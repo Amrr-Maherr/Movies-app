@@ -16,30 +16,30 @@ const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),
 );
 const TopPicksSection = lazy(
-  () => import("@/components/sections/TopPicksSection"),
+  () => import("@/features/home/components/sections/TopPicksSection"),
 );
 const MediaSection = lazy(() => import("@/components/shared/MediaSection"));
 const NewReleasesSection = lazy(
-  () => import("@/components/sections/NewReleasesSection"),
+  () => import("@/features/home/components/sections/NewReleasesSection"),
 );
-const MoviePromo = lazy(() => import("@/components/sections/MoviePromo"));
+const MoviePromo = lazy(() => import("@/features/home/components/sections/MoviePromo"));
 const OnlyOnNetflixSection = lazy(
-  () => import("@/components/sections/OnlyOnNetflixSection"),
+  () => import("@/features/home/components/sections/OnlyOnNetflixSection"),
 );
 const AwardWinnersSection = lazy(
-  () => import("@/components/sections/AwardWinnersSection"),
+  () => import("@/features/home/components/sections/AwardWinnersSection"),
 );
 const PricingSection = lazy(
-  () => import("@/components/sections/PricingSection"),
+  () => import("@/features/home/components/sections/PricingSection"),
 );
 const AskedQuestions = lazy(
-  () => import("@/components/sections/AskedQuestions"),
+  () => import("@/features/home/components/sections/AskedQuestions"),
 );
 const PlatformsSection = lazy(
-  () => import("@/components/sections/PlatformsSection"),
+  () => import("@/features/home/components/sections/PlatformsSection"),
 );
 const MoreReasonsSection = lazy(
-  () => import("@/components/sections/MoreReasonsSection"),
+  () => import("@/features/home/components/sections/MoreReasonsSection"),
 );
 
 const Home = memo(function Home() {

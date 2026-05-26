@@ -13,10 +13,10 @@ import { Film, Tv, Image as ImageIcon } from "lucide-react";
 import { getYear } from "@/utils";
 
 const PersonHero = lazy(() => import("@/features/people/components/PersonHero"));
-const BiographySection = lazy(() => import("@/components/sections/BiographySection"));
-const KnownForSection = lazy(() => import("@/components/sections/KnownForSection"));
-const CreditsSection = lazy(() => import("@/components/sections/CreditsSection"));
-const SocialLinksSection = lazy(() => import("@/components/sections/SocialLinksSection"));
+const BiographySection = lazy(() => import("@/features/people/components/sections/BiographySection"));
+const KnownForSection = lazy(() => import("@/features/people/components/sections/KnownForSection"));
+const CreditsSection = lazy(() => import("@/features/people/components/sections/CreditsSection"));
+const SocialLinksSection = lazy(() => import("@/features/people/components/sections/SocialLinksSection"));
 const ImagesGallery = lazy(() => import("@/components/sections/ImagesGallery"));
 
 const PersonDetailsPage = memo(function PersonDetailsPage() {

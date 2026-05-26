@@ -21,12 +21,12 @@ import type { Video } from "@/types";
 
 const MediaHero = lazy(() => import("@/components/shared/MediaHero"));
 const MediaInfoSection = lazy(() => import("@/components/sections/MediaInfoSection"));
-const EpisodesSection = lazy(() => import("@/components/sections/EpisodesSection"));
+const EpisodesSection = lazy(() => import("@/features/tv-shows/components/sections/EpisodesSection"));
 const TrailersSection = lazy(() => import("@/components/sections/TrailersSection"));
 const BehindTheScenesSection = lazy(() => import("@/components/sections/BehindTheScenesSection"));
 const ReviewsSection = lazy(() => import("@/components/sections/ReviewsSection"));
-const KeywordsSection = lazy(() => import("@/components/sections/KeywordsSection"));
-const WatchProvidersSection = lazy(() => import("@/components/sections/WatchProvidersSection"));
+const KeywordsSection = lazy(() => import("@/features/tv-shows/components/sections/KeywordsSection"));
+const WatchProvidersSection = lazy(() => import("@/features/tv-shows/components/sections/WatchProvidersSection"));
 const MoreLikeThisSection = lazy(() => import("@/components/sections/MoreLikeThisSection"));
 const VideosSection = lazy(() => import("@/components/sections/VideosSection"));
 const ImagesGallery = lazy(() => import("@/components/sections/ImagesGallery"));
