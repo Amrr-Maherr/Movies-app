@@ -50,7 +50,7 @@ const BrowseDropdown = memo(function BrowseDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-4 w-64 bg-black/90 border-t-2 border-[#e50914] shadow-xl py-2 z-50">
+        <div className="absolute top-full left-0 mt-4 w-64 bg-[var(--background-primary)]/90 border-t-2 border-[var(--netflix-red)] shadow-xl py-2 z-50">
           <div className="flex flex-col">
             {HeaderLinks.map((link, index) => (
               <NavLink
@@ -59,7 +59,7 @@ const BrowseDropdown = memo(function BrowseDropdown({
                 className={({ isActive }) =>
                   cn(
                     "px-4 py-3 text-sm text-center font-medium transition-colors hover:bg-white/10",
-                    isActive ? "text-white font-bold" : "text-[#b3b3b3]"
+                    isActive ? "text-[var(--text-primary)] font-bold" : "text-[var(--text-secondary)]"
                   )
                 }
                 onClick={onClose}

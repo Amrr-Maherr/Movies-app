@@ -74,7 +74,7 @@ export default function Signup() {
         </h1>
 
         {error && (
-          <div className="mb-4 p-3 rounded bg-[#e87c7c] text-white text-sm">
+          <div className="mb-4 p-3 rounded bg-[var(--error)] text-[var(--text-inverse)] text-sm">
             {(error as Error).message || "Signup failed. Please try again."}
           </div>
         )}
@@ -89,9 +89,9 @@ export default function Signup() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 disabled={isPending}
-                className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
+                className="peer w-full bg-[var(--input-bg)] border-0 rounded text-[var(--text-primary)] px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[var(--background-tertiary)] transition-colors"
               />
-              <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
+              <label className="absolute left-4 top-4 text-[var(--text-muted)] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[var(--text-primary)] peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-[var(--text-primary)] bg-[var(--input-bg)] px-1 peer-focus:bg-[var(--background-primary)] peer-not-placeholder-shown:bg-[var(--background-primary)]">
                 Name
               </label>
             </div>
@@ -104,9 +104,9 @@ export default function Signup() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isPending}
-                className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
+                className="peer w-full bg-[var(--input-bg)] border-0 rounded text-[var(--text-primary)] px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[var(--background-tertiary)] transition-colors"
               />
-              <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
+              <label className="absolute left-4 top-4 text-[var(--text-muted)] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[var(--text-primary)] peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-[var(--text-primary)] bg-[var(--input-bg)] px-1 peer-focus:bg-[var(--background-primary)] peer-not-placeholder-shown:bg-[var(--background-primary)]">
                 Email
               </label>
             </div>
@@ -119,9 +119,9 @@ export default function Signup() {
                 onChange={(e) => setPhone(e.target.value)}
                 required
                 disabled={isPending}
-                className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
+                className="peer w-full bg-[var(--input-bg)] border-0 rounded text-[var(--text-primary)] px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[var(--background-tertiary)] transition-colors"
               />
-              <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
+              <label className="absolute left-4 top-4 text-[var(--text-muted)] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[var(--text-primary)] peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-[var(--text-primary)] bg-[var(--input-bg)] px-1 peer-focus:bg-[var(--background-primary)] peer-not-placeholder-shown:bg-[var(--background-primary)]">
                 Phone
               </label>
             </div>
@@ -134,9 +134,9 @@ export default function Signup() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isPending}
-                className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
+                className="peer w-full bg-[var(--input-bg)] border-0 rounded text-[var(--text-primary)] px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[var(--background-tertiary)] transition-colors"
               />
-              <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
+              <label className="absolute left-4 top-4 text-[var(--text-muted)] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[var(--text-primary)] peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-[var(--text-primary)] bg-[var(--input-bg)] px-1 peer-focus:bg-[var(--background-primary)] peer-not-placeholder-shown:bg-[var(--background-primary)]">
                 Password
               </label>
             </div>
@@ -149,9 +149,9 @@ export default function Signup() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 disabled={isPending}
-                className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
+                className="peer w-full bg-[var(--input-bg)] border-0 rounded text-[var(--text-primary)] px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[var(--background-tertiary)] transition-colors"
               />
-              <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
+              <label className="absolute left-4 top-4 text-[var(--text-muted)] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-[var(--text-primary)] peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-[var(--text-primary)] bg-[var(--input-bg)] px-1 peer-focus:bg-[var(--background-primary)] peer-not-placeholder-shown:bg-[var(--background-primary)]">
                 Confirm Password
               </label>
             </div>
@@ -160,18 +160,18 @@ export default function Signup() {
           <button
             type="submit"
             disabled={isPending}
-            className="mt-6 w-full bg-[#e50914] hover:bg-[#f40612] text-white font-semibold py-3 rounded text-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="mt-6 w-full bg-[var(--netflix-red)] hover:bg-[var(--netflix-red-hover)] text-[var(--button-primary-text)] font-semibold py-3 rounded text-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isPending ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
 
-        <div className="mt-10 text-[#737373]">
+        <div className="mt-10 text-[var(--text-muted)]">
           <p className="text-base text-center">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-white hover:underline font-medium"
+              className="text-[var(--text-primary)] hover:underline font-medium"
             >
               Sign In
             </Link>

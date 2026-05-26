@@ -8,6 +8,7 @@ import SearchButton from "./components/search/SearchButton";
 import { HeaderLinks } from "@/layout/header/data/header";
 import { cn } from "@/lib/utils";
 import LanguageDropdown from "./components/LanguageDropdown";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 const ProfileMenu = lazy(() => import("./components/ProfileMenu"));
 const BrowseDropdown = lazy(() => import("./components/BrowseDropdown"));
@@ -57,8 +58,8 @@ const Header = memo(function Header() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-colors duration-500",
         isScrolled
-          ? "bg-[#141414] shadow-lg"
-          : "bg-gradient-to-b from-black/80 via-black/40 to-transparent"
+          ? "bg-[var(--header-bg-scrolled)] shadow-lg"
+          : "bg-gradient-to-b from-[var(--header-bg)]/80 via-[var(--header-bg)]/40 to-transparent"
       )}
     >
       <div className="px-4 md:px-12 lg:px-16 flex items-center py-4">
@@ -83,12 +84,13 @@ const Header = memo(function Header() {
           </Suspense>
         </div>
 
-        {/* Right section: Search + Language + Bell + Profile */}
+        {/* Right section: Search + Language + Theme + Bell + Profile */}
         <div className="flex items-center gap-4 sm:gap-6">
           <SearchButton />
           <LanguageDropdown />
+          <ThemeToggle />
 
-          <button className="text-white hover:text-gray-300 transition-colors" aria-label="Notifications">
+          <button className="text-[var(--header-text)] hover:text-[var(--text-secondary)] transition-colors" aria-label="Notifications">
             <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
@@ -98,12 +100,12 @@ const Header = memo(function Header() {
               className="flex items-center gap-2 cursor-pointer pb-2 -mb-2"
               onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
             >
-              <div className="w-8 h-8 rounded bg-blue-500 overflow-hidden flex items-center justify-center text-white text-sm font-bold">
+              <div className="w-8 h-8 rounded bg-blue-500 overflow-hidden flex items-center justify-center text-[var(--text-inverse)] text-sm font-bold">
                 K
               </div>
               <ChevronDown
                 className={cn(
-                  "w-4 h-4 text-white transition-transform duration-300 hidden sm:block",
+                  "w-4 h-4 text-[var(--header-text)] transition-transform duration-300 hidden sm:block",
                   isProfileMenuOpen && "rotate-180"
                 )}
               />
