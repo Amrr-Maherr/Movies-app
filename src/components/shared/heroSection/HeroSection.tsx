@@ -60,12 +60,12 @@ const HeroSection = memo(function HeroSection({
   }
 
   return (
-    <section className="relative w-full overflow-hidden">
+    <section className="relative w-full min-h-[100dvh] h-screen overflow-hidden">
       <OptimizedSectionWrapper
         data={featuredMedia}
         isLoading={isLoading}
         fallback={<SectionSkeleton variant="hero" />}
-        height={600}
+        height="100dvh"
         title="Hero Slider"
       >
         {(mediaItems) => (

@@ -114,7 +114,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
         data={data}
         isLoading={isLoading}
         fallback={<SectionSkeleton variant="hero" />}
-        height={500}
+        height="100dvh"
         title="Hero"
       >
         {(mediaData) => <MediaHero media={mediaData as any} />}

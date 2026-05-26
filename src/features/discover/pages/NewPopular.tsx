@@ -89,7 +89,7 @@ const NewPopular = memo(function NewPopular() {
         data={mediaData}
         isLoading={isLoading}
         fallback={<SectionSkeleton variant="hero" />}
-        height={400}
+        height="100dvh"
         title="Hero"
       >
         {(data) => (

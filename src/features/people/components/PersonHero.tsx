@@ -39,7 +39,7 @@ const PersonHero = memo(function PersonHero({ person }: PersonHeroProps) {
   );
 
   return (
-    <div className="relative w-full min-h-[60vh] md:min-h-[70vh] bg-gradient-to-b from-zinc-900 to-black">
+    <div className="relative w-full min-h-[100dvh] h-screen bg-gradient-to-b from-zinc-900 to-black">
       {/* Background Blur Effect */}
       {profileUrl && (
         <>

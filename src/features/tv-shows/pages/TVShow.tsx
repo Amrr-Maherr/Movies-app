@@ -91,7 +91,7 @@ const TVShow = memo(function TVShow() {
         data={tvShowsData}
         isLoading={isLoading}
         fallback={<SectionSkeleton variant="hero" />}
-        height={400}
+        height="100dvh"
         title="Hero Section"
       >
         {(data) => (

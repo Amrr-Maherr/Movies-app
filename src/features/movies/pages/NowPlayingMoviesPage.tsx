@@ -81,7 +81,7 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
         data={featuredMovies.length > 0 ? featuredMovies : null}
         isLoading={isLoading}
         fallback={<SectionSkeleton variant="hero" />}
-        height={600}
+        height="100dvh"
         title="Hero Section"
       >
         {(data) => (

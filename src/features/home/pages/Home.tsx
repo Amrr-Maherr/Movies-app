@@ -215,7 +215,7 @@ const Home = memo(function Home() {
         data={upcomingMovies?.results?.[0]}
         isLoading={upcomingLoading}
         fallback={<SectionSkeleton variant="hero" />}
-        height={500}
+        height="100dvh"
         title="Featured Movie"
       >
         {(movie) => (

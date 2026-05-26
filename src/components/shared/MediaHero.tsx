@@ -180,7 +180,7 @@ const MediaHero = memo(function MediaHero({
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-video max-h-[85vh] min-h-[500px] overflow-hidden"
+      className="relative w-full min-h-[100dvh] h-screen overflow-hidden"
     >
       {/* ========================================
           BACKGROUND IMAGE - Fallback

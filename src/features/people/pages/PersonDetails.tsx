@@ -107,7 +107,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
         data={personData}
         isLoading={isLoading}
         fallback={<SectionSkeleton variant="hero" />}
-        height={500}
+        height="100dvh"
         title="Hero"
       >
         {(data) => <PersonHero person={data} />}

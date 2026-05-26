@@ -91,7 +91,7 @@ const Movie = memo(function Movie() {
         data={moviesData}
         isLoading={isLoading}
         fallback={<SectionSkeleton variant="hero" />}
-        height={400}
+        height="100dvh"
         title="Hero Section"
       >
         {(data) => (

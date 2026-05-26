@@ -82,7 +82,7 @@ const ListSkeleton = memo(({ cardCount, className }: { cardCount: number; classN
  * Hero layout - for large hero sections
  */
 const HeroSkeleton = memo(({ className }: { className?: string }) => (
-  <div className={`w-full aspect-video relative overflow-hidden ${className}`}>
+  <div className={`w-full min-h-[100dvh] h-screen relative overflow-hidden ${className}`}>
     <div className="absolute inset-0">
       <Skeleton height="100%" borderRadius={0} />
     </div>
