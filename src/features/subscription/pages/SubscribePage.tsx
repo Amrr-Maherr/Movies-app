@@ -6,11 +6,11 @@ import { Check, ArrowLeft } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { LoadingFallback } from "@/components/ui";
 
-const Step1CreateAccount = lazy(() => import("./subscribe/Step1CreateAccount"));
-const Step2ChoosePlan = lazy(() => import("./subscribe/Step2ChoosePlan"));
-const PaymentForm = lazy(() => import("./subscribe/PaymentForm"));
-const Step3ConfirmSubscription = lazy(() => import("./subscribe/Step3ConfirmSubscription"));
-const Step4SuccessScreen = lazy(() => import("./subscribe/Step4SuccessScreen"));
+const Step1CreateAccount = lazy(() => import("./Step1CreateAccount"));
+const Step2ChoosePlan = lazy(() => import("./Step2ChoosePlan"));
+const PaymentForm = lazy(() => import("../components/PaymentForm"));
+const Step3ConfirmSubscription = lazy(() => import("./Step3ConfirmSubscription"));
+const Step4SuccessScreen = lazy(() => import("./Step4SuccessScreen"));
 
 const STEPS = [
   { id: 1, name: "Account" },
