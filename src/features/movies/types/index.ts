@@ -4,8 +4,8 @@
  * Types for movie-related API responses from TMDB.
  */
 
-import type { Credits, Video, ImageFile } from "./movieDetails";
-import type { HeroMedia } from "./hero";
+import type { Credits, Video, ImageFile } from "@/types/movieDetails";
+import type { HeroMedia } from "@/types/hero";
 
 export interface MovieImagesResponse {
   id: number;

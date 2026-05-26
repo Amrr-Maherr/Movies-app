@@ -2,7 +2,7 @@ import { memo, useMemo, useState, useCallback, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import type { ImageFile } from "@/services/moviesService";
+import type { ImageFile } from "@/features/movies/api/moviesService";
 
 const LazyImage = lazy(() => import("@/components/ui/OptimizedImage"));
 

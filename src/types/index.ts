@@ -1,9 +1,9 @@
 /**
  * Central type exports for the application
- * Import types from this file for cleaner imports
+ * Re-exports types from their respective feature directories.
  */
 
-// Movie types
+// Shared/Movie types (shared across features)
 export type {
   Movie,
   PopularMoviesResponse,
@@ -12,7 +12,7 @@ export type {
   StreamingPlatform,
 } from "./movies";
 
-// Hero types
+// Hero types (shared across features)
 export type {
   HeroBackgroundProps,
   HeroContentProps,
@@ -21,7 +21,7 @@ export type {
   HeroMedia,
 } from "./hero";
 
-// Movie Details types (canonical sources for Video, Genre, Credits, Season, Episode, ImageFile)
+// Movie Details types (shared across features)
 export type {
   MovieDetails,
   Genre,
@@ -39,14 +39,14 @@ export type {
   MediaImages,
 } from "./movieDetails";
 
-// Media Details types (shared for Movies and TV Shows)
+// Media Details types (TV Show specific - moved to tv-shows feature)
 export type {
   TvShowDetails,
   MediaDetails,
   MediaHeroProps,
   Provider,
   WatchProvidersSectionProps,
-} from "./mediaDetails";
+} from "../features/tv-shows/types";
 
 // Person types
 export type {
@@ -61,7 +61,7 @@ export type {
   PopularPeopleResponse,
   HeroMediaWithMediaType,
   PopularPersonResult,
-} from "./personService";
+} from "../features/people/types";
 
 // TV Service types
 export type {
@@ -76,7 +76,7 @@ export type {
   ProviderInfo,
   WatchProviderRegion,
   TVWatchProvidersResponse,
-} from "./tvService";
+} from "../features/tv-shows/types/tvServiceTypes";
 
 // Movie Service types
 export type {
@@ -88,14 +88,14 @@ export type {
   MovieSimilarResponse,
   MovieRecommendationsResponse,
   MovieWatchProvidersResponse,
-} from "./movieService";
+} from "../features/movies/types";
 
 // Trending Service types
 export type {
   TrendingPerson,
   TrendingPeopleResponse,
   StreamingPlatformsResponse,
-} from "./trendingService";
+} from "../features/home/types";
 
 // Search Service types
 export type {
@@ -105,7 +105,7 @@ export type {
   PersonSearchResponse,
   MultiSearchResult,
   MultiSearchResponse,
-} from "./searchService";
+} from "../features/search/types";
 
 // Genre Service types
 export type {
@@ -113,12 +113,12 @@ export type {
   DiscoverMoviesParams,
   DiscoverTvParams,
   DiscoverResponse,
-} from "./genreService";
+} from "../features/discover/types/genreServiceTypes";
 
 // Discover Service types
 export type {
   PlatformContentResponse,
-} from "./discoverService";
+} from "../features/discover/types/discoverServiceTypes";
 
 // Auth Service types
 export type {
@@ -126,28 +126,28 @@ export type {
   LoginData,
   AuthResponse,
   ApiError,
-} from "./authService";
+} from "../features/auth/types";
 
 // Collection Service types
 export type {
   Collection,
   MoviePart,
-} from "./collectionService";
+} from "../features/discover/types/collectionServiceTypes";
 
 // Company Service types
 export type {
   Company,
   CompanyMoviesResponse,
-} from "./companyService";
+} from "../features/discover/types/companyServiceTypes";
 
 // Network Service types
 export type {
   Network,
   NetworkTVSeriesResponse,
-} from "./networkService";
+} from "../features/discover/types/networkServiceTypes";
 
 // Platform Service types
 export type {
   StreamingPlatform as PlatformStreamingPlatform,
   PlatformContentResponse as PlatformServiceContentResponse,
-} from "./platformService";
+} from "../features/discover/types/platformServiceTypes";

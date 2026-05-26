@@ -1,12 +1,12 @@
 /**
- * Network Service Types
+ * Company Service Types
  *
- * Types for TV network-related API responses from TMDB.
+ * Types for company-related API responses from TMDB.
  */
 
-import type { TvShow } from "./movies";
+import type { Movie } from "@/types/movies";
 
-export interface Network {
+export interface Company {
   id: number;
   logo_path: string | null;
   name: string;
@@ -14,17 +14,17 @@ export interface Network {
   headquarters?: string;
   homepage?: string;
   description?: string;
-  parent_organization?: {
+  parent_company?: {
     id: number;
     logo_path: string | null;
     name: string;
   } | null;
 }
 
-export interface NetworkTVSeriesResponse {
+export interface CompanyMoviesResponse {
   id: number;
   page: number;
-  results: TvShow[];
+  results: Movie[];
   total_pages: number;
   total_results: number;
 }

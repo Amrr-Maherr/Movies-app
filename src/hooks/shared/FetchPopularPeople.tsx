@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getPopularPeople } from "@/services";
-import type { PopularPeopleResponse } from "@/services/personService";
+import type { PopularPeopleResponse } from "@/features/people/api/personService";
 
 const usePopularPeople = (page: number = 1) => {
   return useQuery<PopularPeopleResponse>({

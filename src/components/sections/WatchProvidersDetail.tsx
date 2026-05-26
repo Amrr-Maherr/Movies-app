@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react";
 import { Tv } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import type { WatchProviderRegion } from "@/services/moviesService";
+import type { WatchProviderRegion } from "@/features/movies/api/moviesService";
 
 interface WatchProvidersDetailProps {
   providers?: WatchProviderRegion;

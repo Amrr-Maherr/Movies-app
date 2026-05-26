@@ -3,7 +3,7 @@ import { SectionSkeleton } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import Card from "@/components/shared/Card/Card";
 import { getKnownForItems } from "@/utils";
-import type { CastCredit, CrewCredit } from "@/services/personService";
+import type { CastCredit, CrewCredit } from "@/features/people/api/personService";
 
 // Lazy-loaded component
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));

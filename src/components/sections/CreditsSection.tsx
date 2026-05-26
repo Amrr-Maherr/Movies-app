@@ -2,7 +2,7 @@ import { memo, useMemo, useState, useCallback, lazy, Suspense } from "react";
 import { SectionSkeleton } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import Card from "@/components/shared/Card/Card";
-import type { CastCredit, CrewCredit } from "@/services/personService";
+import type { CastCredit, CrewCredit } from "@/features/people/api/personService";
 
 // Lazy-loaded component
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));

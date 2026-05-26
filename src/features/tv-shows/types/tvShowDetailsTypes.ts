@@ -3,7 +3,7 @@
  * Includes credits, videos, keywords, and genres from TMDB API
  */
 
-import type { Genre, CastMember, Credits, Video, Videos, Keyword, Keywords, MovieDetails, CrewMember, Season, MediaImages } from './movieDetails';
+import type { Genre, CastMember, Credits, Video, Videos, Keyword, Keywords, MovieDetails, CrewMember, Season, MediaImages } from '@/types/movieDetails';
 
 /**
  * Extended TV Show details with all appended responses from TMDB API

@@ -1,7 +1,7 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { multiSearch } from "@/services";
 import type { Movie, TvShow, PersonSearchResult } from "@/types";
-import type { MultiSearchResult } from "@/services/searchService";
+import type { MultiSearchResult } from "@/features/search/api/searchService";
 
 export interface MovieSearchResult {
   item: Movie;

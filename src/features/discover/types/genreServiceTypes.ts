@@ -1,30 +1,31 @@
 /**
- * Discover Service Types
+ * Genre Service Types
  *
- * Types for discover-related API responses from TMDB.
+ * Types for genre-related API responses from TMDB.
  */
 
-import type { Movie, TvShow } from "./movies";
+import type { Movie, TvShow } from "@/types/movies";
+
+export interface Genre {
+  id: number;
+  name: string;
+}
+
+export interface GenresResponse {
+  genres: Genre[];
+}
 
 export interface DiscoverMoviesParams {
   page?: number;
+  withGenres?: string;
+  withoutGenres?: string;
   sortBy?: string;
-  certification?: string;
-  certificationGte?: string;
-  certificationLte?: string;
-  includeAdult?: boolean;
-  includeVideo?: boolean;
-  primaryReleaseDateGte?: string;
-  primaryReleaseDateLte?: string;
-  primaryReleaseYear?: number;
-  releaseDateGte?: string;
-  releaseDateLte?: string;
   voteAverageGte?: number;
   voteAverageLte?: number;
   voteCountGte?: number;
   voteCountLte?: number;
-  withGenres?: string;
-  withoutGenres?: string;
+  primaryReleaseYear?: number;
+  includeAdult?: boolean;
   withOriginalLanguage?: string;
   withReleaseType?: number;
   withRuntimeGte?: number;
@@ -38,24 +39,27 @@ export interface DiscoverMoviesParams {
   withoutKeywords?: string;
   year?: number;
   region?: string;
+  certification?: string;
+  certificationGte?: string;
+  certificationLte?: string;
+  includeVideo?: boolean;
+  primaryReleaseDateGte?: string;
+  primaryReleaseDateLte?: string;
+  releaseDateGte?: string;
+  releaseDateLte?: string;
 }
 
 export interface DiscoverTvParams {
   page?: number;
+  withGenres?: string;
+  withoutGenres?: string;
   sortBy?: string;
-  airDateGte?: string;
-  airDateLte?: string;
-  firstAirDateGte?: string;
-  firstAirDateLte?: string;
-  firstAirDateYear?: number;
-  includeAdult?: boolean;
-  includeNullFirstAirDates?: boolean;
   voteAverageGte?: number;
   voteAverageLte?: number;
   voteCountGte?: number;
   voteCountLte?: number;
-  withGenres?: string;
-  withoutGenres?: string;
+  firstAirDateYear?: number;
+  includeAdult?: boolean;
   withOriginalLanguage?: string;
   withRuntimeGte?: number;
   withRuntimeLte?: number;
@@ -69,13 +73,17 @@ export interface DiscoverTvParams {
   withKeywords?: string;
   withoutKeywords?: string;
   timezone?: string;
+  includeNullFirstAirDates?: boolean;
   screenedTheatrically?: boolean;
+  airDateGte?: string;
+  airDateLte?: string;
+  firstAirDateGte?: string;
+  firstAirDateLte?: string;
 }
 
-export interface PlatformContentResponse {
-  id: number;
+export interface DiscoverResponse {
   page: number;
-  results: (Movie | TvShow)[];
+  results: Movie[] | TvShow[];
   total_pages: number;
   total_results: number;
 }

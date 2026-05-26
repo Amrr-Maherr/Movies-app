@@ -1,5 +1,5 @@
 import { useMemo, memo } from "react";
-import type { PersonDetails } from "@/services/personService";
+import type { PersonDetails } from "@/features/people/api/personService";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { formatDate, calculateAge } from "@/utils";
 

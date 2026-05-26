@@ -4,7 +4,7 @@
  * Types for streaming platform-related API responses from TMDB.
  */
 
-import type { Movie, TvShow } from "./movies";
+import type { Movie, TvShow } from "@/types/movies";
 
 export interface StreamingPlatform {
   id: number;

@@ -4,7 +4,7 @@
  * Types for search-related API responses from TMDB.
  */
 
-import type { Movie, TvShow } from "./movies";
+import type { Movie, TvShow } from "@/types/movies";
 
 export interface MovieSearchResponse {
   page: number;
