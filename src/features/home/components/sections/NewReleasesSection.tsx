@@ -6,7 +6,7 @@ import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
 
 // Lazy-loaded component
-const Slider = lazy(() => import("../shared/Slider/slider"));
+const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
 interface NewReleasesSectionProps {
   movies: HeroMedia[];

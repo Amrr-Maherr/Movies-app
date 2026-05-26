@@ -1,4 +1,5 @@
 import { memo, useMemo, lazy, Suspense } from "react";
+import Slider from "@/components/shared/Slider/slider";
 import { Award } from "lucide-react";
 import { SectionSkeleton } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
@@ -7,7 +8,7 @@ import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
 
 // Lazy-loaded component
-const Slider = lazy(() => import("../shared/Slider/slider"));
+  
 
 interface AwardWinnersSectionProps {
   movies: HeroMedia[];
