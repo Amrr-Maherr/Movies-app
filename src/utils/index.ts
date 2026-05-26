@@ -14,7 +14,7 @@
 
 // Date helpers
 export { formatDate } from "./formatDate";
-export { calculateAge } from "./calculateAge";
+export { calculateAge } from "../features/people/utils/calculateAge";
 export { getYear } from "./movieHelpers";
 export { getReleaseYear } from "./getReleaseYear";
 
@@ -29,10 +29,10 @@ export { getReleaseDate } from "./getReleaseDate";
 export { getRuntime } from "./getRuntime";
 
 // Data processing
-export { getKnownForItems } from "./getKnownForItems";
-export { filterKeyCrew } from "./filterKeyCrew";
-export { extractKeywords } from "./extractKeywords";
-export { extractWatchProviders } from "./extractWatchProviders";
+export { getKnownForItems } from "../features/people/utils/getKnownForItems";
+export { filterKeyCrew } from "../features/movies/utils/filterKeyCrew";
+export { extractKeywords } from "../features/movies/utils/extractKeywords";
+export { extractWatchProviders } from "../features/movies/utils/extractWatchProviders";
 
 // Movie helpers
 export { getMatchScore, getAgeRating, getGenres, getTrailerEmbedUrl, getTrailerWatchUrl } from "./movieHelpers";
