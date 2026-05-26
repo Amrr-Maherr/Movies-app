@@ -2,7 +2,7 @@
  * Services Index
  * 
  * Central export point for all API service modules.
- * Import services from this file for cleaner imports throughout the application.
+ * Re-exports all API functions from their respective feature directories.
  * 
  * @example
  * // Import specific functions
@@ -13,14 +13,22 @@
  * import * as tvService from '@/services/tvService';
  */
 
+// ============= Auth Service =============
+export {
+  signup,
+  login,
+  type SignupData,
+  type LoginData,
+  type AuthResponse,
+  type ApiError,
+} from "../features/auth/api/authService";
+
 // ============= Movies Service =============
 export {
-  // Movie Lists
   getPopularMovies,
   getTopRatedMovies,
   getUpcomingMovies,
   getNowPlayingMovies,
-  // Movie Details
   getMovieDetails,
   getMovieCredits,
   getMovieReviews,
@@ -29,7 +37,6 @@ export {
   getMovieVideos,
   getMovieImages,
   getMovieWatchProviders,
-  // Types
   type MovieDetailsResponse,
   type MovieImagesResponse,
   type MovieReviewsResponse,
@@ -42,16 +49,14 @@ export {
   type MovieReview,
   type ProviderInfo,
   type WatchProviderRegion,
-} from "./moviesService";
+} from "../features/movies/api/moviesService";
 
 // ============= TV Service =============
 export {
-  // TV Show Lists
   getPopularTvShows,
   getTopRatedTvShows,
   getAiringTodayTvShows,
   getOnTheAirTvShows,
-  // TV Show Details
   getTVShowDetails,
   getTVCredits,
   getTVReviews,
@@ -60,11 +65,9 @@ export {
   getTVVideos,
   getTVImages,
   getTVWatchProviders,
-  // Season & Episode
   getTVSeasonDetails,
   getTVEpisodeDetails,
   getSeasonEpisodes,
-  // Types
   type TVDetailsResponse,
   type TVImagesResponse,
   type TVReviewsResponse,
@@ -73,22 +76,17 @@ export {
   type TVRecommendationsResponse,
   type TVWatchProvidersResponse,
   type TVExternalIds,
-} from "./tvService";
+} from "../features/tv-shows/api/tvService";
 
 // ============= Person Service =============
 export {
-  // Person Details
   getPersonDetails,
   getPersonExternalIds,
-  // Person Credits
   getPersonMovieCredits,
   getPersonTVCredits,
   getPersonCombinedCredits,
-  // Person Images
   getPersonImages,
-  // Popular People
   getPopularPeople,
-  // Types
   type PersonDetails,
   type PersonExternalIds,
   type PersonMovieCreditsResponse,
@@ -98,117 +96,84 @@ export {
   type CastCredit,
   type CrewCredit,
   type PopularPeopleResponse,
-} from "./personService";
+} from "../features/people/api/personService";
 
 // ============= Search Service =============
 export {
-  // Search Functions
   searchMovies,
   searchTvShows,
   searchPeople,
   multiSearch,
-  // Types
   type MovieSearchResponse,
   type TvSearchResponse,
   type PersonSearchResult,
   type PersonSearchResponse,
   type MultiSearchResult,
   type MultiSearchResponse,
-} from "./searchService";
+} from "../features/search/api/searchService";
 
 // ============= Discover Service =============
 export {
-  // Discover Functions
   discoverMovies,
   discoverTvShows,
   getKidsMovies,
   getMediaByLanguage,
-  // Genres
   getMovieGenres,
   getTvGenres,
-  // Types
   type DiscoverMoviesParams,
   type DiscoverTvParams,
   type Genre,
   type GenresResponse,
-} from "./discoverService";
+} from "../features/discover/api/discoverService";
 
 // ============= Trending Service =============
 export {
-  // Trending Functions
   getTrendingMoviesDay,
   getTrendingMoviesWeek,
   getTrendingTvShowsDay,
   getTrendingTvShowsWeek,
   getTrendingPeopleDay,
   getTrendingPeopleWeek,
-  // Streaming Platforms
   getStreamingPlatforms,
-  // Types
   type TrendingPerson,
   type TrendingPeopleResponse,
   type StreamingPlatform,
   type StreamingPlatformsResponse,
-} from "./trendingService";
-
-// ============= Auth Service =============
-export {
-  // Auth Functions
-  signup,
-  login,
-  // Types
-  type SignupData,
-  type LoginData,
-  type AuthResponse,
-  type ApiError,
-} from "./authService";
+} from "../features/home/api/trendingService";
 
 // ============= Company Service =============
 export {
-  // Company Functions
   getCompanyDetails,
   getCompanyMovies,
-  // Types
   type Company,
   type CompanyMoviesResponse,
-} from "./companyService";
+} from "../features/discover/api/companyService";
 
 // ============= Collection Service =============
 export {
-  // Collection Functions
   getCollectionDetails,
-  // Types
   type Collection,
   type MoviePart,
-} from "./collectionService";
+} from "../features/discover/api/collectionService";
 
 // ============= Network Service =============
 export {
-  // Network Functions
   getNetworkDetails,
   getNetworkTVSeries,
-  // Types
   type Network,
   type NetworkTVSeriesResponse,
-} from "./networkService";
+} from "../features/discover/api/networkService";
 
 // ============= Genre Service =============
-// Note: getMovieGenres and getTvGenres are exported from discoverService
-// Note: DiscoverMoviesParams and DiscoverTvParams are exported from discoverService
 export {
-  // Genre Functions
   discoverMoviesByGenre,
   discoverTvShowsByGenre,
-  // Types
   type DiscoverResponse,
-} from "./genreService";
+} from "../features/discover/api/genreService";
 
 // ============= Platform Service =============
-// Note: getStreamingPlatforms is exported from trendingService
 export {
-  // Platform Functions
   getPlatformMovies,
   getPlatformTVShows,
-  // Types
   type PlatformContentResponse,
-} from "./platformService";
+} from "../features/discover/api/platformService";
