@@ -2,7 +2,7 @@ import { memo, useState, useCallback, useMemo, lazy, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import type { MediaImage } from "@/types/movieDetails";
+import type { MediaImage } from "@/shared/types/movieDetails";
 import { SectionSkeleton } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 

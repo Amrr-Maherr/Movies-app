@@ -1,4 +1,4 @@
-import { HeaderLink } from "@/types/header";
+import { HeaderLink } from "@/layout/types";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { memo } from "react";

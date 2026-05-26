@@ -1,4 +1,4 @@
-import type { FooterLink as FooterLinkType } from "@/types/footer";
+import type { FooterLink as FooterLinkType } from "@/layout/types";
 import { Link } from "react-router-dom";
 import { memo } from "react";
 

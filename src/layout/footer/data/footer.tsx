@@ -1,4 +1,4 @@
-import type { FooterLink, SocialLink } from "@/types/footer";
+import type { FooterLink, SocialLink } from "@/layout/types";
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 
 /**

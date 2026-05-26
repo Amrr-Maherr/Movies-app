@@ -10,7 +10,7 @@ export type {
   TvShow,
   PopularTvShowsResponse,
   StreamingPlatform,
-} from "./movies";
+} from "../shared/types/movies";
 
 // Hero types (shared across features)
 export type {
@@ -19,7 +19,7 @@ export type {
   HeroSlideProps,
   HeroSectionProps,
   HeroMedia,
-} from "./hero";
+} from "../shared/types/hero";
 
 // Movie Details types (shared across features)
 export type {
@@ -37,7 +37,7 @@ export type {
   ImageFile,
   MediaImage,
   MediaImages,
-} from "./movieDetails";
+} from "../shared/types/movieDetails";
 
 // Media Details types (TV Show specific - moved to tv-shows feature)
 export type {

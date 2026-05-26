@@ -4,8 +4,8 @@
  * Types for TV show-related API responses from TMDB.
  */
 
-import type { Credits, Season, Episode, Video, Genre, ImageFile } from "@/types/movieDetails";
-import type { HeroMedia } from "@/types/hero";
+import type { Credits, Season, Episode, Video, Genre, ImageFile } from "@/shared/types/movieDetails";
+import type { HeroMedia } from "@/shared/types/hero";
 
 export interface TVExternalIds {
   imdb_id: string | null;

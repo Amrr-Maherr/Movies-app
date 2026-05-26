@@ -1,4 +1,4 @@
-import type { HeaderLink } from "@/types/header";
+import type { HeaderLink } from "@/layout/types";
 
 /**
  * Header navigation links

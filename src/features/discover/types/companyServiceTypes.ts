@@ -4,7 +4,7 @@
  * Types for company-related API responses from TMDB.
  */
 
-import type { Movie } from "@/types/movies";
+import type { Movie } from "@/shared/types/movies";
 
 export interface Company {
   id: number;

@@ -4,7 +4,7 @@
  * Types for genre-related API responses from TMDB.
  */
 
-import type { Movie, TvShow } from "@/types/movies";
+import type { Movie, TvShow } from "@/shared/types/movies";
 
 export interface Genre {
   id: number;

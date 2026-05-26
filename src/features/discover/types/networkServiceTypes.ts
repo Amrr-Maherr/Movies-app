@@ -4,7 +4,7 @@
  * Types for TV network-related API responses from TMDB.
  */
 
-import type { TvShow } from "@/types/movies";
+import type { TvShow } from "@/shared/types/movies";
 
 export interface Network {
   id: number;

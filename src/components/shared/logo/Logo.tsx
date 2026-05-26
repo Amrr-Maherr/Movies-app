@@ -1,6 +1,6 @@
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import logo from "@/assets/logos/vite.svg";
-import type { LogoProps } from "@/types/logo";
+import type { LogoProps } from "@/shared/components/logo/types";
 import { memo } from "react";
 
 /**
