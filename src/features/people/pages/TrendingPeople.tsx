@@ -7,6 +7,7 @@ import { Star, TrendingUp } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -137,7 +138,7 @@ const TrendingPeople = memo(function TrendingPeople() {
               {peopleData.map((person: any, index) => (
                 <Link
                   key={person.id}
-                  to={`/person/${person.id}`}
+                  to={getLocalizedLink(`/person/${person.id}`)}
                   className="group cursor-pointer block"
                 >
                   <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">

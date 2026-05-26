@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { FileText, Scale, Shield } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function LegalNotices() {
   const notices = [
@@ -80,13 +81,13 @@ export default function LegalNotices() {
             For more information about our legal policies and practices, please see:
           </p>
           <div className="flex flex-wrap gap-4">
-            <Link to="/terms-of-use" className="text-[var(--netflix-red)] hover:underline">
+            <Link to={getLocalizedLink('/terms-of-use')} className="text-[var(--netflix-red)] hover:underline">
               Terms of Use
             </Link>
-            <Link to="/privacy" className="text-[var(--netflix-red)] hover:underline">
+            <Link to={getLocalizedLink('/privacy')} className="text-[var(--netflix-red)] hover:underline">
               Privacy Policy
             </Link>
-            <Link to="/cookie-preferences" className="text-[var(--netflix-red)] hover:underline">
+            <Link to={getLocalizedLink('/cookie-preferences')} className="text-[var(--netflix-red)] hover:underline">
               Cookie Preferences
             </Link>
           </div>

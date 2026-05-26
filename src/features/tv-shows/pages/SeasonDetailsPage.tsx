@@ -72,7 +72,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
   // Cast from credits
   const cast = useMemo(
     () =>
-      ((season as Record<string, unknown>)?.credits as
+      ((season as unknown as Record<string, unknown>)?.credits as
         | { cast: CastMember[] }
         | undefined)?.cast ?? [],
     [season],
@@ -81,7 +81,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
   // Crew from credits
   const crew = useMemo(
     () =>
-      ((season as Record<string, unknown>)?.credits as
+      ((season as unknown as Record<string, unknown>)?.credits as
         | { crew: CrewMember[] }
         | undefined)?.crew ?? [],
     [season],
@@ -106,14 +106,14 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
 
   // Videos
   const videos = useMemo(() => {
-    const s = season as Record<string, unknown>;
+    const s = season as unknown as Record<string, unknown>;
     const v = s?.videos as { results?: Video[] } | undefined;
     return v?.results ?? [];
   }, [season]);
 
   // Images
   const allImages = useMemo(() => {
-    const s = season as Record<string, unknown>;
+    const s = season as unknown as Record<string, unknown>;
     const imgs = s?.images as
       | { backdrops?: ImageFile[]; posters?: ImageFile[] }
       | undefined;
@@ -125,7 +125,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
 
   // External IDs
   const externalIds = useMemo(() => {
-    const s = season as Record<string, unknown>;
+    const s = season as unknown as Record<string, unknown>;
     return (s?.external_ids ?? {}) as Record<string, unknown>;
   }, [season]);
 

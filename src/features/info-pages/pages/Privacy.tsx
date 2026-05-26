@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Shield, Lock, Eye, Database } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function Privacy() {
   const sections = [
@@ -94,10 +95,10 @@ export default function Privacy() {
         <div className="max-w-4xl mt-8 pt-8 border-t border-[var(--card-border)]">
           <p className="text-[var(--text-secondary)] mb-4">Related policies:</p>
           <div className="flex flex-wrap gap-4">
-            <Link to="/terms-of-use" className="text-[var(--netflix-red)] hover:underline">
+            <Link to={getLocalizedLink('/terms-of-use')} className="text-[var(--netflix-red)] hover:underline">
               Terms of Use
             </Link>
-            <Link to="/cookie-preferences" className="text-[var(--netflix-red)] hover:underline">
+            <Link to={getLocalizedLink('/cookie-preferences')} className="text-[var(--netflix-red)] hover:underline">
               Cookie Preferences
             </Link>
           </div>

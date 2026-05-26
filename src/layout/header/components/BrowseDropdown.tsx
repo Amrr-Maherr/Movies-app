@@ -3,6 +3,7 @@ import { ChevronDown } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { HeaderLinks } from "@/layout/header/data/header";
 import { cn } from "@/lib/utils";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 interface BrowseDropdownProps {
   isOpen: boolean;
@@ -55,7 +56,7 @@ const BrowseDropdown = memo(function BrowseDropdown({
             {HeaderLinks.map((link, index) => (
               <NavLink
                 key={index}
-                to={link.link}
+                to={getLocalizedLink(link.link)}
                 className={({ isActive }) =>
                   cn(
                     "px-4 py-3 text-sm text-center font-medium transition-colors hover:bg-white/10",

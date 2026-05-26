@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { LucideIcon } from "lucide-react";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export interface SectionHeaderProps {
   title: string;
@@ -45,7 +46,7 @@ const SectionHeader = memo(function SectionHeader({
           </span>
         )}
         {actionLabel && actionHref && (
-          <a href={actionHref} className="inline-flex" aria-label={actionLabel}>
+          <a href={getLocalizedLink(actionHref)} className="inline-flex" aria-label={actionLabel}>
             <button className="flex items-center gap-1 text-sm md:text-base text-gray-300 hover:text-white transition-colors min-h-[48px] min-w-[48px] px-3 touch-manipulation">
               {actionLabel}
             </button>

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Cookie, Settings, BarChart3 } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function CookiePreferences() {
   const cookieCategories = [
@@ -105,7 +106,7 @@ export default function CookiePreferences() {
             Cookies are small text files that are stored on your device when you visit our website. 
             They help us provide you with a better experience by remembering your preferences and 
             understanding how you use our service.
-          </p>
+          </p>{getLocalizedLink('')}
           <Link to="/privacy" className="text-[var(--netflix-red)] hover:underline">
             Learn more in our Privacy Policy
           </Link>

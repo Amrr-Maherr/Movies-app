@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function ProtectedRoute() {
   const token = localStorage.getItem("token");
@@ -7,7 +8,7 @@ export default function ProtectedRoute() {
   console.log(token, "token");
 
   if (payment !== "success") {
-    return <Navigate to="/subscribe" replace />;
+    return <Navigate to={getLocalizedLink("/subscribe")} replace />;
   }
 
   return <Outlet />;

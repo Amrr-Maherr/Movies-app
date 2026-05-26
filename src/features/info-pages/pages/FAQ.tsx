@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function FAQ() {
   const faqs = [
@@ -66,7 +67,7 @@ export default function FAQ() {
           <p className="text-[var(--text-secondary)] mb-6">
             Want to learn more? Check out our{" "}
             <Link
-              to="/help-center"
+              to={getLocalizedLink('/help-center')}
               className="text-[var(--netflix-red)] hover:underline"
             >
               Help Center

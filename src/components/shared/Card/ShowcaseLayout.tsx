@@ -2,6 +2,7 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import { Star, Play } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export interface ShowcaseLayoutProps {
   title: string;
@@ -38,7 +39,7 @@ const ShowcaseLayout = memo(
     aspectRatio = "aspect-video md:aspect-[10/9]",
   }: ShowcaseLayoutProps) => (
     <a
-      href={detailsUrl}
+      href={getLocalizedLink(detailsUrl)}
       className="block w-full group touch-manipulation"
       aria-label={`View details for ${title}`}
     >
@@ -50,7 +51,7 @@ const ShowcaseLayout = memo(
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
-            window.location.href = detailsUrl;
+            window.location.href = getLocalizedLink(detailsUrl);
           }
         }}
       >

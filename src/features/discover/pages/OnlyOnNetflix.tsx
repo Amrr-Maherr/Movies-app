@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Star, Film, Tv, Award } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function OnlyOnNetflix() {
   const categories = [
@@ -127,7 +128,7 @@ export default function OnlyOnNetflix() {
             Want more? Explore our full library of Netflix Originals
           </p>
           <Link
-            to="/home"
+            to={getLocalizedLink('/')}
             className="inline-flex items-center gap-2 bg-[var(--netflix-red)] text-white px-8 py-3 rounded font-bold hover:bg-[var(--netflix-red-hover)] transition-colors duration-300"
           >
             Start Watching

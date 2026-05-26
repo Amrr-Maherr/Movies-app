@@ -6,6 +6,7 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 import Pagination from "@/components/shared/Pagination";
 import usePopularPeople from "@/features/people/hooks/FetchPopularPeople";
 import { TrendingUp } from "lucide-react";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
@@ -43,7 +44,7 @@ const ActorsPage = memo(function ActorsPage() {
             Popular Actors
           </h1>
           <Link
-            to="/trending/actors"
+            to={getLocalizedLink('/trending/actors')}
             className="flex items-center gap-2 text-[var(--netflix-red)] hover:underline font-semibold"
           >
             <TrendingUp className="w-5 h-5" />

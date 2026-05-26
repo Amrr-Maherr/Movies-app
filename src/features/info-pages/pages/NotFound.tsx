@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function NotFound() {
   return (
@@ -17,7 +18,7 @@ export default function NotFound() {
         Sorry, we can't find that page. You'll find lots to explore on the home page.
       </p>
       <Link
-        to="/"
+        to={getLocalizedLink('/')}
         className="bg-[var(--netflix-red)] text-[var(--text-inverse)] font-medium px-6 py-3 rounded transition-all duration-300 ease-in-out hover:bg-[var(--netflix-red-hover)] hover:scale-105"
       >
         Netflix Home

@@ -370,7 +370,7 @@ export async function getTVEpisodeDetails(
   episodeNumber: number
 ): Promise<EpisodeDetailsResponse | null> {
   try {
-    const response = await axios.get<Episode>(
+    const response = await axios.get<EpisodeDetailsResponse>(
       `${TMDB_BASE_URL}/tv/${tvShowId}/season/${seasonNumber}/episode/${episodeNumber}`,
       {
         params: {

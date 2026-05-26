@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MessageSquare, HelpCircle, ChevronLeft } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function ContactUs() {
   const contactMethods = [
@@ -102,7 +103,7 @@ export default function ContactUs() {
             ))}
           </ul>
           <Link
-            to="/faq"
+            to={getLocalizedLink('/faq')}
             className="inline-flex items-center gap-2 text-[var(--netflix-red)] font-medium mt-6 hover:underline"
           >
             View all FAQs

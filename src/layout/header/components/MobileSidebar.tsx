@@ -4,6 +4,7 @@ import { Drawer, DrawerContent, DrawerClose } from "@/components/ui/drawer";
 import { HeaderLinks } from "@/layout/header/data/header";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 interface MobileSidebarProps {
   open: boolean;
@@ -59,14 +60,14 @@ const MobileSidebar = memo(function MobileSidebar({
           {/* Bottom section with profile options */}
           <div className="border-t border-[var(--separator)] p-4 space-y-2">
             <NavLink
-              to="/account"
+              to={getLocalizedLink('/account')}
               className="block px-6 py-3 text-[var(--text-primary)] font-medium hover:bg-[var(--hover-overlay)] rounded transition-colors duration-200"
               onClick={() => onOpenChange(false)}
             >
               Account
             </NavLink>
             <NavLink
-              to="/settings"
+              to={getLocalizedLink('/settings')}
               className="block px-6 py-3 text-[var(--text-primary)] font-medium hover:bg-[var(--hover-overlay)] rounded transition-colors duration-200"
               onClick={() => onOpenChange(false)}
             >

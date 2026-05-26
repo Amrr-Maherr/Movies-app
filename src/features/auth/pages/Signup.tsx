@@ -4,6 +4,7 @@ import AuthLayout from "@/features/auth/components/AuthLayout";
 import { useSignup } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 // Lazy-loaded components
 const Input = lazy(() =>
@@ -170,7 +171,7 @@ export default function Signup() {
           <p className="text-base text-center">
             Already have an account?{" "}
             <Link
-              to="/login"
+              to={getLocalizedLink('/login')}
               className="text-white hover:underline font-medium"
             >
               Sign In

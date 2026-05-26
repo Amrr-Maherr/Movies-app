@@ -3,7 +3,7 @@
  * Includes credits, videos, keywords, and genres from TMDB API
  */
 
-import type { Genre, CastMember, Credits, Video, Videos, Keyword, Keywords, MovieDetails, CrewMember, Season, MediaImages } from '@/shared/types/movieDetails';
+import type { Genre, CastMember, Credits, Video, Videos, Keyword, Keywords, MovieDetails, CrewMember, Season, MediaImages, Episode, MediaImage } from '@/shared/types/movieDetails';
 
 /**
  * Extended TV Show details with all appended responses from TMDB API
@@ -271,4 +271,4 @@ export interface SeasonDetailsResponse extends Season {
 }
 
 // Re-export common types for convenience
-export type { Genre, CastMember, CrewMember, Credits, Video, Videos, Keyword, Keywords, MediaImage, MediaImages };
+export type { Genre, CastMember, CrewMember, Credits, Video, Videos, Keyword, Keywords, MediaImages };

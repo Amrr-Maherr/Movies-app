@@ -1,6 +1,7 @@
 import { WifiOff, RefreshCw, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function OfflinePage() {
   const handleRetry = () => {
@@ -41,7 +42,7 @@ export default function OfflinePage() {
           </button>
 
           <Link
-            to="/"
+            to={getLocalizedLink('/')}
             className="flex items-center justify-center gap-2 bg-white/10 text-white px-6 py-3 rounded font-semibold hover:bg-white/20 transition-colors"
           >
             <Home className="h-5 w-5" />

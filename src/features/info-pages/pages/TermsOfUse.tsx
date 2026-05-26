@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function TermsOfUse() {
   const sections = [
@@ -70,13 +71,13 @@ export default function TermsOfUse() {
             For more information, please see our:
           </p>
           <div className="flex flex-wrap gap-4">
-            <Link to="/privacy" className="text-[var(--netflix-red)] hover:underline">
+            <Link to={getLocalizedLink('/privacy')} className="text-[var(--netflix-red)] hover:underline">
               Privacy Policy
             </Link>
-            <Link to="/cookie-preferences" className="text-[var(--netflix-red)] hover:underline">
+            <Link to={getLocalizedLink('/cookie-preferences')} className="text-[var(--netflix-red)] hover:underline">
               Cookie Preferences
             </Link>
-            <Link to="/legal-notices" className="text-[var(--netflix-red)] hover:underline">
+            <Link to={getLocalizedLink('/legal-notices')} className="text-[var(--netflix-red)] hover:underline">
               Legal Notices
             </Link>
           </div>
