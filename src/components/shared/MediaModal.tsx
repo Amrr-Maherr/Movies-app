@@ -8,6 +8,8 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addToList, removeFromList, selectIsInList } from "@/features/my-list/store/listSlice";
+import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 interface MediaModalProps {
   movie: HeroMedia | null;
@@ -22,6 +24,7 @@ const getPosterUrl = (p: string | null) =>
   p ? `https://image.tmdb.org/t/p/w342${p}` : "";
 
 const MediaModal = memo(function MovieModal({ movie, isOpen, onClose }: MediaModalProps) {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -36,7 +39,7 @@ const MediaModal = memo(function MovieModal({ movie, isOpen, onClose }: MediaMod
 
   const isTvShow = movie ? "first_air_date" in movie : false;
   const detailsUrl = movie
-    ? `/${isTvShow ? "tv" : "movie"}/${formatSlugWithId(generateSlug(title), movie.id)}`
+    ? getLocalizedLink(`/${isTvShow ? "tv" : "movie"}/${formatSlugWithId(generateSlug(title), movie.id)}`)
     : "#";
 
   const isInList = useAppSelector((state) => (movie ? selectIsInList(state, movie.id) : false));

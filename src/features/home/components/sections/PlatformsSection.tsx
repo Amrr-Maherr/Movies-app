@@ -6,6 +6,8 @@ import PlatformCard from "@/components/sections/PlatformCard";
 import type { StreamingPlatform } from "@/types";
 import { SectionSkeleton } from "@/components/ui";
 import { Link } from "react-router-dom";
+import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 // Lazy-loaded component
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
@@ -59,8 +61,9 @@ const PlatformsSection = memo(function PlatformsSection({
           badgeText="Browse by Platform"
         />
         <Link
-          to="/platforms"
+          to={getLocalizedLink("/platforms")}
           className="ml-4 text-sm md:text-base text-gray-300 hover:text-white transition-colors flex-shrink-0"
+          lang={i18n.language || 'en'}
         >
           View All →
         </Link>

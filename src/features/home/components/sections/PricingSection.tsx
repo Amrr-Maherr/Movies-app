@@ -10,6 +10,8 @@ import {
   Headphones,
   Crown,
 } from "lucide-react";
+import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 const tiersData = [
   {
@@ -62,6 +64,7 @@ const tiersData = [
 ];
 
 const PricingSection = memo(function PricingSection() {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
 
   // Memoized: Pre-process tiers with icon components
@@ -69,9 +72,9 @@ const PricingSection = memo(function PricingSection() {
 
   const handlePlanClick = useCallback(
     (planId: string) => {
-      navigate(`/subscribe?plan=${planId}`, { state: { planId } });
+      navigate(getLocalizedLink(`/subscribe?plan=${planId}`), { state: { planId } });
     },
-    [navigate],
+    [navigate, i18n.language],
   );
 
   return (

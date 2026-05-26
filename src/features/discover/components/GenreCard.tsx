@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { memo } from "react";
 import { Film, Tv } from "lucide-react";
+import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 interface GenreCardProps {
   id: number;
@@ -18,11 +20,14 @@ interface GenreCardProps {
  * - Added aria-label for screen readers
  */
 const GenreCard = memo(function GenreCard({ id, name, type }: GenreCardProps) {
+  const { i18n } = useTranslation();
+  
   return (
     <Link
-      to={`/${type}/genre/${id}`}
+      to={getLocalizedLink(`/${type}/genre/${id}`)}
       className="group relative overflow-hidden rounded-md bg-[var(--background-secondary)] hover:bg-[var(--background-tertiary)] transition-all duration-200 shadow-md hover:shadow-xl hover:scale-[1.02] aspect-[16/9] flex items-center justify-center min-h-[48px] touch-manipulation"
       aria-label={`Browse ${name} ${type === "movie" ? "movies" : "TV shows"}`}
+      lang={i18n.language || 'en'}
     >
       <div className="text-center p-4">
         {type === "movie" ? (
