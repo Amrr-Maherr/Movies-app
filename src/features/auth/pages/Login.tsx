@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthLayout from "@/layout/AuthLayout";
+import AuthLayout from "@/features/auth/components/AuthLayout";
 import { useLogin } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";

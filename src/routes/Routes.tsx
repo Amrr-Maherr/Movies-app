@@ -17,67 +17,63 @@ const ScrollToTop = () => {
 };
 
 // Lazy-loaded page components
-const MovieDetails = lazy(() => import("@/pages/MovieDetails"));
-const ProtectedRoute = lazy(() => import("@/guards/ProtectedRoute"));
-const TVShowDetailsPage = lazy(() => import("@/pages/TVShowDetails"));
-const PersonDetailsPage = lazy(() => import("@/pages/PersonDetails"));
-const TagsPage = lazy(() => import("@/pages/Tags"));
-const SearchPage = lazy(() => import("@/pages/SearchPage"));
-
-// Movie detail sub-pages — removed (now rendered as tabs inside MovieDetails)
-
-// TV detail sub-pages — removed (now rendered as tabs inside TVShowDetails)
+const MovieDetails = lazy(() => import("@/features/movies/pages/MovieDetails"));
+const ProtectedRoute = lazy(() => import("@/features/auth/components/ProtectedRoute"));
+const TVShowDetailsPage = lazy(() => import("@/features/tv-shows/pages/TVShowDetails"));
+const PersonDetailsPage = lazy(() => import("@/features/people/pages/PersonDetails"));
+const TagsPage = lazy(() => import("@/features/discover/pages/Tags"));
+const SearchPage = lazy(() => import("@/features/search/pages/SearchPage"));
 
 // Movies list pages
 const NowPlayingMoviesPage = lazy(
-  () => import("@/pages/movies/NowPlayingMoviesPage"),
+  () => import("@/features/movies/pages/NowPlayingMoviesPage"),
 );
 
 // Main pages
-const Home = lazy(() => import("../pages/Home"));
-const Actor = lazy(() => import("@/pages/Actor"));
-const Movie = lazy(() => import("@/pages/Movie"));
-const TVShow = lazy(() => import("@/pages/TVShow"));
-const Session = lazy(() => import("@/pages/Session"));
-const Kids = lazy(() => import("@/pages/Kids"));
-const NewPopular = lazy(() => import("@/pages/NewPopular"));
-const MyList = lazy(() => import("@/pages/MyList"));
-const BrowseByLanguages = lazy(() => import("@/pages/BrowseByLanguages"));
-const Company = lazy(() => import("@/pages/Company"));
-const Collection = lazy(() => import("@/pages/Collection"));
-const Network = lazy(() => import("@/pages/Network"));
-const Genres = lazy(() => import("@/pages/Genres"));
-const GenreMovies = lazy(() => import("@/pages/GenreMovies"));
-const GenreTV = lazy(() => import("@/pages/GenreTV"));
-const Platform = lazy(() => import("@/pages/Platform"));
-const Platforms = lazy(() => import("@/pages/Platforms"));
-const TrendingPeople = lazy(() => import("@/pages/TrendingPeople"));
-const SeasonDetailsPage = lazy(() => import("@/pages/SeasonDetailsPage"));
-const EpisodeDetailsPage = lazy(() => import("@/pages/EpisodeDetailsPage"));
-const NotFound = lazy(() => import("@/pages/NotFound"));
-const Offline = lazy(() => import("@/pages/Offline"));
+const Home = lazy(() => import("../features/home/pages/Home"));
+const Actor = lazy(() => import("@/features/people/pages/Actor"));
+const Movie = lazy(() => import("@/features/movies/pages/Movie"));
+const TVShow = lazy(() => import("@/features/tv-shows/pages/TVShow"));
+const Session = lazy(() => import("@/features/discover/pages/Session"));
+const Kids = lazy(() => import("@/features/discover/pages/Kids"));
+const NewPopular = lazy(() => import("@/features/discover/pages/NewPopular"));
+const MyList = lazy(() => import("@/features/my-list/pages/MyList"));
+const BrowseByLanguages = lazy(() => import("@/features/discover/pages/BrowseByLanguages"));
+const Company = lazy(() => import("@/features/discover/pages/Company"));
+const Collection = lazy(() => import("@/features/discover/pages/Collection"));
+const Network = lazy(() => import("@/features/discover/pages/Network"));
+const Genres = lazy(() => import("@/features/discover/pages/Genres"));
+const GenreMovies = lazy(() => import("@/features/discover/pages/GenreMovies"));
+const GenreTV = lazy(() => import("@/features/discover/pages/GenreTV"));
+const Platform = lazy(() => import("@/features/discover/pages/Platform"));
+const Platforms = lazy(() => import("@/features/discover/pages/Platforms"));
+const TrendingPeople = lazy(() => import("@/features/people/pages/TrendingPeople"));
+const SeasonDetailsPage = lazy(() => import("@/features/tv-shows/pages/SeasonDetailsPage"));
+const EpisodeDetailsPage = lazy(() => import("@/features/tv-shows/pages/EpisodeDetailsPage"));
+const NotFound = lazy(() => import("@/features/info-pages/pages/NotFound"));
+const Offline = lazy(() => import("@/features/info-pages/pages/Offline"));
 
 // Auth pages
-const Login = lazy(() => import("@/pages/auth/Login"));
-const Signup = lazy(() => import("@/pages/auth/Signup"));
+const Login = lazy(() => import("@/features/auth/pages/Login"));
+const Signup = lazy(() => import("@/features/auth/pages/Signup"));
 
 // Footer pages
-const FAQ = lazy(() => import("@/pages/FAQ"));
-const HelpCenter = lazy(() => import("@/pages/HelpCenter"));
-const Account = lazy(() => import("@/pages/Account"));
-const MediaCenter = lazy(() => import("@/pages/MediaCenter"));
-const InvestorRelations = lazy(() => import("@/pages/InvestorRelations"));
-const Jobs = lazy(() => import("@/pages/Jobs"));
-const WaysToWatch = lazy(() => import("@/pages/WaysToWatch"));
-const TermsOfUse = lazy(() => import("@/pages/TermsOfUse"));
-const Privacy = lazy(() => import("@/pages/Privacy"));
-const CookiePreferences = lazy(() => import("@/pages/CookiePreferences"));
-const CorporateInformation = lazy(() => import("@/pages/CorporateInformation"));
-const ContactUs = lazy(() => import("@/pages/ContactUs"));
-const SpeedTest = lazy(() => import("@/pages/SpeedTest"));
-const LegalNotices = lazy(() => import("@/pages/LegalNotices"));
-const OnlyOnNetflix = lazy(() => import("@/pages/OnlyOnNetflix"));
-const SubscribePage = lazy(() => import("@/pages/SubscribePage"));
+const FAQ = lazy(() => import("@/features/info-pages/pages/FAQ"));
+const HelpCenter = lazy(() => import("@/features/info-pages/pages/HelpCenter"));
+const Account = lazy(() => import("@/features/info-pages/pages/Account"));
+const MediaCenter = lazy(() => import("@/features/info-pages/pages/MediaCenter"));
+const InvestorRelations = lazy(() => import("@/features/info-pages/pages/InvestorRelations"));
+const Jobs = lazy(() => import("@/features/info-pages/pages/Jobs"));
+const WaysToWatch = lazy(() => import("@/features/info-pages/pages/WaysToWatch"));
+const TermsOfUse = lazy(() => import("@/features/info-pages/pages/TermsOfUse"));
+const Privacy = lazy(() => import("@/features/info-pages/pages/Privacy"));
+const CookiePreferences = lazy(() => import("@/features/info-pages/pages/CookiePreferences"));
+const CorporateInformation = lazy(() => import("@/features/info-pages/pages/CorporateInformation"));
+const ContactUs = lazy(() => import("@/features/info-pages/pages/ContactUs"));
+const SpeedTest = lazy(() => import("@/features/info-pages/pages/SpeedTest"));
+const LegalNotices = lazy(() => import("@/features/info-pages/pages/LegalNotices"));
+const OnlyOnNetflix = lazy(() => import("@/features/discover/pages/OnlyOnNetflix"));
+const SubscribePage = lazy(() => import("@/features/subscription/pages/SubscribePage"));
 
 // Memoized AppRoutes component - avoids re-renders when parent updates
 const AppRoutes = memo(function AppRoutes() {
