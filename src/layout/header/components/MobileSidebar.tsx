@@ -1,7 +1,7 @@
 import { memo, useCallback } from "react";
 import { X } from "lucide-react";
 import { Drawer, DrawerContent, DrawerClose } from "@/components/ui/drawer";
-import { HeaderLinks } from "@/data/header";
+import { HeaderLinks } from "@/layout/header/data/header";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 

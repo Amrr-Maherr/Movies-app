@@ -1,7 +1,7 @@
 import { memo, useRef, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { HeaderLinks } from "@/data/header";
+import { HeaderLinks } from "@/layout/header/data/header";
 import { cn } from "@/lib/utils";
 
 interface BrowseDropdownProps {

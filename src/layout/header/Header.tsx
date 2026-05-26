@@ -5,7 +5,7 @@ import NavLinks from "./components/NavLinks";
 import SearchButton from "./components/search/SearchButton";
 // import ProfileMenu from "./components/ProfileMenu";
 // import BrowseDropdown from "./components/BrowseDropdown";
-import { HeaderLinks } from "@/data/header";
+import { HeaderLinks } from "@/layout/header/data/header";
 import { cn } from "@/lib/utils";
 
 const ProfileMenu = lazy(() => import("./components/ProfileMenu"));

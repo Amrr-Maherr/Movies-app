@@ -1,6 +1,6 @@
 import { memo } from "react";
 import FooterLink from "./FooterLink";
-import { FooterLinks, SocialLinks } from "@/data/footer";
+import { FooterLinks, SocialLinks } from "@/layout/footer/data/footer";
 import { Globe } from "lucide-react";
 
 // Memoized Footer component - purely presentational, avoids re-renders
