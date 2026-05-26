@@ -7,6 +7,7 @@ import SearchButton from "./components/search/SearchButton";
 // import BrowseDropdown from "./components/BrowseDropdown";
 import { HeaderLinks } from "@/layout/header/data/header";
 import { cn } from "@/lib/utils";
+import LanguageDropdown from "./components/LanguageDropdown";
 
 const ProfileMenu = lazy(() => import("./components/ProfileMenu"));
 const BrowseDropdown = lazy(() => import("./components/BrowseDropdown"));
