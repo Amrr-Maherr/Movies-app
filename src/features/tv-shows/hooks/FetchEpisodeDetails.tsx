@@ -1,9 +1,9 @@
 import { getTVEpisodeDetails } from "@/services";
-import type { Episode } from "@/types";
+import type { EpisodeDetailsResponse } from "@/features/tv-shows/types";
 import { useQuery } from "@tanstack/react-query";
 
 interface FetchEpisodeDetailsReturn {
-  data: Episode | null | undefined;
+  data: EpisodeDetailsResponse | null | undefined;
   error: unknown;
   refetch: () => void;
   isLoading: boolean;
@@ -14,7 +14,7 @@ export default function FetchEpisodeDetails(
   seasonNumber: number,
   episodeNumber: number,
 ): FetchEpisodeDetailsReturn {
-  const { data, error, refetch, isLoading } = useQuery<Episode>({
+  const { data, error, refetch, isLoading } = useQuery<EpisodeDetailsResponse>({
     queryKey: ["EpisodeDetails", tvShowId, seasonNumber, episodeNumber],
     queryFn: () =>
       getTVEpisodeDetails(

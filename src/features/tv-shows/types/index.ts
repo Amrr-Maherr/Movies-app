@@ -4,6 +4,14 @@ export type {
   MediaHeroProps,
   Provider,
   WatchProvidersSectionProps,
+  GuestStar,
+  EpisodeCrewMember,
+  EpisodeCastMember,
+  EpisodeExternalIds,
+  EpisodeCredits,
+  EpisodeImages,
+  EpisodeDetailsResponse,
+  SeasonDetailsResponse,
 } from "./tvShowDetailsTypes";
 
 export type {

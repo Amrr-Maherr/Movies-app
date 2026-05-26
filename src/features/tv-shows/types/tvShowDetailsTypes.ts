@@ -154,5 +154,121 @@ export interface WatchProvidersSectionProps {
   providers: Provider[];
 }
 
+/**
+ * Guest star type from TMDB episode details API.
+ * Contains all fields returned by the API.
+ */
+export interface GuestStar {
+  character: string;
+  credit_id: string;
+  order: number;
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+}
+
+/**
+ * Crew member type from TMDB episode credits response.
+ * Contains all fields returned by the API.
+ */
+export interface EpisodeCrewMember {
+  id: number;
+  credit_id: string;
+  name: string;
+  department: string;
+  job: string;
+  profile_path: string | null;
+  popularity: number;
+  adult: boolean;
+  gender: number;
+  original_name: string;
+  known_for_department: string;
+}
+
+/**
+ * Cast member type from TMDB episode credits response.
+ * Contains all fields returned by the API.
+ */
+export interface EpisodeCastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+  order: number;
+  credit_id: string;
+  popularity: number;
+  adult: boolean;
+  gender: number;
+  original_name: string;
+  known_for_department: string;
+}
+
+/**
+ * External IDs from TMDB episode details API.
+ */
+export interface EpisodeExternalIds {
+  imdb_id: string | null;
+  tvdb_id: number | null;
+  wikidata_id: string | null;
+  facebook_id: string | null;
+  instagram_id: string | null;
+  twitter_id: string | null;
+}
+
+/**
+ * Credits from TMDB episode details append_to_response.
+ */
+export interface EpisodeCredits {
+  cast: EpisodeCastMember[];
+  crew: EpisodeCrewMember[];
+}
+
+/**
+ * Images from TMDB episode details append_to_response.
+ * Episode images use 'stills' array; includes other arrays for compatibility.
+ */
+export interface EpisodeImages {
+  id?: number;
+  stills?: MediaImage[];
+  backdrops?: MediaImage[];
+  posters?: MediaImage[];
+  logos?: MediaImage[];
+}
+
+/**
+ * Full episode details response from TMDB API.
+ * Extends the base Episode type with all append_to_response data
+ * and fuller types for crew/guest_stars.
+ */
+export interface EpisodeDetailsResponse extends Episode {
+  credits?: EpisodeCredits;
+  videos?: Videos;
+  images?: EpisodeImages;
+  external_ids?: EpisodeExternalIds;
+}
+
+/**
+ * Full season details response from TMDB API.
+ * Extends the base Season type with all append_to_response data.
+ */
+export interface SeasonDetailsResponse extends Season {
+  credits?: Credits;
+  videos?: Videos;
+  images?: MediaImages;
+  external_ids?: {
+    imdb_id: string | null;
+    tvdb_id: number | null;
+    wikidata_id: string | null;
+    facebook_id: string | null;
+    instagram_id: string | null;
+    twitter_id: string | null;
+  };
+}
+
 // Re-export common types for convenience
-export type { Genre, CastMember, CrewMember, Credits, Video, Videos, Keyword, Keywords };
+export type { Genre, CastMember, CrewMember, Credits, Video, Videos, Keyword, Keywords, MediaImage, MediaImages };

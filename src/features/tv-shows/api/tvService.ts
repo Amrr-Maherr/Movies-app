@@ -28,6 +28,7 @@ import type {
   WatchProviderRegion,
   TVWatchProvidersResponse,
 } from "@/types";
+import type { EpisodeDetailsResponse, SeasonDetailsResponse } from "@/features/tv-shows/types";
 
 // Re-export types for backward compatibility
 export type {
@@ -335,7 +336,7 @@ export async function getTVWatchProviders(id: number, region: string = "US"): Pr
 export async function getTVSeasonDetails(
   tvShowId: number,
   seasonNumber: number
-): Promise<Season | null> {
+): Promise<SeasonDetailsResponse | null> {
   try {
     const response = await axios.get<Season>(
       `${TMDB_BASE_URL}/tv/${tvShowId}/season/${seasonNumber}`,
@@ -367,7 +368,7 @@ export async function getTVEpisodeDetails(
   tvShowId: number,
   seasonNumber: number,
   episodeNumber: number
-): Promise<Episode | null> {
+): Promise<EpisodeDetailsResponse | null> {
   try {
     const response = await axios.get<Episode>(
       `${TMDB_BASE_URL}/tv/${tvShowId}/season/${seasonNumber}/episode/${episodeNumber}`,
