@@ -10,10 +10,10 @@ import Pagination from "@/components/shared/Pagination";
 import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 
 // Hooks
-import usePopularTvShows from "@/hooks/shared/FetchPopularTvShows";
-import useTopRatedTvShows from "@/hooks/shared/FetchTopRatedTvShows";
-import useAiringTodayTv from "@/hooks/shared/FetchAiringTodayTv";
-import useOnTheAirTv from "@/hooks/shared/FetchOnTheAirTv";
+import usePopularTvShows from "@/features/tv-shows/hooks/FetchPopularTvShows";
+import useTopRatedTvShows from "@/features/tv-shows/hooks/FetchTopRatedTvShows";
+import useAiringTodayTv from "@/features/tv-shows/hooks/FetchAiringTodayTv";
+import useOnTheAirTv from "@/features/tv-shows/hooks/FetchOnTheAirTv";
 
 const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),

@@ -4,7 +4,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton, PageSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchTvShowDetails from "@/hooks/shared/FetchTvShowDetails";
+import FetchTvShowDetails from "@/features/tv-shows/hooks/FetchTvShowDetails";
 import DetailPageNav, { type MovieTab } from "@/components/shared/DetailPageNav";
 import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 import { extractKeywords, extractWatchProviders } from "@/utils";

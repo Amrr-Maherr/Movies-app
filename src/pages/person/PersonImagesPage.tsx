@@ -5,7 +5,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchPersonDetails from "@/hooks/shared/FetchPersonDetails";
+import FetchPersonDetails from "@/features/people/hooks/FetchPersonDetails";
 import { usePersonImages } from "@/hooks/shared";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 

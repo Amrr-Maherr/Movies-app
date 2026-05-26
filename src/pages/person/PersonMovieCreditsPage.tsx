@@ -4,7 +4,7 @@ import { Film } from "lucide-react";
 import { extractIdFromSlug } from "@/utils/slugify";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchPersonDetails from "@/hooks/shared/FetchPersonDetails";
+import FetchPersonDetails from "@/features/people/hooks/FetchPersonDetails";
 import { usePersonMovieCredits } from "@/hooks/shared";
 import DetailPageNav from "@/components/shared/DetailPageNav";
 import MediaGrid from "@/components/shared/MediaGrid";

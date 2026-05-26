@@ -8,7 +8,7 @@ import {
   type MovieSearchResult,
   type TvShowSearchResult,
   type PersonSearchResultItem,
-} from "@/hooks/shared/FetchSearch";
+} from "@/features/search/hooks/FetchSearch";
 import { useDebounce } from "@/utils";
 import { SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";

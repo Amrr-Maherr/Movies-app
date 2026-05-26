@@ -4,7 +4,7 @@ import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper"
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import Pagination from "@/components/shared/Pagination";
-import usePopularPeople from "@/hooks/shared/FetchPopularPeople";
+import usePopularPeople from "@/features/people/hooks/FetchPopularPeople";
 import { TrendingUp } from "lucide-react";
 
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));

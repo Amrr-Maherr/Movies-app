@@ -4,7 +4,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { PageSkeleton, Error, SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
-import FetchMovieDetails from "@/hooks/shared/FetchMovieDetails";
+import FetchMovieDetails from "@/features/movies/hooks/FetchMovieDetails";
 import DetailPageNav, { type MovieTab } from "@/components/shared/DetailPageNav";
 import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 import {

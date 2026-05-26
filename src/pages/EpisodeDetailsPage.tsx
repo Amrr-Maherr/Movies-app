@@ -4,7 +4,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { Clock, Calendar, Star } from "lucide-react";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
-import FetchEpisodeDetails from "@/hooks/shared/FetchEpisodeDetails";
+import FetchEpisodeDetails from "@/features/tv-shows/hooks/FetchEpisodeDetails";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import FullCreditsSection from "@/components/sections/FullCreditsSection";

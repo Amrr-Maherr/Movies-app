@@ -4,7 +4,7 @@ import { extractIdFromSlug } from "@/utils/slugify";
 import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { ArrowLeft, Calendar, Film, Clock, Star } from "lucide-react";
-import FetchTvSeasonDetails from "@/hooks/shared/FetchTvSeasonDetails";
+import FetchTvSeasonDetails from "@/features/tv-shows/hooks/FetchTvSeasonDetails";
 import type { Episode } from "@/types";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import OptimizedImage from "@/components/ui/OptimizedImage";

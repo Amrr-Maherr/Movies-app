@@ -25,7 +25,7 @@ import {
   type MovieSearchResult,
   type TvShowSearchResult,
   type PersonSearchResultItem,
-} from "@/hooks/shared/FetchSearch";
+} from "@/features/search/hooks/FetchSearch";
 import { useDebounce } from "@/utils";
 import type { SearchPopupProps } from "./types";
 import SearchHeader from "./SearchHeader";

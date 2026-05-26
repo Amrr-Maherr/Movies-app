@@ -6,7 +6,7 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 import type { Movie, HeroMedia } from "@/types";
 
 // Hooks
-import useKidsMovies from "@/hooks/shared/FetchKidsMovies";
+import useKidsMovies from "@/features/discover/hooks/FetchKidsMovies";
 
 const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),
