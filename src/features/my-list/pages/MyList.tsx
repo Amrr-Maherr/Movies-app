@@ -1,6 +1,6 @@
 import { memo, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { selectList, removeFromList } from "@/store/ListReucer";
+import { selectList, removeFromList } from "@/features/my-list/store/listSlice";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { Play, X } from "lucide-react";

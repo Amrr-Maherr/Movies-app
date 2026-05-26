@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from './store'
+import type { RootState } from '@/store/store'
 import type { HeroMedia } from '@/types'
 import toast from 'react-hot-toast';
 export type ListItem = HeroMedia

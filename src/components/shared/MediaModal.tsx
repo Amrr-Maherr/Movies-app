@@ -7,7 +7,7 @@ import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addToList, removeFromList, selectIsInList } from "@/store/ListReucer";
+import { addToList, removeFromList, selectIsInList } from "@/features/my-list/store/listSlice";
 
 interface MediaModalProps {
   movie: HeroMedia | null;

@@ -9,7 +9,7 @@ import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
 import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import { useMovieModal } from "@/contexts/MovieModalContext";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addToList, removeFromList, selectIsInList } from "@/store/ListReucer";
+import { addToList, removeFromList, selectIsInList } from "@/features/my-list/store/listSlice";
 import type { HeroMedia, Episode, Season } from "@/types";
 
 export interface UseCardLogicProps {
