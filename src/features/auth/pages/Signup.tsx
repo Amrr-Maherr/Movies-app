@@ -162,7 +162,7 @@ export default function Signup() {
             disabled={isPending}
             className="mt-6 w-full bg-[#e50914] hover:bg-[#f40612] text-white font-semibold py-3 rounded text-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {isPending ? "Creating Account..." : "Sign Up"}
+            {isPending ? t('auth.creatingAccount') : t('auth.signUp')}
           </button>
         </form>
 

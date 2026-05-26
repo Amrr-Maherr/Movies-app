@@ -15,6 +15,7 @@ import {
   ReviewLayout,
   TrailerLayout,
 } from "./CardVariantLayouts";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 interface ContentCardVariantsProps {
   variant: "episode" | "season" | "person" | "review" | "trailer";
@@ -83,6 +84,10 @@ export function ContentCardVariants({
     setTrailerImageLoaded,
   } = cardLogic;
 
+  const localizedEpisodeLink = getLocalizedLink(episodeLink);
+  const localizedSeasonDetailsUrl = getLocalizedLink(seasonDetailsUrl);
+  const localizedPersonDetailsUrl = getLocalizedLink(personDetailsUrl);
+
   // Episode variant
   if (variant === "episode" && episode) {
     return (
@@ -92,7 +97,7 @@ export function ContentCardVariants({
           className="h-full w-full"
         >
           <Link
-            to={episodeLink}
+            to={localizedEpisodeLink}
             className="block group"
             onClick={onClick ? handleNavigate : undefined}
             onMouseEnter={handleCardMouseEnter}
@@ -148,7 +153,7 @@ export function ContentCardVariants({
           className="h-full w-full"
         >
           <Link
-            to={personDetailsUrl}
+            to={localizedPersonDetailsUrl}
             className="group relative cursor-pointer block"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}

@@ -20,7 +20,7 @@ const SUPPORTED_LANGUAGES: Language[] = [
 ];
 
 const LanguageDropdown = memo(function LanguageDropdown() {
-  const { t, i18n } = useTranslation('common');
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   
   const currentLanguage = i18n.language || 'en';
@@ -30,6 +30,19 @@ const LanguageDropdown = memo(function LanguageDropdown() {
     localStorage.setItem('app_language', langCode);
     i18n.changeLanguage(langCode);
     setIsOpen(false);
+    
+    // Update URL with new language
+    const currentPath = window.location.pathname;
+    const pathParts = currentPath.split('/').filter(Boolean);
+    
+    // Remove existing language prefix if present
+    if (pathParts.length > 0 && ['en', 'ar'].includes(pathParts[0])) {
+      pathParts.shift();
+    }
+    
+    // Build new path with language prefix
+    const newPath = `/${langCode}${pathParts.length > 0 ? '/' + pathParts.join('/') : ''}`;
+    window.location.href = newPath;
   };
 
   return (

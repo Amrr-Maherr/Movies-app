@@ -6,21 +6,21 @@ import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
  * Displayed in the footer navigation grid
  */
 export const FooterLinks: FooterLink[] = [
-  { title: "FAQ", href: "/faq" },
-  { title: "Help Center", href: "/help-center" },
-  { title: "Account", href: "/account" },
-  { title: "Media Center", href: "/media-center" },
-  { title: "Investor Relations", href: "/investor-relations" },
-  { title: "Jobs", href: "/jobs" },
-  { title: "Ways to Watch", href: "/ways-to-watch" },
-  { title: "Terms of Use", href: "/terms-of-use" },
-  { title: "Privacy", href: "/privacy" },
-  { title: "Cookie Preferences", href: "/cookie-preferences" },
-  { title: "Corporate Information", href: "/corporate-information" },
-  { title: "Contact Us", href: "/contact-us" },
-  { title: "Speed Test", href: "/speed-test" },
-  { title: "Legal Notices", href: "/legal-notices" },
-  { title: "Only on Netflix", href: "/only-on-netflix" },
+  { title: "footer.faq", href: "/en/faq" },
+  { title: "footer.help", href: "/en/help-center" },
+  { title: "footer.account", href: "/en/account" },
+  { title: "footer.mediaCenter", href: "/en/media-center" },
+  { title: "footer.investorRelations", href: "/en/investor-relations" },
+  { title: "footer.jobs", href: "/en/jobs" },
+  { title: "footer.waysToWatch", href: "/en/ways-to-watch" },
+  { title: "footer.termsOfUse", href: "/en/terms-of-use" },
+  { title: "footer.privacy", href: "/en/privacy" },
+  { title: "footer.cookiePreferences", href: "/en/cookie-preferences" },
+  { title: "footer.corporateInformation", href: "/en/corporate-information" },
+  { title: "footer.contact", href: "/en/contact-us" },
+  { title: "footer.speedTest", href: "/en/speed-test" },
+  { title: "footer.legalNotices", href: "/en/legal-notices" },
+  { title: "footer.onlyOnNetflix", href: "/en/only-on-netflix" },
 ];
 
 /**
@@ -31,25 +31,25 @@ export const SocialLinks: SocialLink[] = [
   {
     platform: "Facebook",
     href: "#",
-    ariaLabel: "Facebook",
+    ariaLabel: "footer.social.facebook",
     icon: <Facebook className="w-6 h-6" />,
   },
   {
     platform: "Instagram",
     href: "#",
-    ariaLabel: "Instagram",
+    ariaLabel: "footer.social.instagram",
     icon: <Instagram className="w-6 h-6" />,
   },
   {
     platform: "Twitter",
     href: "#",
-    ariaLabel: "Twitter",
+    ariaLabel: "footer.social.twitter",
     icon: <Twitter className="w-6 h-6" />,
   },
   {
     platform: "YouTube",
     href: "#",
-    ariaLabel: "YouTube",
+    ariaLabel: "footer.social.youtube",
     icon: <Youtube className="w-6 h-6" />,
   },
 ];

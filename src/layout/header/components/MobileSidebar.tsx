@@ -70,13 +70,13 @@ const MobileSidebar = memo(function MobileSidebar({
               className="block px-6 py-3 text-[var(--text-primary)] font-medium hover:bg-[var(--hover-overlay)] rounded transition-colors duration-200"
               onClick={() => onOpenChange(false)}
             >
-              Settings
+              buttons.settings
             </NavLink>
             <button
               className="w-full text-left px-6 py-3 text-[var(--error)] font-medium hover:bg-[var(--hover-overlay)] rounded transition-colors duration-200"
               onClick={handleLogout}
             >
-              Logout
+              buttons.logout
             </button>
           </div>
         </div>

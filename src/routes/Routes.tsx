@@ -1,5 +1,5 @@
 import { lazy, Suspense, memo, useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import PageTransition from "@/components/shared/PageTransition";
 import "@/index.css";
@@ -14,6 +14,12 @@ const ScrollToTop = () => {
   }, [pathname]);
 
   return null;
+};
+
+// Language redirect component
+const LanguageRedirect = () => {
+  const currentLang = localStorage.getItem('app_language') || 'en';
+  return <Navigate to={`/${currentLang}`} replace />;
 };
 
 // Lazy-loaded page components
@@ -83,9 +89,15 @@ const AppRoutes = memo(function AppRoutes() {
       <ScrollToTop />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
+          {/* Language redirect */}
+          <Route path="/" element={<LanguageRedirect />} />
+          
+          {/* Language-prefixed routes */}
+          <Route path="/:lang" element={<LanguageRedirect />} />
+          
           {/* Main routes */}
           <Route
-            path="/"
+            path="/:lang/"
             element={
               <PageTransition>
                 <Home />
@@ -94,7 +106,7 @@ const AppRoutes = memo(function AppRoutes() {
           />
           <Route element={<ProtectedRoute />}>
             <Route
-              path="/tv-shows"
+              path="/:lang/tv-shows"
               element={
                 <PageTransition>
                   <TVShow />
@@ -102,7 +114,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/tags/:slug"
+              path="/:lang/tags/:slug"
               element={
                 <PageTransition>
                   <TagsPage />
@@ -110,7 +122,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/search"
+              path="/:lang/search"
               element={
                 <PageTransition>
                   <SearchPage />
@@ -118,7 +130,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/movies"
+              path="/:lang/movies"
               element={
                 <PageTransition>
                   <Movie />
@@ -126,7 +138,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/kids"
+              path="/:lang/kids"
               element={
                 <PageTransition>
                   <Kids />
@@ -134,7 +146,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/new-popular"
+              path="/:lang/new-popular"
               element={
                 <PageTransition>
                   <NewPopular />
@@ -142,7 +154,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/my-list"
+              path="/:lang/my-list"
               element={
                 <PageTransition>
                   <MyList />
@@ -150,7 +162,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/browse/languages"
+              path="/:lang/browse/languages"
               element={
                 <PageTransition>
                   <BrowseByLanguages />
@@ -158,7 +170,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/company/:id"
+              path="/:lang/company/:id"
               element={
                 <PageTransition>
                   <Company />
@@ -166,7 +178,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/collection/:id"
+              path="/:lang/collection/:id"
               element={
                 <PageTransition>
                   <Collection />
@@ -174,7 +186,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/network/:id"
+              path="/:lang/network/:id"
               element={
                 <PageTransition>
                   <Network />
@@ -182,7 +194,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/genres"
+              path="/:lang/genres"
               element={
                 <PageTransition>
                   <Genres />
@@ -190,7 +202,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/movie/genre/:id"
+              path="/:lang/movie/genre/:id"
               element={
                 <PageTransition>
                   <GenreMovies />
@@ -198,7 +210,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/tv/genre/:id"
+              path="/:lang/tv/genre/:id"
               element={
                 <PageTransition>
                   <GenreTV />
@@ -206,7 +218,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/platform/:id"
+              path="/:lang/platform/:id"
               element={
                 <PageTransition>
                   <Platform />
@@ -214,7 +226,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/platforms"
+              path="/:lang/platforms"
               element={
                 <PageTransition>
                   <Platforms />
@@ -222,7 +234,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/trending/actors"
+              path="/:lang/trending/actors"
               element={
                 <PageTransition>
                   <TrendingPeople />
@@ -230,7 +242,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/actors"
+              path="/:lang/actors"
               element={
                 <PageTransition>
                   <Actor />
@@ -238,7 +250,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/actor/:slugWithId"
+              path="/:lang/actor/:slugWithId"
               element={
                 <PageTransition>
                   <PersonDetailsPage />
@@ -246,7 +258,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/session"
+              path="/:lang/session"
               element={
                 <PageTransition>
                   <Session />
@@ -258,7 +270,7 @@ const AppRoutes = memo(function AppRoutes() {
 
             {/* Details routes */}
             <Route
-              path="/movie/:slugWithId"
+              path="/:lang/movie/:slugWithId"
               element={
                 <PageTransition>
                   <MovieDetails />
@@ -267,7 +279,7 @@ const AppRoutes = memo(function AppRoutes() {
             />
 
             <Route
-              path="/tv/:slugWithId"
+              path="/:lang/tv/:slugWithId"
               element={
                 <PageTransition>
                   <TVShowDetailsPage />
@@ -275,7 +287,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/tv/:slugWithId/season/:seasonNumber"
+              path="/:lang/tv/:slugWithId/season/:seasonNumber"
               element={
                 <PageTransition>
                   <SeasonDetailsPage />
@@ -283,7 +295,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/tv/:slugWithId/season/:seasonNumber/episode/:episodeNumber"
+              path="/:lang/tv/:slugWithId/season/:seasonNumber/episode/:episodeNumber"
               element={
                 <PageTransition>
                   <EpisodeDetailsPage />
@@ -292,7 +304,7 @@ const AppRoutes = memo(function AppRoutes() {
             />
 
             <Route
-              path="/person/:slugWithId"
+              path="/:lang/person/:slugWithId"
               element={
                 <PageTransition>
                   <PersonDetailsPage />
@@ -302,7 +314,7 @@ const AppRoutes = memo(function AppRoutes() {
 
             {/* Movies list routes */}
             <Route
-              path="/now-playing"
+              path="/:lang/now-playing"
               element={
                 <PageTransition>
                   <NowPlayingMoviesPage />
@@ -312,7 +324,7 @@ const AppRoutes = memo(function AppRoutes() {
 
             {/* Footer routes */}
             <Route
-              path="/faq"
+              path="/:lang/faq"
               element={
                 <PageTransition>
                   <FAQ />
@@ -320,7 +332,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/help-center"
+              path="/:lang/help-center"
               element={
                 <PageTransition>
                   <HelpCenter />
@@ -328,7 +340,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/account"
+              path="/:lang/account"
               element={
                 <PageTransition>
                   <Account />
@@ -336,7 +348,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/media-center"
+              path="/:lang/media-center"
               element={
                 <PageTransition>
                   <MediaCenter />
@@ -344,7 +356,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/investor-relations"
+              path="/:lang/investor-relations"
               element={
                 <PageTransition>
                   <InvestorRelations />
@@ -352,7 +364,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/jobs"
+              path="/:lang/jobs"
               element={
                 <PageTransition>
                   <Jobs />
@@ -360,7 +372,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/ways-to-watch"
+              path="/:lang/ways-to-watch"
               element={
                 <PageTransition>
                   <WaysToWatch />
@@ -368,7 +380,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/terms-of-use"
+              path="/:lang/terms-of-use"
               element={
                 <PageTransition>
                   <TermsOfUse />
@@ -376,7 +388,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/privacy"
+              path="/:lang/privacy"
               element={
                 <PageTransition>
                   <Privacy />
@@ -384,7 +396,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/cookie-preferences"
+              path="/:lang/cookie-preferences"
               element={
                 <PageTransition>
                   <CookiePreferences />
@@ -392,7 +404,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/corporate-information"
+              path="/:lang/corporate-information"
               element={
                 <PageTransition>
                   <CorporateInformation />
@@ -400,7 +412,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/contact-us"
+              path="/:lang/contact-us"
               element={
                 <PageTransition>
                   <ContactUs />
@@ -408,7 +420,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/speed-test"
+              path="/:lang/speed-test"
               element={
                 <PageTransition>
                   <SpeedTest />
@@ -416,7 +428,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/legal-notices"
+              path="/:lang/legal-notices"
               element={
                 <PageTransition>
                   <LegalNotices />
@@ -424,7 +436,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/only-on-netflix"
+              path="/:lang/only-on-netflix"
               element={
                 <PageTransition>
                   <OnlyOnNetflix />
@@ -433,7 +445,7 @@ const AppRoutes = memo(function AppRoutes() {
             />
 
             <Route
-              path="/offline"
+              path="/:lang/offline"
               element={
                 <PageTransition>
                   <Offline />
@@ -443,7 +455,7 @@ const AppRoutes = memo(function AppRoutes() {
           </Route>
           {/* Subscribe page */}
           <Route
-            path="/subscribe"
+            path="/:lang/subscribe"
             element={
               <PageTransition>
                 <SubscribePage />
@@ -460,7 +472,7 @@ const AppRoutes = memo(function AppRoutes() {
             }
           />
           <Route
-            path="/login"
+            path="/:lang/login"
             element={
               <PageTransition>
                 <Login />
@@ -468,7 +480,7 @@ const AppRoutes = memo(function AppRoutes() {
             }
           />
           <Route
-            path="/signup"
+            path="/:lang/signup"
             element={
               <PageTransition>
                 <Signup />

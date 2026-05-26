@@ -10,6 +10,8 @@ import {
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
+import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 interface ProfileMenuProps {
   isOpen: boolean;
@@ -25,10 +27,13 @@ const ProfileMenu = memo(function ProfileMenu({
   isOpen,
   onClose,
 }: ProfileMenuProps) {
+  const { t, i18n } = useTranslation();
   const handleLogout = useCallback(() => {
     console.log("Logout clicked");
     onClose();
   }, [onClose]);
+
+  const currentLang = i18n.language || 'en';
 
   return (
     <motion.div
@@ -56,12 +61,12 @@ const ProfileMenu = memo(function ProfileMenu({
           ))}
 
           <Link
-            to="/manage-profiles"
+            to={getLocalizedLink('/manage-profiles')}
             className="flex items-center gap-3 mt-2 hover:underline cursor-pointer text-[#b3b3b3] group"
             onClick={onClose}
           >
             <Users className="w-5 h-5 text-[#b3b3b3] group-hover:text-white transition-colors" />
-            Manage Profiles
+            {t('buttons.manageProfiles')}
           </Link>
         </div>
 
@@ -70,20 +75,20 @@ const ProfileMenu = memo(function ProfileMenu({
         {/* Auth Links */}
         <div className="py-2">
           <Link
-            to="/login"
+            to={getLocalizedLink('/login')}
             className="flex items-center gap-3 px-4 py-2 hover:underline text-[#b3b3b3] hover:text-white transition-colors"
             onClick={onClose}
           >
             <LogIn className="w-4 h-4" />
-            Sign In
+            {t('buttons.signIn')}
           </Link>
           <Link
-            to="/signup"
+            to={getLocalizedLink('/signup')}
             className="flex items-center gap-3 px-4 py-2 hover:underline text-[#b3b3b3] hover:text-white transition-colors"
             onClick={onClose}
           >
             <UserPlus className="w-4 h-4" />
-            Sign Up
+            {t('buttons.signUp')}
           </Link>
         </div>
 
@@ -92,28 +97,28 @@ const ProfileMenu = memo(function ProfileMenu({
         {/* Links */}
         <div className="py-2">
           <Link
-            to="/account"
+            to={getLocalizedLink('/account')}
             className="flex items-center gap-3 px-4 py-2 hover:underline"
             onClick={onClose}
           >
             <User className="w-4 h-4 text-[#b3b3b3]" />
-            Account
+            {t('buttons.account')}
           </Link>
           <Link
-            to="/help-center"
+            to={getLocalizedLink('/help-center')}
             className="flex items-center gap-3 px-4 py-2 hover:underline"
             onClick={onClose}
           >
             <HelpCircle className="w-4 h-4 text-[#b3b3b3]" />
-            Help Center
+            {t('buttons.help')}
           </Link>
           <Link
-            to="/settings"
+            to={getLocalizedLink('/settings')}
             className="flex items-center gap-3 px-4 py-2 hover:underline"
             onClick={onClose}
           >
             <Settings className="w-4 h-4 text-[#b3b3b3]" />
-            Settings
+            {t('buttons.settings')}
           </Link>
         </div>
 
@@ -124,7 +129,7 @@ const ProfileMenu = memo(function ProfileMenu({
           onClick={handleLogout}
           className="w-full text-center px-4 py-4 text-sm hover:underline"
         >
-          Sign out of Netflix
+          {t('buttons.logout')}
         </button>
       </div>
     </motion.div>

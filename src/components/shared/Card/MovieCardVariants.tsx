@@ -17,6 +17,7 @@ import {
 import CardPoster from "./CardPoster";
 import CardBadges from "./CardBadges";
 import CardHoverOverlay from "./CardHoverOverlay";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 interface MovieCardVariantsProps {
   movie: HeroMedia;
@@ -75,7 +76,7 @@ export function MovieCardVariants({
           className="h-full w-full"
         >
           <Link
-            to={detailsUrl}
+            to={localizedDetailsUrl}
             className="relative group cursor-pointer block"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}
@@ -169,7 +170,7 @@ export function MovieCardVariants({
           className="h-full w-full"
         >
           <Link
-            to={detailsUrl}
+            to={localizedDetailsUrl}
             className="relative group cursor-pointer block"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}

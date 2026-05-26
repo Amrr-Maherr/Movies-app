@@ -11,27 +11,29 @@
     "notifications": "إشعارات",
     "language": "اللغة"
   },
-  "auth": {
-    "login": {
-      "title": "تسجيل الدخول",
-      "email": "البريد الإلكتروني",
-      "password": "كلمة المرور",
-      "signIn": "تسجيل الدخول",
-      "signUp": "إنشاء حساب",
-      "forgotPassword": "نسيت كلمة المرور؟",
-      "noAccount": "جديد على نتفليكس؟",
-      "signUpNow": "سجل الآن"
-    },
-    "signup": {
-      "title": "إنشاء حساب",
-      "name": "الاسم",
-      "email": "البريد الإلكتروني",
-      "password": "كلمة المرور",
-      "confirmPassword": "تأكيد كلمة المرور",
-      "createAccount": "إنشاء حساب",
-      "alreadyHaveAccount": "لديك حساب بالفعل؟",
-      "signIn": "تسجيل الدخول"
-    }
+  "movies": {
+    "popular": "شائع",
+    "topRated": "الأعلى تقييماً",
+    "upcoming": "قريباً",
+    "nowPlaying": "يعرض الآن",
+    "similar": "أفلام مشابهة",
+    "recommendations": "توصيات"
+  },
+  "discover": {
+    "title": "اكتشف",
+    "movies": "أفلام",
+    "tvShows": "مسلسلات تلفزيونية",
+    "genres": "الأنواع",
+    "languages": "اللغات",
+    "kids": "أطفال وعائلة",
+    "newPopular": "جديد وشائع"
+  },
+  "people": {
+    "knownFor": "معروف بـ",
+    "biography": "السيرة الذاتية",
+    "filmography": "الأعمال",
+    "cast": "طاقم التمثيل",
+    "crew": "الطاقم"
   },
   "common": {
     "loading": "جاري التحميل...",
@@ -72,38 +74,6 @@
     "moreInfo": "المزيد من المعلومات",
     "share": "مشاركة"
   },
-  "movies": {
-    "popular": "شائع",
-    "topRated": "الأعلى تقييماً",
-    "upcoming": "قريباً",
-    "nowPlaying": "يعرض الآن",
-    "similar": "أفلام مشابهة",
-    "recommendations": "توصيات"
-  },
-  "tv": {
-    "popular": "شائع",
-    "topRated": "الأعلى تقييماً",
-    "airingToday": "يعرض اليوم",
-    "onTheAir": "يُبث الآن",
-    "similar": "مسلسلات مشابهة",
-    "recommendations": "توصيات"
-  },
-  "discover": {
-    "title": "اكتشف",
-    "movies": "أفلام",
-    "tvShows": "مسلسلات تلفزيونية",
-    "genres": "الأنواع",
-    "languages": "اللغات",
-    "kids": "أطفال وعائلة",
-    "newPopular": "جديد وشائع"
-  },
-  "people": {
-    "knownFor": "معروف بـ",
-    "biography": "السيرة الذاتية",
-    "filmography": "الأعمال",
-    "cast": "طاقم التمثيل",
-    "crew": "الطاقم"
-  },
   "search": {
     "title": "بحث",
     "results": "النتائج",
@@ -113,8 +83,28 @@
   "footer": {
     "contact": "اتصل بنا",
     "about": "من نحن",
-    "privacy": "سياسة الخصوصية",
-    "terms": "شروط الخدمة",
-    "help": "مركز المساعدة"
+    "privacy": "الخصوصية",
+    "terms": "الشروط",
+    "help": "مركز المساعدة",
+    "account": "الحساب",
+    "serviceCode": "رمز الخدمة",
+    "copyright": "© 1997-2026 Netflix, Inc.",
+    "faq": "الأسئلة الشائعة",
+    "mediaCenter": "مركز الوسائط",
+    "investorRelations": "علاقات المستثمرين",
+    "jobs": "الوظائف",
+    "waysToWatch": "طرق المشاهدة",
+    "termsOfUse": "شروط الاستخدام",
+    "cookiePreferences": "تفضيلات ملفات تعريف الارتباط",
+    "corporateInformation": "معلومات الشركة",
+    "speedTest": "اختبار السرعة",
+    "legalNotices": "إشعارات قانونية",
+    "onlyOnNetflix": "حصرياً على نتفليكس",
+    "social": {
+      "facebook": "فيسبوك",
+      "instagram": "إنستغرام",
+      "twitter": "تويتر",
+      "youtube": "يوتيوب"
+    }
   }
 }

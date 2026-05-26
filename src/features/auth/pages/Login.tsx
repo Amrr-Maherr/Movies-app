@@ -121,7 +121,7 @@ export default function Login() {
             disabled={isPending}
             className="mt-6 w-full bg-[#e50914] hover:bg-[#f40612] text-white font-semibold py-3 rounded text-base disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {isPending ? "Signing In..." : "Sign In"}
+            {isPending ? t('auth.signingIn') : t('auth.signIn')}
           </button>
 
           <div className="flex items-center justify-between text-sm text-[#737373] mt-2">

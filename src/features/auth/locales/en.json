@@ -1,0 +1,30 @@
+{
+  "login": {
+    "title": "Sign In",
+    "description": "Sign in to your Netflix account to watch movies and TV shows",
+    "email": "Email or phone number",
+    "password": "Password",
+    "signIn": "Sign In",
+    "signingIn": "Signing In...",
+    "forgotPassword": "Need help?",
+    "rememberMe": "Remember me",
+    "noAccount": "New to Netflix?",
+    "signUpNow": "Sign up now",
+    "testCredentials": "Test Credentials:",
+    "username": "Username:",
+    "passwordLabel": "Password:",
+    "loginFailed": "Login failed. Please check your credentials.",
+    "recaptcha": "This page is protected by Google reCAPTCHA to ensure you're not a bot.",
+    "learnMore": "Learn more."
+  },
+  "signup": {
+    "title": "Create Account",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign In"
+  }
+}

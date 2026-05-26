@@ -1,10 +1,13 @@
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 import FooterLink from "./FooterLink";
 import { FooterLinks, SocialLinks } from "@/layout/footer/data/footer";
 import { Globe } from "lucide-react";
 
 // Memoized Footer component - purely presentational, avoids re-renders
 const Footer = memo(function Footer() {
+  const { t, i18n } = useTranslation();
+  
   return (
     <footer className="bg-[var(--background-primary)] text-[var(--text-primary)] py-16">
       <div className="container">
@@ -15,7 +18,7 @@ const Footer = memo(function Footer() {
               key={social.platform}
               href={social.href}
               className="text-[var(--text-primary)] hover:text-[var(--text-secondary)] transition-colors duration-300"
-              aria-label={social.ariaLabel}
+              aria-label={t(`footer.social.${social.platform.toLowerCase()}`)}
             >
               {social.icon}
             </a>
@@ -31,7 +34,7 @@ const Footer = memo(function Footer() {
 
         {/* Service Code Button */}
         <button className="text-sm text-[var(--text-secondary)] border border-[var(--text-secondary)] px-4 py-2 mb-6 hover:text-[var(--text-primary)] hover:border-[var(--text-primary)] transition-colors duration-300 bg-transparent cursor-pointer">
-          Service Code
+          {t('footer.serviceCode')}
         </button>
 
         {/* Copyright and Language */}
@@ -39,11 +42,11 @@ const Footer = memo(function Footer() {
           <div className="flex items-center gap-2">
             <Globe className="w-4 h-4 text-[var(--text-secondary)]" />
             <span className="text-sm text-[var(--text-secondary)]">
-              English
+              {i18n.language === 'ar' ? 'العربية' : 'English'}
             </span>
           </div>
           <span className="text-xs text-[var(--text-secondary)]">
-            © 1997-2026 Netflix, Inc.
+            {t('footer.copyright')}
           </span>
         </div>
       </div>

@@ -11,27 +11,29 @@
     "notifications": "Notifications",
     "language": "Language"
   },
-  "auth": {
-    "login": {
-      "title": "Sign In",
-      "email": "Email",
-      "password": "Password",
-      "signIn": "Sign In",
-      "signUp": "Sign Up",
-      "forgotPassword": "Forgot password?",
-      "noAccount": "New to Netflix?",
-      "signUpNow": "Sign up now"
-    },
-    "signup": {
-      "title": "Create Account",
-      "name": "Name",
-      "email": "Email",
-      "password": "Password",
-      "confirmPassword": "Confirm Password",
-      "createAccount": "Create Account",
-      "alreadyHaveAccount": "Already have an account?",
-      "signIn": "Sign In"
-    }
+  "movies": {
+    "popular": "Popular",
+    "topRated": "Top Rated",
+    "upcoming": "Upcoming",
+    "nowPlaying": "Now Playing",
+    "similar": "Similar Movies",
+    "recommendations": "Recommendations"
+  },
+  "discover": {
+    "title": "Discover",
+    "movies": "Movies",
+    "tvShows": "TV Shows",
+    "genres": "Genres",
+    "languages": "Languages",
+    "kids": "Kids & Family",
+    "newPopular": "New & Popular"
+  },
+  "people": {
+    "knownFor": "Known For",
+    "biography": "Biography",
+    "filmography": "Filmography",
+    "cast": "Cast",
+    "crew": "Crew"
   },
   "common": {
     "loading": "Loading...",
@@ -70,39 +72,21 @@
     "watchNow": "Watch Now",
     "trailer": "Trailer",
     "moreInfo": "More Info",
-    "share": "Share"
-  },
-  "movies": {
-    "popular": "Popular",
-    "topRated": "Top Rated",
-    "upcoming": "Upcoming",
-    "nowPlaying": "Now Playing",
-    "similar": "Similar Movies",
-    "recommendations": "Recommendations"
-  },
-  "tv": {
-    "popular": "Popular",
-    "topRated": "Top Rated",
-    "airingToday": "Airing Today",
-    "onTheAir": "On The Air",
-    "similar": "Similar TV Shows",
-    "recommendations": "Recommendations"
-  },
-  "discover": {
-    "title": "Discover",
-    "movies": "Movies",
-    "tvShows": "TV Shows",
-    "genres": "Genres",
-    "languages": "Languages",
-    "kids": "Kids & Family",
-    "newPopular": "New & Popular"
-  },
-  "people": {
-    "knownFor": "Known For",
-    "biography": "Biography",
-    "filmography": "Filmography",
-    "cast": "Cast",
-    "crew": "Crew"
+    "share": "Share",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signingIn": "Signing In...",
+    "creatingAccount": "Creating Account...",
+    "logout": "Sign out of Netflix",
+    "menu": "Menu",
+    "settings": "Settings",
+    "retry": "Retry",
+    "close": "Close",
+    "search": "Search",
+    "notifications": "Notifications",
+    "manageProfiles": "Manage Profiles",
+    "account": "Account",
+    "help": "Help Center"
   },
   "search": {
     "title": "Search",
@@ -113,8 +97,28 @@
   "footer": {
     "contact": "Contact Us",
     "about": "About Us",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "help": "Help Center"
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "help": "Help Center",
+    "account": "Account",
+    "serviceCode": "Service Code",
+    "copyright": "© 1997-2026 Netflix, Inc.",
+    "faq": "FAQ",
+    "mediaCenter": "Media Center",
+    "investorRelations": "Investor Relations",
+    "jobs": "Jobs",
+    "waysToWatch": "Ways to Watch",
+    "termsOfUse": "Terms of Use",
+    "cookiePreferences": "Cookie Preferences",
+    "corporateInformation": "Corporate Information",
+    "speedTest": "Speed Test",
+    "legalNotices": "Legal Notices",
+    "onlyOnNetflix": "Only on Netflix",
+    "social": {
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "youtube": "YouTube"
+    }
   }
 }

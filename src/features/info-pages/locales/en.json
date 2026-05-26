@@ -1,0 +1,61 @@
+{
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "description": "Find answers to common questions about Netflix streaming service.",
+    "questions": {
+      "whatIsNetflix": "What is Netflix?",
+      "whatIsNetflixAnswer": "Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices. You can watch as much as you want, whenever you want without a single commercial – all for one low monthly price.",
+      "howMuch": "How much does Netflix cost?",
+      "howMuchAnswer": "Watch Netflix on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from USD 9.99 to USD 19.99 a month. No extra costs, no contracts.",
+      "whereWatch": "Where can I watch?",
+      "whereWatchAnswer": "Watch anywhere, anytime. Sign in with your Netflix account to watch instantly on the web at netflix.com from your personal computer or on any internet-connected device that offers the Netflix app, including smart TVs, smartphones, tablets, streaming media players and game consoles.",
+      "howCancel": "How do I cancel?",
+      "howCancelAnswer": "Netflix is flexible. There are no pesky contracts and no commitments. You can easily cancel your account online in two clicks. There are no cancellation fees – start or stop your account anytime.",
+      "whatWatch": "What can I watch on Netflix?",
+      "whatWatchAnswer": "Netflix has an extensive library of feature films, documentaries, TV shows, anime, award-winning Netflix originals, and more. Watch as much as you want, anytime you want.",
+      "goodForKids": "Is Netflix good for kids?",
+      "goodForKidsAnswer": "The Netflix Kids experience is included in your membership to give parents control while kids enjoy family-friendly TV shows and movies in their own space. Kids profiles come with PIN-protected parental controls that let you restrict the maturity rating of content kids can watch and block specific titles you don't want kids to see."
+    }
+  },
+  "helpCenter": {
+    "title": "Help Center",
+    "description": "Get help with your Netflix account, streaming issues, and more.",
+    "subtitle": "We're here to help you get the most out of Netflix",
+    "categories": {
+      "accountBilling": "Account & Billing",
+      "accountBillingDesc": "Manage your account, update payment info, and view billing history",
+      "watching": "Watching Netflix",
+      "watchingDesc": "Learn about streaming quality, supported devices, and troubleshooting",
+      "plans": "Plans & Pricing",
+      "plansDesc": "Compare plans, upgrade or downgrade, and understand what's included",
+      "contact": "Contact Us",
+      "contactDesc": "Get in touch with our support team for personalized help"
+    },
+    "quickLinks": {
+      "resetPassword": "How to reset your password",
+      "updatePayment": "Update your payment method",
+      "cancelMembership": "Cancel your membership",
+      "browseTvGenre": "Browse TV shows by genre",
+      "browseMoviesGenre": "Browse movies by genre"
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "description": "Netflix Privacy Policy - Learn how we collect, use, and protect your personal information.",
+    "subtitle": "Your privacy is important to us",
+    "sections": {
+      "collect": "Information We Collect",
+      "collectContent": "We collect information you provide directly to us, such as when you create or modify your account, request customer support, or otherwise communicate with us. This may include your name, email address, phone number, billing information, and payment method.",
+      "use": "How We Use Your Information",
+      "useContent": "We use the information we collect to provide, maintain, and improve our services, to process your requests, and to send you related information. We also use this information to personalize your experience and to show you content that we think you might be interested in.",
+      "sharing": "Information Sharing",
+      "sharingContent": "We do not sell your personal information. We may share your information with service providers who perform services on our behalf, in response to legal requests, or to protect our rights and the rights of others.",
+      "retention": "Data Retention",
+      "retentionContent": "We retain your personal information for as long as your account is active or as needed to provide you services. We may also retain and use your information as necessary to comply with our legal obligations, resolve disputes, and enforce our agreements.",
+      "rights": "Your Rights",
+      "rightsContent": "You have the right to access, correct, or delete your personal information. You can do this through your account settings or by contacting us. You may also have the right to data portability and to object to certain processing of your information.",
+      "security": "Security",
+      "securityContent": "We take reasonable measures to help protect your personal information from loss, theft, misuse, and unauthorized access, disclosure, alteration, and destruction. However, no internet transmission is ever completely secure."
+    }
+  }
+}
