@@ -82,7 +82,7 @@ export default function SearchPage() {
 
         {/* Animated background pattern */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,#ffffff_1px,transparent_0)] bg-[size:40px_40px]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,var(--text-primary)_1px,transparent_0)] bg-[size:40px_40px]" />
         </div>
 
         <div className="relative container mx-auto px-4 pt-32 pb-20">

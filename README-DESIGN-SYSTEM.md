@@ -24,19 +24,19 @@ The design system follows Netflix's signature dark-first aesthetic while providi
 
 **Backgrounds**
 - `--background-primary`: `#ffffff` - Main background
-- `--background-secondary`: `#f5f5f5` - Secondary backgrounds
-- `--background-tertiary`: `#e5e5e5` - Tertiary backgrounds
+- `--background-secondary`: `#fafafa` - Secondary backgrounds
+- `--background-tertiary`: `#f3f4f6` - Tertiary backgrounds
 
 **Text**
-- `--text-primary`: `#141414` - Primary text
-- `--text-secondary`: `#4d4d4d` - Secondary text
-- `--text-muted`: `#808080` - Muted/disabled text
+- `--text-primary`: `#09090b` - Primary text
+- `--text-secondary`: `#52525b` - Secondary text
+- `--text-muted`: `#71717a` - Muted/disabled text
 - `--text-inverse`: `#ffffff` - Inverse text (on dark backgrounds)
 
 **UI Elements**
 - `--card-background`: `#ffffff` - Card backgrounds
-- `--card-border`: `#e5e5e5` - Card borders
-- `--separator`: `#e5e5e5` - Dividers/separators
+- `--card-border`: `#e4e4e7` - Card borders
+- `--separator`: `#e4e4e7` - Dividers/separators
 
 **Interactive States**
 - `--hover-overlay`: `rgba(0, 0, 0, 0.05)` - Hover overlay
@@ -53,17 +53,17 @@ The design system follows Netflix's signature dark-first aesthetic while providi
 
 **Header/Navigation**
 - `--header-bg`: `transparent` - Default header background
-- `--header-bg-scrolled`: `#141414` - Scrolled header background
-- `--header-text`: `#141414` - Header text color
+- `--header-bg-scrolled`: `rgba(255, 255, 255, 0.95)` - Scrolled header background with blur
+- `--header-text`: `#09090b` - Header text color
 
 **Content Cards**
 - `--content-card-bg`: `#ffffff` - Content card background
-- `--content-card-shadow`: `rgba(0, 0, 0, 0.1)` - Content card shadow
+- `--content-card-shadow`: `rgba(0, 0, 0, 0.08)` - Content card shadow
 
 **Input Fields**
 - `--input-bg`: `#ffffff` - Input background
-- `--input-border`: `#8c8c8c` - Input border
-- `--input-focus-border`: `#141414` - Input focus border
+- `--input-border`: `#d4d4d8` - Input border
+- `--input-focus-border`: `#09090b` - Input focus border
 
 **Status Colors**
 - `--success`: `#46d369` - Success state

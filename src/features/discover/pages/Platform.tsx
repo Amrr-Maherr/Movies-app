@@ -116,7 +116,7 @@ const Platform = memo(function Platform() {
         <div className="mb-8">
           {/* <Link
             to="/"
-            className="inline-flex items-center gap-2 text-[#b3b3b3] hover:text-white transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mb-6"
           >
             <span>← Back to Home</span>
           </Link> */}
