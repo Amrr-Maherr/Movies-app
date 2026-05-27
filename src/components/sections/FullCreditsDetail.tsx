@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { Card } from "@/components/shared/Card";
 import { cn } from "@/lib/utils";
 import type { CastMember, CrewMember } from "@/types";
+import { useTranslation } from "react-i18next";
 
 interface FullCreditsDetailProps {
   cast: CastMember[];
@@ -46,6 +47,7 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
   crew,
   title = "Cast & Crew",
 }: FullCreditsDetailProps) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [dept, setDept] = useState("all");
 
@@ -96,11 +98,11 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder={t("common.search")}
                 value={query}
                 onChange={handleQuery}
                 className="pl-9 pr-4 py-2 rounded bg-[var(--input-search-bg)] border border-[var(--tab-border)] text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white/30 w-52"
-                aria-label="Search cast and crew"
+                aria-label={t("media.fullCastAndCrew")}
               />
             </div>
 
@@ -112,7 +114,7 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
             >
               {departments.map((d) => (
                 <option key={d} value={d} className="bg-zinc-900">
-                  {d === "all" ? "All Departments" : d}
+                  {d === "all" ? t("common.viewAll") : d}
                 </option>
               ))}
             </select>
@@ -123,7 +125,7 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
         {filteredCast.length > 0 && (
           <div className="mb-10">
             <p className="text-[var(--section-meta-color)] text-xs font-semibold uppercase tracking-widest mb-4">
-              Cast <span className="opacity-50">({filteredCast.length})</span>
+              {t("people.cast")} <span className="opacity-50">({filteredCast.length})</span>
             </p>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
               {filteredCast.map((a) => <CastCard key={a.id} actor={a} />)}
@@ -135,7 +137,7 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
         {filteredCrew.length > 0 && (
           <div>
             <p className="text-[var(--section-meta-color)] text-xs font-semibold uppercase tracking-widest mb-4">
-              Crew <span className="opacity-50">({filteredCrew.length})</span>
+              {t("people.crew")} <span className="opacity-50">({filteredCrew.length})</span>
             </p>
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
               {filteredCrew.map((m) => <CrewCard key={`${m.id}-${m.job}`} member={m} />)}
@@ -144,7 +146,7 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
         )}
 
         {!filteredCast.length && !filteredCrew.length && (
-          <p className="text-[var(--section-meta-color)] text-center py-16">No results found.</p>
+          <p className="text-[var(--section-meta-color)] text-center py-16">{t("search.noResults")}</p>
         )}
       </div>
     </section>

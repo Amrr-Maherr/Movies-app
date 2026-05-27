@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { memo, useMemo, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { useCollectionDetails } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
@@ -13,6 +14,7 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const POSTER_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 const Collection = memo(function Collection() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const collectionId = id ? parseInt(id, 10) : 0;
 
@@ -64,8 +66,8 @@ const Collection = memo(function Collection() {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
         <Error
-          message="Collection not found"
-          retryButtonText="Go Back"
+          message={t('common:errors.notFound')}
+          retryButtonText={t('common:common.back')}
           onRetry={() => window.history.back()}
         />
       </div>
@@ -125,12 +127,12 @@ const Collection = memo(function Collection() {
                 <div className="flex flex-wrap items-center gap-4 md:gap-6 text-sm md:text-base">
                   <div className="flex items-center gap-2 text-[var(--success)]">
                     <Star className="w-5 h-5 fill-current" />
-                    <span className="font-bold">{averageRating} Average</span>
+                    <span className="font-bold">{averageRating} {t('common:media.rating')}</span>
                   </div>
 
                   <div className="flex items-center gap-2 text-white">
                     <Film className="w-5 h-5" />
-                    <span>{totalMovies} Movies</span>
+                    <span>{totalMovies} {t('discover:movies')}</span>
                   </div>
                 </div>
               </div>
@@ -172,7 +174,7 @@ const Collection = memo(function Collection() {
           isEmptyFallback={
             <div className="text-center py-12 text-[#737373]">
               <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
-              <p className="text-lg">No movies in this collection</p>
+                <p className="text-lg">{t('common:common.noData')}</p>
             </div>
           }
         >

@@ -31,9 +31,9 @@ interface SearchSectionConfig {
   gridCols: string;
 }
 
-const CONFIGS: Record<string, SearchSectionConfig> = {
+const CONFIGS = (t: (key: string) => string): Record<string, SearchSectionConfig> => ({
   movie: {
-    title: "Movies",
+    title: t('common:search.movies'),
     icon: (
       <svg
         className="w-4 h-4 text-white"
@@ -62,7 +62,7 @@ const CONFIGS: Record<string, SearchSectionConfig> = {
     gridCols: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
   },
   tv: {
-    title: "TV Shows",
+    title: t('common:search.tvShows'),
     icon: (
       <svg
         className="w-4 h-4 text-white"
@@ -85,7 +85,7 @@ const CONFIGS: Record<string, SearchSectionConfig> = {
     gridCols: "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5",
   },
   person: {
-    title: "People",
+    title: t('common:search.people'),
     icon: (
       <svg
         className="w-4 h-4 text-white"
@@ -107,7 +107,7 @@ const CONFIGS: Record<string, SearchSectionConfig> = {
     maxDisplay: 8,
     gridCols: "grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8",
   },
-};
+});
 
 // ── Props ──────────────────────────────────────────────────────
 
@@ -125,9 +125,9 @@ const SearchSection = memo(function SearchSection({
   query,
   onClose,
 }: SearchSectionProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const cfg = CONFIGS[type];
+  const cfg = CONFIGS(t)[type];
   if (!cfg) return null;
 
   const { maxDisplay, gridCols } = cfg;
@@ -158,7 +158,7 @@ const SearchSection = memo(function SearchSection({
           whileHover={{ x: 4 }}
           className={`flex items-center gap-1.5 text-xs font-medium ${cfg.linkColor} ${cfg.linkHoverColor} transition-colors`}
         >
-          View all
+          {t('common:search.viewAll')}
           <ArrowRight className="w-3.5 h-3.5" />
         </motion.button>
       </div>
@@ -174,7 +174,7 @@ const SearchSection = memo(function SearchSection({
                   id: Number(item.id),
                   name: String(item.name),
                   profileImage: String(item.profile_path || ""),
-                  role: "Actor",
+                  role: t('common:search.actor'),
                 }}
                 variant="person"
               />
@@ -193,7 +193,7 @@ const SearchSection = memo(function SearchSection({
       {/* Showing X of Y */}
       {results.length > maxDisplay && (
         <p className="text-white/30 text-xs mt-3 text-center">
-          Showing {maxDisplay} of {results.length} results
+          {t('common:search.showingXOfY', { count: maxDisplay, total: results.length })}
         </p>
       )}
     </section>

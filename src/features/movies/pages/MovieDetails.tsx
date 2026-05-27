@@ -16,6 +16,7 @@ import {
   useMovieRecommendations,
 } from "@/hooks/shared";
 import { Heart } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const MediaHero = lazy(() => import("@/components/shared/MediaHero"));
 const MediaInfoSection = lazy(() => import("@/components/sections/MediaInfoSection"));
@@ -31,6 +32,7 @@ const FullCreditsDetail = lazy(() => import("@/components/sections/FullCreditsDe
 const RecommendationsSection = lazy(() => import("@/components/sections/RecommendationsSection"));
 
 const MovieDetailsPage = memo(function MovieDetailsPage() {
+  const { t } = useTranslation();
   const { startTour } = useOnboarding();
   const { slugWithId } = useParams<{ slugWithId: string }>();
   const id = extractIdFromSlug(slugWithId);
@@ -92,8 +94,8 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
     return (
       <Error
         fullscreen
-        title="Failed to load movie details"
-        message="We couldn't load the movie information. Please try again."
+        title={t("errors.somethingWentWrong")}
+        message={t("errors.somethingWentWrong")}
         onRetry={handleRetry}
       />
     );
@@ -103,7 +105,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
     <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
         name={data.title || "Movie Details"}
-        description={data.overview || "Watch this movie on Netflix"}
+        description={data.overview || t("buttons.watchNow")}
         image={data.poster_path ? `https://image.tmdb.org/t/p/original${data.poster_path}` : undefined}
         url={window.location.href}
         type="video.movie"
@@ -188,7 +190,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
           fallback={<SectionSkeleton variant="list" cardCount={5} />}
           height={600}
           title="Reviews"
-          isEmptyFallback={<EmptyState message="No reviews available for this movie yet." />}
+          isEmptyFallback={<EmptyState message={t("media.noReviews")} />}
         >
           {reviews.length > 0 ? <ReviewsSection reviews={reviews} /> : null}
         </OptimizedSectionWrapper>
@@ -202,9 +204,9 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
           fallback={<SectionSkeleton variant="grid" cardCount={6} />}
           height={600}
           title="Videos"
-          isEmptyFallback={<EmptyState message="No videos available for this movie yet." />}
+          isEmptyFallback={<EmptyState message={t("media.noVideoAvailable")} />}
         >
-          {tabVideos.length > 0 ? <VideosSection videos={tabVideos} title="All Videos & Trailers" /> : null}
+          {tabVideos.length > 0 ? <VideosSection videos={tabVideos} title={t("media.trailersVideos")} /> : null}
         </OptimizedSectionWrapper>
       )}
 
@@ -216,10 +218,10 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
           fallback={<SectionSkeleton variant="grid" cardCount={12} />}
           height={800}
           title="Images"
-          isEmptyFallback={<EmptyState message="No images available for this movie yet." />}
+          isEmptyFallback={<EmptyState message={t("personDetails.images")} />}
         >
           {allImages.length > 0 ? (
-            <ImagesGallery images={allImages} title="Complete Image Gallery" type="all" />
+            <ImagesGallery images={allImages} title={t("personDetails.viewAllImages")} type="all" />
           ) : null}
         </OptimizedSectionWrapper>
       )}
@@ -233,7 +235,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
           height={600}
           title="Watch Providers"
         >
-          <WatchProvidersDetail providers={usProviders} region="US" title="Streaming Providers" />
+          <WatchProvidersDetail providers={usProviders} region="US" title={t("media.watchProviders")} />
         </OptimizedSectionWrapper>
       )}
 
@@ -245,10 +247,10 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
           fallback={<SectionSkeleton variant="grid" cardCount={12} />}
           height={1200}
           title="Credits"
-          isEmptyFallback={<EmptyState message="No cast or crew information available for this movie yet." />}
+          isEmptyFallback={<EmptyState message={t("media.fullCastAndCrew")} />}
         >
           {cast.length > 0 || crew.length > 0 ? (
-            <FullCreditsDetail cast={cast} crew={crew} title="Complete Cast & Crew" />
+            <FullCreditsDetail cast={cast} crew={crew} title={t("media.fullCastAndCrew")} />
           ) : null}
         </OptimizedSectionWrapper>
       )}
@@ -265,14 +267,14 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
             <section className="bg-black py-16">
               <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
                 <Heart className="w-20 h-20 text-white/20 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-white mb-2">No Recommendations Available</h2>
-                <p className="text-white/60 text-lg">We don't have enough data to recommend similar movies yet.</p>
+                <h2 className="text-2xl font-bold text-white mb-2">{t("media.recommendations")}</h2>
+                <p className="text-white/60 text-lg">{t("media.noReviews")}</p>
               </div>
             </section>
           }
         >
           {recommendations.length > 0 ? (
-            <RecommendationsSection recommendations={recommendations} title="More Like This" variant="recommendations" />
+            <RecommendationsSection recommendations={recommendations} title={t("media.moreLikeThis")} variant="recommendations" />
           ) : null}
         </OptimizedSectionWrapper>
       )}

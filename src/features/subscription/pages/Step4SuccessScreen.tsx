@@ -3,15 +3,17 @@
 import { CheckCircle2, Play, LayoutGrid, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { useTranslation } from "react-i18next";
 
 export default function Step4SuccessScreen({ planName, onGoHome }) {
+  const { t } = useTranslation();
   const userName = JSON.parse(localStorage.getItem("name") || '"User"');
 
   return (
     <div className="w-full max-w-[600px] mx-auto px-6 py-16 bg-black text-white text-center">
       <HelmetMeta
-        name="Welcome to Netflix"
-        description="Your subscription is active. Start watching your favorite movies and TV shows now."
+        name={t("subscription.success")}
+        description={t("subscription.successMessage")}
       />
 
       <div className="mb-10">
@@ -21,9 +23,9 @@ export default function Step4SuccessScreen({ planName, onGoHome }) {
         </div>
       </div>
 
-      <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome to Netflix, {userName}!</h1>
+      <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("subscription.success")}, {userName}!</h1>
       <p className="text-xl text-neutral-400 mb-10 max-w-[450px] mx-auto">
-        Your <span className="text-white font-bold">{planName}</span> subscription is now active.
+        {t("subscription.successMessage")}
       </p>
 
       {/* Features Recap */}

@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Calendar, Star } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
+import { useTranslation } from "react-i18next";
 
 export interface NewReleaseLayoutProps {
   movie: HeroMedia;
@@ -30,6 +31,7 @@ const NewReleaseLayout = memo(
     ratingValue,
     formattedReleaseDate,
   }: NewReleaseLayoutProps) => {
+    const { t } = useTranslation();
     // Check if content is for adults only
     const isAdult = movie.adult === true;
 
@@ -37,7 +39,7 @@ const NewReleaseLayout = memo(
       <div
         className="group touch-manipulation min-h-[48px]"
         role="article"
-        aria-label={`New Release: ${title}`}
+        aria-label={`${t("home.newReleases")}: ${title}`}
       >
         <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
           <OptimizedImage

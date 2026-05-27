@@ -1,5 +1,6 @@
 import { useSearch } from "@/hooks/shared";
 import React, { lazy, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import type { HeroMedia } from "@/types";
 import { SectionSkeleton, Error } from "@/components/ui";
@@ -10,6 +11,7 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 const Card = lazy(() => import("@/components/shared/Card/Card"));
 
 export default function Tags() {
+  const { t } = useTranslation();
   const { slug } = useParams();
 
   // Decode the keyword from URL
@@ -26,8 +28,8 @@ export default function Tags() {
     return (
       <Error
         fullscreen
-        title="Search Error"
-        message="We couldn't load the search results. Please try again."
+        title={t('common:search.searchError')}
+        message={t('common:search.searchErrorMessage')}
         onRetry={() => window.location.reload()}
       />
     );
@@ -39,10 +41,10 @@ export default function Tags() {
         name={`Tag: ${keyword}`}
         description={`Browse all movies and TV shows tagged with "${keyword}". Find related content on Netflix.`}
       />
-      <h1 className="text-3xl font-bold text-white mb-6">Tag: {keyword}</h1>
+      <h1 className="text-3xl font-bold text-white mb-6">{t('common:search.title')}: {keyword}</h1>
 
       {results.length === 0 ? (
-        <p className="text-white/70">No results found</p>
+        <p className="text-white/70">{t('common:search.noResults')}</p>
       ) : (
         <OptimizedSectionWrapper
           data={results.length > 0 ? results : null}

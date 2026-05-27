@@ -3,5 +3,25 @@
   "placeholder": "ابحث عن أفلام، مسلسلات تلفزيونية، أشخاص...",
   "results": "النتائج",
   "noResults": "لم يتم العثور على نتائج",
-  "filters": "التصفية"
+  "filters": "التصفية",
+  "genres": {
+    "action": "أكشن",
+    "comedy": "كوميديا",
+    "drama": "دراما",
+    "horror": "رعب",
+    "sciFi": "خيال علمي",
+    "romance": "رومانسية",
+    "thriller": "إثارة",
+    "documentary": "وثائقي",
+    "animationGenre": "رسوم متحركة",
+    "mystery": "غموض",
+    "fantasy": "فانتازيا",
+    "crime": "جريمة",
+    "adventure": "مغامرة",
+    "musical": "موسيقي",
+    "family": "عائلة",
+    "superhero": "أبطال خارقون",
+    "anime": "أنمي",
+    "koreanDrama": "دراما كورية"
+  }
 }

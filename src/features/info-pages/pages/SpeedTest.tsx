@@ -1,82 +1,84 @@
+import { useTranslation } from "react-i18next";
 import { Gauge, Wifi, Download, Server } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function SpeedTest() {
+  const { t } = useTranslation();
   const speedFactors = [
     {
       icon: <Wifi className="w-8 h-8" />,
-      title: "Internet Connection",
-      description: "Your internet speed and bandwidth affect streaming quality. Netflix recommends at least 3 Mbps for SD, 5 Mbps for HD, and 25 Mbps for Ultra HD."
+      title: t('infoPages.speedTest.connection'),
+      description: t('infoPages.speedTest.connectionDesc')
     },
     {
       icon: <Server className="w-8 h-8" />,
-      title: "Network Congestion",
-      description: "During peak hours, network congestion can affect your streaming quality. Try watching during off-peak times for better performance."
+      title: t('infoPages.speedTest.congestion'),
+      description: t('infoPages.speedTest.congestionDesc')
     },
     {
       icon: <Gauge className="w-8 h-8" />,
-      title: "Device Performance",
-      description: "Older devices may not support the latest streaming technologies. Consider updating your device or using a compatible streaming device."
+      title: t('infoPages.speedTest.devicePerformance'),
+      description: t('infoPages.speedTest.devicePerformanceDesc')
     },
     {
       icon: <Download className="w-8 h-8" />,
-      title: "Download Speed",
-      description: "Run a speed test to check your current internet speed. If it's below the recommended levels, contact your internet service provider."
+      title: t('infoPages.speedTest.downloadSpeed'),
+      description: t('infoPages.speedTest.downloadSpeedDesc')
     }
   ];
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
-        name="Speed Test"
-        description="Test your internet speed and optimize your Netflix streaming experience."
+        name={t('infoPages.speedTest.title')}
+        description={t('infoPages.speedTest.description')}
       />
 
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Speed Test
+          {t('infoPages.speedTest.title')}
         </h1>
         <p className="text-[var(--text-secondary)] text-lg mb-12">
-          Check your internet speed and optimize your Netflix experience
+          {t('infoPages.speedTest.subtitle')}
         </p>
 
         {/* Speed Test Tool */}
         <div className="max-w-2xl bg-[var(--background-secondary)] border border-[var(--card-border)] rounded-md p-8 mb-12">
           <div className="text-center">
             <Gauge className="w-24 h-24 text-[var(--netflix-red)] mx-auto mb-6" />
-            <h2 className="text-2xl font-bold mb-4">Test Your Connection</h2>
+            <h2 className="text-2xl font-bold mb-4">{t('infoPages.speedTest.testConnection')}</h2>
             <p className="text-[var(--text-secondary)] mb-8">
-              Click the button below to test your current internet speed
+              {t('infoPages.speedTest.testConnectionDesc')}
             </p>
             <button className="bg-[var(--netflix-red)] text-white px-12 py-4 rounded font-bold text-lg hover:bg-[var(--netflix-red-hover)] transition-colors duration-300">
-              Start Speed Test
+              {t('infoPages.speedTest.startTest')}
             </button>
           </div>
         </div>
 
         {/* Recommended Speeds */}
         <div className="max-w-4xl mb-12">
-          <h2 className="text-2xl font-bold mb-6">Recommended Speeds</h2>
+          <h2 className="text-2xl font-bold mb-6">{t('infoPages.speedTest.recommendedSpeeds')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-[var(--background-secondary)] border border-[var(--card-border)] rounded-md p-6">
               <div className="text-3xl font-bold text-[var(--netflix-red)] mb-2">3 Mbps</div>
-              <div className="font-semibold mb-2">SD Quality</div>
+              <div className="font-semibold mb-2">{t('infoPages.speedTest.sdQuality')}</div>
               <div className="text-sm text-[var(--text-secondary)]">
-                Standard Definition (480p)
+                {t('infoPages.speedTest.sdDesc')}
               </div>
             </div>
             <div className="bg-[var(--background-secondary)] border border-[var(--card-border)] rounded-md p-6">
               <div className="text-3xl font-bold text-[var(--netflix-red)] mb-2">5 Mbps</div>
-              <div className="font-semibold mb-2">HD Quality</div>
+              <div className="font-semibold mb-2">{t('infoPages.speedTest.hdQuality')}</div>
               <div className="text-sm text-[var(--text-secondary)]">
-                High Definition (720p - 1080p)
+                {t('infoPages.speedTest.hdDesc')}
               </div>
             </div>
             <div className="bg-[var(--background-secondary)] border border-[var(--card-border)] rounded-md p-6">
               <div className="text-3xl font-bold text-[var(--netflix-red)] mb-2">25 Mbps</div>
-              <div className="font-semibold mb-2">Ultra HD Quality</div>
+              <div className="font-semibold mb-2">{t('infoPages.speedTest.ultraHdQuality')}</div>
               <div className="text-sm text-[var(--text-secondary)]">
-                4K Ultra HD (2160p)
+                {t('infoPages.speedTest.ultraHdDesc')}
               </div>
             </div>
           </div>
@@ -84,7 +86,7 @@ export default function SpeedTest() {
 
         {/* Factors Affecting Speed */}
         <div className="max-w-4xl space-y-6">
-          <h2 className="text-2xl font-bold mb-6">Factors Affecting Streaming Speed</h2>
+          <h2 className="text-2xl font-bold mb-6">{t('infoPages.speedTest.factorsTitle')}</h2>
           {speedFactors.map((factor, index) => (
             <div
               key={index}
@@ -107,14 +109,14 @@ export default function SpeedTest() {
 
         {/* Tips */}
         <div className="max-w-4xl mt-12 bg-[var(--background-secondary)] border border-[var(--card-border)] rounded-md p-8">
-          <h2 className="text-2xl font-bold mb-6">Tips for Better Streaming</h2>
+          <h2 className="text-2xl font-bold mb-6">{t('infoPages.speedTest.tipsTitle')}</h2>
           <ul className="space-y-3">
             {[
-              "Connect your device directly to your router using an Ethernet cable",
-              "Close other applications that may be using bandwidth",
-              "Reduce the number of devices connected to your network",
-              "Move closer to your Wi-Fi router or use a Wi-Fi extender",
-              "Upgrade your internet plan if speeds are consistently low"
+              t('infoPages.speedTest.tip1'),
+              t('infoPages.speedTest.tip2'),
+              t('infoPages.speedTest.tip3'),
+              t('infoPages.speedTest.tip4'),
+              t('infoPages.speedTest.tip5')
             ].map((tip, index) => (
               <li key={index} className="flex items-start gap-3">
                 <span className="text-[var(--netflix-red)] font-bold">{index + 1}.</span>

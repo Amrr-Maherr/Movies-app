@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { usePlatformMovies, usePlatformTVShows } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film, Tv, Globe } from "lucide-react";
@@ -48,6 +49,7 @@ const PLATFORM_INFO: Record<
 };
 
 const Platform = memo(function Platform() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const platformId = id ? parseInt(id, 10) : 0;
   const [activeTab, setActiveTab] = useState<"movies" | "tv">("movies");
@@ -97,8 +99,8 @@ const Platform = memo(function Platform() {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
         <Error
-          message="Failed to load platform content"
-          retryButtonText="Try Again"
+      message={t('common:errors.somethingWentWrong')}
+      retryButtonText={t('common:discover.retry')}
           onRetry={() => window.location.reload()}
         />
       </div>
@@ -108,7 +110,7 @@ const Platform = memo(function Platform() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20 pb-12">
       <HelmetMeta
-        name={`${displayName} - Streaming Platform`}
+        name={`${displayName} - ${t('common:home.streamingPlatforms')}`}
         description={`${displayDescription}. Browse ${totalResults} movies and TV shows available on ${displayName}.`}
       />
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
@@ -159,7 +161,7 @@ const Platform = memo(function Platform() {
             }`}
           >
             <Film className="w-5 h-5" />
-            Movies
+            {t('discover:movies')}
           </button>
           <button
             onClick={() => {
@@ -173,7 +175,7 @@ const Platform = memo(function Platform() {
             }`}
           >
             <Tv className="w-5 h-5" />
-            TV Shows
+            {t('discover:tvShows')}
           </button>
           <span className="ml-auto text-[#737373]">{totalResults} titles</span>
         </div>
@@ -192,7 +194,7 @@ const Platform = memo(function Platform() {
               ) : (
                 <Tv className="w-16 h-16 mx-auto mb-4 opacity-50" />
               )}
-              <p className="text-lg">No content available on this platform</p>
+              <p className="text-lg">{t('common:common.noData')}</p>
             </div>
           }
         >

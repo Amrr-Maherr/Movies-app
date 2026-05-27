@@ -2,6 +2,7 @@ import { memo, useMemo, lazy, Suspense } from "react";
 import { SectionSkeleton } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Card } from "@/components/shared/Card";
+import { useTranslation } from "react-i18next";
 
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
@@ -16,6 +17,7 @@ interface ReviewsSectionProps {
 }
 
 const ReviewsSection = memo(function ReviewsSection({ reviews }: ReviewsSectionProps) {
+  const { t } = useTranslation();
   const validReviews = useMemo(
     () => reviews.filter((r) => r.author && r.content?.trim()),
     [reviews],
@@ -26,13 +28,13 @@ const ReviewsSection = memo(function ReviewsSection({ reviews }: ReviewsSectionP
   return (
     <section className="bg-[var(--section-bg)] py-10">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
-        <h3 className="text-xl font-semibold text-[var(--section-title-color)] mb-6">User Reviews</h3>
+        <h3 className="text-xl font-semibold text-[var(--section-title-color)] mb-6">{t("media.userReviews")}</h3>
         <OptimizedSectionWrapper
           data={validReviews}
           isLoading={false}
           fallback={<SectionSkeleton variant="list" cardCount={4} />}
           height={400}
-          title="User Reviews"
+          title={t("media.userReviews")}
         >
           {(reviewsData) => (
             <Slider slidesPerView={3} slidesPerViewMobile={1} spaceBetween={16} hideNavigation={false}>
@@ -51,7 +53,7 @@ const ReviewsSection = memo(function ReviewsSection({ reviews }: ReviewsSectionP
             </Slider>
           )}
         </OptimizedSectionWrapper>
-        <p className="text-[var(--section-meta-color)] text-xs mt-4">{validReviews.length} reviews</p>
+        <p className="text-[var(--section-meta-color)] text-xs mt-4">{validReviews.length} {t("media.reviews")}</p>
       </div>
     </section>
   );

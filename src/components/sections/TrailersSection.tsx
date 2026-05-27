@@ -3,6 +3,7 @@ import type { Video } from "@/types";
 import { SectionSkeleton } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Card } from "@/components/shared/Card";
+import { useTranslation } from "react-i18next";
 
 // Lazy-loaded components
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
@@ -15,6 +16,7 @@ interface TrailersSectionProps {
 const TrailersSection = memo(function TrailersSection({
   videos,
 }: TrailersSectionProps) {
+  const { t } = useTranslation();
   const [selectedTrailer, setSelectedTrailer] = useState<Video | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -51,14 +53,14 @@ const TrailersSection = memo(function TrailersSection({
       <section className="bg-black py-4 md:py-12">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
           <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
-            Trailers
+            {t("media.trailersVideos")}
           </h2>
           <OptimizedSectionWrapper
             data={youtubeTrailers}
             isLoading={false}
             fallback={<SectionSkeleton variant="grid" cardCount={4} />}
             height={300}
-            title="Trailers"
+            title={t("media.trailersVideos")}
           >
             {(trailersData) => (
               <Slider

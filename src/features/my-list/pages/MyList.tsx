@@ -14,7 +14,7 @@ import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvide
 
 const MyList = memo(function MyList() {
   const { startTour } = useOnboarding();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const myList = useAppSelector(selectList);
@@ -63,19 +63,19 @@ const MyList = memo(function MyList() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background-primary)] text-[var(--text-primary)]">
         <HelmetMeta
-          name="My List"
-          description="Your personal list of saved movies and TV shows on Netflix."
+          name={t("myList.title")}
+          description={t("myList.title")}
         />
         <div className="text-center p-8">
-          <h1 className="text-4xl font-bold mb-4">My List</h1>
+          <h1 className="text-4xl font-bold mb-4">{t("myList.title")}</h1>
           <p className="text-lg text-gray-400 mb-6">
-            Your list is empty. Start adding movies and TV shows to watch later!
+            {t("myList.empty")}
           </p>
           <button
             onClick={() => navigate("/")}
             className="bg-white text-black px-6 py-3 rounded font-semibold hover:bg-gray-200 transition-colors"
           >
-            Browse Content
+            {t("common.getStarted")}
           </button>
         </div>
       </div>
@@ -85,14 +85,14 @@ const MyList = memo(function MyList() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] my-list-container">
       <HelmetMeta
-        name="My List"
-        description="Your personal list of saved movies and TV shows on Netflix."
+        name={t("myList.title")}
+        description={t("myList.title")}
       />
 
       <div className="p-4 sm:p-8">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2">My List</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2">{t("myList.title")}</h1>
         <p className="text-gray-400 mb-8">
-          {myList.length} title{myList.length !== 1 ? "s" : ""}
+          {myList.length} {t("myList.title")}
         </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
@@ -117,7 +117,7 @@ const MyList = memo(function MyList() {
                       <button
                         onClick={(e) => handleRemove(e, item.id)}
                         className="absolute top-2 right-2 bg-black/80 backdrop-blur-sm text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600 z-10"
-                        title="Remove from My List"
+                        title={t("myList.removeFrom")}
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -126,7 +126,7 @@ const MyList = memo(function MyList() {
                       <button
                         onClick={(e) => handlePlay(e, mediaType, item.id, title)}
                         className="absolute bottom-20 right-2 bg-white/90 backdrop-blur-sm text-black p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white"
-                        title="Play"
+                        title={t("buttons.play")}
                       >
                         <Play className="h-4 w-4 fill-black" />
                       </button>

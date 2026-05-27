@@ -1,4 +1,5 @@
 import { memo, lazy, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { Tv } from "lucide-react";
 import { useStreamingPlatforms } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
@@ -15,6 +16,7 @@ const PlatformCard = lazy(() => import("@/components/sections/PlatformCard"));
  * Each platform card links to its dedicated page showing available content.
  */
 const Platforms = memo(function Platforms() {
+  const { t } = useTranslation();
   const { data: platforms, isLoading, error } = useStreamingPlatforms();
 
   if (isLoading) {
@@ -29,8 +31,8 @@ const Platforms = memo(function Platforms() {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] pt-20 flex items-center justify-center">
         <Error
-          message="Failed to load streaming platforms"
-          retryButtonText="Try Again"
+          message={t('common:errors.somethingWentWrong')}
+          retryButtonText={t('common:discover.retry')}
           onRetry={() => window.location.reload()}
         />
       </div>
@@ -40,7 +42,7 @@ const Platforms = memo(function Platforms() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20 pb-12">
       <HelmetMeta
-        name="Streaming Platforms"
+        name={t('common:home.streamingPlatforms')}
         description="Browse all available streaming platforms and discover movies and TV shows available on each service."
       />
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
@@ -51,13 +53,12 @@ const Platforms = memo(function Platforms() {
               <Tv className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white">
-              Streaming Platforms
+              {t('common:home.streamingPlatforms')}
             </h1>
           </div>
 
           <p className="text-lg text-[#b3b3b3] max-w-2xl">
-            Browse all available streaming platforms and discover movies and TV
-            shows available on each service.
+            {t('common:home.browseByPlatform')}
           </p>
         </div>
 
@@ -83,7 +84,7 @@ const Platforms = memo(function Platforms() {
         {/* Platform Count */}
         <div className="mt-8 text-center text-[#737373]">
           <p className="text-sm">
-            Showing {platforms.length} streaming platforms
+            {t('common:search.showingXOfY', { count: platforms.length, total: platforms.length })}
           </p>
         </div>
       </div>

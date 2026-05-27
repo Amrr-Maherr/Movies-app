@@ -4,12 +4,20 @@
     "tvShows": "مسلسلات تلفزيونية",
     "movies": "أفلام",
     "newAndPopular": "جديد وشائع",
-    "myList": "قائمتي"
+    "myList": "قائمتي",
+    "browse": "تصفح",
+    "nowPlaying": "يعرض الآن",
+    "kids": "أطفال وعائلة",
+    "newPopular": "جديد وشائع",
+    "genres": "الأنواع",
+    "languages": "اللغات",
+    "cast": "طاقم التمثيل"
   },
   "header": {
     "search": "بحث",
     "notifications": "إشعارات",
-    "language": "اللغة"
+    "language": "اللغة",
+    "menu": "القائمة"
   },
   "movies": {
     "popular": "شائع",
@@ -17,7 +25,8 @@
     "upcoming": "قريباً",
     "nowPlaying": "يعرض الآن",
     "similar": "أفلام مشابهة",
-    "recommendations": "توصيات"
+    "recommendations": "توصيات",
+    "title": "أفلام"
   },
   "discover": {
     "title": "اكتشف",
@@ -26,14 +35,21 @@
     "genres": "الأنواع",
     "languages": "اللغات",
     "kids": "أطفال وعائلة",
-    "newPopular": "جديد وشائع"
+    "newPopular": "جديد وشائع",
+    "allGenres": "جميع الأنواع",
+    "errorLoading": "فشل تحميل الأنواع",
+    "retry": "حاول مرة أخرى"
   },
   "people": {
     "knownFor": "معروف بـ",
     "biography": "السيرة الذاتية",
     "filmography": "الأعمال",
     "cast": "طاقم التمثيل",
-    "crew": "الطاقم"
+    "crew": "الطاقم",
+    "castPeople": "طاقم التمثيل",
+    "trending": "ممثلون رائجون",
+    "popularActors": "ممثلون مشهورون",
+    "trendingNow": "رائج الآن"
   },
   "common": {
     "loading": "جاري التحميل...",
@@ -53,7 +69,29 @@
     "sort": "ترتيب",
     "viewAll": "عرض الكل",
     "showMore": "عرض المزيد",
-    "showLess": "عرض أقل"
+    "showLess": "عرض أقل",
+    "learnMore": "اعرف المزيد",
+    "noData": "لا توجد بيانات متاحة",
+    "tryAgain": "حاول مرة أخرى",
+    "notFound": "غير موجود",
+    "offline": "أنت غير متصل",
+    "offlineMessage": "يبدو أن اتصالك بالإنترنت قد انقطع. تحقق من إعدادات الشبكة وحاول مرة أخرى.",
+    "offlineTips": "تحقق من اتصال Wi-Fi أو بيانات الجوال",
+    "offlineRefresh": "حاول تحديث الصفحة",
+    "offlineCache": "بعض المحتوى قد لا يزال متاحاً من التخزين المؤقت",
+    "pageNotFound": "هل أضعت طريقك؟",
+    "pageNotFoundMessage": "عذراً، لم نتمكن من العثور على تلك الصفحة. ستجد الكثير لاستكشافه على الصفحة الرئيسية.",
+    "netflixHome": "الصفحة الرئيسية لنتفليكس",
+    "getStarted": "ابدأ الآن",
+    "and": "و",
+    "moreInfo": "المزيد",
+    "myList": "قائمتي",
+    "pause": "إيقاف",
+    "mute": "كتم",
+    "unmute": "إلغاء الكتم",
+    "enterFullscreen": "ملء الشاشة",
+    "exitFullscreen": "الخروج من ملء الشاشة",
+    "fullscreen": "ملء الشاشة"
   },
   "errors": {
     "required": "هذا الحقل مطلوب",
@@ -72,13 +110,79 @@
     "watchNow": "شاهد الآن",
     "trailer": "الإعلان",
     "moreInfo": "المزيد من المعلومات",
-    "share": "مشاركة"
+    "share": "مشاركة",
+    "signIn": "تسجيل الدخول",
+    "signUp": "اشتراك",
+    "signingIn": "جاري تسجيل الدخول...",
+    "creatingAccount": "جاري إنشاء الحساب...",
+    "logout": "تسجيل الخروج من نتفليكس",
+    "menu": "القائمة",
+    "settings": "الإعدادات",
+    "retry": "إعادة المحاولة",
+    "close": "إغلاق",
+    "search": "بحث",
+    "notifications": "إشعارات",
+    "manageProfiles": "إدارة الملفات الشخصية",
+    "account": "الحساب",
+    "help": "مركز المساعدة",
+    "logoutNo": "تسجيل الخروج",
+    "getStarted": "ابدأ الآن",
+    "subscribe": "اشترك",
+    "savePreferences": "حفظ التفضيلات",
+    "rejectAll": "رفض الكل الاختياري",
+    "acceptAll": "قبول الكل",
+    "goHome": "اذهب إلى الرئيسية"
   },
   "search": {
     "title": "بحث",
     "results": "النتائج",
     "noResults": "لم يتم العثور على نتائج",
-    "searchPlaceholder": "ابحث عن أفلام، مسلسلات تلفزيونية، أشخاص..."
+    "searchPlaceholder": "ابحث عن أفلام، مسلسلات تلفزيونية، أشخاص...",
+    "searchPageDescription": "ابحث عن الأفلام والمسلسلات والأشخاص على نتفليكس. اعثر على محتواك المفضل.",
+    "filters": "تصفية",
+    "all": "الكل",
+    "movies": "أفلام",
+    "tvShows": "مسلسلات تلفزيونية",
+    "people": "أشخاص",
+    "actor": "ممثل",
+    "foundResults": "تم العثور على {{count}} نتيجة لـ \"{{query}}\"",
+    "foundResults_plural": "تم العثور على {{count}} نتائج لـ \"{{query}}\"",
+    "searching": "جاري البحث...",
+    "startSearch": "ابدأ بحثك",
+    "startSearchDescription": "ابحث عن الأفلام والمسلسلات والأشخاص من أكبر مكتبة ترفيهية في العالم",
+    "searchError": "خطأ في البحث",
+    "searchErrorMessage": "لم نتمكن من تحميل نتائج البحث. يرجى المحاولة مرة أخرى.",
+    "noResultsFor": "لم نعثر على شيء لـ \"{{query}}\"",
+    "tryDifferentKeywords": "جرّب كلمات مفتاحية مختلفة أو تحقق من الإملاء",
+    "viewAll": "عرض الكل",
+    "showingXOfY": "عرض {{count}} من {{total}} نتيجة",
+    "closeSearch": "إغلاق البحث",
+    "suggestions": {
+      "actionMovies": "🎬 أفلام أكشن",
+      "popularTVShows": "📺 مسلسلات مشهورة",
+      "comedy": "🎭 كوميديا",
+      "animation": "🎪 رسوم متحركة"
+    },
+    "genres": {
+      "action": "أكشن",
+      "comedy": "كوميديا",
+      "drama": "دراما",
+      "horror": "رعب",
+      "sciFi": "خيال علمي",
+      "romance": "رومانسية",
+      "thriller": "إثارة",
+      "documentary": "وثائقي",
+      "animationGenre": "رسوم متحركة",
+      "mystery": "غموض",
+      "fantasy": "فانتازيا",
+      "crime": "جريمة",
+      "adventure": "مغامرة",
+      "musical": "موسيقي",
+      "family": "عائلة",
+      "superhero": "أبطال خارقون",
+      "anime": "أنمي",
+      "koreanDrama": "دراما كورية"
+    }
   },
   "footer": {
     "contact": "اتصل بنا",
@@ -105,6 +209,305 @@
       "instagram": "إنستغرام",
       "twitter": "تويتر",
       "youtube": "يوتيوب"
+    },
+    "questionsLeft": "لديك أسئلة؟ اتصل بنا.",
+    "questionsFAQ": "الأسئلة الشائعة",
+    "questionsHelpCenter": "مركز المساعدة",
+    "questionsTerms": "شروط الاستخدام",
+    "questionsPrivacy": "الخصوصية"
+  },
+  "home": {
+    "topPicks": "أفضل 10 في مصر اليوم",
+    "trendingNow": "رائج الآن",
+    "newReleases": "إصدارات جديدة",
+    "newReleasesWeek": "إصدارات هذا الأسبوع",
+    "trendingTvShows": "مسلسلات رائجة",
+    "featuredMovie": "فيلم مميز",
+    "onlyOnNetflix": "حصرياً على نتفليكس",
+    "awardWinners": "الحائزون على جوائز",
+    "moreReasons": "المزيد من الأسباب للانضمام",
+    "pricing": "الأسعار",
+    "faq": "الأسئلة الشائعة",
+    "plans": "الخطط",
+    "pickPlan": "اختر الخطة التي تناسب مشاهدتك",
+    "planDescription": "شاهد أفلامك ومسلسلاتك المفضلة على أي جهاز. لا رسوم خفية، ألغِ في أي وقت.",
+    "readyToStart": "هل أنت مستعد للبدء؟",
+    "signUpPrompt": "اشترك أو سجل الدخول لاكتشاف آلاف الأفلام والمسلسلات.",
+    "faqQuestion1": "ما هو نتفليكس كلون؟",
+    "faqAnswer1": "نتفليكس كلون هو تطبيق ويب مبني لاستكشاف الأفلام والمسلسلات بواجهة تشبه نتفليكس.",
+    "faqQuestion2": "كيف يمكنني مشاهدة الأفلام؟",
+    "faqAnswer2": "يمكنك تصفح الأفلام الرائجة والشائعة والأعلى تقييماً والقادمة، ثم النقر على أي فيلم لعرض التفاصيل.",
+    "faqQuestion3": "هل المسلسلات التلفزيونية مشمولة؟",
+    "faqAnswer3": "نعم، يمكنك استكشاف المسلسلات الرائجة والشائعة، وعرض المواسم والحلقات وطاقم التمثيل والمزيد.",
+    "faqQuestion4": "هل يوجد إعلان لكل فيلم؟",
+    "faqAnswer4": "عندما تكون متاحة، يتم تضمين الإعلانات مباشرة على صفحة تفاصيل الفيلم أو المسلسل.",
+    "faqQuestion5": "هل يمكنني عرض تفاصيل الإنتاج؟",
+    "faqAnswer5": "نعم، يتم عرض شركات الإنتاج والشبكات والبلدان إلى جانب المراجعات والبيانات الوصفية.",
+    "faqQuestion6": "هل هذا المشروع متجاوب بالكامل؟",
+    "faqAnswer6": "نعم، يتكيف التخطيط مع جميع أحجام الشاشات، بما في ذلك سطح المكتب والجهاز اللوحي والجوال.",
+    "faqSupportText": "لديك سؤال مختلف ولا تجد الإجابة التي تبحث عنها؟ تواصل مع فريق الدعم لدينا عن طريق إرسال بريد إلكتروني وسنعاود الاتصال بك في أقرب وقت ممكن.",
+    "streamingPlatforms": "منصات البث",
+    "viewAllPlatforms": "عرض الكل ←",
+    "browseByPlatform": "تصفح حسب المنصة",
+    "justAdded": "أُضيف حديثاً",
+    "top6Movies": "أفضل 6 أفلام في مصر اليوم"
+  },
+  "reasons": {
+    "enjoyOnTV": {
+      "title": "استمتع بالتلفاز الخاص بك",
+      "description": "شاهد على أجهزة Smart TV و Playstation و Xbox و Chromecast و Apple TV ومشغلات Blu-ray والمزيد."
+    },
+    "downloadOffline": {
+      "title": "نزّل برامجك لمشاهدتها دون اتصال",
+      "description": "احفظ مفضلاتك بسهولة واحصل دائماً على شيء لمشاهدته."
+    },
+    "watchEverywhere": {
+      "title": "شاهد في كل مكان",
+      "description": "شاهد أفلاماً ومسلسلات غير محدودة على هاتفك وجهازك اللوحي والحاسوب المحمول والتلفاز."
+    },
+    "kidsProfiles": {
+      "title": "أنشئ ملفات شخصية للأطفال",
+      "description": "أرسل الأطفال في مغامرات مع شخصياتهم المفضلة في مساحة مصممة خصيصاً لهم - مجاناً مع عضويتك."
     }
+  },
+  "pricing": {
+    "basic": {
+      "name": "أساسي",
+      "price": "$9.99",
+      "description": "بث على شاشة واحدة في كل مرة بجودة قياسية (SD).",
+      "features": {
+        "screen": "شاشة واحدة في كل مرة",
+        "quality": "جودة قياسية (SD)",
+        "unlimited": "أفلام ومسلسلات غير محدودة",
+        "devices": "شاهد على أي جهاز"
+      }
+    },
+    "standard": {
+      "name": "قياسي",
+      "price": "$15.99",
+      "description": "بث على شاشتين في وقت واحد بجودة عالية (HD).",
+      "badge": "الأكثر رواجاً",
+      "features": {
+        "screens": "شاشتان في كل مرة",
+        "quality": "جودة عالية (HD)",
+        "unlimited": "أفلام ومسلسلات غير محدودة",
+        "download": "تنزيل للمشاهدة دون اتصال"
+      }
+    },
+    "premium": {
+      "name": "بريميوم",
+      "price": "$19.99",
+      "description": "بث على 4 شاشات في نفس الوقت بجودة فائقة (4K+HDR).",
+      "features": {
+        "screens": "4 شاشات في كل مرة",
+        "quality": "فائقة الدقة (4K+HDR)",
+        "unlimited": "أفلام ومسلسلات غير محدودة",
+        "download": "تنزيل للمشاهدة دون اتصال",
+        "support": "دعم عملاء ذو أولوية"
+      }
+    },
+    "perMonth": "/الشهر",
+    "getStarted": "ابدأ اليوم"
+  },
+  "infoPages": {
+    "faq": {
+      "title": "الأسئلة الشائعة",
+      "description": "اعثر على إجابات للأسئلة الشائعة حول نتفليكس كلون.",
+      "moreQuestions": "لا تزال لديك أسئلة؟",
+      "contactDescription": "لا تجد الإجابة التي تبحث عنها؟ يرجى التحدث مع فريقنا الودود."
+    },
+    "help": {
+      "title": "مركز المساعدة",
+      "description": "اعثر على إجابات للأسئلة الشائعة واحصل على الدعم.",
+      "quickLinks": "روابط سريعة",
+      "categories": {
+        "account": "الحساب والفواتير",
+        "accountDesc": "إدارة إعدادات حسابك واشتراكك",
+        "troubleshooting": "استكشاف الأخطاء وإصلاحها",
+        "troubleshootingDesc": "إصلاح المشكلات والأخطاء الشائعة",
+        "watching": "مشاهدة نتفليكس",
+        "watchingDesc": "نصائح لأفضل تجربة مشاهدة",
+        "parental": "الرقابة الأبوية",
+        "parentalDesc": "حافظ على سلامة عائلتك أثناء المشاهدة"
+      }
+    },
+    "privacy": {
+      "title": "سياسة الخصوصية"
+    },
+    "terms": {
+      "title": "شروط الاستخدام"
+    },
+    "legal": {
+      "title": "إشعارات قانونية"
+    },
+    "cookies": {
+      "title": "تفضيلات ملفات تعريف الارتباط",
+      "about": "حول ملفات تعريف الارتباط",
+      "aboutDescription": "ملفات تعريف الارتباط هي ملفات نصية صغيرة يتم تخزينها على جهازك عند زيارة موقعنا. تساعدنا في توفير تجربة أفضل لك من خلال تذكر تفضيلاتك وفهم كيفية استخدامك لخدمتنا.",
+      "learnMore": "اعرف المزيد في سياسة الخصوصية الخاصة بنا",
+      "essential": "ملفات تعريف الارتباط الأساسية",
+      "essentialDesc": "هذه الملفات ضرورية لتعمل خدمة نتفليكس بشكل صحيح. تمكن الوظائف الأساسية مثل الأمان وإدارة الشبكة وإمكانية الوصول.",
+      "analytics": "ملفات تعريف الارتباط التحليلية",
+      "analyticsDesc": "تساعدنا هذه الملفات في فهم كيفية استخدامك لخدمة نتفليكس من خلال جمع المعلومات وإعداد التقارير بشكل مجهول. يساعدنا هذا في تحسين خدمتنا.",
+      "personalization": "ملفات تعريف الارتباط للتخصيص",
+      "personalizationDesc": "تسمح لنا هذه الملفات بتذكر تفضيلاتك وتوفير ميزات مخصصة ومحسنة.",
+      "advertising": "ملفات تعريف الارتباط الإعلانية",
+      "advertisingDesc": "تُستخدم هذه الملفات لتقديم إعلانات ذات صلة لك والحد من عدد المرات التي ترى فيها إعلاناً.",
+      "required": "مطلوب",
+      "optional": "اختياري"
+    },
+    "corporate": {
+      "title": "معلومات الشركة"
+    },
+    "investor": {
+      "title": "علاقات المستثمرين"
+    },
+    "jobs": {
+      "title": "الوظائف",
+      "joinTeam": "انضم إلى فريقنا"
+    },
+    "mediaCenter": {
+      "title": "مركز الوسائط"
+    },
+    "waysToWatch": {
+      "title": "طرق المشاهدة"
+    },
+    "speedTest": {
+      "title": "اختبار السرعة"
+    },
+    "contact": {
+      "title": "اتصل بنا"
+    },
+    "account": {
+      "title": "الحساب"
+    },
+    "offline": {
+      "retry": "حاول مرة أخرى"
+    }
+  },
+  "personDetails": {
+    "biography": "السيرة الذاتية",
+    "knownFor": "معروف بـ",
+    "filmography": "الأعمال",
+    "noBiography": "لا توجد سيرة ذاتية متاحة.",
+    "noKnownFor": "لا توجد عناصر معروفة متاحة.",
+    "images": "الصور",
+    "viewAllImages": "عرض كل الصور",
+    "movieCredits": "أعمال سينمائية",
+    "tvCredits": "أعمال تلفزيونية",
+    "allCredits": "جميع الأعمال",
+    "fullCredits": "جميع الأعمال",
+    "alsoKnownAs": "معروف أيضاً باسم",
+    "personalInfo": "معلومات شخصية",
+    "birthday": "تاريخ الميلاد",
+    "placeOfBirth": "مكان الميلاد",
+    "deathday": "تاريخ الوفاة",
+    "gender": "الجنس",
+    "department": "القسم",
+    "knownForDepartment": "معروف بـ"
+  },
+  "media": {
+    "overview": "نظرة عامة",
+    "noOverview": "لا توجد نظرة عامة متاحة.",
+    "topCast": "أبرز طاقم التمثيل",
+    "fullCastAndCrew": "طاقم التمثيل الكامل",
+    "reviews": "المراجعات",
+    "noReviews": "لا توجد مراجعات بعد.",
+    "userReviews": "مراجعات المستخدمين",
+    "moreLikeThis": "المزيد مثل هذا",
+    "recommendations": "توصيات",
+    "details": "التفاصيل",
+    "originalTitle": "العنوان الأصلي",
+    "status": "الحالة",
+    "releaseDate": "تاريخ الإصدار",
+    "runtime": "المدة",
+    "budget": "الميزانية",
+    "revenue": "الإيرادات",
+    "language": "اللغة",
+    "productionCompanies": "شركات الإنتاج",
+    "productionCountries": "بلدان الإنتاج",
+    "networks": "الشبكات",
+    "genres": "الأنواع",
+    "tagline": "الشعار",
+    "viewCollection": "عرض المجموعة",
+    "season": "الموسم",
+    "episode": "الحلقة",
+    "episodes": "الحلقات",
+    "airDate": "تاريخ البث",
+    "partOfCollection": "جزء من {{name}}",
+    "rating": "التقييم",
+    "voteCount": "{{count}} صوت",
+    "popularity": "الشعبية",
+    "trailersVideos": "إعلانات وفيديوهات",
+    "watchProviders": "أين تشاهد",
+    "director": "المخرج",
+    "writers": "الكتّاب",
+    "stars": "النجوم",
+    "crew": "الطاقم",
+    "noVideoAvailable": "لا توجد فيديوهات متاحة.",
+    "noWatchProviders": "لا تتوفر مزودي مشاهدة.",
+    "keywords": "الكلمات المفتاحية",
+    "contentRating": "تصنيف المحتوى",
+    "homepage": "الموقع الإلكتروني"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signUp": "اشتراك",
+    "createAccount": "إنشاء حساب",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "newToNetflix": "جديد في نتفليكس؟",
+    "signInNow": "سجل الدخول الآن.",
+    "signUpNow": "اشترك الآن.",
+    "email": "البريد الإلكتروني أو رقم الهاتف",
+    "password": "كلمة المرور",
+    "name": "الاسم",
+    "phone": "الهاتف",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "rememberMe": "تذكرني",
+    "needHelp": "هل تحتاج مساعدة؟",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "signingIn": "جاري تسجيل الدخول...",
+    "creatingAccount": "جاري إنشاء الحساب...",
+    "noAccount": "ليس لديك حساب؟",
+    "testCredentials": "بيانات الدخول التجريبية",
+    "username": "اسم المستخدم:",
+    "passwordLabel": "كلمة المرور:",
+    "loginFailed": "فشل تسجيل الدخول. يرجى التحقق من بيانات الدخول.",
+    "recaptcha": "هذه الصفحة محمية بواسطة Google reCAPTCHA للتأكد من أنك لست برنامجاً آلياً.",
+    "learnMore": "اعرف المزيد.",
+    "or": "أو",
+    "signUpDescription": "أنشئ حساباً لبدء المشاهدة",
+    "passwordMinLength": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+    "passwordsMustMatch": "يجب أن تتطابق كلمات المرور",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "nameRequired": "الاسم مطلوب"
+  },
+  "subscription": {
+    "step": "الخطوة {{current}} من {{total}}",
+    "account": "الحساب",
+    "plan": "الخطة",
+    "confirm": "تأكيد",
+    "payment": "الدفع",
+    "done": "تم",
+    "getStarted": "ابدأ الآن",
+    "choosePlan": "اختر خطتك",
+    "monthly": "/الشهر",
+    "mostPopular": "الأكثر رواجاً",
+    "confirmSubscription": "تأكيد الاشتراك",
+    "subscribe": "اشترك",
+    "success": "تم الاشتراك بنجاح!",
+    "successMessage": "مرحباً بك في نتفليكس! ابدأ المشاهدة الآن.",
+    "goHome": "اذهب إلى الرئيسية",
+    "basic": "أساسي",
+    "standard": "قياسي",
+    "premium": "بريميوم"
+  },
+  "myList": {
+    "title": "قائمتي",
+    "empty": "قائمتك فارغة",
+    "emptyDescription": "أضف أفلاماً ومسلسلات إلى قائمتك لمشاهدتها لاحقاً.",
+    "addTo": "أضف إلى قائمتي",
+    "removeFrom": "أزل من قائمتي",
+    "inList": "في القائمة"
   }
 }

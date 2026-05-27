@@ -1,4 +1,5 @@
 import { memo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 
 export type NewPopularFilterOption =
   | "trendingMovies"
@@ -11,13 +12,6 @@ interface NewPopularFiltersProps {
   onFilterChange: (filter: NewPopularFilterOption) => void;
 }
 
-const filters: { id: NewPopularFilterOption; label: string }[] = [
-  { id: "trendingMovies", label: "Trending Movies" },
-  { id: "trendingTv", label: "Trending TV Shows" },
-  { id: "nowPlaying", label: "Now Playing in Theaters" },
-  { id: "popularMovies", label: "Popular Movies" },
-];
-
 /**
  * Memoized NewPopularFilters Component
  *
@@ -28,6 +22,15 @@ const NewPopularFilters = memo(function NewPopularFilters({
   activeFilter,
   onFilterChange,
 }: NewPopularFiltersProps) {
+  const { t } = useTranslation();
+
+  const filters: { id: NewPopularFilterOption; label: string }[] = [
+    { id: "trendingMovies", label: t('common:home.trendingNow') },
+    { id: "trendingTv", label: t('common:nav.tvShows') },
+    { id: "nowPlaying", label: t('common:movies.nowPlaying') },
+    { id: "popularMovies", label: t('common:movies.popular') },
+  ];
+
   // Memoize click handler to prevent recreation on every render
   const handleFilterClick = useCallback(
     (filter: NewPopularFilterOption) => {

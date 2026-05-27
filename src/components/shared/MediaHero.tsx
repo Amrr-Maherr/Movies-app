@@ -18,6 +18,7 @@ import {
   getYear,
 } from "@/utils";
 import type { MediaDetails } from "@/types";
+import { useTranslation } from "react-i18next";
 
 // Lazy load BackgroundVideo component for better performance
 const BackgroundVideo = lazy(
@@ -37,6 +38,7 @@ interface MediaHeroProps {
 const MediaHero = memo(function MediaHero({
   media,
 }: MediaHeroProps) {
+  const { t } = useTranslation();
   // const [isAddedToList, setIsAddedToList] = useState(false);
   const [showTrailer, setShowTrailer] = useState(false);
 
@@ -252,7 +254,7 @@ const MediaHero = memo(function MediaHero({
             >
               {/* Match Score - Netflix green */}
               <span className="text-[var(--success)] text-xs sm:text-sm font-bold tracking-tight">
-                {matchScore}% Match
+                {matchScore}% {t('media.rating')}
               </span>
 
               {/* Year */}
@@ -275,7 +277,7 @@ const MediaHero = memo(function MediaHero({
                 className={`${isVisible ? "hidden" : "block"} text-[var(--text-primary)] text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 max-w-[90vw] sm:max-w-xl font-medium drop-shadow-lg hero-description`}
                 style={{ textShadow: "1px 1px 4px rgba(0,0,0,0.8)" }}
               >
-                {media.overview || "No description available."}
+                {media.overview || t('media.noOverview')}
               </p>
             </div>
 
@@ -319,13 +321,13 @@ const MediaHero = memo(function MediaHero({
           onClick={() => setShowTrailer(false)}
           role="dialog"
           aria-modal="true"
-          aria-label="Trailer player"
+          aria-label={t('media.trailersVideos')}
         >
           <div className="relative w-full max-w-5xl aspect-video mx-4">
             <button
               onClick={() => setShowTrailer(false)}
               className="absolute -top-10 right-0 text-white hover:text-[var(--netflix-red)] transition-colors"
-              aria-label="Close trailer"
+              aria-label={t('common.close')}
             >
               <svg
                 className="w-8 h-8"
@@ -344,7 +346,7 @@ const MediaHero = memo(function MediaHero({
             </button>
             <iframe
               src={trailerUrl.replace("watch?v=", "embed/")}
-              title="Media Trailer"
+              title={t('media.trailersVideos')}
               className="w-full h-full rounded-lg"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

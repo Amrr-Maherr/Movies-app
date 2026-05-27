@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { Play, Info, Plus, Check, ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export interface CardHoverOverlayProps {
   title: string;
@@ -29,6 +30,7 @@ const CardHoverOverlay = memo(
     showDropdown = true,
     className = "",
   }: CardHoverOverlayProps) => {
+    const { t } = useTranslation();
     return (
       <div
         className={`absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent transition-opacity duration-300 ease-in-out ${className}`}
@@ -47,14 +49,14 @@ const CardHoverOverlay = memo(
               onClick={onPlay}
             >
               <Play className="h-3 w-3 fill-black" />
-              Play
+              {t("buttons.play")}
             </button>
             <button
               className="bg-[var(--background-secondary)]/90 backdrop-blur-sm text-white py-2 px-3 rounded-md font-semibold text-xs flex items-center justify-center gap-1 hover:bg-[var(--background-tertiary)] transition-colors border border-white/20"
               onClick={onMoreInfo}
             >
               <Info className="h-3 w-3" />
-              Info
+              {t("common.moreInfo")}
             </button>
             {onAddToList && (
               <button
@@ -64,7 +66,7 @@ const CardHoverOverlay = memo(
                     : "bg-[var(--background-secondary)]/90 hover:bg-[var(--background-tertiary)]"
                 }`}
                 onClick={onAddToList}
-                title={isInList ? "Remove from My List" : "Add to My List"}
+                title={isInList ? t("myList.removeFrom") : t("myList.addTo")}
               >
                 {isInList ? (
                   <Check className="h-3 w-3" />

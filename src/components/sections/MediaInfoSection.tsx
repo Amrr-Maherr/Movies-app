@@ -1,6 +1,7 @@
 import { memo, useMemo, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 import type { MediaDetails, Genre } from "@/types";
 import {
   formatRuntime,
@@ -27,6 +28,7 @@ interface MediaInfoSectionProps {
 const MediaInfoSection = memo(function MediaInfoSection({
   media,
 }: MediaInfoSectionProps) {
+  const { t } = useTranslation();
   // Memoized: Pre-calculated values
   const title = useMemo(() => getTitle(media), [media]);
   const releaseDate = useMemo(() => getReleaseDate(media), [media]);
@@ -36,38 +38,38 @@ const MediaInfoSection = memo(function MediaInfoSection({
   const metadataRows = useMemo(() => {
     const rows = [
       {
-        label: "Genres",
+        label: t('media.genres'),
         value:
           media.genres && media.genres.length > 0
             ? media.genres.map((g: Genre) => g.name).join(", ")
             : "",
       },
       {
-        label: "Release Date",
+        label: t('media.releaseDate'),
         value: releaseDate ? formatDate(releaseDate) : "",
       },
       {
-        label: "Runtime",
+        label: t('media.runtime'),
         value: runtime ? formatRuntime(runtime) : "",
       },
       {
-        label: "Original Language",
+        label: t('media.language'),
         value: media.original_language
           ? getLanguageName(media.original_language)
           : "",
       },
       {
-        label: "Rating",
+        label: t('media.rating'),
         value: media.vote_average
-          ? `⭐ ${media.vote_average.toFixed(1)} (${formatNumber(media.vote_count)} votes)`
+          ? `⭐ ${media.vote_average.toFixed(1)} (${t('media.voteCount', { count: media.vote_count })})`
           : "",
       },
       {
-        label: "Status",
+        label: t('media.status'),
         value: media.status && media.status !== "Released" ? media.status : "",
       },
       {
-        label: "Production",
+        label: t('media.productionCompanies'),
         value: "",
         component:
           media.production_companies &&
@@ -115,7 +117,7 @@ const MediaInfoSection = memo(function MediaInfoSection({
             {media.overview && (
               <div className="space-y-4">
                 <h2 className="text-2xl md:text-3xl font-bold text-white">
-                  About {title}
+                  {t('media.overview')}
                 </h2>
                 <p className="text-base md:text-lg text-gray-300 leading-relaxed max-w-4xl">
                   {media.overview}
@@ -127,7 +129,7 @@ const MediaInfoSection = memo(function MediaInfoSection({
             {topCast.length > 0 && (
               <div className="space-y-4 pt-4">
                 <h3 className="text-xl md:text-2xl font-bold text-white">
-                  Cast
+                  {t('media.topCast')}
                 </h3>
                 <Suspense
                   fallback={<SectionSkeleton variant="grid" cardCount={4} />}
@@ -147,7 +149,7 @@ const MediaInfoSection = memo(function MediaInfoSection({
                             id: actor.id,
                             name: actor.name,
                             profileImage: actor.profile_path,
-                            role: actor.character || "Unknown role",
+                            role: actor.character || t('media.noOverview'),
                           }}
                         />
                       ))}
@@ -181,7 +183,7 @@ const MediaInfoSection = memo(function MediaInfoSection({
                 media.production_countries.length > 0 && (
                   <div className="space-y-1.5 pt-4 border-t border-zinc-800">
                     <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Production Countries
+                      {t('media.productionCountries')}
                     </span>
                     <p className="text-base text-gray-200 font-normal">
                       {media.production_countries.map((c) => c.name).join(", ")}
@@ -193,7 +195,7 @@ const MediaInfoSection = memo(function MediaInfoSection({
               {media.spoken_languages && media.spoken_languages.length > 0 && (
                 <div className="space-y-1.5 pt-4 border-t border-zinc-800">
                   <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Available In
+                    {t('media.language')}
                   </span>
                   <p className="text-base text-gray-200 font-normal">
                     {media.spoken_languages
@@ -206,9 +208,9 @@ const MediaInfoSection = memo(function MediaInfoSection({
               {/* Budget & Revenue */}
               {"budget" in media && media.budget && media.budget > 0 && (
                 <div className="space-y-1.5 pt-4 border-t border-zinc-800">
-                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Budget
-                  </span>
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      {t('media.budget')}
+                    </span>
                   <p className="text-base text-gray-200 font-normal">
                     ${formatNumber(media.budget)}
                   </p>
@@ -217,9 +219,9 @@ const MediaInfoSection = memo(function MediaInfoSection({
 
               {"budget" in media && media.revenue && media.revenue > 0 && (
                 <div className="space-y-1.5 pt-4 border-t border-zinc-800">
-                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Revenue
-                  </span>
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      {t('media.revenue')}
+                    </span>
                   <p className="text-base text-gray-200 font-normal">
                     ${formatNumber(media.revenue)}
                   </p>

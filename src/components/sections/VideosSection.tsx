@@ -4,6 +4,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import { SectionSkeleton } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import type { Video } from "@/types";
+import { useTranslation } from "react-i18next";
 
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 const TrailerModal = lazy(() => import("@/components/shared/TrailerModal"));
@@ -34,6 +35,7 @@ const VideoCard = memo(function VideoCard({
   video: Video;
   onPlay: (v: Video) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div
       className="cursor-pointer group"
@@ -41,7 +43,7 @@ const VideoCard = memo(function VideoCard({
       role="button"
       tabIndex={0}
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onPlay(video)}
-      aria-label={`Play ${video.name}`}
+      aria-label={`${t("buttons.play")} ${video.name}`}
     >
       <div className="relative aspect-video rounded overflow-hidden bg-zinc-900">
         <OptimizedImage
@@ -79,6 +81,7 @@ const VideosSection = memo(function VideosSection({
   videos,
   title = "Videos & Trailers",
 }: VideosSectionProps) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<Video | null>(null);
 
   const validVideos = useMemo(

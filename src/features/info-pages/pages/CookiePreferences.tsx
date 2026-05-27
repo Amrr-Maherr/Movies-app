@@ -1,49 +1,51 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Cookie, Settings, BarChart3 } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function CookiePreferences() {
+  const { t } = useTranslation();
   const cookieCategories = [
     {
       icon: <Settings className="w-8 h-8" />,
-      name: "Essential Cookies",
+      name: t('infoPages.cookies.essential'),
       status: "required",
-      description: "These cookies are necessary for the Netflix service to function properly. They enable core functionality such as security, network management, and accessibility."
+      description: t('infoPages.cookies.essentialDesc')
     },
     {
       icon: <BarChart3 className="w-8 h-8" />,
-      name: "Analytics Cookies",
+      name: t('infoPages.cookies.analytics'),
       status: "optional",
-      description: "These cookies help us understand how you use the Netflix service by collecting and reporting information anonymously. This helps us improve our service."
+      description: t('infoPages.cookies.analyticsDesc')
     },
     {
       icon: <Cookie className="w-8 h-8" />,
-      name: "Personalization Cookies",
+      name: t('infoPages.cookies.personalization'),
       status: "optional",
-      description: "These cookies allow us to remember your preferences and provide enhanced, personalized features. They help us show you content that matches your interests."
+      description: t('infoPages.cookies.personalizationDesc')
     },
     {
       icon: <Cookie className="w-8 h-8" />,
-      name: "Advertising Cookies",
+      name: t('infoPages.cookies.advertising'),
       status: "optional",
-      description: "These cookies are used to deliver relevant advertisements to you and limit the number of times you see an advertisement. They help measure the effectiveness of advertising campaigns."
+      description: t('infoPages.cookies.advertisingDesc')
     }
   ];
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
-        name="Cookie Preferences"
-        description="Manage how Netflix uses cookies to improve your streaming experience."
+        name={t('infoPages.cookies.title')}
+        description={t('infoPages.cookies.description')}
       />
 
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Cookie Preferences
+          {t('infoPages.cookies.title')}
         </h1>
         <p className="text-[var(--text-secondary)] text-lg mb-12">
-          Manage how we use cookies to improve your Netflix experience
+          {t('infoPages.cookies.subtitle')}
         </p>
 
         {/* Cookie Categories */}
@@ -63,7 +65,7 @@ export default function CookiePreferences() {
                       <h3 className="text-xl font-semibold">{category.name}</h3>
                       {category.status === "required" && (
                         <span className="text-xs bg-[var(--netflix-red)] text-white px-2 py-1 rounded">
-                          Required
+                          {t('infoPages.cookies.required')}
                         </span>
                       )}
                     </div>
@@ -89,26 +91,24 @@ export default function CookiePreferences() {
         {/* Action Buttons */}
         <div className="max-w-4xl mt-8 flex flex-wrap gap-4">
           <button className="bg-[var(--netflix-red)] text-white px-8 py-3 rounded font-medium hover:bg-[var(--netflix-red-hover)] transition-colors duration-300">
-            Save Preferences
+            {t('buttons.savePreferences')}
           </button>
           <button className="bg-transparent border border-[var(--text-secondary)] text-[var(--text-primary)] px-8 py-3 rounded font-medium hover:border-[var(--netflix-red)] hover:text-[var(--netflix-red)] transition-colors duration-300">
-            Reject All Optional
+            {t('buttons.rejectAll')}
           </button>
           <button className="bg-transparent border border-[var(--text-secondary)] text-[var(--text-primary)] px-8 py-3 rounded font-medium hover:border-[var(--netflix-red)] hover:text-[var(--netflix-red)] transition-colors duration-300">
-            Accept All
+            {t('buttons.acceptAll')}
           </button>
         </div>
 
         {/* Info Section */}
         <div className="max-w-4xl mt-12 pt-8 border-t border-[var(--card-border)]">
-          <h2 className="text-xl font-semibold mb-4">About Cookies</h2>
+          <h2 className="text-xl font-semibold mb-4">{t('infoPages.cookies.about')}</h2>
           <p className="text-[var(--text-secondary)] leading-relaxed mb-4">
-            Cookies are small text files that are stored on your device when you visit our website. 
-            They help us provide you with a better experience by remembering your preferences and 
-            understanding how you use our service.
+            {t('infoPages.cookies.aboutDescription')}
           </p>
           <Link to={getLocalizedLink('/privacy')} className="text-[var(--netflix-red)] hover:underline">
-            Learn more in our Privacy Policy
+            {t('infoPages.cookies.learnMore')}
           </Link>
         </div>
       </div>

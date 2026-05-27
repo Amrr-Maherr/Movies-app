@@ -7,6 +7,7 @@ import { HeroMedia } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addToList, removeFromList, selectIsInList } from "@/features/my-list/store/listSlice";
 import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 interface ActionButtonsProps {
   movie?: HeroMedia;
@@ -20,6 +21,7 @@ const ActionButtons = memo(function ActionButtons({
   movie,
   onMoreInfo,
 }: ActionButtonsProps) {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const isInList = useAppSelector((state) =>
     movie ? selectIsInList(state, movie.id) : false,
@@ -63,7 +65,7 @@ const ActionButtons = memo(function ActionButtons({
             className="w-5 h-5 sm:w-6 sm:h-6 md:w-6 md:h-6 fill-current"
             aria-hidden="true"
           />
-          Play
+          {t('buttons.play')}
         </button>
       </Link>
 
@@ -83,7 +85,7 @@ const ActionButtons = memo(function ActionButtons({
           className="w-5 h-5 sm:w-6 sm:h-6 md:w-6 md:h-6"
           aria-hidden="true"
         />
-        More Info
+        {t('buttons.moreInfo')}
       </button>
 
       {/* 
@@ -100,8 +102,8 @@ const ActionButtons = memo(function ActionButtons({
             : "bg-[var(--background-secondary)]/80 hover:bg-[var(--background-tertiary)] text-white"
         }`}
         aria-pressed={isInList}
-        aria-label={isInList ? "Remove from My List" : "Add to My List"}
-        title={isInList ? "Remove from My List" : "Add to My List"}
+        aria-label={isInList ? t('myList.removeFrom') : t('myList.addTo')}
+        title={isInList ? t('myList.removeFrom') : t('myList.addTo')}
       >
         {isInList ? (
           <Check
@@ -114,7 +116,7 @@ const ActionButtons = memo(function ActionButtons({
             aria-hidden="true"
           />
         )}
-        {isInList ? "In List" : "My List"}
+        {isInList ? t('myList.inList') : t('myList.addTo')}
       </button>
     </div>
   );

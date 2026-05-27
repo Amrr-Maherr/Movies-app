@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Film, Calendar } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { Season } from "@/types";
+import { useTranslation } from "react-i18next";
 
 export interface SeasonLayoutProps {
   season: Season;
@@ -17,6 +18,7 @@ export interface SeasonLayoutProps {
  */
 const SeasonLayout = memo(
   ({ season, title, imageUrl, formattedAirDate }: SeasonLayoutProps) => {
+    const { t } = useTranslation();
     return (
       <div className="relative">
         <div className="relative rounded-lg bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-2xl">
@@ -37,7 +39,7 @@ const SeasonLayout = memo(
               </div>
             )}
             <div className="absolute top-2 left-2 rounded bg-black/80 px-3 py-1.5 text-sm font-semibold text-white backdrop-blur-sm">
-              Season {season.season_number}
+              {t("media.season")} {season.season_number}
             </div>
             <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <div className="rounded-full bg-white/90 px-6 py-3 text-sm font-semibold text-black shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
@@ -53,7 +55,7 @@ const SeasonLayout = memo(
           <div className="mt-2 flex items-center justify-between text-xs text-gray-400">
             <div className="flex items-center gap-1.5">
               <Film className="h-3.5 w-3.5" />
-              <span>{season.episode_count} Episodes</span>
+                <span>{season.episode_count} {t("media.episodes")}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Calendar className="h-3.5 w-3.5" />

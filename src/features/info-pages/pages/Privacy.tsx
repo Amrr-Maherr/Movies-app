@@ -1,55 +1,57 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Shield, Lock, Eye, Database } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function Privacy() {
+  const { t } = useTranslation();
   const sections = [
     {
       icon: <Shield className="w-6 h-6" />,
-      title: "Information We Collect",
-      content: "We collect information you provide directly to us, such as when you create or modify your account, request customer support, or otherwise communicate with us. This may include your name, email address, phone number, billing information, and payment method."
+      title: t('infoPages:privacy.sections.collect'),
+      content: t('infoPages:privacy.sections.collectContent')
     },
     {
       icon: <Eye className="w-6 h-6" />,
-      title: "How We Use Your Information",
-      content: "We use the information we collect to provide, maintain, and improve our services, to process your requests, and to send you related information. We also use this information to personalize your experience and to show you content that we think you might be interested in."
+      title: t('infoPages:privacy.sections.use'),
+      content: t('infoPages:privacy.sections.useContent')
     },
     {
       icon: <Lock className="w-6 h-6" />,
-      title: "Information Sharing",
-      content: "We do not sell your personal information. We may share your information with service providers who perform services on our behalf, in response to legal requests, or to protect our rights and the rights of others."
+      title: t('infoPages:privacy.sections.sharing'),
+      content: t('infoPages:privacy.sections.sharingContent')
     },
     {
       icon: <Database className="w-6 h-6" />,
-      title: "Data Retention",
-      content: "We retain your personal information for as long as your account is active or as needed to provide you services. We may also retain and use your information as necessary to comply with our legal obligations, resolve disputes, and enforce our agreements."
+      title: t('infoPages:privacy.sections.retention'),
+      content: t('infoPages:privacy.sections.retentionContent')
     },
     {
       icon: <Shield className="w-6 h-6" />,
-      title: "Your Rights",
-      content: "You have the right to access, correct, or delete your personal information. You can do this through your account settings or by contacting us. You may also have the right to data portability and to object to certain processing of your information."
+      title: t('infoPages:privacy.sections.rights'),
+      content: t('infoPages:privacy.sections.rightsContent')
     },
     {
       icon: <Lock className="w-6 h-6" />,
-      title: "Security",
-      content: "We take reasonable measures to help protect your personal information from loss, theft, misuse, and unauthorized access, disclosure, alteration, and destruction. However, no internet transmission is ever completely secure."
+      title: t('infoPages:privacy.sections.security'),
+      content: t('infoPages:privacy.sections.securityContent')
     }
   ];
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
-        name="Privacy Policy"
-        description="Netflix Privacy Policy - Learn how we collect, use, and protect your personal information."
+        name={t('infoPages:privacy.title')}
+        description={t('infoPages:privacy.description')}
       />
 
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Privacy Policy
+          {t('infoPages:privacy.title')}
         </h1>
         <p className="text-[var(--text-secondary)] text-lg mb-12">
-          Your privacy is important to us. Here's how we protect your data.
+          {t('infoPages:privacy.subtitle')}
         </p>
 
         {/* Content */}
@@ -78,10 +80,9 @@ export default function Privacy() {
 
         {/* Contact Section */}
         <div className="max-w-4xl mt-12 bg-[var(--background-secondary)] border border-[var(--card-border)] rounded-md p-8">
-          <h2 className="text-2xl font-bold mb-4">Contact Us</h2>
+          <h2 className="text-2xl font-bold mb-4">{t('infoPages.privacy.contactUs')}</h2>
           <p className="text-[var(--text-secondary)] mb-6">
-            If you have questions about this Privacy Policy or our data practices, 
-            please contact our Privacy Office:
+            {t('infoPages.privacy.contactDesc')}
           </p>
           <a
             href="mailto:privacy@netflix.com"
@@ -93,13 +94,13 @@ export default function Privacy() {
 
         {/* Related Links */}
         <div className="max-w-4xl mt-8 pt-8 border-t border-[var(--card-border)]">
-          <p className="text-[var(--text-secondary)] mb-4">Related policies:</p>
+          <p className="text-[var(--text-secondary)] mb-4">{t('infoPages.privacy.relatedPolicies')}</p>
           <div className="flex flex-wrap gap-4">
             <Link to={getLocalizedLink('/terms-of-use')} className="text-[var(--netflix-red)] hover:underline">
-              Terms of Use
+              {t('infoPages.terms.title')}
             </Link>
             <Link to={getLocalizedLink('/cookie-preferences')} className="text-[var(--netflix-red)] hover:underline">
-              Cookie Preferences
+              {t('infoPages.cookies.title')}
             </Link>
           </div>
         </div>

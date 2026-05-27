@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { User } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import { useTranslation } from "react-i18next";
 
 export interface PersonLayoutProps {
   name: string;
@@ -21,12 +22,13 @@ export interface PersonLayoutProps {
  */
 const PersonLayout = memo(
   ({ name, imageUrl, role, isHovered }: PersonLayoutProps) => {
+    const { t } = useTranslation();
     return (
       <div
         className="relative group touch-manipulation min-h-[48px]"
         role="article"
         tabIndex={0}
-        aria-label={`View details for ${name}, ${role}`}
+        aria-label={`${t("common.moreInfo")} ${name}, ${role}`}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();

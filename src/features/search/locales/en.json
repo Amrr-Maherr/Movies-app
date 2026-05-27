@@ -3,5 +3,25 @@
   "placeholder": "Search for movies, TV shows, people...",
   "results": "Results",
   "noResults": "No results found",
-  "filters": "Filters"
+  "filters": "Filters",
+  "genres": {
+    "action": "Action",
+    "comedy": "Comedy",
+    "drama": "Drama",
+    "horror": "Horror",
+    "sciFi": "Sci-Fi",
+    "romance": "Romance",
+    "thriller": "Thriller",
+    "documentary": "Documentary",
+    "animationGenre": "Animation",
+    "mystery": "Mystery",
+    "fantasy": "Fantasy",
+    "crime": "Crime",
+    "adventure": "Adventure",
+    "musical": "Musical",
+    "family": "Family",
+    "superhero": "Superhero",
+    "anime": "Anime",
+    "koreanDrama": "Korean Drama"
+  }
 }

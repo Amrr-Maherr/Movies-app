@@ -57,24 +57,24 @@ export default function Login() {
   return (
     <AuthLayout>
       <HelmetMeta
-        name="Sign In"
-        description="Sign in to your Netflix account to watch movies and TV shows"
+        name={t('auth.login.title')}
+        description={t('auth.login.description')}
       />
       <div className="w-full max-w-[450px] bg-black/75 rounded-lg px-8 py-16 md:px-16 md:py-12">
-        <h1 className="text-3xl font-bold text-white mb-8">Sign In</h1>
+        <h1 className="text-3xl font-bold text-white mb-8">{t('auth.login.title')}</h1>
 
         {/* Test Credentials */}
         <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-4 mb-6">
           <p className="text-sm font-medium text-white mb-2">
-            Test Credentials:
+            {t('auth.login.testCredentials')}
           </p>
           <div className="text-sm text-neutral-400 space-y-1">
             <p>
-              <span className="text-neutral-500">Username:</span>{" "}
+              <span className="text-neutral-500">{t('auth.login.username')}</span>{" "}
               <span className="text-white font-mono">emilys</span>
             </p>
             <p>
-              <span className="text-neutral-500">Password:</span>{" "}
+              <span className="text-neutral-500">{t('auth.login.passwordLabel')}</span>{" "}
               <span className="text-white font-mono">emilyspass</span>
             </p>
           </div>
@@ -83,7 +83,7 @@ export default function Login() {
         {error && (
           <div className="mb-4 p-3 rounded bg-[#e87c7c] text-white text-sm">
             {(error as Error).message ||
-              "Login failed. Please check your credentials."}
+                                  t('auth.login.loginFailed')}
           </div>
         )}
 
@@ -100,7 +100,7 @@ export default function Login() {
                 className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
               />
               <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
-                Email or phone number
+                {t('auth.login.email')}
               </label>
             </div>
 
@@ -115,7 +115,7 @@ export default function Login() {
                 className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
               />
               <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
-                Password
+                {t('auth.login.password')}
               </label>
             </div>
           </Suspense>
@@ -141,30 +141,29 @@ export default function Login() {
                 htmlFor="remember"
                 className="text-[#737373] cursor-pointer hover:text-white transition-colors"
               >
-                Remember me
+                {t('auth.login.rememberMe')}
               </label>
             </div>
             <Link to="#" className="hover:underline">
-              Need help?
+              {t('auth.login.forgotPassword')}
             </Link>
           </div>
         </form>
 
         <div className="mt-16 text-[#737373] flex flex-col gap-4">
           <p className="text-base">
-            New to Netflix?{" "}
+            {t('auth.login.noAccount')}{" "}
             <Link
               to={getLocalizedLink('/signup')}
               className="text-white hover:underline font-medium"
             >
-              Sign up now.
+              {t('auth.login.signUpNow')}
             </Link>
           </p>
           <p className="text-xs">
-            This page is protected by Google reCAPTCHA to ensure you're not a
-            bot.{" "}
+            {t('auth.login.recaptcha')}{" "}
             <Link to="#" className="text-blue-500 hover:underline">
-              Learn more.
+              {t('auth.login.learnMore')}
             </Link>
           </p>
         </div>

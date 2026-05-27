@@ -1,34 +1,36 @@
+import { useTranslation } from "react-i18next";
 import { TrendingUp, DollarSign, Users, FileText } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function InvestorRelations() {
+  const { t } = useTranslation();
   const financialHighlights = [
-    { icon: <TrendingUp className="w-8 h-8" />, label: "Revenue Growth", value: "+12.5%" },
-    { icon: <DollarSign className="w-8 h-8" />, label: "Market Cap", value: "$195B" },
-    { icon: <Users className="w-8 h-8" />, label: "Global Subscribers", value: "260M+" },
-    { icon: <FileText className="w-8 h-8" />, label: "Content Investment", value: "$17B" }
+    { icon: <TrendingUp className="w-8 h-8" />, label: t('infoPages.investor.revenueGrowth'), value: "+12.5%" },
+    { icon: <DollarSign className="w-8 h-8" />, label: t('infoPages.investor.marketCap'), value: "$195B" },
+    { icon: <Users className="w-8 h-8" />, label: t('infoPages.investor.globalSubscribers'), value: "260M+" },
+    { icon: <FileText className="w-8 h-8" />, label: t('infoPages.investor.contentInvestment'), value: "$17B" }
   ];
 
   const reports = [
-    { title: "Q4 2025 Earnings Report", date: "January 20, 2026", type: "PDF" },
-    { title: "Q3 2025 Earnings Report", date: "October 18, 2025", type: "PDF" },
-    { title: "2025 Annual Report", date: "March 15, 2025", type: "PDF" },
-    { title: "2024 Annual Report", date: "March 20, 2024", type: "PDF" }
+    { title: t('infoPages.investor.report1'), date: t('infoPages.investor.report1Date'), type: "PDF" },
+    { title: t('infoPages.investor.report2'), date: t('infoPages.investor.report2Date'), type: "PDF" },
+    { title: t('infoPages.investor.report3'), date: t('infoPages.investor.report3Date'), type: "PDF" },
+    { title: t('infoPages.investor.report4'), date: t('infoPages.investor.report4Date'), type: "PDF" }
   ];
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
-        name="Investor Relations"
-        description="Netflix investor information, financial data, and stock information."
+        name={t('infoPages.investor.title')}
+        description={t('infoPages.investor.description')}
       />
 
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Investor Relations
+          {t('infoPages.investor.title')}
         </h1>
         <p className="text-[var(--text-secondary)] text-lg mb-12">
-          Netflix financial information, reports, and investor resources
+          {t('infoPages.investor.subtitle')}
         </p>
 
         {/* Financial Highlights */}
@@ -53,14 +55,14 @@ export default function InvestorRelations() {
 
         {/* Stock Information */}
         <div className="bg-[var(--background-secondary)] border border-[var(--card-border)] rounded-md p-8 mb-12">
-          <h2 className="text-2xl font-bold mb-6">Stock Information</h2>
+          <h2 className="text-2xl font-bold mb-6">{t('infoPages.investor.stockInfo')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <p className="text-[var(--text-secondary)] mb-2">NASDAQ Symbol</p>
+              <p className="text-[var(--text-secondary)] mb-2">{t('infoPages.investor.nasdaqSymbol')}</p>
               <p className="text-2xl font-bold">NFLX</p>
             </div>
             <div>
-              <p className="text-[var(--text-secondary)] mb-2">Current Price</p>
+              <p className="text-[var(--text-secondary)] mb-2">{t('infoPages.investor.currentPrice')}</p>
               <p className="text-2xl font-bold text-[#46d369]">$485.23 (+2.4%)</p>
             </div>
           </div>
@@ -68,7 +70,7 @@ export default function InvestorRelations() {
 
         {/* Financial Reports */}
         <div>
-          <h2 className="text-2xl font-bold mb-6">Financial Reports</h2>
+          <h2 className="text-2xl font-bold mb-6">{t('infoPages.investor.financialReports')}</h2>
           <div className="space-y-4">
             {reports.map((report, index) => (
               <div

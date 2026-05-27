@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, lazy, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { useNetworkDetails, useNetworkTVSeries } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
@@ -11,6 +12,7 @@ const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const Network = memo(function Network() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const networkId = id ? parseInt(id, 10) : 0;
 
@@ -43,8 +45,8 @@ const Network = memo(function Network() {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
         <Error
-          message="Network not found"
-          retryButtonText="Go Back"
+          message={t('common:errors.notFound')}
+          retryButtonText={t('common:common.back')}
           onRetry={() => window.history.back()}
         />
       </div>
@@ -111,7 +113,7 @@ const Network = memo(function Network() {
                 {networkShows && (
                   <div className="flex items-center gap-2">
                     <Tv className="w-4 h-4" />
-                    <span>{networkShows.total_results} TV Shows</span>
+                    <span>{networkShows.total_results} {t('discover:tvShows')}</span>
                   </div>
                 )}
 
@@ -153,7 +155,7 @@ const Network = memo(function Network() {
                 <OptimizedSectionWrapper
                   data={network.parent_organization}
                   isLoading={networkLoading}
-                  fallback={<span className="text-white/60">Loading...</span>}
+                  fallback={<span className="text-white/60">{t('common:common.loading')}</span>}
                   height={32}
                   title="Parent Org"
                 >
@@ -175,13 +177,13 @@ const Network = memo(function Network() {
       {/* TV Series Section */}
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8 md:py-12">
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
-          TV Shows by {network.name}
+          {t('discover:tvShows')} by {network.name}
         </h2>
 
         {showsError ? (
           <Error
-            message="Failed to load TV shows"
-            retryButtonText="Try Again"
+            message={t('common:errors.somethingWentWrong')}
+            retryButtonText={t('common:discover.retry')}
             onRetry={() => window.location.reload()}
           />
         ) : (
@@ -194,7 +196,7 @@ const Network = memo(function Network() {
             isEmptyFallback={
               <div className="text-center py-12 text-[#737373]">
                 <Tv className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p className="text-lg">No TV shows available</p>
+                <p className="text-lg">{t('common:common.noData')}</p>
               </div>
             }
           >

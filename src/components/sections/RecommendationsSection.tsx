@@ -3,6 +3,7 @@ import { SectionSkeleton } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import Card from "@/components/shared/Card/Card";
 import type { HeroMedia } from "@/types";
+import { useTranslation } from "react-i18next";
 
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
 
@@ -16,6 +17,7 @@ const RecommendationsSection = memo(function RecommendationsSection({
   recommendations,
   title = "More Like This",
 }: RecommendationsSectionProps) {
+  const { t } = useTranslation();
   const items = useMemo(
     () =>
       recommendations
@@ -59,7 +61,7 @@ const RecommendationsSection = memo(function RecommendationsSection({
           )}
         </OptimizedSectionWrapper>
         <p className="text-[var(--section-meta-color)] text-xs mt-4">
-          {items.length} titles
+          {items.length} {t("nav.movies")}
         </p>
       </div>
     </section>

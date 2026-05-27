@@ -1,6 +1,7 @@
 import { memo, useState } from "react";
 import { Play } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
+import { useTranslation } from "react-i18next";
 
 export interface TrailerLayoutProps {
   title: string;
@@ -29,12 +30,13 @@ const TrailerLayout = memo(
     imageLoaded,
     onImageLoad,
   }: TrailerLayoutProps) => {
+    const { t } = useTranslation();
     return (
       <div
         className="relative group touch-manipulation min-h-[48px]"
         role="article"
         tabIndex={0}
-        aria-label={`Play trailer: ${title}`}
+        aria-label={`${t("buttons.trailer")}: ${title}`}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();

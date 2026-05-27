@@ -4,6 +4,7 @@ import { Card } from "@/components/shared/Card";
 import { SectionSkeleton } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { filterKeyCrew } from "@/utils";
+import { useTranslation } from "react-i18next";
 
 // Lazy-loaded component
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
@@ -18,6 +19,7 @@ const FullCreditsSection = memo(function FullCreditsSection({
   cast,
   crew,
 }: FullCreditsSectionProps) {
+  const { t } = useTranslation();
   // Memoized: Top billed cast (limit to 20)
   const topBilledCast = useMemo(() => cast.slice(0, 20), [cast]);
 
@@ -36,7 +38,7 @@ const FullCreditsSection = memo(function FullCreditsSection({
         {topBilledCast.length > 0 && (
           <div className="mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
-              Top Billed Cast
+              {t("media.topCast")}
             </h2>
             <Suspense
               fallback={<SectionSkeleton variant="grid" cardCount={6} />}
@@ -70,7 +72,7 @@ const FullCreditsSection = memo(function FullCreditsSection({
         {keyCrew.length > 0 && (
           <div className="mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
-              Crew
+              {t("people.crew")}
             </h2>
             <Suspense
               fallback={<SectionSkeleton variant="grid" cardCount={6} />}

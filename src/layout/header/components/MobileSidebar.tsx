@@ -5,6 +5,7 @@ import { HeaderLinks } from "@/layout/header/data/header";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 interface MobileSidebarProps {
   open: boolean;
@@ -16,6 +17,7 @@ const MobileSidebar = memo(function MobileSidebar({
   open,
   onOpenChange,
 }: MobileSidebarProps) {
+  const { t } = useTranslation();
   // Memoized: Handle logout click
   const handleLogout = useCallback(() => {
     console.log("Logout clicked");
@@ -29,7 +31,7 @@ const MobileSidebar = memo(function MobileSidebar({
           {/* Header with close button */}
           <div className="flex items-center justify-between p-4 border-b border-[var(--separator)]">
             <span className="text-lg font-bold text-[var(--text-primary)]">
-              Menu
+              {t("header.menu")}
             </span>
             <DrawerClose className="text-[var(--text-primary)] hover:bg-[var(--hover-overlay)] p-2 rounded-full transition-colors duration-200">
               <X className="w-6 h-6" />
@@ -64,20 +66,20 @@ const MobileSidebar = memo(function MobileSidebar({
               className="block px-6 py-3 text-[var(--text-primary)] font-medium hover:bg-[var(--hover-overlay)] rounded transition-colors duration-200"
               onClick={() => onOpenChange(false)}
             >
-              Account
+              {t("footer.account")}
             </NavLink>
             <NavLink
               to={getLocalizedLink('/settings')}
               className="block px-6 py-3 text-[var(--text-primary)] font-medium hover:bg-[var(--hover-overlay)] rounded transition-colors duration-200"
               onClick={() => onOpenChange(false)}
             >
-              buttons.settings
+              {t("buttons.settings")}
             </NavLink>
             <button
               className="w-full text-left px-6 py-3 text-[var(--error)] font-medium hover:bg-[var(--hover-overlay)] rounded transition-colors duration-200"
               onClick={handleLogout}
             >
-              buttons.logout
+              {t("buttons.logoutNo")}
             </button>
           </div>
         </div>

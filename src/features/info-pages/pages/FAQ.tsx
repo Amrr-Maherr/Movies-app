@@ -1,46 +1,48 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function FAQ() {
+  const { t } = useTranslation();
   const faqs = [
     {
-      question: "What is Netflix?",
-      answer: "Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices. You can watch as much as you want, whenever you want without a single commercial – all for one low monthly price."
+      question: t('infoPages:faq.questions.whatIsNetflix'),
+      answer: t('infoPages:faq.questions.whatIsNetflixAnswer')
     },
     {
-      question: "How much does Netflix cost?",
-      answer: "Watch Netflix on your smartphone, tablet, Smart TV, laptop, or streaming device, all for one fixed monthly fee. Plans range from USD 9.99 to USD 19.99 a month. No extra costs, no contracts."
+      question: t('infoPages:faq.questions.howMuch'),
+      answer: t('infoPages:faq.questions.howMuchAnswer')
     },
     {
-      question: "Where can I watch?",
-      answer: "Watch anywhere, anytime. Sign in with your Netflix account to watch instantly on the web at netflix.com from your personal computer or on any internet-connected device that offers the Netflix app, including smart TVs, smartphones, tablets, streaming media players and game consoles."
+      question: t('infoPages:faq.questions.whereWatch'),
+      answer: t('infoPages:faq.questions.whereWatchAnswer')
     },
     {
-      question: "How do I cancel?",
-      answer: "Netflix is flexible. There are no pesky contracts and no commitments. You can easily cancel your account online in two clicks. There are no cancellation fees – start or stop your account anytime."
+      question: t('infoPages:faq.questions.howCancel'),
+      answer: t('infoPages:faq.questions.howCancelAnswer')
     },
     {
-      question: "What can I watch on Netflix?",
-      answer: "Netflix has an extensive library of feature films, documentaries, TV shows, anime, award-winning Netflix originals, and more. Watch as much as you want, anytime you want."
+      question: t('infoPages:faq.questions.whatWatch'),
+      answer: t('infoPages:faq.questions.whatWatchAnswer')
     },
     {
-      question: "Is Netflix good for kids?",
-      answer: "The Netflix Kids experience is included in your membership to give parents control while kids enjoy family-friendly TV shows and movies in their own space. Kids profiles come with PIN-protected parental controls that let you restrict the maturity rating of content kids can watch and block specific titles you don't want kids to see."
+      question: t('infoPages:faq.questions.goodForKids'),
+      answer: t('infoPages:faq.questions.goodForKidsAnswer')
     }
   ];
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
-        name="Frequently Asked Questions"
-        description="Find answers to common questions about Netflix streaming service."
+        name={t('infoPages:faq.title')}
+        description={t('infoPages:faq.description')}
       />
 
       {/* Header */}
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-12 text-center">
-          Frequently Asked Questions
+          {t('infoPages:faq.title')}
         </h1>
 
         {/* FAQ Items */}
@@ -65,12 +67,12 @@ export default function FAQ() {
         {/* CTA Section */}
         <div className="text-center mt-12">
           <p className="text-[var(--text-secondary)] mb-6">
-            Want to learn more? Check out our{" "}
+            {t('infoPages:faq.moreQuestions')}{" "}
             <Link
               to={getLocalizedLink('/help-center')}
               className="text-[var(--netflix-red)] hover:underline"
             >
-              Help Center
+              {t('infoPages:helpCenter.title')}
             </Link>
           </p>
         </div>

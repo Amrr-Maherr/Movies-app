@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Flame, Play } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 export interface LandscapeLayoutProps {
   title: string;
@@ -33,7 +34,9 @@ const LandscapeLayout = memo(
     mediaType,
     detailsUrl,
     isAdult = false,
-  }: LandscapeLayoutProps) => (
+  }: LandscapeLayoutProps) => {
+    const { t } = useTranslation();
+    return (
     /* 
       ACCESSIBILITY FIX: Card wrapper is now a clickable div with proper role
       instead of anchor to avoid nested interactive elements issue.
@@ -42,7 +45,7 @@ const LandscapeLayout = memo(
     <a
       href={getLocalizedLink(detailsUrl)}
       className="block w-full group touch-manipulation"
-      aria-label={`View details for ${title}`}
+      aria-label={`${t("common.moreInfo")} ${title}`}
     >
       <motion.div
         className="relative rounded-xl w-full shadow-xl cursor-pointer min-h-[48px]"
@@ -117,14 +120,15 @@ const LandscapeLayout = memo(
                 </span>
               )}
               <span className="text-gray-400">
-                {mediaType === "tv" ? "Series" : "Movie"}
+                {mediaType === "tv" ? t("media.episodes") : t("nav.movies")}
               </span>
             </div>
           </div>
         </div>
       </motion.div>
     </a>
-  ),
+    );
+  },
 );
 
 LandscapeLayout.displayName = "LandscapeLayout";

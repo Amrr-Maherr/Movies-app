@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useTvShowsByGenre, useTvGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Tv } from "lucide-react";
@@ -10,6 +11,7 @@ import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper"
 import Card from "@/components/shared/Card/Card";
 
 const GenreTV = memo(function GenreTV() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const genreId = id ? parseInt(id, 10) : 0;
   const [page, setPage] = useState(1);
@@ -39,8 +41,8 @@ const GenreTV = memo(function GenreTV() {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
         <Error
-          message="Failed to load TV shows"
-          retryButtonText="Try Again"
+          message={t('common:errors.somethingWentWrong')}
+          retryButtonText={t('common:discover.retry')}
           onRetry={() => window.location.reload()}
         />
       </div>
@@ -50,7 +52,7 @@ const GenreTV = memo(function GenreTV() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20 pb-12">
       <HelmetMeta
-        name={`${genreName} TV Shows`}
+        name={`${genreName} ${t('discover:tvShows')}`}
         description={`Watch ${totalResults} TV shows in the ${genreName} genre. Stream the best ${genreName} series on Netflix.`}
       />
       <div className="container">
@@ -59,7 +61,7 @@ const GenreTV = memo(function GenreTV() {
           <div className="flex items-center gap-3 mb-4">
             <Tv className="w-8 h-8 text-[var(--netflix-red)]" />
             <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)]">
-              {genreName} TV Shows
+              {genreName} {t('discover:tvShows')}
             </h1>
           </div>
           <p className="text-base text-[var(--text-secondary)]">
@@ -77,7 +79,7 @@ const GenreTV = memo(function GenreTV() {
           isEmptyFallback={
             <div className="text-center py-12 text-[var(--text-muted)]">
               <Tv className="w-16 h-16 mx-auto mb-4 opacity-50" />
-              <p className="text-lg">No TV shows available in this genre</p>
+              <p className="text-lg">{t('common:common.noData')}</p>
             </div>
           }
         >

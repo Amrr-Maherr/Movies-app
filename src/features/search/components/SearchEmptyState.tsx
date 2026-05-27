@@ -1,4 +1,5 @@
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -18,6 +19,7 @@ const SearchEmptyState = memo(function SearchEmptyState({
   suggestions,
   onSelect,
 }: SearchEmptyStateProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center py-20">
       <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-6">

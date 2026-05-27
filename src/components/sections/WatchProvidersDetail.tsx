@@ -2,6 +2,7 @@ import { memo, useMemo } from "react";
 import { Tv } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { WatchProviderRegion } from "@/features/movies/api/moviesService";
+import { useTranslation } from "react-i18next";
 
 interface WatchProvidersDetailProps {
   providers?: WatchProviderRegion;
@@ -77,6 +78,7 @@ const WatchProvidersDetail = memo(function WatchProvidersDetail({
   region = "US",
   title = "Where to Watch",
 }: WatchProvidersDetailProps) {
+  const { t } = useTranslation();
   const hasAny = useMemo(
     () => providers && SECTIONS.some((s) => (providers[s.key]?.length ?? 0) > 0),
     [providers],
@@ -87,7 +89,7 @@ const WatchProvidersDetail = memo(function WatchProvidersDetail({
       <section className="bg-[var(--section-bg)] py-10">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center py-16">
           <Tv className="w-12 h-12 text-[var(--section-meta-color)] mx-auto mb-3" />
-          <p className="text-[var(--section-meta-color)]">No streaming info available for {region}</p>
+          <p className="text-[var(--section-meta-color)]">{t("media.noWatchProviders")}</p>
         </div>
       </section>
     );
@@ -97,7 +99,7 @@ const WatchProvidersDetail = memo(function WatchProvidersDetail({
     <section className="bg-[var(--section-bg)] py-10">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-2">{title}</h2>
-        <p className="text-[var(--section-meta-color)] text-sm mb-8">Availability in {region}</p>
+        <p className="text-[var(--section-meta-color)] text-sm mb-8">{t("media.watchProviders")}</p>
 
         <div className="space-y-8">
           {SECTIONS.map((s) =>
@@ -108,7 +110,7 @@ const WatchProvidersDetail = memo(function WatchProvidersDetail({
         </div>
 
         <p className="text-[var(--section-meta-color)] text-xs mt-8">
-          Prices and availability may vary by region.
+          {t("media.noWatchProviders")}
         </p>
       </div>
     </section>

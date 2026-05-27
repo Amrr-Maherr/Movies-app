@@ -13,62 +13,60 @@ import {
 import { getLocalizedLink } from "@/lib/utils/i18n";
 import { useTranslation } from "react-i18next";
 
-const tiersData = [
-  {
-    name: "Basic",
-    id: "tier-basic",
-    href: "#",
-    priceMonthly: "$9.99",
-    description: "Stream on 1 screen at a time in standard definition (SD).",
-    icon: Monitor,
-    features: [
-      { text: "1 screen at a time", icon: Monitor },
-      { text: "Standard Definition (SD)", icon: Monitor },
-      { text: "Unlimited movies and series", icon: Check },
-      { text: "Watch on any device", icon: Check },
-    ],
-    featured: false,
-  },
-  {
-    name: "Standard",
-    id: "tier-standard",
-    href: "#",
-    priceMonthly: "$15.99",
-    description: "Stream on 2 screens simultaneously in High Definition (HD).",
-    icon: Users,
-    badge: "Most Popular",
-    features: [
-      { text: "2 screens at a time", icon: Users },
-      { text: "High Definition (HD)", icon: Monitor },
-      { text: "Unlimited movies and series", icon: Check },
-      { text: "Download for offline viewing", icon: Download },
-    ],
-    featured: true,
-  },
-  {
-    name: "Premium",
-    id: "tier-premium",
-    href: "#",
-    priceMonthly: "$19.99",
-    description: "Stream on 4 screens at the same time in Ultra HD (4K+HDR).",
-    icon: Crown,
-    features: [
-      { text: "4 screens at a time", icon: Users },
-      { text: "Ultra HD (4K+HDR)", icon: Monitor },
-      { text: "Unlimited movies and series", icon: Check },
-      { text: "Download for offline viewing", icon: Download },
-      { text: "Priority customer support", icon: Headphones },
-    ],
-    featured: false,
-  },
-];
-
 const PricingSection = memo(function PricingSection() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   // Memoized: Pre-process tiers with icon components
-  const tiers = useMemo(() => tiersData, []);
+  const tiers = useMemo(() => [
+    {
+      name: t('pricing.basic.name'),
+      id: "tier-basic",
+      href: "#",
+      priceMonthly: t('pricing.basic.price'),
+      description: t('pricing.basic.description'),
+      icon: Monitor,
+      features: [
+        { text: t('pricing.basic.features.screen'), icon: Monitor },
+        { text: t('pricing.basic.features.quality'), icon: Monitor },
+        { text: t('pricing.basic.features.unlimited'), icon: Check },
+        { text: t('pricing.basic.features.devices'), icon: Check },
+      ],
+      featured: false,
+    },
+    {
+      name: t('pricing.standard.name'),
+      id: "tier-standard",
+      href: "#",
+      priceMonthly: t('pricing.standard.price'),
+      description: t('pricing.standard.description'),
+      icon: Users,
+      badge: t('pricing.standard.badge'),
+      features: [
+        { text: t('pricing.standard.features.screens'), icon: Users },
+        { text: t('pricing.standard.features.quality'), icon: Monitor },
+        { text: t('pricing.standard.features.unlimited'), icon: Check },
+        { text: t('pricing.standard.features.download'), icon: Download },
+      ],
+      featured: true,
+    },
+    {
+      name: t('pricing.premium.name'),
+      id: "tier-premium",
+      href: "#",
+      priceMonthly: t('pricing.premium.price'),
+      description: t('pricing.premium.description'),
+      icon: Crown,
+      features: [
+        { text: t('pricing.premium.features.screens'), icon: Users },
+        { text: t('pricing.premium.features.quality'), icon: Monitor },
+        { text: t('pricing.premium.features.unlimited'), icon: Check },
+        { text: t('pricing.premium.features.download'), icon: Download },
+        { text: t('pricing.premium.features.support'), icon: Headphones },
+      ],
+      featured: false,
+    },
+  ], [t]);
 
   const handlePlanClick = useCallback(
     (planId: string) => {
@@ -83,14 +81,13 @@ const PricingSection = memo(function PricingSection() {
         <div className="space-y-10">
           <div className="text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-white">
-              Plans
+              {t('home.plans')}
             </h2>
             <p className="text-3xl font-semibold text-white max-w-2xl mx-auto">
-              Pick the plan that fits your binge
+              {t('home.pickPlan')}
             </p>
             <p className="mt-4 text-lg text-gray-400 max-w-xl mx-auto">
-              Stream your favorite movies and series on any device. No hidden
-              fees, cancel anytime.
+              {t('home.planDescription')}
             </p>
           </div>
 
@@ -128,7 +125,7 @@ const PricingSection = memo(function PricingSection() {
                     <span className="text-3xl font-semibold text-white">
                       {tier.priceMonthly}
                     </span>
-                    <span className="text-sm text-gray-400">/month</span>
+                    <span className="text-sm text-gray-400">{t('pricing.perMonth')}</span>
                   </p>
 
                   {/* Description */}
@@ -161,7 +158,7 @@ const PricingSection = memo(function PricingSection() {
                         : "bg-white/10 text-white hover:bg-white/20"
                     }`}
                   >
-                    Get started today
+                    {t('pricing.getStarted')}
                   </button>
                 </div>
               );

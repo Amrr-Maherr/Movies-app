@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { HeaderLinks } from "@/layout/header/data/header";
 import { cn } from "@/lib/utils";
 import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 interface BrowseDropdownProps {
   isOpen: boolean;
@@ -16,6 +17,7 @@ const BrowseDropdown = memo(function BrowseDropdown({
   onClose,
   onToggle,
 }: BrowseDropdownProps) {
+  const { t } = useTranslation();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close when clicking outside
@@ -41,7 +43,7 @@ const BrowseDropdown = memo(function BrowseDropdown({
         onClick={onToggle}
         className="flex items-center gap-1 text-[var(--text-primary)] font-medium hover:text-[var(--text-secondary)] transition-colors text-sm"
       >
-        Browse
+        {t("nav.browse")}
         <ChevronDown
           className={cn(
             "w-3.5 h-3.5 transition-transform duration-300",

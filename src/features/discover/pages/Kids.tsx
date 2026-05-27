@@ -1,4 +1,5 @@
 import { memo, lazy, Suspense, useMemo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton } from "@/components/ui";
@@ -14,6 +15,7 @@ const HeroSection = lazy(
 const MediaGrid = lazy(() => import("@/components/shared/MediaGrid"));
 
 const Kids = memo(function Kids() {
+  const { t } = useTranslation();
   const { data: movies, isLoading, error, refetch } = useKidsMovies(1);
 
   // Memoized: Pre-computed movies array
@@ -30,7 +32,7 @@ const Kids = memo(function Kids() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
-        name="Kids & Family"
+        name={t('discover:kids')}
         description="Discover movies that are perfect for the whole family on Netflix."
       />
 
@@ -53,7 +55,7 @@ const Kids = memo(function Kids() {
 
       <div className="container !mb-6 !mt-8">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
-          Kids & Family
+          {t('discover:kids')}
         </h1>
         <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
           Discover movies that are perfect for the whole family.
@@ -63,13 +65,13 @@ const Kids = memo(function Kids() {
       {error ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
           <p className="text-xl text-[var(--error)] font-medium mb-4">
-            Failed to load Kids Movies. Please try again.
+            {t('common:errors.somethingWentWrong')}
           </p>
           <button
             onClick={handleRetry}
             className="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-white/80 transition-colors"
           >
-            Retry
+            {t('common:common.retry')}
           </button>
         </div>
       ) : (
@@ -93,7 +95,7 @@ const Kids = memo(function Kids() {
               >
                 <MediaGrid
                   items={moviesData}
-                  emptyMessage="No Kids Movies found."
+                  emptyMessage={t('common:common.noData')}
                 />
               </motion.div>
             )}

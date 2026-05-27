@@ -14,15 +14,15 @@ const Step3ConfirmSubscription = lazy(() => import("./Step3ConfirmSubscription")
 const Step4SuccessScreen = lazy(() => import("./Step4SuccessScreen"));
 
 const STEPS = [
-  { id: 1, name: "Account" },
-  { id: 2, name: "Plan" },
-  { id: 3, name: "Confirm" },
-  { id: 4, name: "Payment" },
-  { id: 5, name: "Done" },
+  { id: 1, name: "subscription.account" },
+  { id: 2, name: "subscription.plan" },
+  { id: 3, name: "subscription.confirm" },
+  { id: 4, name: "subscription.payment" },
+  { id: 5, name: "subscription.done" },
 ];
 
 export default function SubscribePage() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const currentLang = i18n.language || 'en';
   const [currentStep, setCurrentStep] = useState(1);
@@ -30,9 +30,9 @@ export default function SubscribePage() {
   const [selectedPlanId, setSelectedPlanId] = useState("tier-standard");
 
   const planNames = {
-    "tier-basic": "Basic",
-    "tier-standard": "Standard",
-    "tier-premium": "Premium",
+    "tier-basic": t("subscription.basic"),
+    "tier-standard": t("subscription.standard"),
+    "tier-premium": t("subscription.premium"),
   };
 
   const handleNext = (data) => {
@@ -47,16 +47,15 @@ export default function SubscribePage() {
   return (
     <div className="min-h-screen bg-black py-8 px-4 sm:py-20 sm:px-6">
       <HelmetMeta
-        name="Subscribe to Netflix"
-        description="Choose your subscription plan and start watching unlimited movies and TV shows."
+        name={t("subscription.choosePlan")}
+        description={t("subscription.choosePlan")}
       />
       <div className="max-w-4xl mx-auto">
         {/* Progress Bar */}
         {currentStep < 5 && (
           <div className="mb-8 text-center sm:text-left">
             <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
-              Step <span className="font-bold">{currentStep}</span> of{" "}
-              <span className="font-bold">4</span>
+              {t("subscription.step", { current: currentStep, total: 4 })}
             </span>
           </div>
         )}

@@ -21,6 +21,8 @@ import enSearch from '../features/search/locales/en.json' assert { type: 'json' 
 import arSearch from '../features/search/locales/ar.json' assert { type: 'json' };
 import enMyList from '../features/my-list/locales/en.json' assert { type: 'json' };
 import arMyList from '../features/my-list/locales/ar.json' assert { type: 'json' };
+import enInfoPages from '../features/info-pages/locales/en.json' assert { type: 'json' };
+import arInfoPages from '../features/info-pages/locales/ar.json' assert { type: 'json' };
 
 const resources = {
   en: {
@@ -33,6 +35,7 @@ const resources = {
     home: enHome,
     search: enSearch,
     myList: enMyList,
+    infoPages: enInfoPages,
   },
   ar: {
     common: arCommon,
@@ -44,6 +47,7 @@ const resources = {
     home: arHome,
     search: arSearch,
     myList: arMyList,
+    infoPages: arInfoPages,
   },
 };
 
@@ -55,7 +59,7 @@ i18n
     fallbackLng: 'en',
     lng: localStorage.getItem('app_language') || 'en',
     defaultNS: 'common',
-    ns: ['common', 'auth', 'movies', 'tv', 'discover', 'people', 'home', 'search', 'myList'],
+    ns: ['common', 'auth', 'movies', 'tv', 'discover', 'people', 'home', 'search', 'myList', 'infoPages'],
     debug: import.meta.env.DEV,
 
     interpolation: {

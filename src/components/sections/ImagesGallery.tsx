@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { ImageFile } from "@/features/movies/api/moviesService";
+import { useTranslation } from "react-i18next";
 
 const LazyImage = lazy(() => import("@/components/ui/OptimizedImage"));
 
@@ -28,6 +29,7 @@ const ImageCard = memo(function ImageCard({
   image: ImageFile;
   onClick: () => void;
 }) {
+  const { t } = useTranslation();
   const type = getType(image);
   return (
     <div
@@ -36,11 +38,11 @@ const ImageCard = memo(function ImageCard({
       role="button"
       tabIndex={0}
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onClick()}
-      aria-label="View image"
+      aria-label={t("common.viewAll")}
     >
       <OptimizedImage
         src={`${BASE}/w500${image.file_path}`}
-        alt="gallery image"
+        alt={t("common.viewAll")}
         className="w-full h-full transition-transform duration-300 group-hover:scale-105"
         objectFit={type === "logo" ? "contain" : "cover"}
       />
@@ -61,6 +63,7 @@ const Lightbox = memo(function Lightbox({
   onPrev: () => void;
   onNext: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <AnimatePresence>
       <motion.div
@@ -76,7 +79,7 @@ const Lightbox = memo(function Lightbox({
         <button
           className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
           onClick={(e) => { e.stopPropagation(); onClose(); }}
-          aria-label="Close"
+          aria-label={t("common.close")}
         >
           <X className="w-5 h-5" />
         </button>
@@ -85,7 +88,7 @@ const Lightbox = memo(function Lightbox({
         <button
           className="absolute left-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
           onClick={(e) => { e.stopPropagation(); onPrev(); }}
-          aria-label="Previous"
+          aria-label={t("common.previous")}
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -94,7 +97,7 @@ const Lightbox = memo(function Lightbox({
         <button
           className="absolute right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
           onClick={(e) => { e.stopPropagation(); onNext(); }}
-          aria-label="Next"
+          aria-label={t("common.next")}
         >
           <ChevronRight className="w-6 h-6" />
         </button>
@@ -108,7 +111,7 @@ const Lightbox = memo(function Lightbox({
           <Suspense fallback={<div className="w-[800px] h-[450px] bg-zinc-800 animate-pulse rounded" />}>
             <LazyImage
               src={`${BASE}/w1280${image.file_path}`}
-              alt="full size"
+              alt={t("common.viewAll")}
               className="max-w-full max-h-[85vh] object-contain rounded"
               objectFit="contain"
             />
@@ -125,6 +128,7 @@ const ImagesGallery = memo(function ImagesGallery({
   title = "Gallery",
   type = "all",
 }: ImagesGalleryProps) {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<ImageFile | null>(null);
 
   const filtered = useMemo(() => {

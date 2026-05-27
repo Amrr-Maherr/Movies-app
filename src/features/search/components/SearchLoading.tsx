@@ -1,7 +1,9 @@
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 import { Search } from "lucide-react";
 
 const SearchLoading = memo(function SearchLoading() {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col items-center justify-center py-20">
       <div className="relative">
@@ -10,7 +12,7 @@ const SearchLoading = memo(function SearchLoading() {
           <Search className="w-5 h-5 text-netflix-red animate-pulse" />
         </div>
       </div>
-      <p className="text-white/40 mt-6 text-sm">Searching...</p>
+      <p className="text-white/40 mt-6 text-sm">{t('common:search.searching')}</p>
     </div>
   );
 });

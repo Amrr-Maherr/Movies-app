@@ -20,13 +20,13 @@ interface GenreCardProps {
  * - Added aria-label for screen readers
  */
 const GenreCard = memo(function GenreCard({ id, name, type }: GenreCardProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   return (
     <Link
       to={getLocalizedLink(`/${type}/genre/${id}`)}
       className="group relative overflow-hidden rounded-md bg-[var(--background-secondary)] hover:bg-[var(--background-tertiary)] transition-all duration-200 shadow-md hover:shadow-xl hover:scale-[1.02] aspect-[16/9] flex items-center justify-center min-h-[48px] touch-manipulation"
-      aria-label={`Browse ${name} ${type === "movie" ? "movies" : "TV shows"}`}
+      aria-label={`${t("nav.browse")} ${name}`}
       lang={i18n.language || 'en'}
     >
       <div className="text-center p-4">

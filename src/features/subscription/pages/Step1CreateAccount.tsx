@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "@/hooks/shared";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { useTranslation } from "react-i18next";
 
 export default function Step1CreateAccount({ onNext }) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("emilys");
   const [password, setPassword] = useState("emilyspass");
   const [error, setError] = useState("");
@@ -17,7 +19,7 @@ export default function Step1CreateAccount({ onNext }) {
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!email || !password) {
-      setError("Please fill in all fields");
+      setError(t("errors.required"));
       return;
     }
 
@@ -35,7 +37,7 @@ export default function Step1CreateAccount({ onNext }) {
           onNext({ email: response.email, password });
         },
         onError: (err) => {
-          setError((err as Error).message || "Login failed. Please check your credentials.");
+          setError((err as Error).message || t("auth.loginFailed"));
         },
       },
     );
@@ -44,18 +46,18 @@ export default function Step1CreateAccount({ onNext }) {
   return (
     <div className="w-full max-w-[450px] mx-auto px-6 py-12 bg-black/80 rounded-md shadow-xl border border-white/5">
       <HelmetMeta
-        name="Create Account - Step 1"
-        description="Sign in or create your Netflix account to start your subscription."
+        name={t("auth.createAccount")}
+        description={t("auth.signUpDescription")}
       />
       
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-2 text-neutral-400">
-          <span className="text-xs uppercase tracking-widest font-bold">Step 1 of 4</span>
+          <span className="text-xs uppercase tracking-widest font-bold">{t("subscription.step", { current: 1, total: 4 })}</span>
         </div>
-        <h1 className="text-3xl font-bold text-white mb-3">Sign In to get started</h1>
+        <h1 className="text-3xl font-bold text-white mb-3">{t("auth.signIn")}</h1>
         <p className="text-neutral-400 text-sm">
-          Joining Netflix is easy. Enter your password and you'll be watching in no time.
+          {t("auth.signUpDescription")}
         </p>
       </div>
 
@@ -63,8 +65,8 @@ export default function Step1CreateAccount({ onNext }) {
       <div className="bg-blue-900/20 border border-blue-800/50 rounded-md p-4 mb-8 flex gap-3">
         <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
         <div className="text-xs text-blue-200/80 leading-relaxed">
-          <p className="font-bold text-blue-300 mb-1">Demo Credentials Loaded:</p>
-          <p>We've pre-filled the fields with test data for you to explore the app easily.</p>
+          <p className="font-bold text-blue-300 mb-1">{t("auth.testCredentials")}</p>
+          <p>{t("auth.signUpDescription")}</p>
         </div>
       </div>
 
@@ -74,7 +76,7 @@ export default function Step1CreateAccount({ onNext }) {
           <div className="relative group">
             <Input
               type="text"
-              placeholder="Email or username"
+              placeholder={t("auth.email")}
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -88,7 +90,7 @@ export default function Step1CreateAccount({ onNext }) {
           <div className="relative group">
             <Input
               type="password"
-              placeholder="Password"
+              placeholder={t("auth.password")}
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -114,11 +116,11 @@ export default function Step1CreateAccount({ onNext }) {
           {isPending ? (
             <span className="flex items-center gap-2">
               <span className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin" />
-              Signing in...
+              {t("buttons.signingIn")}
             </span>
           ) : (
             <span className="flex items-center justify-center gap-2">
-              Next <ArrowRight className="w-5 h-5" />
+              {t("common.next")} <ArrowRight className="w-5 h-5" />
             </span>
           )}
         </Button>
@@ -126,14 +128,14 @@ export default function Step1CreateAccount({ onNext }) {
         <div className="flex items-center justify-between text-sm text-neutral-500 pt-2">
           <label className="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" className="w-4 h-4 rounded bg-neutral-800 border-neutral-700 accent-[#E50914]" defaultChecked />
-            <span>Remember me</span>
+            <span>{t("auth.rememberMe")}</span>
           </label>
-          <a href="#" className="hover:underline">Need help?</a>
+          <a href="#" className="hover:underline">{t("auth.needHelp")}</a>
         </div>
       </form>
 
       <div className="mt-12 pt-6 border-t border-neutral-800 text-neutral-500 text-sm">
-        New to Netflix? <span className="text-white hover:underline cursor-pointer">Sign up now.</span>
+        {t("auth.newToNetflix")} <span className="text-white hover:underline cursor-pointer">{t("auth.signUpNow")}</span>
       </div>
     </div>
   );

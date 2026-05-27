@@ -2,6 +2,7 @@ import { memo, useMemo, useCallback, lazy, Suspense, useEffect } from "react";
 import { Error as ErrorComponent, SectionSkeleton } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { useTranslation } from "react-i18next";
 import "@/index.css";
 import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 
@@ -43,6 +44,7 @@ const MoreReasonsSection = lazy(
 );
 
 const Home = memo(function Home() {
+  const { t } = useTranslation();
   const { startTour } = useOnboarding();
   const {
     data: trendingMoviesWeek,
@@ -116,7 +118,7 @@ const Home = memo(function Home() {
   if (!trendingMoviesWeek && trendingWeekError) {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <ErrorComponent retryButtonText="Try Again" onRetry={handleRetry} />
+        <ErrorComponent retryButtonText={t('common.tryAgain')} onRetry={handleRetry} />
       </div>
     );
   }
@@ -146,12 +148,12 @@ const Home = memo(function Home() {
         isLoading={trendingWeekLoading}
         fallback={<SectionSkeleton variant="grid" cardCount={6} />}
         height={300}
-        title="Top 6 Movies"
+        title={t('home.top6Movies')}
       >
         {(movies) => (
           <TopPicksSection
             movies={movies}
-            title="Top 6 Movies in Egypt Today"
+            title={t('home.top6Movies')}
           />
         )}
       </OptimizedSectionWrapper>
@@ -162,11 +164,11 @@ const Home = memo(function Home() {
         isLoading={trendingWeekLoading}
         fallback={<SectionSkeleton variant="grid" cardCount={6} />}
         height={250}
-        title="Trending Now"
+        title={t('home.trendingNow')}
       >
         {(data) => (
           <MediaSection
-            title="Trending Now"
+            title={t('home.trendingNow')}
             data={data}
             isLoading={trendingWeekLoading}
             error={trendingWeekError}
@@ -181,12 +183,12 @@ const Home = memo(function Home() {
         isLoading={upcomingLoading}
         fallback={<SectionSkeleton variant="grid" cardCount={4} />}
         height={350}
-        title="New Releases"
+        title={t('home.newReleases')}
       >
         {(movies) => (
           <NewReleasesSection
             movies={movies}
-            title="New Releases This Week"
+            title={t('home.newReleasesWeek')}
           />
         )}
       </OptimizedSectionWrapper>
@@ -197,11 +199,11 @@ const Home = memo(function Home() {
         isLoading={trendingTvWeekLoading}
         fallback={<SectionSkeleton variant="grid" cardCount={6} />}
         height={250}
-        title="Trending TV Shows"
+        title={t('home.trendingTvShows')}
       >
         {(data) => (
           <MediaSection
-            title="Trending TV Shows"
+            title={t('home.trendingTvShows')}
             data={data}
             isLoading={trendingTvWeekLoading}
             error={trendingTvWeekError}
@@ -216,7 +218,7 @@ const Home = memo(function Home() {
         isLoading={upcomingLoading}
         fallback={<SectionSkeleton variant="hero" />}
         height="100dvh"
-        title="Featured Movie"
+        title={t('home.featuredMovie')}
       >
         {(movie) => (
           <MoviePromo
@@ -233,7 +235,7 @@ const Home = memo(function Home() {
         isLoading={popularTvLoading}
         fallback={<SectionSkeleton variant="grid" cardCount={6} />}
         height={400}
-        title="Only on Netflix"
+        title={t('home.onlyOnNetflix')}
       >
         {(movies) => (
           <OnlyOnNetflixSection movies={movies} mediaType="tv" />
@@ -246,7 +248,7 @@ const Home = memo(function Home() {
         isLoading={platformsLoading}
         fallback={<SectionSkeleton variant="grid" cardCount={6} />}
         height={350}
-        title="Platforms"
+        title={t('home.streamingPlatforms')}
       >
         {(platformsData) => (
           <PlatformsSection
@@ -263,7 +265,7 @@ const Home = memo(function Home() {
         isLoading={topRatedLoading}
         fallback={<SectionSkeleton variant="grid" cardCount={6} />}
         height={350}
-        title="Award Winners"
+        title={t('home.awardWinners')}
       >
         {(movies) => (
           <AwardWinnersSection
@@ -279,7 +281,7 @@ const Home = memo(function Home() {
         isLoading={false}
         fallback={<SectionSkeleton variant="grid" cardCount={4} />}
         height={400}
-        title="More Reasons"
+        title={t('home.moreReasons')}
       >
         <MoreReasonsSection />
       </OptimizedSectionWrapper>
@@ -290,7 +292,7 @@ const Home = memo(function Home() {
         isLoading={false}
         fallback={<SectionSkeleton variant="grid" cardCount={3} />}
         height={550}
-        title="Pricing"
+        title={t('home.pricing')}
       >
         <PricingSection />
       </OptimizedSectionWrapper>
@@ -301,7 +303,7 @@ const Home = memo(function Home() {
         isLoading={false}
         fallback={<SectionSkeleton variant="list" cardCount={6} />}
         height={500}
-        title="FAQ"
+        title={t('home.faq')}
       >
         <AskedQuestions />
       </OptimizedSectionWrapper>

@@ -1,5 +1,6 @@
 import { memo, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 // ============================================
 // TYPES
@@ -14,7 +15,6 @@ export type MovieTab =
   | "recommendations";
 export type PersonTab = "overview" | "movies" | "tv" | "images";
 export type TabId = MovieTab | PersonTab;
-export type TVTab = MovieTab;
 
 interface TabItem {
   id: TabId;
@@ -30,27 +30,29 @@ interface DetailPageNavProps {
 }
 
 // ============================================
-// TAB DEFINITIONS  (no Overview — hidden per request)
+// TAB DEFINITIONS
 // ============================================
-function getTabItems(type: "movie" | "tv" | "person"): TabItem[] {
+function getTabItems(type: "movie" | "tv" | "person", t: (key: string) => string): TabItem[] {
   if (type === "person") {
     return [
-      { id: "overview", label: "Overview" },
-      { id: "movies", label: "Movies" },
-      { id: "tv", label: "TV Shows" },
-      { id: "images", label: "Photos" },
+      { id: "overview", label: t('media.overview') },
+      { id: "movies", label: t('discover.movies') },
+      { id: "tv", label: t('discover.tvShows') },
+      { id: "images", label: t('personDetails.images') },
     ];
   }
   return [
-    { id: "overview", label: "Overview" },
-    { id: "reviews", label: "Reviews" },
-    { id: "videos", label: "Videos" },
-    { id: "images", label: "Photos" },
-    { id: "watch", label: "Where to Watch" },
-    { id: "credits", label: "Cast & Crew" },
-    { id: "recommendations", label: "More Like This" },
+    { id: "overview", label: t('media.overview') },
+    { id: "reviews", label: t('media.reviews') },
+    { id: "videos", label: t('media.trailersVideos') },
+    { id: "images", label: t('personDetails.images') },
+    { id: "watch", label: t('media.watchProviders') },
+    { id: "credits", label: t('media.fullCastAndCrew') },
+    { id: "recommendations", label: t('media.moreLikeThis') },
   ];
 }
+
+
 
 // ============================================
 // MAIN COMPONENT
@@ -60,7 +62,8 @@ const DetailPageNav = memo(function DetailPageNav({
   activeTab,
   onTabChange,
 }: DetailPageNavProps) {
-  const tabs = useMemo(() => getTabItems(type), [type]);
+  const { t } = useTranslation();
+  const tabs = useMemo(() => getTabItems(type, t), [type, t]);
   const handleClick = (tab: TabId) => onTabChange?.(tab);
 
   return (

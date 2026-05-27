@@ -22,7 +22,7 @@ type FilterType = "all" | "movie" | "tv" | "person";
 export default function SearchPage() {
   const { startTour } = useOnboarding();
   const [searchParams] = useSearchParams();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const queryParam = searchParams.get("q") || "";
   const [filter, setFilter] = useState<FilterType>("all");
@@ -74,8 +74,8 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
-        name={queryParam ? `Search: ${queryParam}` : "Search"}
-        description={`Search for movies, TV shows, and people on Netflix. Find your favorite content.`}
+        name={queryParam ? `Search: ${queryParam}` : t('common:search.title')}
+        description={t('common:search.searchPageDescription')}
       />
 
       {/* Hero Search Section */}
@@ -113,7 +113,7 @@ export default function SearchPage() {
                     type="text"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Search movies, TV shows, and people..."
+                    placeholder={t('common:search.searchPlaceholder')}
                     className="w-full bg-transparent text-white text-xl placeholder:text-white/30 outline-none pl-16 pr-14 py-6"
                     autoFocus
                   />
@@ -137,8 +137,7 @@ export default function SearchPage() {
                 animate={{ opacity: 1 }}
                 className="text-white/40 text-sm mt-6"
               >
-                Found {results.length} result{results.length !== 1 ? "s" : ""}{" "}
-                for "{debouncedQuery}"
+                {t('common:search.foundResults', { count: results.length, query: debouncedQuery })}
               </motion.p>
             )}
           </motion.div>
@@ -153,28 +152,28 @@ export default function SearchPage() {
               active={filter === "all"}
               onClick={() => setFilter("all")}
               icon={<Search className="w-4 h-4" />}
-              label="All"
+              label={t('common:search.all')}
               count={results.length}
             />
             <FilterButton
               active={filter === "movie"}
               onClick={() => setFilter("movie")}
               icon={<Film className="w-4 h-4" />}
-              label="Movies"
+              label={t('common:search.movies')}
               count={groupedResults.movies.length}
             />
             <FilterButton
               active={filter === "tv"}
               onClick={() => setFilter("tv")}
               icon={<Tv className="w-4 h-4" />}
-              label="TV Shows"
+              label={t('common:search.tvShows')}
               count={groupedResults.tvShows.length}
             />
             <FilterButton
               active={filter === "person"}
               onClick={() => setFilter("person")}
               icon={<User className="w-4 h-4" />}
-              label="People"
+              label={t('common:search.people')}
               count={groupedResults.people.length}
             />
           </div>
@@ -187,15 +186,15 @@ export default function SearchPage() {
           <div className="space-y-8">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 border-4 border-netflix-red border-t-transparent rounded-full animate-spin" />
-              <p className="text-white/50">Searching...</p>
+              <p className="text-white/50">{t('common:search.searching')}</p>
             </div>
             <SectionSkeleton variant="grid" cardCount={12} />
           </div>
         ) : error ? (
           <Error
             fullscreen={false}
-            title="Search Error"
-            message="We couldn't load the search results. Please try again."
+            title={t('common:search.searchError')}
+            message={t('common:search.searchErrorMessage')}
             onRetry={() => window.location.reload()}
           />
         ) : debouncedQuery.length < 2 ? (
@@ -208,29 +207,28 @@ export default function SearchPage() {
               <Search className="w-16 h-16 text-white/20" />
             </div>
             <h2 className="text-3xl font-semibold text-white mb-4">
-              Start your search
+              {t('common:search.startSearch')}
             </h2>
             <p className="text-white/40 text-lg max-w-md mx-auto">
-              Search for movies, TV shows, and people from the world's largest
-              entertainment library
+              {t('common:search.startSearchDescription')}
             </p>
 
             {/* Search suggestions */}
             <div className="mt-12 flex flex-wrap justify-center gap-3">
               <SuggestionChip
-                text="🎬 Action Movies"
+                text={t('common:search.suggestions.actionMovies')}
                 onClick={() => setInputValue("action")}
               />
               <SuggestionChip
-                text="📺 Popular TV Shows"
+                text={t('common:search.suggestions.popularTVShows')}
                 onClick={() => setInputValue("popular")}
               />
               <SuggestionChip
-                text="🎭 Comedy"
+                text={t('common:search.suggestions.comedy')}
                 onClick={() => setInputValue("comedy")}
               />
               <SuggestionChip
-                text="🎪 Animation"
+                text={t('common:search.suggestions.animation')}
                 onClick={() => setInputValue("animation")}
               />
             </div>
@@ -245,14 +243,13 @@ export default function SearchPage() {
               <Film className="w-16 h-16 text-white/20" />
             </div>
             <h2 className="text-3xl font-semibold text-white mb-4">
-              No results found
+              {t('common:search.noResults')}
             </h2>
             <p className="text-white/40 text-lg">
-              We couldn't find anything for "
-              <span className="text-white font-medium">{debouncedQuery}</span>"
+              {t('common:search.noResultsFor', { query: debouncedQuery })}
             </p>
             <p className="text-white/30 text-sm mt-4">
-              Try different keywords or check the spelling
+              {t('common:search.tryDifferentKeywords')}
             </p>
           </motion.div>
         ) : (
@@ -270,7 +267,7 @@ export default function SearchPage() {
                   <section>
                     <SectionHeader
                       icon={<Film className="w-6 h-6" />}
-                      title="Movies"
+                      title={t('common:search.movies')}
                       count={groupedResults.movies.length}
                       color="from-blue-500 to-cyan-500"
                     />
@@ -291,7 +288,7 @@ export default function SearchPage() {
                   <section>
                     <SectionHeader
                       icon={<Tv className="w-6 h-6" />}
-                      title="TV Shows"
+                      title={t('common:search.tvShows')}
                       count={groupedResults.tvShows.length}
                       color="from-purple-500 to-pink-500"
                     />
@@ -312,7 +309,7 @@ export default function SearchPage() {
                   <section>
                     <SectionHeader
                       icon={<User className="w-6 h-6" />}
-                      title="People"
+                      title={t('common:search.people')}
                       count={groupedResults.people.length}
                       color="from-orange-500 to-red-500"
                     />
@@ -324,7 +321,7 @@ export default function SearchPage() {
                             id: item.id,
                             name: item.name,
                             profileImage: item.profile_path || "",
-                            role: "Actor",
+                            role: t('common:search.actor'),
                           }}
                           variant="person"
                         />
@@ -351,7 +348,7 @@ export default function SearchPage() {
                           id: personResult.item.id,
                           name: personResult.item.name,
                           profileImage: personResult.item.profile_path || "",
-                          role: "Actor",
+                          role: t('common:search.actor'),
                         }}
                         variant="person"
                       />

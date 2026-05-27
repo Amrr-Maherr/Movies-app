@@ -30,14 +30,14 @@ const PlatformsSection = memo(function PlatformsSection({
   isLoading,
   error,
 }: PlatformsSectionProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   // Show skeleton while loading
   if (isLoading) {
     return (
       <div className="py-6 md:py-8">
         <div className="container">
           <SectionHeader
-            title="Streaming Platforms"
+            title={t('home.streamingPlatforms')}
             icon={Tv}
             iconColor="text-red-600"
           />
@@ -56,17 +56,17 @@ const PlatformsSection = memo(function PlatformsSection({
     <div className="py-6 md:py-8">
       <div className="container">
         <SectionHeader
-          title="Streaming Platforms"
+          title={t('home.streamingPlatforms')}
           icon={Tv}
           iconColor="text-red-600"
-          badgeText="Browse by Platform"
+          badgeText={t('home.browseByPlatform')}
         />
         <Link
           to={getLocalizedLink("/platforms")}
           className="ml-4 text-sm md:text-base text-gray-300 hover:text-white transition-colors flex-shrink-0"
           lang={i18n.language || 'en'}
         >
-          View All →
+          {t('home.viewAllPlatforms')}
         </Link>
         {/* Horizontal Slider with Platform Cards */}
         <div className="mt-6">
@@ -75,7 +75,7 @@ const PlatformsSection = memo(function PlatformsSection({
             isLoading={isLoading || false}
             fallback={<SectionSkeleton variant="grid" cardCount={6} />}
             height={400}
-            title="Streaming Platforms"
+            title={t('home.streamingPlatforms')}
           >
             {(platformsData) => (
               <Slider

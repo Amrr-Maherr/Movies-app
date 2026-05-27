@@ -1,5 +1,6 @@
 import { LucideIcon, Tv, Download, Laptop, Users } from "lucide-react";
-import { memo } from "react";
+import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 interface FeatureBoxProps {
   icon: LucideIcon;
@@ -34,33 +35,6 @@ const FeatureBox = memo(function FeatureBox({
   );
 });
 
-const features = [
-  {
-    icon: Tv,
-    title: "Enjoy on your TV",
-    description:
-      "Watch on Smart TVs, Playstation, Xbox, Chromecast, Apple TV, Blu-ray players, and more.",
-  },
-  {
-    icon: Download,
-    title: "Download your shows to watch offline",
-    description:
-      "Save your favorites easily and always have something to watch.",
-  },
-  {
-    icon: Laptop,
-    title: "Watch everywhere",
-    description:
-      "Stream unlimited movies and TV shows on your phone, tablet, laptop, and TV.",
-  },
-  {
-    icon: Users,
-    title: "Create profiles for kids",
-    description:
-      "Send kids on adventures with their favorite characters in a space made just for them — free with your membership.",
-  },
-];
-
 /**
  * Memoized MoreReasonsSection Component
  *
@@ -68,11 +42,36 @@ const features = [
  * Memoized to prevent unnecessary re-renders.
  */
 const MoreReasonsSection = memo(function MoreReasonsSection() {
+  const { t } = useTranslation();
+
+  const features = useMemo(() => [
+    {
+      icon: Tv,
+      title: t('reasons.enjoyOnTV.title'),
+      description: t('reasons.enjoyOnTV.description'),
+    },
+    {
+      icon: Download,
+      title: t('reasons.downloadOffline.title'),
+      description: t('reasons.downloadOffline.description'),
+    },
+    {
+      icon: Laptop,
+      title: t('reasons.watchEverywhere.title'),
+      description: t('reasons.watchEverywhere.description'),
+    },
+    {
+      icon: Users,
+      title: t('reasons.kidsProfiles.title'),
+      description: t('reasons.kidsProfiles.description'),
+    },
+  ], [t]);
+
   return (
     <section className="py-12 md:py-20 bg-black border-t border-[#222]">
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
         <h2 className="text-2xl md:text-4xl font-bold text-white text-center mb-8 md:mb-12">
-          More Reasons to Join
+          {t('home.moreReasons')}
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">

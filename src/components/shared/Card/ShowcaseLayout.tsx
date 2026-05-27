@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Star, Play } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 export interface ShowcaseLayoutProps {
   title: string;
@@ -37,11 +38,13 @@ const ShowcaseLayout = memo(
     overview,
     detailsUrl,
     aspectRatio = "aspect-video md:aspect-[10/9]",
-  }: ShowcaseLayoutProps) => (
+  }: ShowcaseLayoutProps) => {
+    const { t } = useTranslation();
+    return (
     <a
       href={getLocalizedLink(detailsUrl)}
       className="block w-full group touch-manipulation"
-      aria-label={`View details for ${title}`}
+      aria-label={`${t("common.moreInfo")} ${title}`}
     >
       <motion.div
         className={`relative ${aspectRatio} rounded-xl cursor-pointer shadow-2xl min-h-[48px]`}
@@ -104,13 +107,14 @@ const ShowcaseLayout = memo(
           <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div className="flex items-center gap-1.5 bg-white text-black text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
               <Play className="w-3 h-3 fill-current" aria-hidden="true" />
-              Watch Now
+              {t("buttons.watchNow")}
             </div>
           </div>
         </div>
       </motion.div>
     </a>
-  ),
+    );
+  },
 );
 
 ShowcaseLayout.displayName = "ShowcaseLayout";

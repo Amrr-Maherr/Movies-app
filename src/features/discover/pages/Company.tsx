@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, lazy, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { useCompanyDetails, useCompanyMovies } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
@@ -13,6 +14,7 @@ const MediaSection = lazy(() => import("@/components/shared/MediaSection"));
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const Company = memo(function Company() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const companyId = id ? parseInt(id, 10) : 0;
 
@@ -45,8 +47,8 @@ const Company = memo(function Company() {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
         <Error
-          message="Company not found"
-          retryButtonText="Go Back"
+          message={t('common:errors.notFound')}
+          retryButtonText={t('common:common.back')}
           onRetry={() => window.history.back()}
         />
       </div>
@@ -103,7 +105,7 @@ const Company = memo(function Company() {
                 {companyMovies && (
                   <div className="flex items-center gap-2">
                     <Film className="w-4 h-4" />
-                    <span>{companyMovies.total_results} Movies</span>
+                    <span>{companyMovies.total_results} {t('discover:movies')}</span>
                   </div>
                 )}
 
@@ -143,7 +145,7 @@ const Company = memo(function Company() {
                 <OptimizedSectionWrapper
                   data={company.parent_company}
                   isLoading={companyLoading}
-                  fallback={<span className="text-white/60">Loading...</span>}
+                  fallback={<span className="text-white/60">{t('common:common.loading')}</span>}
                   height={32}
                   title="Parent Company"
                 >
@@ -165,13 +167,13 @@ const Company = memo(function Company() {
       {/* Movies Section */}
       <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8 md:py-12">
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
-          Movies by {company.name}
+          {t('discover:movies')} by {company.name}
         </h2>
 
         {moviesError ? (
           <Error
-            message="Failed to load movies"
-            retryButtonText="Try Again"
+            message={t('common:errors.somethingWentWrong')}
+            retryButtonText={t('common:discover.retry')}
             onRetry={() => window.location.reload()}
           />
         ) : (
@@ -184,7 +186,7 @@ const Company = memo(function Company() {
             isEmptyFallback={
               <div className="text-center py-12 text-[#737373]">
                 <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p className="text-lg">No movies available</p>
+                <p className="text-lg">{t('common:common.noData')}</p>
               </div>
             }
           >

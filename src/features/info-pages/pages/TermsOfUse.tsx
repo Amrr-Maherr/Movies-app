@@ -1,56 +1,58 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function TermsOfUse() {
+  const { t } = useTranslation();
   const sections = [
     {
-      title: "1. Membership",
-      content: "Netflix service is an individual, non-transferable, non-assignable subscription for your personal and non-commercial use. During your membership, you are granted a limited, non-exclusive, non-transferable, non-sublicensable license to access and use the Netflix service and to view, download and print content."
+      title: t('infoPages.terms.section1'),
+      content: t('infoPages.terms.section1Content')
     },
     {
-      title: "2. Billing & Cancellation",
-      content: "Netflix offers various subscription plans. You agree to pay all charges at the prices then in effect for your use of the Netflix service and any applicable taxes. We may change our subscription plans and the prices for such plans at any time, upon notice to you."
+      title: t('infoPages.terms.section2'),
+      content: t('infoPages.terms.section2Content')
     },
     {
-      title: "3. Content",
-      content: "The Netflix service includes a collection of content that varies by country and changes from time to time at the sole discretion of Netflix. Netflix may add or remove content at any time without prior notice."
+      title: t('infoPages.terms.section3'),
+      content: t('infoPages.terms.section3Content')
     },
     {
-      title: "4. Passwords & Account Sharing",
-      content: "You may create a password and limit access to the Netflix service and devices used to access the service by selecting the 'Profile Lock' feature. You agree not to share your password with anyone outside your household unless you are on a plan that allows multiple households."
+      title: t('infoPages.terms.section4'),
+      content: t('infoPages.terms.section4Content')
     },
     {
-      title: "5. Device Limits",
-      content: "The Netflix service and any content viewed through the service are for your personal and non-commercial use only. During your membership, you are granted a limited, non-exclusive, non-transferable, non-sublicensable license to access and use the Netflix service."
+      title: t('infoPages.terms.section5'),
+      content: t('infoPages.terms.section5Content')
     },
     {
-      title: "6. Disclaimer of Warranties",
-      content: "The Netflix service and any content viewed through the service are provided 'as is' and 'as available' without warranty of any kind, express or implied, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, or non-infringement."
+      title: t('infoPages.terms.section6'),
+      content: t('infoPages.terms.section6Content')
     },
     {
-      title: "7. Limitation of Liability",
-      content: "Netflix shall not be liable for any direct, indirect, incidental, special, or consequential damages arising out of or in connection with your use of the Netflix service or any content, including but not limited to lost profits, loss of data, or business interruption."
+      title: t('infoPages.terms.section7'),
+      content: t('infoPages.terms.section7Content')
     },
     {
-      title: "8. Governing Law",
-      content: "These Terms of Use shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law provisions. Any dispute arising out of these Terms shall be resolved in the courts of Santa Clara County, California."
+      title: t('infoPages.terms.section8'),
+      content: t('infoPages.terms.section8Content')
     }
   ];
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
-        name="Terms of Use"
-        description="Netflix Terms of Use and membership agreement."
+        name={t('infoPages.terms.title')}
+        description={t('infoPages.terms.description')}
       />
 
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Terms of Use
+          {t('infoPages.terms.title')}
         </h1>
         <p className="text-[var(--text-secondary)] text-lg mb-12">
-          Last updated: January 1, 2026
+          {t('infoPages.terms.lastUpdated')}
         </p>
 
         {/* Content */}
@@ -68,17 +70,17 @@ export default function TermsOfUse() {
         {/* Footer Links */}
         <div className="max-w-4xl mt-12 pt-8 border-t border-[var(--card-border)]">
           <p className="text-[var(--text-secondary)] mb-4">
-            For more information, please see our:
+            {t('infoPages.terms.moreInfo')}
           </p>
           <div className="flex flex-wrap gap-4">
             <Link to={getLocalizedLink('/privacy')} className="text-[var(--netflix-red)] hover:underline">
-              Privacy Policy
+              {t('infoPages.privacy.title')}
             </Link>
             <Link to={getLocalizedLink('/cookie-preferences')} className="text-[var(--netflix-red)] hover:underline">
-              Cookie Preferences
+              {t('infoPages.cookies.title')}
             </Link>
             <Link to={getLocalizedLink('/legal-notices')} className="text-[var(--netflix-red)] hover:underline">
-              Legal Notices
+              {t('infoPages.legal.title')}
             </Link>
           </div>
         </div>

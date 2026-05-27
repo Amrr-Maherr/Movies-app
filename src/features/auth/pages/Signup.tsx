@@ -69,17 +69,17 @@ export default function Signup() {
   return (
     <AuthLayout>
       <HelmetMeta
-        name="Create an Account"
-        description="Sign up for Netflix to start watching movies and TV shows"
+        name={t('auth.signup.title')}
+        description={t('auth.signUpDescription')}
       />
       <div className="w-full max-w-[450px] bg-black/75 rounded-lg px-8 py-16 md:px-16 md:py-12">
         <h1 className="text-3xl font-bold text-white mb-8">
-          Create an Account
+          {t('auth.signup.title')}
         </h1>
 
         {error && (
           <div className="mb-4 p-3 rounded bg-[#e87c7c] text-white text-sm">
-            {(error as Error).message || "Signup failed. Please try again."}
+            {(error as Error).message || t('errors.somethingWentWrong')}
           </div>
         )}
 
@@ -96,7 +96,7 @@ export default function Signup() {
                 className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
               />
               <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
-                Name
+                {t('auth.signup.name')}
               </label>
             </div>
 
@@ -111,7 +111,7 @@ export default function Signup() {
                 className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
               />
               <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
-                Email
+                {t('auth.signup.email')}
               </label>
             </div>
 
@@ -126,7 +126,7 @@ export default function Signup() {
                 className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
               />
               <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
-                Phone
+                {t('auth.phone')}
               </label>
             </div>
 
@@ -141,7 +141,7 @@ export default function Signup() {
                 className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
               />
               <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
-                Password
+                {t('auth.signup.password')}
               </label>
             </div>
 
@@ -153,10 +153,10 @@ export default function Signup() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 disabled={isPending}
-                className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-none focus:ring-0 focus:bg-[#454545] transition-colors"
+                className="peer w-full bg-[#333] border-0 rounded text-white px-4 py-4 h-12 placeholder-transparent focus:outline-hidden peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black"
               />
               <label className="absolute left-4 top-4 text-[#8c8c8c] text-base pointer-events-none transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-2 peer-focus:text-xs peer-focus:text-white peer-not-placeholder-shown:-top-2 peer-not-placeholder-shown:text-xs peer-not-placeholder-shown:text-white bg-[#333] px-1 peer-focus:bg-black peer-not-placeholder-shown:bg-black">
-                Confirm Password
+                {t('auth.signup.confirmPassword')}
               </label>
             </div>
           </Suspense>
@@ -172,12 +172,12 @@ export default function Signup() {
 
         <div className="mt-10 text-[#737373]">
           <p className="text-base text-center">
-            Already have an account?{" "}
+            {t('auth.signup.alreadyHaveAccount')}{" "}
             <Link
               to={getLocalizedLink('/login')}
               className="text-white hover:underline font-medium"
             >
-              Sign In
+              {t('auth.signup.signIn')}
             </Link>
           </p>
         </div>

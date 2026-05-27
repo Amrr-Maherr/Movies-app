@@ -1,48 +1,50 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Film, Tv, Newspaper, Video, ChevronLeft } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function MediaCenter() {
+  const { t } = useTranslation();
   const news = [
     {
       icon: <Newspaper className="w-6 h-6" />,
-      title: "Netflix Announces New Original Series for 2026",
-      date: "February 15, 2026",
-      description: "Discover the exciting new shows coming to Netflix this year, including drama, comedy, and documentary series."
+      title: t('infoPages.mediaCenter.news1'),
+      date: t('infoPages.mediaCenter.news1Date'),
+      description: t('infoPages.mediaCenter.news1Desc')
     },
     {
       icon: <Film className="w-6 h-6" />,
-      title: "Top 10 Most Watched Movies of January",
-      date: "February 1, 2026",
-      description: "See what everyone was watching last month. From action blockbusters to heartwarming romances."
+      title: t('infoPages.mediaCenter.news2'),
+      date: t('infoPages.mediaCenter.news2Date'),
+      description: t('infoPages.mediaCenter.news2Desc')
     },
     {
       icon: <Tv className="w-6 h-6" />,
-      title: "Renewed: Your Favorite Shows Return",
-      date: "January 20, 2026",
-      description: "Good news! These fan-favorite series have been renewed for another season."
+      title: t('infoPages.mediaCenter.news3'),
+      date: t('infoPages.mediaCenter.news3Date'),
+      description: t('infoPages.mediaCenter.news3Desc')
     },
     {
       icon: <Video className="w-6 h-6" />,
-      title: "Behind the Scenes: Making of Netflix Originals",
-      date: "January 10, 2026",
-      description: "Go behind the camera and discover how your favorite Netflix shows are made."
+      title: t('infoPages.mediaCenter.news4'),
+      date: t('infoPages.mediaCenter.news4Date'),
+      description: t('infoPages.mediaCenter.news4Desc')
     }
   ];
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
-        name="Media Center"
-        description="Latest news, press releases, and updates from Netflix."
+        name={t('infoPages.mediaCenter.title')}
+        description={t('infoPages.mediaCenter.description')}
       />
 
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Media Center
+          {t('infoPages.mediaCenter.title')}
         </h1>
         <p className="text-[var(--text-secondary)] text-lg mb-12">
-          Latest news, press releases, and updates from Netflix
+          {t('infoPages.mediaCenter.subtitle')}
         </p>
 
         {/* News Grid */}
@@ -70,7 +72,7 @@ export default function MediaCenter() {
                     to="#"
                     className="inline-flex items-center gap-2 text-[var(--netflix-red)] font-medium mt-4 hover:underline"
                   >
-                    Read More
+                    {t('infoPages.mediaCenter.readMore')}
                     <ChevronLeft className="w-4 h-4 rotate-180" />
                   </Link>
                 </div>
@@ -81,9 +83,9 @@ export default function MediaCenter() {
 
         {/* Press Contact */}
         <div className="mt-12 bg-[var(--background-secondary)] border border-[var(--card-border)] rounded-md p-8">
-          <h2 className="text-2xl font-bold mb-4">Press Contact</h2>
+          <h2 className="text-2xl font-bold mb-4">{t('infoPages.mediaCenter.pressContact')}</h2>
           <p className="text-[var(--text-secondary)] mb-4">
-            For media inquiries, please contact our press team:
+            {t('infoPages.mediaCenter.pressContactDesc')}
           </p>
           <a
             href="mailto:press@netflix.com"

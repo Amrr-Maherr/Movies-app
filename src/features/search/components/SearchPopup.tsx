@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, memo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Swords,
   Smile,
@@ -36,63 +37,63 @@ import SearchSection from "./SearchSection";
 
 // ── Genre suggestions — add more here easily ────────────────────
 
-const QUICK_SUGGESTIONS: QuickSuggestion[] = [
-  { icon: <Swords className="w-3.5 h-3.5" />, text: "Action", query: "action" },
-  { icon: <Smile className="w-3.5 h-3.5" />, text: "Comedy", query: "comedy" },
-  { icon: <Drama className="w-3.5 h-3.5" />, text: "Drama", query: "drama" },
-  { icon: <Ghost className="w-3.5 h-3.5" />, text: "Horror", query: "horror" },
+const getQuickSuggestions = (t: (key: string) => string): QuickSuggestion[] => [
+  { icon: <Swords className="w-3.5 h-3.5" />, text: t('common:search.genres.action'), query: "action" },
+  { icon: <Smile className="w-3.5 h-3.5" />, text: t('common:search.genres.comedy'), query: "comedy" },
+  { icon: <Drama className="w-3.5 h-3.5" />, text: t('common:search.genres.drama'), query: "drama" },
+  { icon: <Ghost className="w-3.5 h-3.5" />, text: t('common:search.genres.horror'), query: "horror" },
   {
     icon: <Rocket className="w-3.5 h-3.5" />,
-    text: "Sci-Fi",
+    text: t('common:search.genres.sciFi'),
     query: "science fiction",
   },
   {
     icon: <Heart className="w-3.5 h-3.5" />,
-    text: "Romance",
+    text: t('common:search.genres.romance'),
     query: "romance",
   },
   {
     icon: <Flame className="w-3.5 h-3.5" />,
-    text: "Thriller",
+    text: t('common:search.genres.thriller'),
     query: "thriller",
   },
   {
     icon: <BookOpen className="w-3.5 h-3.5" />,
-    text: "Documentary",
+    text: t('common:search.genres.documentary'),
     query: "documentary",
   },
   {
     icon: <Sparkles className="w-3.5 h-3.5" />,
-    text: "Animation",
+    text: t('common:search.genres.animationGenre'),
     query: "animation",
   },
   {
     icon: <SearchIcon className="w-3.5 h-3.5" />,
-    text: "Mystery",
+    text: t('common:search.genres.mystery'),
     query: "mystery",
   },
   {
     icon: <Sword className="w-3.5 h-3.5" />,
-    text: "Fantasy",
+    text: t('common:search.genres.fantasy'),
     query: "fantasy",
   },
-  { icon: <Bomb className="w-3.5 h-3.5" />, text: "Crime", query: "crime" },
+  { icon: <Bomb className="w-3.5 h-3.5" />, text: t('common:search.genres.crime'), query: "crime" },
   {
     icon: <Globe className="w-3.5 h-3.5" />,
-    text: "Adventure",
+    text: t('common:search.genres.adventure'),
     query: "adventure",
   },
-  { icon: <Music className="w-3.5 h-3.5" />, text: "Musical", query: "music" },
-  { icon: <Users className="w-3.5 h-3.5" />, text: "Family", query: "family" },
+  { icon: <Music className="w-3.5 h-3.5" />, text: t('common:search.genres.musical'), query: "music" },
+  { icon: <Users className="w-3.5 h-3.5" />, text: t('common:search.genres.family'), query: "family" },
   {
     icon: <Zap className="w-3.5 h-3.5" />,
-    text: "Superhero",
+    text: t('common:search.genres.superhero'),
     query: "superhero",
   },
-  { icon: <Palette className="w-3.5 h-3.5" />, text: "Anime", query: "anime" },
+  { icon: <Palette className="w-3.5 h-3.5" />, text: t('common:search.genres.anime'), query: "anime" },
   {
     icon: <Clapperboard className="w-3.5 h-3.5" />,
-    text: "Korean Drama",
+    text: t('common:search.genres.koreanDrama'),
     query: "korean drama",
   },
 ];
@@ -106,6 +107,7 @@ export const SearchPopup = memo(function SearchPopup({
   isOpen,
   onClose,
 }: SearchPopupProps) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebounce(query, 300);
 
@@ -182,7 +184,7 @@ export const SearchPopup = memo(function SearchPopup({
             {/* Empty state with suggestions */}
             {!isLoading && query.length < 2 && (
               <SearchEmptyState
-                suggestions={QUICK_SUGGESTIONS}
+                suggestions={getQuickSuggestions(t)}
                 onSelect={setQuery}
               />
             )}

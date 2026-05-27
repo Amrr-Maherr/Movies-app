@@ -4,6 +4,7 @@ import { Check, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { useTranslation } from "react-i18next";
 
 const plans = [
   {
@@ -33,19 +34,20 @@ const plans = [
 ];
 
 export default function Step2ChoosePlan({ selectedPlanId, onSelectPlan, onNext }) {
+  const { t } = useTranslation();
   return (
     <div className="w-full max-w-[1000px] mx-auto px-6 py-12 bg-black text-white">
       <HelmetMeta
-        name="Choose Your Plan"
-        description="Choose the Netflix plan that's right for you."
+        name={t("subscription.choosePlan")}
+        description={t("subscription.choosePlan")}
       />
 
       {/* Header */}
       <div className="mb-10 max-w-[600px]">
         <div className="flex items-center gap-2 mb-2 text-neutral-400">
-          <span className="text-xs uppercase tracking-widest font-bold">Step 2 of 4</span>
+          <span className="text-xs uppercase tracking-widest font-bold">{t("subscription.step", { current: 2, total: 4 })}</span>
         </div>
-        <h1 className="text-3xl font-bold mb-4">Choose the plan that's right for you</h1>
+        <h1 className="text-3xl font-bold mb-4">{t("subscription.choosePlan")}</h1>
         <ul className="space-y-3">
           <li className="flex items-center gap-3 text-lg text-neutral-200">
             <Check className="w-6 h-6 text-[#E50914] flex-shrink-0" />
@@ -88,7 +90,7 @@ export default function Step2ChoosePlan({ selectedPlanId, onSelectPlan, onNext }
                 "text-2xl font-bold mb-2",
                 selectedPlanId === plan.id ? "text-white" : "text-neutral-400"
               )}>{plan.name}</h3>
-              <p className="text-3xl font-bold">${plan.price}<span className="text-sm font-normal text-neutral-500">/mo</span></p>
+              <p className="text-3xl font-bold">${plan.price}<span className="text-sm font-normal text-neutral-500">{t("subscription.monthly")}</span></p>
             </div>
 
             <div className="space-y-4 pt-6 border-t border-neutral-800">
@@ -126,7 +128,7 @@ export default function Step2ChoosePlan({ selectedPlanId, onSelectPlan, onNext }
           disabled={!selectedPlanId}
           className="w-full max-w-[400px] bg-[#E50914] hover:bg-[#f40612] text-white h-16 text-xl font-bold rounded-md shadow-lg transition-transform active:scale-[0.98]"
         >
-          Next
+          {t("common.next")}
         </Button>
       </div>
     </div>

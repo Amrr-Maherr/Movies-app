@@ -1,52 +1,54 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { HelpCircle, Book, MessageSquare, Phone } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
 export default function HelpCenter() {
+  const { t } = useTranslation();
   const helpCategories = [
     {
       icon: <Book className="w-8 h-8" />,
-      title: "Account & Billing",
-      description: "Manage your account, update payment info, and view billing history"
+      title: t('infoPages:helpCenter.categories.accountBilling'),
+      description: t('infoPages:helpCenter.categories.accountBillingDesc')
     },
     {
       icon: <MessageSquare className="w-8 h-8" />,
-      title: "Watching Netflix",
-      description: "Learn about streaming quality, supported devices, and troubleshooting"
+      title: t('infoPages:helpCenter.categories.watching'),
+      description: t('infoPages:helpCenter.categories.watchingDesc')
     },
     {
       icon: <HelpCircle className="w-8 h-8" />,
-      title: "Plans & Pricing",
-      description: "Compare plans, upgrade or downgrade, and understand what's included"
+      title: t('infoPages:helpCenter.categories.plans'),
+      description: t('infoPages:helpCenter.categories.plansDesc')
     },
     {
       icon: <Phone className="w-8 h-8" />,
-      title: "Contact Us",
-      description: "Get in touch with our support team for personalized help"
+      title: t('infoPages:helpCenter.categories.contact'),
+      description: t('infoPages:helpCenter.categories.contactDesc')
     }
   ];
 
   const quickLinks = [
-    "How to reset your password",
-    "Update your payment method",
-    "Cancel your membership",
-    "Browse TV shows by genre",
-    "Browse movies by genre"
+    t('infoPages:helpCenter.quickLinks.resetPassword'),
+    t('infoPages:helpCenter.quickLinks.updatePayment'),
+    t('infoPages:helpCenter.quickLinks.cancelMembership'),
+    t('infoPages:helpCenter.quickLinks.browseTvGenre'),
+    t('infoPages:helpCenter.quickLinks.browseMoviesGenre')
   ];
 
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
-        name="Help Center"
-        description="Get help with your Netflix account, streaming issues, and more."
+        name={t('infoPages:helpCenter.title')}
+        description={t('infoPages:helpCenter.description')}
       />
 
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Help Center
+          {t('infoPages:helpCenter.title')}
         </h1>
         <p className="text-[var(--text-secondary)] text-lg mb-12">
-          We're here to help you get the most out of Netflix
+          {t('infoPages:helpCenter.subtitle')}
         </p>
 
         {/* Search Bar */}
@@ -54,7 +56,7 @@ export default function HelpCenter() {
           <div className="relative">
             <input
               type="text"
-              placeholder="Search for help articles..."
+              placeholder={t('infoPages:helpCenter.searchPlaceholder')}
               className="w-full bg-[var(--background-secondary)] border border-[var(--input-border)] text-[var(--text-primary)] px-4 py-3 rounded-md focus:outline-none focus:border-[var(--netflix-red)] transition-colors duration-300"
             />
           </div>
@@ -82,7 +84,7 @@ export default function HelpCenter() {
 
         {/* Quick Links */}
         <div className="max-w-2xl">
-          <h2 className="text-2xl font-bold mb-6">Quick Links</h2>
+          <h2 className="text-2xl font-bold mb-6">{t('infoPages:helpCenter.quickLinksTitle')}</h2>
           <ul className="space-y-3">
             {quickLinks.map((link, index) => (
               <li key={index}>

@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SearchPopup from "@/features/search/components/SearchPopup";
+import { useTranslation } from "react-i18next";
 
 interface SearchButtonProps {
   className?: string;
 }
 
 export default function SearchButton({ className }: SearchButtonProps) {
+  const { t } = useTranslation();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   return (
@@ -20,7 +22,7 @@ export default function SearchButton({ className }: SearchButtonProps) {
           "transition-all duration-200",
           className,
         )}
-        aria-label="Search"
+        aria-label={t("header.search")}
         onClick={() => setIsPopupOpen(true)}
       >
         <Search className="w-5 h-5" />

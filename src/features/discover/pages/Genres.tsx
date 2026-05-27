@@ -1,4 +1,5 @@
 import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useMovieGenres, useTvGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film, Tv } from "lucide-react";
@@ -7,6 +8,7 @@ import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper"
 import GenreCard from "@/features/discover/components/GenreCard";
 
 const Genres = memo(function Genres() {
+  const { t } = useTranslation();
   const {
     data: movieGenres,
     isLoading: movieGenresLoading,
@@ -41,8 +43,8 @@ const Genres = memo(function Genres() {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
         <Error
-          message="Failed to load genres"
-          retryButtonText="Try Again"
+          message={t('common:discover.errorLoading')}
+          retryButtonText={t('common:discover.retry')}
           onRetry={() => window.location.reload()}
         />
       </div>
@@ -52,14 +54,14 @@ const Genres = memo(function Genres() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20">
       <HelmetMeta
-        name="Browse by Genre"
+        name={t('discover:genres')}
         description="Explore movies and TV shows organized by category. Find your favorite genres and discover new content on Netflix."
       />
       <div className="container">
         {/* Page Header */}
         <div className="mb-10 mt-4">
           <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)] mb-3">
-            Browse by Genre
+            {t('discover:genres')}
           </h1>
           <p className="text-sm md:text-base text-[var(--text-secondary)] max-w-2xl">
             Explore movies and TV shows organized by category
@@ -71,7 +73,7 @@ const Genres = memo(function Genres() {
           <div className="flex items-center gap-2 mb-4">
             <Film className="w-5 h-5 text-[var(--netflix-red)]" />
             <h2 className="text-xl md:text-2xl font-semibold text-[var(--text-primary)]">
-              Movies
+              {t('discover:movies')}
             </h2>
           </div>
 
@@ -84,7 +86,7 @@ const Genres = memo(function Genres() {
             isEmptyFallback={
               <div className="text-center py-16 text-[var(--text-muted)]">
                 <Film className="w-14 h-14 mx-auto mb-3 opacity-30" />
-                <p className="text-sm">No movie genres available</p>
+                <p className="text-sm">{t('common:common.noData')}</p>
               </div>
             }
           >
@@ -108,7 +110,7 @@ const Genres = memo(function Genres() {
           <div className="flex items-center gap-2 mb-4">
             <Tv className="w-5 h-5 text-[var(--netflix-red)]" />
             <h2 className="text-xl md:text-2xl font-semibold text-[var(--text-primary)]">
-              TV Shows
+              {t('discover:tvShows')}
             </h2>
           </div>
 
@@ -121,7 +123,7 @@ const Genres = memo(function Genres() {
             isEmptyFallback={
               <div className="text-center py-16 text-[var(--text-muted)]">
                 <Tv className="w-14 h-14 mx-auto mb-3 opacity-30" />
-                <p className="text-sm">No TV show genres available</p>
+                <p className="text-sm">{t('common:common.noData')}</p>
               </div>
             }
           >

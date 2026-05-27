@@ -1,4 +1,5 @@
 import { memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Pagination,
   PaginationContent,
@@ -37,6 +38,7 @@ const ShadcnPagination = memo(function ShadcnPagination({
   isLoading = false,
   onPageChange,
 }: PaginationProps) {
+  const { t } = useTranslation();
   // Generate page numbers to display with ellipsis logic
   const pageNumbers = useMemo(() => {
     const pages: (number | "ellipsis")[] = [];
@@ -128,7 +130,7 @@ const ShadcnPagination = memo(function ShadcnPagination({
                 onClick={() => handlePageClick(page as number)}
                 isActive={page === currentPage}
                 disabled={isLoading}
-                aria-label={`Go to page ${page}`}
+                aria-label={t("common.next")}
                 aria-current={page === currentPage ? "page" : undefined}
                 className="min-h-[48px] min-w-[48px] touch-manipulation"
               >

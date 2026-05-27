@@ -7,6 +7,7 @@ import {
   Maximize,
   Minimize,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface VideoControlsProps {
   isMuted: boolean;
@@ -33,6 +34,7 @@ const VideoControls = memo(function VideoControls({
   onTogglePlay,
   onToggleFullscreen,
 }: VideoControlsProps) {
+  const { t } = useTranslation();
   const handleFullscreen = useCallback(() => {
     if (onToggleFullscreen) {
       onToggleFullscreen();
@@ -57,8 +59,8 @@ const VideoControls = memo(function VideoControls({
             ? "bg-white/20 hover:bg-white/30 text-white"
             : "bg-white/20 hover:bg-white/30 text-white"
         }`}
-        aria-label={isPlaying ? "Pause video" : "Play video"}
-        title={isPlaying ? "Pause" : "Play"}
+        aria-label={isPlaying ? t('common.pause') : t('buttons.play')}
+        title={isPlaying ? t('common.pause') : t('buttons.play')}
       >
         {isPlaying ? (
           <Pause className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -76,8 +78,8 @@ const VideoControls = memo(function VideoControls({
             ? "bg-white/20 hover:bg-white/30 text-white"
             : "bg-white/20 hover:bg-white/30 text-white"
         }`}
-        aria-label={isMuted ? "Unmute video" : "Mute video"}
-        title={isMuted ? "Unmute" : "Mute"}
+        aria-label={isMuted ? t('common.unmute') : t('common.mute')}
+        title={isMuted ? t('common.unmute') : t('common.mute')}
       >
         {isMuted ? (
           <VolumeX className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -96,8 +98,8 @@ const VideoControls = memo(function VideoControls({
               ? "bg-white/20 hover:bg-white/30 text-white"
               : "bg-white/20 hover:bg-white/30 text-white"
           }`}
-          aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-          title={isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
+          aria-label={isFullscreen ? t('common.exitFullscreen') : t('common.enterFullscreen')}
+          title={isFullscreen ? t('common.exitFullscreen') : t('common.fullscreen')}
         >
           {isFullscreen ? (
             <Minimize className="w-5 h-5 sm:w-6 sm:h-6" />

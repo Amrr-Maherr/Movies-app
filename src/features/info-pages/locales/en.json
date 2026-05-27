@@ -2,6 +2,7 @@
   "faq": {
     "title": "Frequently Asked Questions",
     "description": "Find answers to common questions about Netflix streaming service.",
+    "moreQuestions": "Still have questions?",
     "questions": {
       "whatIsNetflix": "What is Netflix?",
       "whatIsNetflixAnswer": "Netflix is a streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices. You can watch as much as you want, whenever you want without a single commercial – all for one low monthly price.",
@@ -31,6 +32,8 @@
       "contact": "Contact Us",
       "contactDesc": "Get in touch with our support team for personalized help"
     },
+    "searchPlaceholder": "Search for help articles...",
+    "quickLinksTitle": "Quick Links",
     "quickLinks": {
       "resetPassword": "How to reset your password",
       "updatePayment": "Update your payment method",

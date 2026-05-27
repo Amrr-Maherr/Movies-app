@@ -5,6 +5,7 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { MediaImage } from "@/shared/types/movieDetails";
 import { SectionSkeleton } from "@/components/ui";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
+import { useTranslation } from "react-i18next";
 
 // Lazy-loaded component
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
@@ -31,6 +32,7 @@ const Lightbox = memo(function Lightbox({
   onPrev,
   onNext,
 }: LightboxProps) {
+  const { t } = useTranslation();
   const current = images[activeIndex];
   if (!current) return null;
 
@@ -47,7 +49,7 @@ const Lightbox = memo(function Lightbox({
         <button
           className="absolute top-4 right-4 z-10 p-2 text-white/70 hover:text-white transition-colors bg-black/40 rounded-full"
           onClick={onClose}
-          aria-label="Close lightbox"
+          aria-label={t("common.close")}
         >
           <X className="w-6 h-6" />
         </button>
@@ -65,7 +67,7 @@ const Lightbox = memo(function Lightbox({
               e.stopPropagation();
               onPrev();
             }}
-            aria-label="Previous image"
+            aria-label={t("common.previous")}
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
@@ -82,7 +84,7 @@ const Lightbox = memo(function Lightbox({
         >
           <OptimizedImage
             src={`${IMAGE_BASE_URL}${FULL_SIZE}${current.file_path}`}
-            alt={`Behind the scenes ${activeIndex + 1}`}
+            alt={`${t("common.viewAll")} ${activeIndex + 1}`}
             className="max-h-[90vh] max-w-[90vw] object-contain"
             objectFit="contain"
           />
@@ -96,7 +98,7 @@ const Lightbox = memo(function Lightbox({
               e.stopPropagation();
               onNext();
             }}
-            aria-label="Next image"
+            aria-label={t("common.next")}
           >
             <ChevronRight className="w-6 h-6" />
           </button>
@@ -128,7 +130,7 @@ const ImageCard = memo(function ImageCard({
     >
       <OptimizedImage
         src={`${IMAGE_BASE_URL}${THUMB_SIZE}${image.file_path}`}
-        alt={`Behind the scenes ${index + 1}`}
+        alt={`${t("common.viewAll")} ${index + 1}`}
         className="w-full h-full transition-transform duration-500 group-hover:scale-110"
         objectFit="cover"
       />
@@ -154,6 +156,7 @@ const BehindTheScenesSection = memo(function BehindTheScenesSection({
   images,
   title = "Behind the Scenes",
 }: BehindTheSectionProps) {
+  const { t } = useTranslation();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Only show backdrops with proper aspect ratios (cinematic shots)
@@ -191,7 +194,7 @@ const BehindTheScenesSection = memo(function BehindTheScenesSection({
               {title}
             </h2>
             <span className="text-sm text-gray-500">
-              {displayImages.length} photos
+              {displayImages.length} {t("personDetails.images")}
             </span>
           </div>
 

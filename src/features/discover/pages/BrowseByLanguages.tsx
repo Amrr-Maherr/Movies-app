@@ -1,4 +1,5 @@
 import { useState, memo, useMemo, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { motion as motionFramer, AnimatePresence as AnimatePresenceFramer } from "framer-motion";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -12,6 +13,7 @@ import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper"
 import MediaGrid from "@/components/shared/MediaGrid";
 
 const BrowseByLanguages = memo(function BrowseByLanguages() {
+  const { t } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState<string>(
     SUPPORTED_LANGUAGES[0].code,
   );
@@ -42,7 +44,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-24 container">
       <HelmetMeta
-        name="Browse by Languages"
+        name={t('discover:languages')}
         description="Discover movies and TV shows based on their original language on Netflix."
       />
 
@@ -55,7 +57,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
       >
         <div className="container my-2">
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
-            Browse by Languages
+            {t('discover:languages')}
           </h1>
           <p className="text-[var(--text-secondary)] text-sm sm:text-base max-w-2xl">
             Discover movies and TV shows based on their original language.
@@ -80,13 +82,13 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
       {error ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
           <p className="text-xl text-[var(--error)] font-medium mb-4">
-            Failed to load content for the selected language. Please try again.
+            {t('common:errors.somethingWentWrong')}
           </p>
           <button
             onClick={handleRetry}
             className="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-white/80 transition-colors"
           >
-            Retry
+            {t('common:common.retry')}
           </button>
         </div>
       ) : (
@@ -100,7 +102,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
             isEmptyFallback={
               <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
                 <p className="text-xl text-white/60 font-medium">
-                  No content available for this language.
+                  {t('common:common.noData')}
                 </p>
               </div>
             }
@@ -116,7 +118,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
                 >
                   <MediaGrid
                     items={items as unknown as HeroMedia[]}
-                    emptyMessage="No content available for this language."
+                    emptyMessage={t('common:common.noData')}
                   />
                 </motionFramer.div>
               </AnimatePresenceFramer>

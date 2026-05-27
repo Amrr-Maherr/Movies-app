@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useMoviesByGenre, useMovieGenres } from "@/hooks/shared";
 import { SectionSkeleton, Error } from "@/components/ui";
 import { Film } from "lucide-react";
@@ -10,6 +11,7 @@ import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper"
 import Card from "@/components/shared/Card/Card";
 
 const GenreMovies = memo(function GenreMovies() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const genreId = id ? parseInt(id, 10) : 0;
   const [page, setPage] = useState(1);
@@ -46,8 +48,8 @@ const GenreMovies = memo(function GenreMovies() {
     return (
       <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
         <Error
-          message="Failed to load movies"
-          retryButtonText="Try Again"
+          message={t('common:errors.somethingWentWrong')}
+          retryButtonText={t('common:discover.retry')}
           onRetry={() => window.location.reload()}
         />
       </div>
@@ -57,7 +59,7 @@ const GenreMovies = memo(function GenreMovies() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)] pt-20 pb-12">
       <HelmetMeta
-        name={`${genreName} Movies`}
+        name={`${genreName} ${t('discover:movies')}`}
         description={`Watch ${totalResults} movies in the ${genreName} genre. Browse and stream the best ${genreName} movies on Netflix.`}
       />
       <div className="container">
@@ -66,7 +68,7 @@ const GenreMovies = memo(function GenreMovies() {
           <div className="flex items-center gap-3 mb-4">
             <Film className="w-8 h-8 text-[var(--netflix-red)]" />
             <h1 className="text-3xl md:text-5xl font-bold text-[var(--text-primary)]">
-              {genreName} Movies
+              {genreName} {t('discover:movies')}
             </h1>
           </div>
           <p className="text-base text-[var(--text-secondary)]">
@@ -84,7 +86,7 @@ const GenreMovies = memo(function GenreMovies() {
           isEmptyFallback={
             <div className="text-center py-12 text-[var(--text-muted)]">
               <Film className="w-16 h-16 mx-auto mb-4 opacity-50" />
-              <p className="text-lg">No movies available in this genre</p>
+              <p className="text-lg">{t('common:common.noData')}</p>
             </div>
           }
         >

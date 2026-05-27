@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export interface ErrorProps {
   /**
@@ -68,13 +69,17 @@ export interface ErrorProps {
  */
 const Error = memo(function Error({
   className,
-  title = "Something went wrong",
-  message = "We're sorry, but we couldn't load this content. Please try again.",
+  title,
+  message,
   errorCode,
   onRetry,
-  retryButtonText = "Retry",
+  retryButtonText,
   fullscreen = false,
 }: ErrorProps) {
+  const { t } = useTranslation();
+  const resolvedTitle = title ?? t("errors.somethingWentWrong");
+  const resolvedMessage = message ?? t("errors.somethingWentWrong");
+  const resolvedRetryText = retryButtonText ?? t("common.retry");
   return (
     <div
       className={cn(
@@ -114,11 +119,11 @@ const Error = memo(function Error({
 
       {/* Error Title */}
       <h2 className={cn("text-2xl font-semibold text-foreground", "mb-2")}>
-        {title}
+        {resolvedTitle}
       </h2>
 
       {/* Error Message */}
-      <p className={cn("text-muted-foreground max-w-md", "mb-2")}>{message}</p>
+      <p className={cn("text-muted-foreground max-w-md", "mb-2")}>{resolvedMessage}</p>
 
       {/* Error Code (if provided) */}
       {errorCode && (
@@ -140,7 +145,7 @@ const Error = memo(function Error({
             "bg-netflix-red hover:bg-netflix-red-hover",
             "transition-colors duration-200",
           )}
-          aria-label={`Retry loading content: ${title}`}
+          aria-label={`${t("common.retry")}: ${resolvedTitle}`}
         >
           <svg
             className="w-4 h-4 mr-2"
@@ -156,7 +161,7 @@ const Error = memo(function Error({
               d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
             />
           </svg>
-          {retryButtonText}
+          {resolvedRetryText}
         </Button>
       )}
     </div>

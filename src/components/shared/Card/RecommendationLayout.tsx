@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Star } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
+import { useTranslation } from "react-i18next";
 
 export interface RecommendationLayoutProps {
   movie: HeroMedia;
@@ -27,11 +28,12 @@ const RecommendationLayout = memo(
     matchPercentage,
     isHovered,
   }: RecommendationLayoutProps) => {
+    const { t } = useTranslation();
     return (
       <div
         className="group touch-manipulation min-h-[48px]"
         role="article"
-        aria-label={`Recommendation: ${title}`}
+        aria-label={`${t("media.recommendations")}: ${title}`}
       >
         <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
           <OptimizedImage

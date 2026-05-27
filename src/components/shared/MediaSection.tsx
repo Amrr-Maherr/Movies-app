@@ -4,6 +4,7 @@ import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper"
 import Card from "@/components/shared/Card/Card";
 import { Error } from "@/components/ui";
 import type { HeroMedia } from "@/types";
+import { useTranslation } from "react-i18next";
 
 // Lazy-loaded component
 const Slider = lazy(() => import("@/components/shared/Slider/slider"));
@@ -26,6 +27,7 @@ const MediaSection = memo(function MediaSection({
   onRetry,
   slidesPerView = 4,
 }: MediaSectionProps) {
+  const { t } = useTranslation();
   // Memoize media array to prevent unnecessary re-renders
   const media = useMemo(() => data || [], [data]);
 
@@ -38,7 +40,7 @@ const MediaSection = memo(function MediaSection({
     return (
       <section className="py-8">
         <div className="container">
-          <Error retryButtonText="Try Again" onRetry={handleRetry} />
+          <Error retryButtonText={t("common.tryAgain")} onRetry={handleRetry} />
         </div>
       </section>
     );

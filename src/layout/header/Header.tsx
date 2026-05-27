@@ -8,11 +8,13 @@ import SearchButton from "./components/search/SearchButton";
 import { HeaderLinks } from "@/layout/header/data/header";
 import { cn } from "@/lib/utils";
 import LanguageDropdown from "./components/LanguageDropdown";
+import { useTranslation } from "react-i18next";
 
 const ProfileMenu = lazy(() => import("./components/ProfileMenu"));
 const BrowseDropdown = lazy(() => import("./components/BrowseDropdown"));
 
 const Header = memo(function Header() {
+  const { t } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isBrowseMenuOpen, setIsBrowseMenuOpen] = useState(false);
@@ -88,7 +90,7 @@ const Header = memo(function Header() {
           <SearchButton />
           <LanguageDropdown />
 
-          <button className="text-white hover:text-gray-300 transition-colors" aria-label="Notifications">
+          <button className="text-white hover:text-gray-300 transition-colors" aria-label={t("header.notifications")}>
             <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 

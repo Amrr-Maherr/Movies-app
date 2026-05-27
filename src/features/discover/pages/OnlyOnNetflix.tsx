@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Star, Film, Tv, Award } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export default function OnlyOnNetflix() {
+  const { t } = useTranslation();
   const categories = [
     {
       icon: <Star className="w-8 h-8" />,
@@ -41,13 +43,13 @@ export default function OnlyOnNetflix() {
   return (
     <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)]">
       <HelmetMeta
-        name="Only on Netflix"
+        name={t('common:home.onlyOnNetflix')}
         description="Discover exclusive Netflix Originals and content you can't find anywhere else."
       />
 
       <div className="container py-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Only on Netflix
+          {t('common:home.onlyOnNetflix')}
         </h1>
         <p className="text-[var(--text-secondary)] text-lg mb-12">
           Discover exclusive content you can't find anywhere else
