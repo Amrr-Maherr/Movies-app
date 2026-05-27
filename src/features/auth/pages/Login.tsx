@@ -4,6 +4,7 @@ import AuthLayout from "@/features/auth/components/AuthLayout";
 import { useLogin } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { useTranslation } from "react-i18next";
 
 // Lazy-loaded components
 const Input = lazy(() =>
@@ -11,6 +12,7 @@ const Input = lazy(() =>
 );
 
 export default function Login() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

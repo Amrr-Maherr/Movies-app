@@ -66,6 +66,7 @@ export function MovieCardVariants({
 
   const finalMatchPercentage = matchPercentageProp ?? calculatedMatchPercentage;
   const isAdult = movie.adult === true;
+  const localizedDetailsUrl = getLocalizedLink(detailsUrl);
 
   // Compact variant
   if (variant === "compact") {

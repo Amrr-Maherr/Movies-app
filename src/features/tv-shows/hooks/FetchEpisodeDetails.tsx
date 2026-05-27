@@ -21,7 +21,7 @@ export default function FetchEpisodeDetails(
         tvShowId,
         seasonNumber,
         episodeNumber,
-      ) as Promise<Episode>,
+      ) as Promise<EpisodeDetailsResponse>,
     staleTime: 5 * 60 * 1000, // 5 minutes
     retry: 2,
     enabled: tvShowId > 0 && seasonNumber > 0 && episodeNumber > 0,

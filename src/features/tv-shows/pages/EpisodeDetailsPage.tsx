@@ -74,7 +74,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
   const creditsCast = useMemo(
     () =>
       (
-        (episode as Record<string, unknown>)?.credits as
+        (episode as unknown as Record<string, unknown>)?.credits as
           | { cast: EpisodeCastMember[] }
           | undefined
       )?.cast ?? [],
@@ -85,7 +85,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
   const creditsCrew = useMemo(
     () =>
       (
-        (episode as Record<string, unknown>)?.credits as
+        (episode as unknown as Record<string, unknown>)?.credits as
           | { crew: EpisodeCrewMember[] }
           | undefined
       )?.crew ?? [],
@@ -124,14 +124,14 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
 
   // Videos
   const videos = useMemo(() => {
-    const episodeAny = episode as Record<string, unknown>;
+    const episodeAny = episode as unknown as Record<string, unknown>;
     const v = episodeAny?.videos as { results?: Video[] } | undefined;
     return v?.results ?? [];
   }, [episode]);
 
   // Images
   const images = useMemo(() => {
-    const episodeAny = episode as Record<string, unknown>;
+    const episodeAny = episode as unknown as Record<string, unknown>;
     const imgs = episodeAny?.images as
       | { stills?: ImageFile[]; backdrops?: ImageFile[] }
       | undefined;
@@ -140,7 +140,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
 
   // External IDs
   const externalIds = useMemo(() => {
-    const episodeAny = episode as Record<string, unknown>;
+    const episodeAny = episode as unknown as Record<string, unknown>;
     return (episodeAny?.external_ids ?? {}) as Record<string, unknown>;
   }, [episode]);
 
