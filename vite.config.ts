@@ -11,12 +11,8 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    // =========================================================
-    // PWA PLUGIN - Progressive Web App Support
-    // =========================================================
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
         name: 'Netflix Egypt',
         short_name: 'Netflix',
@@ -24,9 +20,6 @@ export default defineConfig({
         theme_color: '#141414',
         background_color: '#141414',
         display: 'standalone',
-        orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -36,46 +29,14 @@ export default defineConfig({
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any'
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
-      },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/image\.tmdb\.org\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'tmdb-images',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/api\.themoviedb\.org\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'tmdb-api',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 // 1 day
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
+            purpose: 'maskable'
           }
         ]
       }

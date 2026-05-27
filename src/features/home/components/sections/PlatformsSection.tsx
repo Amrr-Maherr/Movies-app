@@ -30,6 +30,7 @@ const PlatformsSection = memo(function PlatformsSection({
   isLoading,
   error,
 }: PlatformsSectionProps) {
+  const { i18n } = useTranslation();
   // Show skeleton while loading
   if (isLoading) {
     return (

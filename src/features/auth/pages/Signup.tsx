@@ -5,6 +5,7 @@ import { useSignup } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { getLocalizedLink } from "@/lib/utils/i18n";
+import { useTranslation } from "react-i18next";
 
 // Lazy-loaded components
 const Input = lazy(() =>
@@ -12,6 +13,7 @@ const Input = lazy(() =>
 );
 
 export default function Signup() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
