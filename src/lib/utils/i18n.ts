@@ -1,29 +1,29 @@
 import i18n from '@/lib/i18n';
 
+const SUPPORTED_LANGS = ['en', 'ar'];
+const DEFAULT_LANG = 'en';
+
 /**
  * Get localized link with language prefix
- * @param path - The original path (with or without language prefix)
- * @returns Localized path with current language prefix
+ * @param path - The original path (relative, e.g. "/home" or "home")
+ * @param lang - Optional language code. Defaults to current i18n language.
+ * @returns Localized path with language prefix
  */
-export function getLocalizedLink(path: string): string {
-  const currentLang = i18n.language || 'en';
+export function getLocalizedLink(path: string, lang?: string): string {
+  const currentLang = lang || i18n.language || DEFAULT_LANG;
   
-  // If path already has language prefix, update it
-  const parts = path.split('/').filter(Boolean);
-  if (parts.length > 0 && ['en', 'ar'].includes(parts[0])) {
-    parts[0] = currentLang;
-    return '/' + parts.join('/');
-  }
+  if (!path) return `/${currentLang}`;
   
-  // Add language prefix
-  return `/${currentLang}${path.startsWith('/') ? '' : '/'}${path}`;
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  return `/${currentLang}${cleanPath}`;
 }
 
 /**
  * Get localized URL with language prefix
  * @param path - The original path
+ * @param lang - Optional language code
  * @returns Full localized URL with language prefix
  */
-export function getLocalizedUrl(path: string): string {
-  return getLocalizedLink(path);
+export function getLocalizedUrl(path: string, lang?: string): string {
+  return getLocalizedLink(path, lang);
 }

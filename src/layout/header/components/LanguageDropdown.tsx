@@ -1,4 +1,4 @@
-import { useState, memo } from "react";
+import { useState, memo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -26,7 +26,7 @@ const LanguageDropdown = memo(function LanguageDropdown() {
   const currentLanguage = i18n.language || 'en';
   const currentLangName = SUPPORTED_LANGUAGES.find(lang => lang.code === currentLanguage)?.name || 'English';
 
-  const handleLanguageChange = (langCode: string) => {
+  const handleLanguageChange = useCallback((langCode: string) => {
     localStorage.setItem('app_language', langCode);
     i18n.changeLanguage(langCode);
     setIsOpen(false);
@@ -40,10 +40,10 @@ const LanguageDropdown = memo(function LanguageDropdown() {
       pathParts.shift();
     }
     
-    // Build new path with language prefix
+    // Build new path with language prefix and reload
     const newPath = `/${langCode}${pathParts.length > 0 ? '/' + pathParts.join('/') : ''}`;
     window.location.href = newPath;
-  };
+  }, [i18n]);
 
   return (
     <div className="relative">

@@ -5,6 +5,7 @@ import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { Play, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import { getTitle } from "@/utils";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
@@ -13,9 +14,11 @@ import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvide
 
 const MyList = memo(function MyList() {
   const { startTour } = useOnboarding();
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const myList = useAppSelector(selectList);
+  const currentLang = i18n.language || 'en';
 
   const handleRemove = (e: React.MouseEvent, itemId: number) => {
     e.stopPropagation();
@@ -33,7 +36,7 @@ const MyList = memo(function MyList() {
     e.preventDefault();
     const slug = generateSlug(title);
     const slugWithId = formatSlugWithId(slug, itemId);
-    navigate(`/${mediaType}/${slugWithId}`);
+    navigate(`/${currentLang}/${mediaType}/${slugWithId}`);
   };
 
   const isTvShow = (item: (typeof myList)[0]): boolean => {

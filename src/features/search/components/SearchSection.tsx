@@ -1,5 +1,6 @@
 import { memo, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Card from "@/components/shared/Card/Card";
@@ -124,15 +125,17 @@ const SearchSection = memo(function SearchSection({
   query,
   onClose,
 }: SearchSectionProps) {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const cfg = CONFIGS[type];
   if (!cfg) return null;
 
   const { maxDisplay, gridCols } = cfg;
   const visible = results.slice(0, maxDisplay);
+  const currentLang = i18n.language || 'en';
 
   const handleViewAll = () => {
-    navigate(`/search?q=${encodeURIComponent(query)}&type=${cfg.typeParam}`);
+    navigate(`/${currentLang}/search?q=${encodeURIComponent(query)}&type=${cfg.typeParam}`);
     onClose();
   };
 

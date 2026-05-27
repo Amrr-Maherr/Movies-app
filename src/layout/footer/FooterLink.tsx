@@ -2,6 +2,7 @@ import type { FooterLink as FooterLinkType } from "@/layout/types";
 import { Link } from "react-router-dom";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 interface FooterLinkProps {
   link: FooterLinkType;
@@ -14,19 +15,7 @@ interface FooterLinkProps {
  * Memoized to prevent unnecessary re-renders when footer updates.
  */
 const FooterLink = memo(function FooterLink({ link }: FooterLinkProps) {
-  const { t, i18n } = useTranslation();
-  const currentLang = i18n.language || 'en';
-  
-  // Update link to include current language
-  const getLocalizedLink = (originalLink: string) => {
-    const parts = originalLink.split('/').filter(Boolean);
-    if (parts.length > 0 && ['en', 'ar'].includes(parts[0])) {
-      parts[0] = currentLang;
-      return '/' + parts.join('/');
-    }
-    return `/${currentLang}${originalLink.startsWith('/') ? '' : '/'}${originalLink}`;
-  };
-  
+  const { t } = useTranslation();
   const localizedLink = getLocalizedLink(link.href);
   
   return (

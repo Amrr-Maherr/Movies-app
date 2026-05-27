@@ -13,8 +13,9 @@ const Input = lazy(() =>
 );
 
 export default function Login() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const currentLang = i18n.language || 'en';
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -47,7 +48,7 @@ export default function Login() {
             sessionStorage.setItem("email", JSON.stringify(response.email));
           }
           // Redirect to home page
-          navigate("/");
+          navigate(`/${currentLang}/`);
         },
       },
     );

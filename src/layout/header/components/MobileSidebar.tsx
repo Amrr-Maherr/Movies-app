@@ -41,7 +41,7 @@ const MobileSidebar = memo(function MobileSidebar({
             {HeaderLinks.map((link, index) => (
               <NavLink
                 key={index}
-                to={link.link}
+                to={getLocalizedLink(link.link)}
                 className={({ isActive }) =>
                   cn(
                     "block px-6 py-3 text-[var(--text-primary)] font-medium transition-colors duration-200",

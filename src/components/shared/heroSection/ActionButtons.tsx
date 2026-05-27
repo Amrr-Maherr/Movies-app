@@ -6,6 +6,7 @@ import { getTitle } from "@/utils";
 import { HeroMedia } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addToList, removeFromList, selectIsInList } from "@/features/my-list/store/listSlice";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 interface ActionButtonsProps {
   movie?: HeroMedia;
@@ -42,7 +43,7 @@ const ActionButtons = memo(function ActionButtons({
   const title = getTitle(movie);
   const slug = generateSlug(title);
   const slugWithId = formatSlugWithId(slug, movie.id);
-  const detailsUrl = `/${isTvShow ? "tv" : "movie"}/${slugWithId}`;
+  const detailsUrl = getLocalizedLink(`/${isTvShow ? "tv" : "movie"}/${slugWithId}`);
 
   return (
     <div className="flex flex-wrap gap-3 pt-4 hero-buttons">

@@ -5,11 +5,13 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
 import { generateSlug, formatSlugWithId } from "@/utils/slugify";
 import { useMovieModal } from "@/shared/contexts/MovieModalContext";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { addToList, removeFromList, selectIsInList } from "@/features/my-list/store/listSlice";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 import type { HeroMedia, Episode, Season } from "@/types";
 
 export interface UseCardLogicProps {
@@ -46,6 +48,7 @@ export function useCardLogic({
     seasonNumber,
 }: UseCardLogicProps) {
     const navigate = useNavigate();
+    const { i18n } = useTranslation();
     const { openModal } = useMovieModal();
     const dispatch = useAppDispatch();
     const [isHovered, setIsHovered] = useState(false);
@@ -106,8 +109,9 @@ export function useCardLogic({
         if (!movie) return "";
         const slug = generateSlug(title);
         const slugWithId = formatSlugWithId(slug, movie.id);
-        return `/${tvShow ? "tv" : "movie"}/${slugWithId}`;
-    }, [movie, title, tvShow]);
+        const lang = i18n.language || 'en';
+        return getLocalizedLink(`/${tvShow ? "tv" : "movie"}/${slugWithId}`, lang);
+    }, [movie, title, tvShow, i18n.language]);
 
     // Metadata
     const matchScore = useMemo(
@@ -197,8 +201,9 @@ export function useCardLogic({
 
     const episodeLink = useMemo(() => {
         if (!episode || !tvShowId || seasonNumber === undefined) return "#";
-        return `/tv/${tvShowId}/season/${seasonNumber}/episode/${episode.episode_number}`;
-    }, [episode, tvShowId, seasonNumber]);
+        const lang = i18n.language || 'en';
+        return getLocalizedLink(`/tv/${tvShowId}/season/${seasonNumber}/episode/${episode.episode_number}`, lang);
+    }, [episode, tvShowId, seasonNumber, i18n.language]);
 
     const episodeAirDate = useMemo(() => {
         if (!episode?.air_date) return "TBA";
@@ -229,8 +234,9 @@ export function useCardLogic({
     const personDetailsUrl = useMemo(() => {
         if (!person) return "#";
         const slug = generateSlug(person.name);
-        return `/person/${formatSlugWithId(slug, person.id)}`;
-    }, [person]);
+        const lang = i18n.language || 'en';
+        return getLocalizedLink(`/person/${formatSlugWithId(slug, person.id)}`, lang);
+    }, [person, i18n.language]);
 
     // Review-specific logic
     const reviewDate = useMemo(() => {
@@ -263,8 +269,9 @@ export function useCardLogic({
 
     const seasonDetailsUrl = useMemo(() => {
         if (!season || !tvShowId) return "#";
-        return `/tv/${tvShowId}/season/${season.season_number}`;
-    }, [season, tvShowId]);
+        const lang = i18n.language || 'en';
+        return getLocalizedLink(`/tv/${tvShowId}/season/${season.season_number}`, lang);
+    }, [season, tvShowId, i18n.language]);
 
     const seasonAirDate = useMemo(() => {
         if (!season?.air_date) return "TBA";

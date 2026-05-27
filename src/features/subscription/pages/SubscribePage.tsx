@@ -2,6 +2,7 @@
 
 import { useState, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Check, ArrowLeft } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { LoadingFallback } from "@/components/ui";
@@ -21,7 +22,9 @@ const STEPS = [
 ];
 
 export default function SubscribePage() {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const currentLang = i18n.language || 'en';
   const [currentStep, setCurrentStep] = useState(1);
   const [accountData, setAccountData] = useState({ email: "", password: "" });
   const [selectedPlanId, setSelectedPlanId] = useState("tier-standard");
@@ -82,7 +85,7 @@ export default function SubscribePage() {
             {currentStep === 5 && (
               <Step4SuccessScreen
                 planName={planNames[selectedPlanId]}
-                onGoHome={() => navigate("/")}
+                onGoHome={() => navigate(`/${currentLang}/`)}
               />
             )}
           </Suspense>

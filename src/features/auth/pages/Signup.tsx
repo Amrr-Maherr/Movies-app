@@ -13,8 +13,9 @@ const Input = lazy(() =>
 );
 
 export default function Signup() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const currentLang = i18n.language || 'en';
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -58,7 +59,7 @@ export default function Signup() {
           );
           // Redirect to home page after short delay
           setTimeout(() => {
-            navigate("/");
+            navigate(`/${currentLang}/`);
           }, 1500);
         },
       },

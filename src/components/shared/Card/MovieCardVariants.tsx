@@ -17,7 +17,6 @@ import {
 import CardPoster from "./CardPoster";
 import CardBadges from "./CardBadges";
 import CardHoverOverlay from "./CardHoverOverlay";
-import { getLocalizedLink } from "@/lib/utils/i18n";
 
 interface MovieCardVariantsProps {
   movie: HeroMedia;
@@ -66,7 +65,6 @@ export function MovieCardVariants({
 
   const finalMatchPercentage = matchPercentageProp ?? calculatedMatchPercentage;
   const isAdult = movie.adult === true;
-  const localizedDetailsUrl = getLocalizedLink(detailsUrl);
 
   // Compact variant
   if (variant === "compact") {
@@ -77,7 +75,7 @@ export function MovieCardVariants({
           className="h-full w-full"
         >
           <Link
-            to={localizedDetailsUrl}
+            to={detailsUrl}
             className="relative group cursor-pointer block"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}
@@ -171,7 +169,7 @@ export function MovieCardVariants({
           className="h-full w-full"
         >
           <Link
-            to={localizedDetailsUrl}
+            to={detailsUrl}
             className="relative group cursor-pointer block"
             onMouseEnter={handleCardMouseEnter}
             onMouseLeave={handleCardMouseLeave}

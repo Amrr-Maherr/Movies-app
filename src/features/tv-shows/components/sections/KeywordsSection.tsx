@@ -2,6 +2,7 @@ import { memo, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export interface KeywordsSectionProps {
   keywords: string[];
@@ -18,14 +19,16 @@ const KeywordsSection = memo(function KeywordsSection({
   onKeywordClick,
   className,
 }: KeywordsSectionProps) {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const currentLang = i18n.language || 'en';
   // Memoized: Keyword click handler
   const handleKeywordClick = useCallback(
     (keyword: string) => {
       onKeywordClick?.(keyword);
-      navigate(`/tags/${encodeURIComponent(keyword)}`);
+      navigate(`/${currentLang}/tags/${encodeURIComponent(keyword)}`);
     },
-    [onKeywordClick],
+    [onKeywordClick, currentLang],
   );
 
   // Memoized: Rendered keywords to avoid re-mapping on every render

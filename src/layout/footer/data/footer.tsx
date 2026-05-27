@@ -6,21 +6,21 @@ import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
  * Displayed in the footer navigation grid
  */
 export const FooterLinks: FooterLink[] = [
-  { title: "footer.faq", href: "/en/faq" },
-  { title: "footer.help", href: "/en/help-center" },
-  { title: "footer.account", href: "/en/account" },
-  { title: "footer.mediaCenter", href: "/en/media-center" },
-  { title: "footer.investorRelations", href: "/en/investor-relations" },
-  { title: "footer.jobs", href: "/en/jobs" },
-  { title: "footer.waysToWatch", href: "/en/ways-to-watch" },
-  { title: "footer.termsOfUse", href: "/en/terms-of-use" },
-  { title: "footer.privacy", href: "/en/privacy" },
-  { title: "footer.cookiePreferences", href: "/en/cookie-preferences" },
-  { title: "footer.corporateInformation", href: "/en/corporate-information" },
-  { title: "footer.contact", href: "/en/contact-us" },
-  { title: "footer.speedTest", href: "/en/speed-test" },
-  { title: "footer.legalNotices", href: "/en/legal-notices" },
-  { title: "footer.onlyOnNetflix", href: "/en/only-on-netflix" },
+  { title: "footer.faq", href: "/faq" },
+  { title: "footer.help", href: "/help-center" },
+  { title: "footer.account", href: "/account" },
+  { title: "footer.mediaCenter", href: "/media-center" },
+  { title: "footer.investorRelations", href: "/investor-relations" },
+  { title: "footer.jobs", href: "/jobs" },
+  { title: "footer.waysToWatch", href: "/ways-to-watch" },
+  { title: "footer.termsOfUse", href: "/terms-of-use" },
+  { title: "footer.privacy", href: "/privacy" },
+  { title: "footer.cookiePreferences", href: "/cookie-preferences" },
+  { title: "footer.corporateInformation", href: "/corporate-information" },
+  { title: "footer.contact", href: "/contact-us" },
+  { title: "footer.speedTest", href: "/speed-test" },
+  { title: "footer.legalNotices", href: "/legal-notices" },
+  { title: "footer.onlyOnNetflix", href: "/only-on-netflix" },
 ];
 
 /**

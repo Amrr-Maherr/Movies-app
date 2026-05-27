@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { memo } from "react";
 import { useTranslation } from "react-i18next";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 interface NavLinksProps {
   link: HeaderLink;
@@ -16,21 +17,7 @@ interface NavLinksProps {
  * Memoized to prevent unnecessary re-renders when header updates.
  */
 const NavLinks = memo(function NavLinks({ link, onClick }: NavLinksProps) {
-  const { t, i18n } = useTranslation();
-  const currentLang = i18n.language || 'en';
-  
-  // Update link to include current language
-  const getLocalizedLink = (originalLink: string) => {
-    // If link already has language prefix, update it
-    const parts = originalLink.split('/').filter(Boolean);
-    if (parts.length > 0 && ['en', 'ar'].includes(parts[0])) {
-      parts[0] = currentLang;
-      return '/' + parts.join('/');
-    }
-    // Add language prefix
-    return `/${currentLang}${originalLink.startsWith('/') ? '' : '/'}${originalLink}`;
-  };
-  
+  const { t } = useTranslation();
   const localizedLink = getLocalizedLink(link.link);
   
   return (

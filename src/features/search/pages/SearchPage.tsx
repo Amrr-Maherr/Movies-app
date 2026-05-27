@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Film, Tv, User, Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
@@ -21,11 +22,13 @@ type FilterType = "all" | "movie" | "tv" | "person";
 export default function SearchPage() {
   const { startTour } = useOnboarding();
   const [searchParams] = useSearchParams();
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const queryParam = searchParams.get("q") || "";
   const [filter, setFilter] = useState<FilterType>("all");
   const [inputValue, setInputValue] = useState(queryParam);
   const debouncedQuery = useDebounce(inputValue, 800);
+  const currentLang = i18n.language || 'en';
 
   const { results, isLoading, error } = useSearch(debouncedQuery);
 
@@ -52,13 +55,13 @@ export default function SearchPage() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim()) {
-      navigate(`/search?q=${encodeURIComponent(inputValue.trim())}`);
+      navigate(`/${currentLang}/search?q=${encodeURIComponent(inputValue.trim())}`);
     }
   };
 
   const clearSearch = () => {
     setInputValue("");
-    navigate("/search");
+    navigate(`/${currentLang}/search`);
   };
 
   useEffect(() => {

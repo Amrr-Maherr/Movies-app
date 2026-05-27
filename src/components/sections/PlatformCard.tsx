@@ -3,6 +3,7 @@ import { memo, useMemo } from "react";
 import type { StreamingPlatform } from "@/types";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { Link } from "react-router-dom";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export interface PlatformCardProps {
   platform?: StreamingPlatform;
@@ -38,10 +39,12 @@ const PlatformCard = memo(function PlatformCard({
   }, [displayLogoPath]);
 
   const linkPath = useMemo(() => {
-    if (platform) return `/platform/${displayId}`;
-    if (type === "network") return `/network/${displayId}`;
-    return `/company/${displayId}`;
-  }, [displayId, displayType, type, platform]);
+    let path = "/";
+    if (platform) path = `/platform/${displayId}`;
+    else if (type === "network") path = `/network/${displayId}`;
+    else path = `/company/${displayId}`;
+    return getLocalizedLink(path);
+  }, [displayId, type, platform]);
 
   return (
     <Link to={linkPath} className="relative w-full h-full">

@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 
 export interface Collection {
@@ -25,7 +26,7 @@ const CollectionSection = memo(function CollectionSection({
         Part of the {collection.name}
       </h2>
       <Link
-        to={`/collection/${collection.id}`}
+        to={getLocalizedLink(`/collection/${collection.id}`)}
         className="group cursor-pointer block"
       >
         <motion.div

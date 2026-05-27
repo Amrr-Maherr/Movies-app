@@ -106,8 +106,8 @@ export default function CookiePreferences() {
             Cookies are small text files that are stored on your device when you visit our website. 
             They help us provide you with a better experience by remembering your preferences and 
             understanding how you use our service.
-          </p>{getLocalizedLink('')}
-          <Link to="/privacy" className="text-[var(--netflix-red)] hover:underline">
+          </p>
+          <Link to={getLocalizedLink('/privacy')} className="text-[var(--netflix-red)] hover:underline">
             Learn more in our Privacy Policy
           </Link>
         </div>

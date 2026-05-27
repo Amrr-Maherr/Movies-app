@@ -1,6 +1,7 @@
 import { lazy, Suspense, memo, useEffect } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import PageTransition from "@/components/shared/PageTransition";
 import "@/index.css";
 import { PageSkeleton } from "@/components/ui";
@@ -16,10 +17,28 @@ const ScrollToTop = () => {
   return null;
 };
 
+// Language sync component - syncs URL lang param with i18n
+const LanguageSync = () => {
+  const { pathname } = useLocation();
+  const { i18n } = useTranslation();
+  const supportedLangs = ['en', 'ar'];
+
+  useEffect(() => {
+    const parts = pathname.split('/').filter(Boolean);
+    const langFromUrl = parts[0];
+    if (langFromUrl && supportedLangs.includes(langFromUrl) && langFromUrl !== i18n.language) {
+      i18n.changeLanguage(langFromUrl);
+      localStorage.setItem('app_language', langFromUrl);
+    }
+  }, [pathname, i18n]);
+
+  return null;
+};
+
 // Language redirect component
 const LanguageRedirect = () => {
   const currentLang = localStorage.getItem('app_language') || 'en';
-  return <Navigate to={`/${currentLang}`} replace />;
+  return <Navigate to={`/${currentLang}/`} replace />;
 };
 
 // Lazy-loaded page components
@@ -87,6 +106,7 @@ const AppRoutes = memo(function AppRoutes() {
   return (
     <Suspense fallback={<PageSkeleton />}>
       <ScrollToTop />
+      <LanguageSync />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           {/* Language redirect */}

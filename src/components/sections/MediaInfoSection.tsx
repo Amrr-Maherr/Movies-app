@@ -1,5 +1,6 @@
 import { memo, useMemo, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 import type { MediaDetails, Genre } from "@/types";
 import {
   formatRuntime,
@@ -73,9 +74,9 @@ const MediaInfoSection = memo(function MediaInfoSection({
           media.production_companies.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {media.production_companies.map((c, index) => (
-                <Link
+                  <Link
                   key={c.id}
-                  to={`/company/${c.id}`}
+                  to={getLocalizedLink(`/company/${c.id}`)}
                   className="text-base text-gray-200 hover:text-white hover:underline transition-colors"
                 >
                   {c.name}
