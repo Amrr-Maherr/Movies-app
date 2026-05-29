@@ -9,9 +9,7 @@ import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvide
 import useTrendingMoviesWeek from '@/features/home/hooks/FetchTrendingMoviesWeek';
 import useTrendingTvWeek from '@/features/home/hooks/FetchTrendingTvWeek';
 import useUpcomingMovies from '@/features/movies/hooks/FetchUpcomingMovies';
-import usePopularTvShows from '@/features/tv-shows/hooks/FetchPopularTvShows';
 import useTopRatedMovies from '@/features/movies/hooks/FetchTopRatedMovies';
-import useStreamingPlatforms from '@/features/home/hooks/FetchStreamingPlatforms';
 
 const HeroSection = lazy(
   () => import("@/components/shared/heroSection/HeroSection"),
@@ -19,28 +17,17 @@ const HeroSection = lazy(
 const TopPicksSection = lazy(
   () => import("@/features/home/components/sections/TopPicksSection"),
 );
-const MediaSection = lazy(() => import("@/components/shared/MediaSection"));
 const NewReleasesSection = lazy(
   () => import("@/features/home/components/sections/NewReleasesSection"),
 );
-const MoviePromo = lazy(() => import("@/features/home/components/sections/MoviePromo"));
-const OnlyOnNetflixSection = lazy(
-  () => import("@/features/home/components/sections/OnlyOnNetflixSection"),
+const TrendingTvSection = lazy(
+  () => import("@/features/home/components/sections/TrendingTvSection"),
 );
 const AwardWinnersSection = lazy(
   () => import("@/features/home/components/sections/AwardWinnersSection"),
 );
 const PricingSection = lazy(
   () => import("@/features/home/components/sections/PricingSection"),
-);
-const AskedQuestions = lazy(
-  () => import("@/features/home/components/sections/AskedQuestions"),
-);
-const PlatformsSection = lazy(
-  () => import("@/features/home/components/sections/PlatformsSection"),
-);
-const MoreReasonsSection = lazy(
-  () => import("@/features/home/components/sections/MoreReasonsSection"),
 );
 
 const Home = memo(function Home() {
@@ -55,7 +42,6 @@ const Home = memo(function Home() {
   const {
     data: trendingTvWeek,
     isLoading: trendingTvWeekLoading,
-    error: trendingTvWeekError,
     refetch: trendingTvWeekRefetch,
   } = useTrendingTvWeek();
   const {
@@ -63,19 +49,8 @@ const Home = memo(function Home() {
     isLoading: upcomingLoading,
     refetch: upcomingRefetch,
   } = useUpcomingMovies(1);
-  const {
-    data: popularTv,
-    isLoading: popularTvLoading,
-    refetch: popularTvRefetch,
-  } = usePopularTvShows(1);
   const { data: topRatedMovies, isLoading: topRatedLoading } =
     useTopRatedMovies(1);
-  const {
-    data: platforms,
-    isLoading: platformsLoading,
-    error: platformsError,
-    refetch: platformsRefetch,
-  } = useStreamingPlatforms();
 
   // FIX: Only take a few items for hero section to prevent swiper from overworking
   const heroData = useMemo(
@@ -104,14 +79,10 @@ const Home = memo(function Home() {
     trendingWeekRefetch();
     upcomingRefetch();
     trendingTvWeekRefetch();
-    popularTvRefetch();
-    platformsRefetch();
   }, [
     trendingWeekRefetch,
     upcomingRefetch,
     trendingTvWeekRefetch,
-    popularTvRefetch,
-    platformsRefetch,
   ]);
 
   // Only show full page error if absolutely no critical data is available
@@ -142,7 +113,7 @@ const Home = memo(function Home() {
         />
       </Suspense>
 
-      {/* Top 10 Movies Section */}
+      {/* Top Picks Section */}
       <OptimizedSectionWrapper
         data={trendingMoviesWeek?.results}
         isLoading={trendingWeekLoading}
@@ -158,37 +129,18 @@ const Home = memo(function Home() {
         )}
       </OptimizedSectionWrapper>
 
-      {/* Trending Now */}
-      <OptimizedSectionWrapper
-        data={trendingMoviesWeek?.results}
-        isLoading={trendingWeekLoading}
-        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
-        height={250}
-        title={t('home.trendingNow')}
-      >
-        {(data) => (
-          <MediaSection
-            title={t('home.trendingNow')}
-            data={data}
-            isLoading={trendingWeekLoading}
-            error={trendingWeekError}
-            onRetry={trendingWeekRefetch}
-          />
-        )}
-      </OptimizedSectionWrapper>
-
       {/* New Releases Section */}
       <OptimizedSectionWrapper
         data={upcomingMovies?.results}
         isLoading={upcomingLoading}
-        fallback={<SectionSkeleton variant="grid" cardCount={4} />}
+        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
         height={350}
         title={t('home.newReleases')}
       >
         {(movies) => (
           <NewReleasesSection
             movies={movies}
-            title={t('home.newReleasesWeek')}
+            title={t('home.newReleases')}
           />
         )}
       </OptimizedSectionWrapper>
@@ -198,63 +150,13 @@ const Home = memo(function Home() {
         data={trendingTvWeek?.results}
         isLoading={trendingTvWeekLoading}
         fallback={<SectionSkeleton variant="grid" cardCount={6} />}
-        height={250}
+        height={300}
         title={t('home.trendingTvShows')}
       >
         {(data) => (
-          <MediaSection
-            title={t('home.trendingTvShows')}
+          <TrendingTvSection
             data={data}
-            isLoading={trendingTvWeekLoading}
-            error={trendingTvWeekError}
-            onRetry={trendingTvWeekRefetch}
-          />
-        )}
-      </OptimizedSectionWrapper>
-
-      {/* Featured Movie */}
-      <OptimizedSectionWrapper
-        data={upcomingMovies?.results?.[0]}
-        isLoading={upcomingLoading}
-        fallback={<SectionSkeleton variant="hero" />}
-        height="100dvh"
-        title={t('home.featuredMovie')}
-      >
-        {(movie) => (
-          <MoviePromo
-            movie={movie}
-            mediaType="movie"
-            variant="left"
-          />
-        )}
-      </OptimizedSectionWrapper>
-
-      {/* Only on Netflix Section */}
-      <OptimizedSectionWrapper
-        data={popularTv?.results}
-        isLoading={popularTvLoading}
-        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
-        height={400}
-        title={t('home.onlyOnNetflix')}
-      >
-        {(movies) => (
-          <OnlyOnNetflixSection movies={movies} mediaType="tv" />
-        )}
-      </OptimizedSectionWrapper>
-
-      {/* Platforms Section */}
-      <OptimizedSectionWrapper
-        data={platforms}
-        isLoading={platformsLoading}
-        fallback={<SectionSkeleton variant="grid" cardCount={6} />}
-        height={350}
-        title={t('home.streamingPlatforms')}
-      >
-        {(platformsData) => (
-          <PlatformsSection
-            platforms={platformsData}
-            isLoading={platformsLoading}
-            error={platformsError}
+            title={t('home.trendingTvShows')}
           />
         )}
       </OptimizedSectionWrapper>
@@ -275,37 +177,15 @@ const Home = memo(function Home() {
         )}
       </OptimizedSectionWrapper>
 
-      {/* More Reasons to Join Section */}
-      <OptimizedSectionWrapper
-        data={true} // Always render once visible
-        isLoading={false}
-        fallback={<SectionSkeleton variant="grid" cardCount={4} />}
-        height={400}
-        title={t('home.moreReasons')}
-      >
-        <MoreReasonsSection />
-      </OptimizedSectionWrapper>
-
       {/* Pricing Section */}
       <OptimizedSectionWrapper
-        data={true} // Always render once visible
+        data={true}
         isLoading={false}
         fallback={<SectionSkeleton variant="grid" cardCount={3} />}
         height={550}
         title={t('home.pricing')}
       >
         <PricingSection />
-      </OptimizedSectionWrapper>
-
-      {/* FAQ Section */}
-      <OptimizedSectionWrapper
-        data={true} // Always render once visible
-        isLoading={false}
-        fallback={<SectionSkeleton variant="list" cardCount={6} />}
-        height={500}
-        title={t('home.faq')}
-      >
-        <AskedQuestions />
       </OptimizedSectionWrapper>
     </div>
   );

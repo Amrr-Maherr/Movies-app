@@ -120,6 +120,7 @@ const ImageCard = memo(function ImageCard({
   index: number;
   onClick: (index: number) => void;
 }) {
+  const { t } = useTranslation();
   const handleClick = useCallback(() => onClick(index), [index, onClick]);
 
   return (

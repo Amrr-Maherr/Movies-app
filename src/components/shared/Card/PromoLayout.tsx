@@ -55,7 +55,7 @@ const PromoLayout = memo(
 
     return (
       <div
-        className="relative w-full h-[50vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] overflow-hidden my-6 md:my-8 group touch-manipulation"
+        className="relative w-full h-[50vh] sm:h-[55vh] md:h-[65vh] lg:h-[75vh] my-6 md:my-8 group touch-manipulation"
         role="article"
         aria-label={`Promotional banner for ${title}`}
       >

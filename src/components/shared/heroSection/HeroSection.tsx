@@ -60,7 +60,7 @@ const HeroSection = memo(function HeroSection({
   }
 
   return (
-    <section className="relative w-full min-h-[100dvh] h-screen overflow-hidden">
+    <section className="relative w-full min-h-[100dvh] h-screen">
       <OptimizedSectionWrapper
         data={featuredMedia}
         isLoading={isLoading}

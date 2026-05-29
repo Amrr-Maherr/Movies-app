@@ -84,7 +84,7 @@ const HeroBackground = memo(function HeroBackground({
       {/* Background Video - YouTube Trailer (Autoplay, Loop, Muted) */}
       {trailerUrl && !videoError && (
         <div
-          className={`absolute inset-0 overflow-hidden ${videoLoaded ? "opacity-100" : "opacity-0"} transition-opacity duration-1000`}
+          className={`absolute inset-0 ${videoLoaded ? "opacity-100" : "opacity-0"} transition-opacity duration-1000`}
         >
           <iframe
             ref={videoRef}
@@ -102,7 +102,7 @@ const HeroBackground = memo(function HeroBackground({
 
       {/* Base Image with slow cinematic zoom using CSS (fallback or underlay) */}
       <div
-        className={`absolute inset-0 overflow-hidden ${videoLoaded ? "opacity-50" : "opacity-100"} transition-opacity duration-1000`}
+        className={`absolute inset-0 ${videoLoaded ? "opacity-50" : "opacity-100"} transition-opacity duration-1000`}
       >
         <OptimizedImage
           src={imageUrl}

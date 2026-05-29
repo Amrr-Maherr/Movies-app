@@ -36,7 +36,7 @@ const AwardWinnerLayout = memo(
           />
         </div>
         {/* Poster */}
-        <div className="relative aspect-[2/3] overflow-hidden rounded-lg border-2 border-yellow-500/30 group-hover:border-yellow-500 transition-colors duration-300">
+        <div className="relative aspect-[2/3] rounded-lg border-2 border-yellow-500/30 group-hover:border-yellow-500 transition-colors duration-300">
           <OptimizedImage
             src={posterUrl}
             alt={title}

@@ -15,7 +15,7 @@ const HeroSlide = memo(function HeroSlide({ movie, onMoreInfo }: ExtraHeroSlideP
   // and reduce viewport calculation overhead. Using 16:9 aspect ratio
   // which is standard for hero banners and provides consistent sizing.
   return (
-    <div className="relative w-full min-h-[100dvh] h-screen overflow-hidden">
+    <div className="relative w-full min-h-[100dvh] h-screen">
       {/* Background */}
       <HeroBackground movie={movie} />
 

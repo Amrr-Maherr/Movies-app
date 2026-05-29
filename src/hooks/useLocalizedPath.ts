@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, type NavigateOptions } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCallback, useMemo } from "react";
 
@@ -25,7 +25,7 @@ export function useLocalizedPath() {
   );
 
   const localizedNavigate = useCallback(
-    (path: string, options?: Parameters<typeof navigate>[1]) => {
+    (path: string, options?: NavigateOptions) => {
       navigate(getLocalizedPath(path), options);
     },
     [navigate, getLocalizedPath],

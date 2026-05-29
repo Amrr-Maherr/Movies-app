@@ -35,7 +35,7 @@ const RecommendationLayout = memo(
         role="article"
         aria-label={`${t("media.recommendations")}: ${title}`}
       >
-        <div className="relative aspect-[2/3] overflow-hidden rounded mb-2">
+        <div className="relative aspect-[2/3] rounded mb-2">
           <OptimizedImage
             src={posterUrl}
             alt={title}

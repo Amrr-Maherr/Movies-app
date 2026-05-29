@@ -1,6 +1,4 @@
-import { memo, useMemo, lazy, Suspense } from "react";
-import { SectionSkeleton } from "@/components/ui";
-import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
+import { memo, useMemo, lazy } from "react";
 import Card from "@/components/shared/Card/Card";
 import SectionHeader from "@/components/shared/SectionHeader";
 import type { HeroMedia } from "@/types";
@@ -13,44 +11,30 @@ interface TopPicksSectionProps {
   title?: string;
 }
 
-// Memoized TopPicksSection component - avoids re-renders when parent updates
 const TopPicksSection = memo(function TopPicksSection({
   movies,
   title = "Top 10 in Egypt Today",
 }: TopPicksSectionProps) {
-  // Memoized: Get top 6 movies - reduced for better performance
   const topMovies = useMemo(() => movies, [movies]);
 
   return (
-    <div className="py-6 md:py-8">
+    <div className="py-4 md:py-6">
       <div className="container">
         <SectionHeader title={title} />
-        <OptimizedSectionWrapper
-          data={topMovies}
-          isLoading={false}
-          fallback={<SectionSkeleton variant="grid" cardCount={6} />}
-          height={400}
-          title={title}
+        <Slider
+          slidesPerView={4}
+          hideNavigation={false}
+          slidesPerViewMobile={1.5}
         >
-          {(moviesData) => (
-            <Slider
-              slidesPerView={4}
-              hideNavigation={false}
-              slidesPerViewMobile={1.5}
-            >
-              {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3"> */}
-              {moviesData.map((movie, index) => (
-                <Card
-                  key={movie.id}
-                  movie={movie}
-                  variant="top10"
-                  rank={index + 1}
-                />
-              ))}
-              {/* </div> */}
-            </Slider>
-          )}
-        </OptimizedSectionWrapper>
+          {topMovies.map((movie, index) => (
+            <Card
+              key={movie.id}
+              movie={movie}
+              variant="top10"
+              rank={index + 1}
+            />
+          ))}
+        </Slider>
       </div>
     </div>
   );
