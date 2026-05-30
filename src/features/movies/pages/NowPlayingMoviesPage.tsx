@@ -64,7 +64,7 @@ const NowPlayingMoviesPage = memo(function NowPlayingMoviesPage() {
 
       {featuredMovie && <MediaHeroSection item={featuredMovie} />}
 
-      <div className="pb-12 md:pb-16 space-y-2">
+      <div className="container pb-12 md:pb-16 space-y-2">
         {mediaRows.map((row) => (
           <MediaRow key={row.title} title={row.title} items={row.items} />
         ))}

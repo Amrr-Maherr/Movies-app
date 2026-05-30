@@ -68,7 +68,7 @@ const PersonHero = memo(function PersonHero({
       )}
 
       {/* ── Foreground Content ── */}
-      <div className="relative z-10 container mx-auto px-4 md:px-8 lg:px-16 min-h-screen flex items-center">
+      <div className="relative z-10 container min-h-screen flex items-center">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 lg:gap-16 w-full py-20 md:py-24">
           {/* ── Profile Image ── */}
           <div className="flex-shrink-0">

@@ -1,5 +1,5 @@
-import { useParams, Link } from "react-router-dom";
-import { memo, useMemo, lazy, Suspense } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { memo, useMemo, lazy, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useCompanyDetails, useCompanyMovies } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
@@ -16,14 +16,35 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const Company = memo(function Company() {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const companyId = id ? parseInt(id, 10) : 0;
+  const navigate = useNavigate();
+  const { lang, slug, id } = useParams<{ lang: string; slug: string; id: string }>();
+
+  // Handle old routes where id is in the slug position or id is provided directly
+  const companyId = useMemo(() => {
+    const idToUse = id || slug;
+    return idToUse ? parseInt(idToUse, 10) : 0;
+  }, [id, slug]);
 
   const {
     data: company,
     isLoading: companyLoading,
     error: companyError,
   } = useCompanyDetails(companyId);
+
+  // Redirect to SEO-friendly URL if needed
+  useEffect(() => {
+    if (company && company.name) {
+      const expectedSlug = company.name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      if (slug !== expectedSlug || !id) {
+        navigate(`/${lang}/company/${expectedSlug}/${companyId}`, { replace: true });
+      }
+    }
+  }, [company, slug, id, lang, companyId, navigate]);
 
   const {
     data: companyMovies,
@@ -62,7 +83,7 @@ const Company = memo(function Company() {
       />
       {/* Header Section */}
       <div className="relative h-[300px] md:h-[400px] bg-gradient-to-b from-black/80 to-[var(--background-primary)]">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl h-full flex items-center">
+        <div className="container h-full flex items-center">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8">
             {/* Company Logo */}
             {logoUrl ? (
@@ -134,7 +155,7 @@ const Company = memo(function Company() {
       {/* Parent Company Section */}
       {company.parent_company && (
         <div className="border-y border-[#222] bg-black/40">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6">
+          <div className="container py-6">
             <div className="flex items-center gap-4">
               <span className="text-[#737373] text-sm">Parent Company:</span>
               <Link
@@ -164,7 +185,7 @@ const Company = memo(function Company() {
       )}
 
       {/* Movies Section */}
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8 md:py-12">
+      <div className="container py-8 md:py-12">
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
           {t('discover:movies')} by {company.name}
         </h2>

@@ -5,7 +5,6 @@ import type { HeroMedia } from "@/types";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import LazyWrapper from "@/components/ui/lazy-wrapper";
 import { getMatchScore, getYear, getAgeRating } from "@/utils/movieHelpers";
-import { buildMediaUrl } from "@/utils/url";
 import { getLocalizedLink } from "@/lib/utils/i18n";
 import { useMovieModal } from "@/shared/contexts/MovieModalContext";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -56,9 +55,18 @@ const MediaCard = memo(function MediaCard({ movie, rank, mediaType }: MediaCardP
     [movie.poster_path],
   );
 
+  const slug = useMemo(
+    () =>
+      title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim(),
+    [title],
+  );
   const detailsUrl = useMemo(
-    () => getLocalizedLink(buildMediaUrl(tvShow ? "tv" : "movie", title, movie.id)),
-    [title, movie.id, tvShow],
+    () => getLocalizedLink(`/${tvShow ? "series" : "movie"}/${slug}/${movie.id}`),
+    [movie.id, tvShow, slug],
   );
 
   const matchScore = useMemo(() => getMatchScore(movie.vote_average), [movie.vote_average]);

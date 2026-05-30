@@ -14,7 +14,7 @@ const MediaRow = memo(function MediaRow({ title, items }: MediaRowProps) {
 
   return (
     <section className="py-6 md:py-8">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
         <h2 className="text-xl md:text-2xl font-bold text-white mb-4 md:mb-5">
           {title}
         </h2>

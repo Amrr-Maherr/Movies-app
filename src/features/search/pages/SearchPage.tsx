@@ -90,7 +90,7 @@ export default function SearchPage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,#ffffff_1px,transparent_0)] bg-[size:40px_40px]" />
         </div>
 
-        <div className="relative container mx-auto px-4 pt-32 pb-20">
+        <div className="relative container pt-32 pb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -148,7 +148,7 @@ export default function SearchPage() {
 
       {/* Filter Tabs */}
       <div className="sticky top-0 z-40 bg-[var(--background-primary)]/95 backdrop-blur-md border-b border-white/5 search-filters">
-        <div className="container mx-auto px-4">
+        <div className="container">
           <div className="flex items-center justify-center gap-2 py-4 overflow-x-auto flex-wrap">
             <FilterButton
               active={filter === "all"}
@@ -183,7 +183,7 @@ export default function SearchPage() {
       </div>
 
       {/* Results Section */}
-      <div className="container mx-auto px-4 py-12">
+      <div className="container py-12">
         {isLoading && debouncedQuery.length >= 2 ? (
           <div className="space-y-8">
             <div className="flex items-center gap-3">

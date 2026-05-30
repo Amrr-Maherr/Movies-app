@@ -4,7 +4,6 @@ import { Film, Calendar } from "lucide-react";
 import type { Season } from "@/types";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { getLocalizedLink } from "@/lib/utils/i18n";
-import { buildMediaUrl } from "@/utils/url";
 import { useTranslation } from "react-i18next";
 
 interface EpisodesSectionProps {
@@ -15,6 +14,12 @@ interface EpisodesSectionProps {
 
 function SeasonCard({ season, tvShowId, tvShowName }: { season: Season; tvShowId: number; tvShowName?: string }) {
   const { t } = useTranslation();
+  const slug = tvShowName
+    ?.toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, "-")
+    .trim() || "series";
+
   const imageUrl = season.poster_path
     ? `https://image.tmdb.org/t/p/w500${season.poster_path}`
     : null;
@@ -24,7 +29,7 @@ function SeasonCard({ season, tvShowId, tvShowName }: { season: Season; tvShowId
 
   return (
     <Link
-      to={getLocalizedLink(buildMediaUrl("tv", tvShowName || "", tvShowId) + `/season/${season.season_number}`)}
+      to={getLocalizedLink(`/series/${slug}/${tvShowId}/season/${season.season_number}`)}
       className="block group"
     >
       <div className="relative">
@@ -92,7 +97,7 @@ const EpisodesSection = memo(function EpisodesSection({
 
   return (
     <section className="bg-black py-4 md:py-12">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl pt-8">
+      <div className="container pt-8">
         <h3 className="text-xl md:text-2xl font-bold text-white mb-6">
           Seasons
         </h3>

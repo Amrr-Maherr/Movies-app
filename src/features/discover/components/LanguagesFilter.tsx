@@ -51,7 +51,7 @@ const LanguagesFilter = memo(function LanguagesFilter({
   const handelUrl = useHandelUrl();
   return (
     <div className="w-full relative py-5">
-      <div className="px-4 sm:px-8">
+      <div className="container">
         <Slider
           slidesPerView={8}
           slidesPerViewMobile={3.5}

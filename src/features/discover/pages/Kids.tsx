@@ -49,7 +49,7 @@ const Kids = memo(function Kids() {
 
       {featuredMovie && <MediaHeroSection item={featuredMovie} />}
 
-      <div className="pb-12 md:pb-16 space-y-2">
+      <div className="container pb-12 md:pb-16 space-y-2">
         {movieItems.length > 0 && (
           <MediaRow title="Kids Movies" items={movieItems} />
         )}

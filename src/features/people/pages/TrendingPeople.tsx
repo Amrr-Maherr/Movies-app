@@ -74,7 +74,7 @@ const TrendingPeople = memo(function TrendingPeople() {
         name="Trending People"
         description="Discover the most popular actors and directors trending right now on Netflix."
       />
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">

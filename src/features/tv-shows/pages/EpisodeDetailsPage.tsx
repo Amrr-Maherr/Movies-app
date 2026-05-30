@@ -197,7 +197,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
 
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col justify-end pb-20 md:pb-32">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+          <div className="container">
             {/* Season / Episode badges */}
             <div className="flex items-center gap-3 mb-4">
               <span className="bg-[var(--netflix-red)] text-white px-3 py-1 rounded text-sm font-bold">
@@ -263,7 +263,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
           SECTION — Episode Quick Info
           ════════════════════════════════════════════════ */}
       <section className="bg-black py-8 md:py-10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+        <div className="container">
           <div className="flex flex-wrap gap-6 text-sm">
             <div>
               <span className="text-neutral-500 block text-xs uppercase tracking-wider">
@@ -347,7 +347,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       >
         {(cast) => (
           <section className="bg-black py-8 md:py-12">
-            <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+            <div className="container">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
                 Cast
               </h2>
@@ -384,7 +384,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       >
         {() => (
           <section className="bg-black py-8 md:py-12">
-            <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+            <div className="container">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-6">
                 Crew
               </h2>
@@ -430,7 +430,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
       >
         {(stars) => (
           <section className="bg-black py-8 md:py-12">
-            <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+            <div className="container">
               <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
                 Guest Stars
               </h2>
@@ -531,7 +531,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
 
           return (
             <section className="bg-black py-8 md:py-12">
-              <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+              <div className="container">
                 <h2 className="text-xl md:text-2xl font-bold text-white mb-6">
                   External Links
                 </h2>

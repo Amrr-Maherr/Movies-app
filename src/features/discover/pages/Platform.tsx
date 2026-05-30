@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { memo, useMemo, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { memo, useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { usePlatformMovies, usePlatformTVShows } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
@@ -51,8 +51,15 @@ const PLATFORM_INFO: Record<
 
 const Platform = memo(function Platform() {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const platformId = id ? parseInt(id, 10) : 0;
+  const navigate = useNavigate();
+  const { lang, slug, id } = useParams<{ lang: string; slug: string; id: string }>();
+
+  // Handle old routes where id is in the slug position or id is provided directly
+  const platformId = useMemo(() => {
+    const idToUse = id || slug;
+    return idToUse ? parseInt(idToUse, 10) : 0;
+  }, [id, slug]);
+
   const [activeTab, setActiveTab] = useState<"movies" | "tv">("movies");
   const [page, setPage] = useState(1);
 
@@ -70,6 +77,21 @@ const Platform = memo(function Platform() {
 
   const platformInfo = PLATFORM_INFO[platformId];
   const displayName = platformInfo?.name || `Platform #${platformId}`;
+
+  // Redirect to SEO-friendly URL if needed
+  useEffect(() => {
+    if (displayName) {
+      const expectedSlug = displayName
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      if (slug !== expectedSlug || !id) {
+        navigate(`/${lang}/platform/${expectedSlug}/${platformId}`, { replace: true });
+      }
+    }
+  }, [displayName, slug, id, lang, platformId, navigate]);
   const displayDescription =
     platformInfo?.description || "Browse movies and TV shows";
   const displayCountry = platformInfo?.country || "US";
@@ -112,7 +134,7 @@ const Platform = memo(function Platform() {
         name={`${displayName} - ${t('common:home.streamingPlatforms')}`}
         description={`${displayDescription}. Browse ${totalResults} movies and TV shows available on ${displayName}.`}
       />
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
         {/* Header */}
         <div className="mb-8">
           {/* <Link

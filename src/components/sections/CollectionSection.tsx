@@ -20,13 +20,18 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 const CollectionSection = memo(function CollectionSection({
   collection,
 }: CollectionSectionProps) {
+  const slug = collection.name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, "-")
+    .trim();
   return (
     <div className="py-4 md:py-8 border-b border-zinc-800">
       <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
         Part of the {collection.name}
       </h2>
       <Link
-        to={getLocalizedLink(`/collection/${collection.id}`)}
+        to={getLocalizedLink(`/collection/${slug}/${collection.id}`)}
         className="group cursor-pointer block"
       >
         <motion.div

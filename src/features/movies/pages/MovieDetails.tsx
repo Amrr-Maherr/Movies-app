@@ -1,5 +1,5 @@
 import { memo, useMemo, lazy, Suspense, useCallback, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { PageSkeleton, SectionSkeleton } from "@/components/ui";
 import { ReactQueryErrorState } from "@/components/errors";
@@ -34,12 +34,33 @@ const RecommendationsSection = lazy(() => import("@/components/sections/Recommen
 const MovieDetailsPage = memo(function MovieDetailsPage() {
   const { t } = useTranslation();
   const { startTour } = useOnboarding();
-  const { id } = useParams<{ slug: string; id: string }>();
-  const numericId = Number(id);
+  const navigate = useNavigate();
+  const { lang, slug, id } = useParams<{ lang: string; slug: string; id: string }>();
+
+  // Handle old routes where id is in the slug position or id is provided directly
+  const numericId = useMemo(() => {
+    const idToUse = id || slug;
+    return Number(idToUse);
+  }, [id, slug]);
 
   const [activeTab, setActiveTab] = useState<MovieTab>("overview");
 
   const { isLoading, data, error, refetch } = FetchMovieDetails(numericId);
+
+  // Redirect to SEO-friendly URL if needed
+  useEffect(() => {
+    if (data && data.title) {
+      const expectedSlug = data.title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      if (slug !== expectedSlug || !id) {
+        navigate(`/${lang}/movie/${expectedSlug}/${numericId}`, { replace: true });
+      }
+    }
+  }, [data, slug, id, lang, numericId, navigate]);
 
   // Tab-specific data hooks — only fetch when tab is active
   const { data: reviewsData } = useMovieReviews(activeTab === "reviews" ? numericId : 0, 1);
@@ -257,7 +278,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
           title="Recommendations"
           isEmptyFallback={
             <section className="bg-black py-16">
-              <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
+              <div className="container text-center">
                 <Heart className="w-20 h-20 text-white/20 mx-auto mb-4" />
                 <h2 className="text-2xl font-bold text-white mb-2">{t("media.recommendations")}</h2>
                 <p className="text-white/60 text-lg">{t("media.noReviews")}</p>
@@ -277,7 +298,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
 function EmptyState({ message }: { message: string }) {
   return (
     <section className="bg-black py-12">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
+      <div className="container text-center">
         <p className="text-white/60 text-lg">{message}</p>
       </div>
     </section>

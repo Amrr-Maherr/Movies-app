@@ -31,7 +31,7 @@ const RecommendationsSection = memo(function RecommendationsSection({
 
   return (
     <section className="bg-[var(--section-bg)] py-10">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
         <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6">
           {title}
         </h2>

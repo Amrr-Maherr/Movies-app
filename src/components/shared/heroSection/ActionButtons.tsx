@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { Play, Info, Plus, Check } from "lucide-react";
 import { Link } from "react-router-dom";
-import { buildMediaUrl } from "@/utils/url";
 import { getTitle } from "@/utils";
 import { HeroMedia } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -43,7 +42,12 @@ const ActionButtons = memo(function ActionButtons({
 
   const isTvShow = "first_air_date" in movie;
   const title = getTitle(movie);
-  const detailsUrl = getLocalizedLink(buildMediaUrl(isTvShow ? "tv" : "movie", title, movie.id));
+  const slug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, "-")
+    .trim();
+  const detailsUrl = getLocalizedLink(`/${isTvShow ? "series" : "movie"}/${slug}/${movie.id}`);
 
   return (
     <div className="flex flex-wrap gap-3 pt-4 hero-buttons">

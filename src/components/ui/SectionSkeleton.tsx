@@ -32,7 +32,7 @@ const SkeletonWrapper = ({
   titleWidth?: number | string 
 }) => (
   <div className={`w-full py-12 bg-[var(--background-primary)]/50 ${className}`}>
-    <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+    <div className="container">
       <div className="mb-6">
         <Skeleton width={titleWidth} height={32} />
       </div>
@@ -86,7 +86,7 @@ const HeroSkeleton = memo(({ className }: { className?: string }) => (
     <div className="absolute inset-0">
       <Skeleton height="100%" borderRadius={0} />
     </div>
-    <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl h-full relative z-10 flex items-end">
+    <div className="container h-full relative z-10 flex items-end">
       <div className="pb-16 space-y-6 max-w-2xl w-full">
         <div className="space-y-3">
           <Skeleton height={60} width="90%" />

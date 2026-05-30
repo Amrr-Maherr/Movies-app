@@ -2,7 +2,6 @@ import { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
 import type { HeroMedia } from "@/types";
 import { Star, Info } from "lucide-react";
-import { buildMediaUrl } from "@/utils/url";
 import { getLocalizedLink } from "@/lib/utils/i18n";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 
@@ -47,10 +46,19 @@ const MediaHeroSection = memo(function MediaHeroSection({
 
   const isTvShow = item ? "first_air_date" in item : false;
 
+  const slug = useMemo(
+    () =>
+      title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim(),
+    [title],
+  );
   const detailsUrl = useMemo(() => {
     if (!item) return "#";
-    return getLocalizedLink(buildMediaUrl(isTvShow ? "tv" : "movie", title, item.id));
-  }, [item, title, isTvShow]);
+    return getLocalizedLink(`/${isTvShow ? "series" : "movie"}/${slug}/${item.id}`);
+  }, [item, isTvShow, slug]);
 
   if (!item) return null;
 
@@ -72,7 +80,7 @@ const MediaHeroSection = memo(function MediaHeroSection({
         <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
       )}
 
-      <div className="relative z-10 container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl h-full min-h-[70vh] md:min-h-screen flex flex-col justify-end pb-16 md:pb-24 pt-24">
+      <div className="relative z-10 container h-full min-h-[70vh] md:min-h-screen flex flex-col justify-end pb-16 md:pb-24 pt-24">
         <div className="max-w-2xl space-y-5">
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-tight tracking-tight hero-title">
             {title}

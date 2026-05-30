@@ -1,5 +1,5 @@
 import { memo, useMemo, lazy, Suspense, useCallback, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { SectionSkeleton, PageSkeleton } from "@/components/ui";
 import { ReactQueryErrorState } from "@/components/errors";
@@ -36,12 +36,33 @@ const RecommendationsSection = lazy(() => import("@/components/sections/Recommen
 
 const TVShowDetailsPage = memo(function TVShowDetailsPage() {
   const { startTour } = useOnboarding();
-  const { id } = useParams<{ slug: string; id: string }>();
-  const numericId = Number(id);
+  const navigate = useNavigate();
+  const { lang, slug, id } = useParams<{ lang: string; slug: string; id: string }>();
+
+  // Handle old routes where id is in the slug position or id is provided directly
+  const numericId = useMemo(() => {
+    const idToUse = id || slug;
+    return Number(idToUse);
+  }, [id, slug]);
 
   const [activeTab, setActiveTab] = useState<MovieTab>("overview");
 
   const { isLoading, data, error, refetch } = FetchTvShowDetails(numericId);
+
+  // Redirect to SEO-friendly URL if needed
+  useEffect(() => {
+    if (data && data.name) {
+      const expectedSlug = data.name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      if (slug !== expectedSlug || !id) {
+        navigate(`/${lang}/series/${expectedSlug}/${numericId}`, { replace: true });
+      }
+    }
+  }, [data, slug, id, lang, numericId, navigate]);
 
   // Tab-specific hooks — only fetch when tab is active
   const { data: reviewsData } = useTVReviews(activeTab === "reviews" ? numericId : 0, 1);
@@ -175,7 +196,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
           >
             {(keywordsData) => (
               <section className="bg-black py-4 md:py-12">
-                <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+                <div className="container">
                   <h3 className="text-xl md:text-2xl font-bold text-white mb-4">Tags</h3>
                   <KeywordsSection keywords={keywordsData} />
                 </div>
@@ -292,7 +313,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
           title="Recommendations"
           isEmptyFallback={
             <section className="bg-[var(--section-bg)] py-16">
-              <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
+              <div className="container text-center">
                 <Heart className="w-20 h-20 text-white/20 mx-auto mb-4" />
                 <h2 className="text-2xl font-bold text-white mb-2">No Recommendations Available</h2>
                 <p className="text-[var(--section-meta-color)] text-lg">We don't have enough data to recommend similar shows yet.</p>
@@ -312,7 +333,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
 function EmptyState({ message }: { message: string }) {
   return (
     <section className="bg-[var(--section-bg)] py-12">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
+      <div className="container text-center">
         <p className="text-[var(--section-meta-color)] text-lg">{message}</p>
       </div>
     </section>

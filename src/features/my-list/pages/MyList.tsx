@@ -6,7 +6,6 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 import { Play, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { buildMediaUrl } from "@/utils/url";
 import { getTitle } from "@/utils";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import Card from "@/components/shared/Card/Card";
@@ -34,7 +33,12 @@ const MyList = memo(function MyList() {
   ) => {
     e.stopPropagation();
     e.preventDefault();
-    navigate(`/${currentLang}${buildMediaUrl(mediaType, title, itemId)}`);
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, "")
+      .replace(/\s+/g, "-")
+      .trim();
+    navigate(`/${currentLang}/${mediaType}/${slug}/${itemId}`);
   };
 
   const isTvShow = (item: (typeof myList)[0]): boolean => {
@@ -45,7 +49,7 @@ const MyList = memo(function MyList() {
   };
 
   const getMediaType = (item: (typeof myList)[0]): string => {
-    return isTvShow(item) ? "tv" : "movie";
+    return isTvShow(item) ? "series" : "movie";
   };
 
   useEffect(() => {
@@ -87,7 +91,7 @@ const MyList = memo(function MyList() {
         description={t("myList.title")}
       />
 
-      <div className="p-4 sm:p-8">
+      <div className="container py-4 sm:py-8">
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">{t("myList.title")}</h1>
         <p className="text-gray-400 mb-8">
           {myList.length} {t("myList.title")}

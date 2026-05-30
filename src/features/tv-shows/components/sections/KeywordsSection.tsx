@@ -26,9 +26,14 @@ const KeywordsSection = memo(function KeywordsSection({
   const handleKeywordClick = useCallback(
     (keyword: string) => {
       onKeywordClick?.(keyword);
-      navigate(`/${currentLang}/tags/${encodeURIComponent(keyword)}`);
+      const slug = keyword
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+      navigate(`/${currentLang}/tags/${slug}`);
     },
-    [onKeywordClick, currentLang],
+    [onKeywordClick, currentLang, navigate],
   );
 
   // Memoized: Rendered keywords to avoid re-mapping on every render

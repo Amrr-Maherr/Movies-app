@@ -39,7 +39,7 @@ const ActorsPage = memo(function ActorsPage() {
         description="Explore the most popular actors and celebrities in the industry today on Netflix."
       />
 
-      <div className="px-4 sm:px-8 mb-8">
+      <div className="container mb-8">
         <div className="flex items-center justify-between mb-3">
           <h1 className="text-4xl md:text-5xl font-bold text-white">
             Popular Actors
@@ -60,7 +60,7 @@ const ActorsPage = memo(function ActorsPage() {
       {error ? (
         <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />
       ) : (
-        <div className="">
+        <div className="container">
           <OptimizedSectionWrapper
             data={allItems.length > 0 ? allItems : null}
             isLoading={isLoading}

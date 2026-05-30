@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { User, Film, Star, Calendar, Clock } from "lucide-react";
 import MediaCard from "../MediaCard/MediaCard";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { buildMediaUrl } from "@/utils/url";
 import { getLocalizedLink } from "@/lib/utils/i18n";
 import type { HeroMedia, Episode } from "@/types";
 
@@ -28,43 +27,51 @@ interface CardProps {
 
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w185";
 
-const PersonCard = memo(({ person }: { person: PersonData }) => (
-  <Link
-    to={getLocalizedLink(buildMediaUrl("person", person.name, person.id))}
-    className="group relative block touch-manipulation"
-  >
-    <div className="relative rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-2xl">
-      <div className="relative aspect-[2/3]">
-        {person.profileImage ? (
-          <>
-            <OptimizedImage
-              src={`${IMAGE_BASE_URL}${person.profileImage}`}
-              alt={person.name}
-              className="h-full w-full transition-transform duration-300 ease-in-out"
-              objectFit="cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
-          </>
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-zinc-800 text-zinc-600">
-            <User size={48} />
-          </div>
+const PersonCard = memo(({ person }: { person: PersonData }) => {
+  const slug = person.name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, "-")
+    .trim();
+
+  return (
+    <Link
+      to={getLocalizedLink(`/actor/${slug}/${person.id}`)}
+      className="group relative block touch-manipulation"
+    >
+      <div className="relative rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-2xl">
+        <div className="relative aspect-[2/3]">
+          {person.profileImage ? (
+            <>
+              <OptimizedImage
+                src={`${IMAGE_BASE_URL}${person.profileImage}`}
+                alt={person.name}
+                className="h-full w-full transition-transform duration-300 ease-in-out"
+                objectFit="cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
+            </>
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-zinc-800 text-zinc-600">
+              <User size={48} />
+            </div>
+          )}
+        </div>
+        <div className="absolute inset-0 rounded-md ring-2 ring-white/0 ring-offset-2 ring-offset-zinc-900 transition-all duration-300 group-focus-within:ring-white/50" />
+      </div>
+      <div className="mt-3 space-y-1 px-1">
+        <p className="text-sm font-medium text-white line-clamp-1 group-hover:text-[var(--netflix-red)] transition-colors duration-300">
+          {person.name}
+        </p>
+        {person.role && (
+          <p className="text-xs text-gray-400 line-clamp-2 group-hover:text-gray-300 transition-colors duration-300">
+            {person.role}
+          </p>
         )}
       </div>
-      <div className="absolute inset-0 rounded-md ring-2 ring-white/0 ring-offset-2 ring-offset-zinc-900 transition-all duration-300 group-focus-within:ring-white/50" />
-    </div>
-    <div className="mt-3 space-y-1 px-1">
-      <p className="text-sm font-medium text-white line-clamp-1 group-hover:text-[var(--netflix-red)] transition-colors duration-300">
-        {person.name}
-      </p>
-      {person.role && (
-        <p className="text-xs text-gray-400 line-clamp-2 group-hover:text-gray-300 transition-colors duration-300">
-          {person.role}
-        </p>
-      )}
-    </div>
-  </Link>
-));
+    </Link>
+  );
+});
 
 const EpisodeCard = memo(({ episode, tvShowId, seasonNumber }: { episode: Episode; tvShowId: number; seasonNumber: number }) => {
   const stillUrl = episode.still_path
@@ -79,7 +86,7 @@ const EpisodeCard = memo(({ episode, tvShowId, seasonNumber }: { episode: Episod
 
   return (
     <Link
-      to={getLocalizedLink(buildMediaUrl("tv", episodeTitle, tvShowId) + `/season/${seasonNumber}/episode/${episode.episode_number}`)}
+      to={getLocalizedLink(`/series/${episodeTitle.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, "-").trim()}/${tvShowId}/season/${seasonNumber}/episode/${episode.episode_number}`)}
       className="group relative block touch-manipulation"
     >
       <div className="relative rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-2xl overflow-hidden">

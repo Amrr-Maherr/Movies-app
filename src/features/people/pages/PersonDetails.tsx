@@ -1,5 +1,5 @@
-import { memo, useMemo, lazy, Suspense, useCallback, useState } from "react";
-import { useParams } from "react-router-dom";
+import { memo, useMemo, lazy, Suspense, useCallback, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { PageSkeleton, SectionSkeleton } from "@/components/ui";
 import { ReactQueryErrorState } from "@/components/errors";
@@ -20,13 +20,34 @@ const SocialLinksSection = lazy(() => import("@/features/people/components/secti
 const ImagesGallery = lazy(() => import("@/components/sections/ImagesGallery"));
 
 const PersonDetailsPage = memo(function PersonDetailsPage() {
-  const { id } = useParams<{ slug: string; id: string }>();
-  const personId = Number(id);
+  const navigate = useNavigate();
+  const { lang, slug, id } = useParams<{ lang: string; slug: string; id: string }>();
+
+  // Handle old routes where id is in the slug position or id is provided directly
+  const personId = useMemo(() => {
+    const idToUse = id || slug;
+    return Number(idToUse);
+  }, [id, slug]);
 
   const [activeTab, setActiveTab] = useState<PersonTab>("overview");
 
   const { personData, externalIdsData, error: personError, refetch: refetchPerson, isLoading: personLoading } =
     FetchPersonDetails(personId);
+
+  // Redirect to SEO-friendly URL if needed
+  useEffect(() => {
+    if (personData && personData.name) {
+      const expectedSlug = personData.name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      if (slug !== expectedSlug || !id) {
+        navigate(`/${lang}/actor/${expectedSlug}/${personId}`, { replace: true });
+      }
+    }
+  }, [personData, slug, id, lang, personId, navigate]);
   const { data: creditsData, error: creditsError, refetch: refetchCredits, isLoading: creditsLoading } =
     FetchPersonCredits(personId);
 
@@ -157,7 +178,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       {/* Movies */}
       {activeTab === "movies" && (
         <section className="bg-[var(--section-bg)] py-10">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+          <div className="container">
             {movies.length > 0 ? (
               <>
                 <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6 flex items-center gap-2">
@@ -186,7 +207,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
       {/* TV Shows */}
       {activeTab === "tv" && (
         <section className="bg-[var(--section-bg)] py-10">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+          <div className="container">
             {tvShows.length > 0 ? (
               <>
                 <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-6 flex items-center gap-2">
@@ -222,7 +243,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
           title="Images Gallery"
           isEmptyFallback={
             <section className="bg-[var(--section-bg)] py-12">
-              <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
+              <div className="container text-center">
                 <ImageIcon className="w-16 h-16 text-white/20 mx-auto mb-4" />
                 <p className="text-[var(--section-meta-color)] text-lg">No profile images available yet.</p>
               </div>

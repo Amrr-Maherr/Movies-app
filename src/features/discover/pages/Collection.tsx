@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { memo, useMemo, Suspense } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { memo, useMemo, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useCollectionDetails } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
@@ -16,14 +16,35 @@ const POSTER_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 const Collection = memo(function Collection() {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const collectionId = id ? parseInt(id, 10) : 0;
+  const navigate = useNavigate();
+  const { lang, slug, id } = useParams<{ lang: string; slug: string; id: string }>();
+
+  // Handle old routes where id is in the slug position or id is provided directly
+  const collectionId = useMemo(() => {
+    const idToUse = id || slug;
+    return idToUse ? parseInt(idToUse, 10) : 0;
+  }, [id, slug]);
 
   const {
     data: collection,
     isLoading: collectionLoading,
     error: collectionError,
   } = useCollectionDetails(collectionId);
+
+  // Redirect to SEO-friendly URL if needed
+  useEffect(() => {
+    if (collection && collection.name) {
+      const expectedSlug = collection.name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      if (slug !== expectedSlug || !id) {
+        navigate(`/${lang}/collection/${expectedSlug}/${collectionId}`, { replace: true });
+      }
+    }
+  }, [collection, slug, id, lang, collectionId, navigate]);
 
   const backdropUrl = useMemo(
     () =>
@@ -100,7 +121,7 @@ const Collection = memo(function Collection() {
 
         {/* Content */}
         <div className="absolute inset-0 flex items-end pb-12 md:pb-16">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+          <div className="container">
             <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-end">
               {/* Poster */}
               {posterUrl ? (
@@ -143,7 +164,7 @@ const Collection = memo(function Collection() {
       {/* Overview Section */}
       {collection.overview && (
         <div className="border-y border-[#222] bg-black/40">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6 md:py-8">
+          <div className="container py-6 md:py-8">
             <h2 className="text-lg md:text-xl font-semibold text-white mb-3">
               About the Collection
             </h2>
@@ -155,7 +176,7 @@ const Collection = memo(function Collection() {
       )}
 
       {/* Movies Section */}
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8 md:py-12">
+      <div className="container py-8 md:py-12">
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
           All Movies in Collection
         </h2>

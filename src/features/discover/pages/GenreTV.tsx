@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { memo, useMemo, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { memo, useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useTvShowsByGenre, useTvGenres } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
@@ -13,18 +13,40 @@ import Card from "@/components/shared/Card/Card";
 
 const GenreTV = memo(function GenreTV() {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const genreId = id ? parseInt(id, 10) : 0;
+  const navigate = useNavigate();
+  const { lang, slug, id } = useParams<{ lang: string; slug: string; id: string }>();
+
+  // Handle old routes where id is in the slug position or id is provided directly
+  const genreId = useMemo(() => {
+    const idToUse = id || slug;
+    return idToUse ? parseInt(idToUse, 10) : 0;
+  }, [id, slug]);
+
   const [page, setPage] = useState(1);
 
   const { data: tvGenres } = useTvGenres();
   const { data: tvData, isLoading, error } = useTvShowsByGenre(genreId, page);
 
   const genreName = useMemo(() => {
-    if (!tvGenres) return "Genre";
+    if (!tvGenres) return "";
     const genre = tvGenres.find((g) => g.id === genreId);
-    return genre?.name || "Genre";
+    return genre?.name || "";
   }, [tvGenres, genreId]);
+
+  // Redirect to SEO-friendly URL if needed
+  useEffect(() => {
+    if (genreName) {
+      const expectedSlug = genreName
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      if (slug !== expectedSlug || !id) {
+        navigate(`/${lang}/tv/genre/${expectedSlug}/${genreId}`, { replace: true });
+      }
+    }
+  }, [genreName, slug, id, lang, genreId, navigate]);
 
   const tvShows = useMemo(() => tvData?.results || [], [tvData]);
   const totalPages = useMemo(() => tvData?.total_pages || 1, [tvData]);

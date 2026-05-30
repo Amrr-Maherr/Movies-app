@@ -3,7 +3,6 @@ import { X, Play, Plus, Check, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { getMatchScore, getYear, getAgeRating, getGenres } from "@/utils/movieHelpers";
-import { buildMediaUrl } from "@/utils/url";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import type { HeroMedia } from "@/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -38,8 +37,13 @@ const MediaModal = memo(function MovieModal({ movie, isOpen, onClose }: MediaMod
   const genres = useMemo(() => (movie ? getGenres(movie.genre_ids) : []), [movie]);
 
   const isTvShow = movie ? "first_air_date" in movie : false;
+  const slug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, "-")
+    .trim();
   const detailsUrl = movie
-    ? getLocalizedLink(buildMediaUrl(isTvShow ? "tv" : "movie", title, movie.id))
+    ? getLocalizedLink(`/${isTvShow ? "series" : "movie"}/${slug}/${movie.id}`)
     : "#";
 
   const isInList = useAppSelector((state) => (movie ? selectIsInList(state, movie.id) : false));

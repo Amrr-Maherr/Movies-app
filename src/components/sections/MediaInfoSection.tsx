@@ -76,9 +76,9 @@ const MediaInfoSection = memo(function MediaInfoSection({
           media.production_companies.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {media.production_companies.map((c, index) => (
-                  <Link
+                <Link
                   key={c.id}
-                  to={getLocalizedLink(`/company/${c.id}`)}
+                  to={getLocalizedLink(`/company/${c.name.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, "-").trim()}/${c.id}`)}
                   className="text-base text-gray-200 hover:text-white hover:underline transition-colors"
                 >
                   {c.name}
@@ -99,7 +99,7 @@ const MediaInfoSection = memo(function MediaInfoSection({
 
   return (
     <section className="bg-black py-12 md:py-16">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-16">
           {/* Left Column - Overview & Tagline (2/3 width) */}

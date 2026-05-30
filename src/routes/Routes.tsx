@@ -3,7 +3,6 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import PageTransition from "@/components/shared/PageTransition";
-import { LegacySlugRedirect } from "@/components/shared/LegacySlugRedirect";
 import "@/index.css";
 import { PageSkeleton } from "@/components/ui";
 
@@ -191,6 +190,14 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
+              path="/:lang/company/:slug/:id"
+              element={
+                <PageTransition>
+                  <Company />
+                </PageTransition>
+              }
+            />
+            <Route
               path="/:lang/company/:id"
               element={
                 <PageTransition>
@@ -199,10 +206,26 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
+              path="/:lang/collection/:slug/:id"
+              element={
+                <PageTransition>
+                  <Collection />
+                </PageTransition>
+              }
+            />
+            <Route
               path="/:lang/collection/:id"
               element={
                 <PageTransition>
                   <Collection />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/:lang/network/:slug/:id"
+              element={
+                <PageTransition>
+                  <Network />
                 </PageTransition>
               }
             />
@@ -223,6 +246,14 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
+              path="/:lang/movie/genre/:slug/:id"
+              element={
+                <PageTransition>
+                  <GenreMovies />
+                </PageTransition>
+              }
+            />
+            <Route
               path="/:lang/movie/genre/:id"
               element={
                 <PageTransition>
@@ -231,10 +262,26 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
+              path="/:lang/tv/genre/:slug/:id"
+              element={
+                <PageTransition>
+                  <GenreTV />
+                </PageTransition>
+              }
+            />
+            <Route
               path="/:lang/tv/genre/:id"
               element={
                 <PageTransition>
                   <GenreTV />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/:lang/platform/:slug/:id"
+              element={
+                <PageTransition>
+                  <Platform />
                 </PageTransition>
               }
             />
@@ -271,11 +318,32 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/:lang/actor/:slugWithId"
-              element={<LegacySlugRedirect type="actor" />}
+              path="/:lang/actor/:slug/:id"
+              element={
+                <PageTransition>
+                  <PersonDetailsPage />
+                </PageTransition>
+              }
+            />
+            {/* Backward compatibility for actor */}
+            <Route
+              path="/:lang/actor/:id"
+              element={
+                <PageTransition>
+                  <PersonDetailsPage />
+                </PageTransition>
+              }
             />
             <Route
-              path="/:lang/actor/:slug/:id"
+              path="/:lang/person/:slug/:id"
+              element={
+                <PageTransition>
+                  <PersonDetailsPage />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/:lang/person/:id"
               element={
                 <PageTransition>
                   <PersonDetailsPage />
@@ -295,11 +363,16 @@ const AppRoutes = memo(function AppRoutes() {
 
             {/* Details routes — SEO-friendly /:slug/:id format */}
             <Route
-              path="/:lang/movie/:slugWithId"
-              element={<LegacySlugRedirect type="movie" />}
-            />
-            <Route
               path="/:lang/movie/:slug/:id"
+              element={
+                <PageTransition>
+                  <MovieDetails />
+                </PageTransition>
+              }
+            />
+            {/* Backward compatibility for movie */}
+            <Route
+              path="/:lang/movie/:id"
               element={
                 <PageTransition>
                   <MovieDetails />
@@ -308,12 +381,21 @@ const AppRoutes = memo(function AppRoutes() {
             />
 
             <Route
-              path="/:lang/tv/:slugWithId"
-              element={<LegacySlugRedirect type="tv" />}
+              path="/:lang/series/:slug/:id"
+              element={
+                <PageTransition>
+                  <TVShowDetailsPage />
+                </PageTransition>
+              }
             />
+            {/* Backward compatibility for series/tv */}
             <Route
-              path="/:lang/series/:slugWithId"
-              element={<LegacySlugRedirect type="series" />}
+              path="/:lang/series/:id"
+              element={
+                <PageTransition>
+                  <TVShowDetailsPage />
+                </PageTransition>
+              }
             />
             <Route
               path="/:lang/tv/:slug/:id"
@@ -324,7 +406,7 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
             <Route
-              path="/:lang/series/:slug/:id"
+              path="/:lang/tv/:id"
               element={
                 <PageTransition>
                   <TVShowDetailsPage />
@@ -332,14 +414,6 @@ const AppRoutes = memo(function AppRoutes() {
               }
             />
 
-            <Route
-              path="/:lang/tv/:slugWithId/season/:seasonNumber"
-              element={<LegacySlugRedirect type="tv" />}
-            />
-            <Route
-              path="/:lang/series/:slugWithId/season/:seasonNumber"
-              element={<LegacySlugRedirect type="series" />}
-            />
             <Route
               path="/:lang/series/:slug/:id/season/:seasonNumber"
               element={
@@ -350,31 +424,10 @@ const AppRoutes = memo(function AppRoutes() {
             />
 
             <Route
-              path="/:lang/tv/:slugWithId/season/:seasonNumber/episode/:episodeNumber"
-              element={<LegacySlugRedirect type="tv" />}
-            />
-            <Route
-              path="/:lang/series/:slugWithId/season/:seasonNumber/episode/:episodeNumber"
-              element={<LegacySlugRedirect type="series" />}
-            />
-            <Route
               path="/:lang/series/:slug/:id/season/:seasonNumber/episode/:episodeNumber"
               element={
                 <PageTransition>
                   <EpisodeDetailsPage />
-                </PageTransition>
-              }
-            />
-
-            <Route
-              path="/:lang/person/:slugWithId"
-              element={<LegacySlugRedirect type="person" />}
-            />
-            <Route
-              path="/:lang/person/:slug/:id"
-              element={
-                <PageTransition>
-                  <PersonDetailsPage />
                 </PageTransition>
               }
             />

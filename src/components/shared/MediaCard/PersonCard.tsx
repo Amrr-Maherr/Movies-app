@@ -1,8 +1,7 @@
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { User } from "lucide-react";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { buildMediaUrl } from "@/utils/url";
 import { getLocalizedLink } from "@/lib/utils/i18n";
 
 export interface PersonCardProps {
@@ -17,9 +16,19 @@ const PersonCard = memo(function PersonCard({ id, name, profilePath, role }: Per
     ? `https://image.tmdb.org/t/p/w185${profilePath}`
     : null;
 
+  const slug = useMemo(
+    () =>
+      name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim(),
+    [name],
+  );
+
   return (
     <Link
-      to={getLocalizedLink(buildMediaUrl("person", name, id))}
+      to={getLocalizedLink(`/actor/${slug}/${id}`)}
       className="group relative block touch-manipulation"
     >
       <div className="relative rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-2xl">

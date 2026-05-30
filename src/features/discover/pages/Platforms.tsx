@@ -44,7 +44,7 @@ const Platforms = memo(function Platforms() {
         name={t('common:home.streamingPlatforms')}
         description="Browse all available streaming platforms and discover movies and TV shows available on each service."
       />
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">

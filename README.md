@@ -264,7 +264,6 @@ netflix/
 │   ├── utils/                       # Utility functions (20 files)
 │   │   ├── tmdb.ts                  # Image URL helpers
 │   │   ├── movieHelpers.ts          # Match score, ratings
-│   │   ├── slugify.ts               # URL slugs
 │   │   └── ... (17 more utilities)
 │   │
 │   ├── routes/                      # Routing config

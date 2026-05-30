@@ -21,10 +21,15 @@ interface GenreCardProps {
  */
 const GenreCard = memo(function GenreCard({ id, name, type }: GenreCardProps) {
   const { t, i18n } = useTranslation();
+  const slug = name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, "")
+    .replace(/\s+/g, "-")
+    .trim();
   
   return (
     <Link
-      to={getLocalizedLink(`/${type}/genre/${id}`)}
+      to={getLocalizedLink(`/${type}/genre/${slug}/${id}`)}
       className="group relative overflow-hidden rounded-md bg-[var(--background-secondary)] hover:bg-[var(--background-tertiary)] transition-all duration-200 shadow-md hover:shadow-xl hover:scale-[1.02] aspect-[16/9] flex items-center justify-center min-h-[48px] touch-manipulation"
       aria-label={`${t("nav.browse")} ${name}`}
       lang={i18n.language || 'en'}

@@ -78,7 +78,7 @@ const PersonImagesPage = memo(function PersonImagesPage() {
 
       {/* Header Section */}
       <section className="bg-black py-8 border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+        <div className="container">
           {/* Page Title */}
           <div className="flex items-center gap-4">
             <OptimizedSectionWrapper
@@ -138,7 +138,7 @@ const PersonImagesPage = memo(function PersonImagesPage() {
         title="Images Gallery"
         isEmptyFallback={
           <section className="bg-black py-12">
-            <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center">
+            <div className="container text-center">
               <ImageIcon className="w-16 h-16 text-white/20 mx-auto mb-4" />
               <p className="text-white/60 text-lg">
                 No profile images available yet.
@@ -158,7 +158,7 @@ const PersonImagesPage = memo(function PersonImagesPage() {
 
       {/* Additional Info */}
       <section className="bg-black py-8 border-t border-white/10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+        <div className="container">
           <div className="bg-gradient-to-r from-purple-600/20 to-purple-600/5 rounded-xl p-6 border border-purple-600/30">
             <h3 className="text-lg font-bold text-white mb-2">
               📸 Photo Gallery

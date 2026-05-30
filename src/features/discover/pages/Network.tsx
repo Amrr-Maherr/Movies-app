@@ -1,5 +1,5 @@
-import { useParams, Link } from "react-router-dom";
-import { memo, useMemo, lazy, Suspense } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { memo, useMemo, lazy, Suspense, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNetworkDetails, useNetworkTVSeries } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
@@ -7,6 +7,7 @@ import { ReactQueryErrorState } from "@/components/errors";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Tv, MapPin, Globe, Building2 } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 
 const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
 
@@ -14,14 +15,35 @@ const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const Network = memo(function Network() {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const networkId = id ? parseInt(id, 10) : 0;
+  const navigate = useNavigate();
+  const { lang, slug, id } = useParams<{ lang: string; slug: string; id: string }>();
+
+  // Handle old routes where id is in the slug position or id is provided directly
+  const networkId = useMemo(() => {
+    const idToUse = id || slug;
+    return idToUse ? parseInt(idToUse, 10) : 0;
+  }, [id, slug]);
 
   const {
     data: network,
     isLoading: networkLoading,
     error: networkError,
   } = useNetworkDetails(networkId);
+
+  // Redirect to SEO-friendly URL if needed
+  useEffect(() => {
+    if (network && network.name) {
+      const expectedSlug = network.name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      if (slug !== expectedSlug || !id) {
+        navigate(`/${lang}/network/${expectedSlug}/${networkId}`, { replace: true });
+      }
+    }
+  }, [network, slug, id, lang, networkId, navigate]);
 
   const {
     data: networkShows,
@@ -60,7 +82,7 @@ const Network = memo(function Network() {
       />
       {/* Header Section */}
       <div className="relative h-[300px] md:h-[400px] bg-gradient-to-b from-black/80 to-[var(--background-primary)]">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl h-full flex items-center">
+        <div className="container h-full flex items-center">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8">
             {/* Network Logo */}
             {logoUrl ? (
@@ -142,13 +164,13 @@ const Network = memo(function Network() {
       {/* Parent Organization Section */}
       {network.parent_organization && (
         <div className="border-y border-[#222] bg-black/40">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-6">
+          <div className="container py-6">
             <div className="flex items-center gap-4">
               <span className="text-[#737373] text-sm">
                 Parent Organization:
               </span>
               <Link
-                to={`/network/${network.parent_organization.id}`}
+                to={getLocalizedLink(`/network/${network.parent_organization.name.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, "-").trim()}/${network.parent_organization.id}`)}
                 className="text-white hover:underline font-medium flex items-center gap-2"
               >
                 <OptimizedSectionWrapper
@@ -174,7 +196,7 @@ const Network = memo(function Network() {
       )}
 
       {/* TV Series Section */}
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl py-8 md:py-12">
+      <div className="container py-8 md:py-12">
         <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
           {t('discover:tvShows')} by {network.name}
         </h2>
@@ -201,12 +223,18 @@ const Network = memo(function Network() {
           >
             {(shows) => (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                {shows.map((show: any) => (
-                  <Link
-                    key={show.id}
-                    to={`/tv/${show.id}`}
-                    className="group cursor-pointer block"
-                  >
+                {shows.map((show: any) => {
+                  const showSlug = show.name
+                    ?.toLowerCase()
+                    .replace(/[^a-z0-9\s]/g, "")
+                    .replace(/\s+/g, "-")
+                    .trim();
+                  return (
+                    <Link
+                      key={show.id}
+                      to={getLocalizedLink(`/series/${showSlug}/${show.id}`)}
+                      className="group cursor-pointer block"
+                    >
                     <div className="relative aspect-[2/3] overflow-hidden rounded-md bg-[#1a1a1a] transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl">
                       {show.poster_path ? (
                         <OptimizedImage
@@ -227,7 +255,8 @@ const Network = memo(function Network() {
                       </h3>
                     </div>
                   </Link>
-                ))}
+                  );
+                })}
               </div>
             )}
           </OptimizedSectionWrapper>

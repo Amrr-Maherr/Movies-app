@@ -36,7 +36,7 @@ export default function Tags() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-20 min-h-screen bg-[var(--background-primary)]">
+    <div className="container py-20 min-h-screen bg-[var(--background-primary)]">
       <HelmetMeta
         name={`Tag: ${keyword}`}
         description={`Browse all movies and TV shows tagged with "${keyword}". Find related content on Netflix.`}

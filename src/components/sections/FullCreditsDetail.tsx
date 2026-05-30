@@ -51,7 +51,7 @@ const FullCreditsDetail = memo(function FullCreditsDetail({
 
   return (
     <section className="bg-[var(--section-bg)] py-10 min-h-screen">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
 
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">

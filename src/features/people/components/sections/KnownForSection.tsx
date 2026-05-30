@@ -30,7 +30,7 @@ const KnownForSection = memo(function KnownForSection({
 
   return (
     <section className="bg-black py-4 md:py-12">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
         <h2 className="text-xl md:text-2xl font-bold text-white mb-4">
           Known For
         </h2>

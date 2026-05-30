@@ -33,7 +33,7 @@ const FullCreditsSection = memo(function FullCreditsSection({
 
   return (
     <section className="bg-black py-4 md:py-12">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
         {/* Top Billed Cast Section */}
         {topBilledCast.length > 0 && (
           <div className="mb-12">

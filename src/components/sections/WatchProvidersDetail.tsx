@@ -87,7 +87,7 @@ const WatchProvidersDetail = memo(function WatchProvidersDetail({
   if (!hasAny) {
     return (
       <section className="bg-[var(--section-bg)] py-10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl text-center py-16">
+        <div className="container text-center py-16">
           <Tv className="w-12 h-12 text-[var(--section-meta-color)] mx-auto mb-3" />
           <p className="text-[var(--section-meta-color)]">{t("media.noWatchProviders")}</p>
         </div>
@@ -97,7 +97,7 @@ const WatchProvidersDetail = memo(function WatchProvidersDetail({
 
   return (
     <section className="bg-[var(--section-bg)] py-10">
-      <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+      <div className="container">
         <h2 className="text-xl font-semibold text-[var(--section-title-color)] mb-2">{title}</h2>
         <p className="text-[var(--section-meta-color)] text-sm mb-8">{t("media.watchProviders")}</p>
 

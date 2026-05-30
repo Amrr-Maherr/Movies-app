@@ -40,11 +40,17 @@ const PlatformCard = memo(function PlatformCard({
 
   const linkPath = useMemo(() => {
     let path = "/";
-    if (platform) path = `/platform/${displayId}`;
-    else if (type === "network") path = `/network/${displayId}`;
-    else path = `/company/${displayId}`;
+    const slug = displayName
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, "")
+      .replace(/\s+/g, "-")
+      .trim();
+
+    if (platform) path = `/platform/${slug}/${displayId}`;
+    else if (type === "network") path = `/network/${slug}/${displayId}`;
+    else path = `/company/${slug}/${displayId}`;
     return getLocalizedLink(path);
-  }, [displayId, type, platform]);
+  }, [displayId, type, platform, displayName]);
 
   return (
     <Link to={linkPath} className="relative w-full h-full">

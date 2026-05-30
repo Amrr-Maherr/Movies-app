@@ -139,7 +139,7 @@ const PersonTVCreditsPage = memo(function PersonTVCreditsPage() {
 
       {/* Header Section */}
       <section className="bg-black py-8 border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+        <div className="container">
           {/* Page Title */}
           <div className="flex items-center gap-4">
             <OptimizedSectionWrapper
@@ -192,7 +192,7 @@ const PersonTVCreditsPage = memo(function PersonTVCreditsPage() {
 
       {/* TV Shows Grid */}
       <section className="bg-black py-8">
-        <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+        <div className="container">
           {tvShows.length > 0 ? (
             <>
               <h2 className="text-xl font-bold text-white mb-6">
@@ -222,7 +222,7 @@ const PersonTVCreditsPage = memo(function PersonTVCreditsPage() {
       {/* Credits breakdown */}
       {creditsData && (
         <section className="bg-black py-8 border-t border-white/10">
-          <div className="container mx-auto px-4 md:px-8 lg:px-16 max-w-7xl">
+          <div className="container">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-white/5 rounded-lg p-4 text-center">
                 <p className="text-2xl font-bold text-white">

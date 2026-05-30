@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { memo, useMemo, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { memo, useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useMoviesByGenre, useMovieGenres } from "@/hooks/shared";
 import { SectionSkeleton } from "@/components/ui";
@@ -13,8 +13,15 @@ import Card from "@/components/shared/Card/Card";
 
 const GenreMovies = memo(function GenreMovies() {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-  const genreId = id ? parseInt(id, 10) : 0;
+  const navigate = useNavigate();
+  const { lang, slug, id } = useParams<{ lang: string; slug: string; id: string }>();
+
+  // Handle old routes where id is in the slug position or id is provided directly
+  const genreId = useMemo(() => {
+    const idToUse = id || slug;
+    return idToUse ? parseInt(idToUse, 10) : 0;
+  }, [id, slug]);
+
   const [page, setPage] = useState(1);
 
   const { data: movieGenres } = useMovieGenres();
@@ -25,10 +32,25 @@ const GenreMovies = memo(function GenreMovies() {
   } = useMoviesByGenre(genreId, page);
 
   const genreName = useMemo(() => {
-    if (!movieGenres) return "Genre";
+    if (!movieGenres) return "";
     const genre = movieGenres.find((g) => g.id === genreId);
-    return genre?.name || "Genre";
+    return genre?.name || "";
   }, [movieGenres, genreId]);
+
+  // Redirect to SEO-friendly URL if needed
+  useEffect(() => {
+    if (genreName) {
+      const expectedSlug = genreName
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, "")
+        .replace(/\s+/g, "-")
+        .trim();
+
+      if (slug !== expectedSlug || !id) {
+        navigate(`/${lang}/movie/genre/${expectedSlug}/${genreId}`, { replace: true });
+      }
+    }
+  }, [genreName, slug, id, lang, genreId, navigate]);
 
   const movies = useMemo(() => moviesData?.results || [], [moviesData]);
   const totalPages = useMemo(() => moviesData?.total_pages || 1, [moviesData]);
