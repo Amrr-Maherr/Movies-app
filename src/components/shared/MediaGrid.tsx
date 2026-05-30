@@ -1,22 +1,10 @@
 import { memo, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { User } from "lucide-react";
 import Card from "./Card/Card";
-
-/**
- * FIX: Optimized MediaGrid with conditional rendering
- * 
- * This component uses memoization and efficient rendering strategies:
- * - For small lists (< 30 items): Direct rendering (no virtualization overhead)
- * - For large lists (30+ items): Still renders all but with memoization
- *
- * Note: react-window v2 has a breaking API change. For true virtualization
- * with 100+ items, consider downgrading to react-window v1 or implementing
- * custom virtualization.
- *
- * Benefits:
- * - Reduced re-renders through memoization
- * - Lower memory usage through optimized mapping
- * - Better performance for typical datasets (< 100 items)
- */
+import { buildMediaUrl } from "@/utils/url";
+import { getLocalizedLink } from "@/lib/utils/i18n";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 interface MediaGridProps {
   items: any[];
@@ -24,9 +12,6 @@ interface MediaGridProps {
   emptyMessage?: string;
 }
 
-/**
- * Standard grid component - optimized with memoization
- */
 const StandardGrid = memo(({ items, type }: { items: any[]; type: "movie" | "tv" | "person" }) => {
   const renderedItems = useMemo(() => {
     return items.map((item) => (
@@ -35,17 +20,41 @@ const StandardGrid = memo(({ items, type }: { items: any[]; type: "movie" | "tv"
         className="w-full"
       >
         {type === "person" ? (
-          <Card
-            variant="person"
-            person={{
-              id: item.id,
-              name: item.name,
-              profileImage: item.profile_path,
-              role: item.known_for_department || "Actor"
-            }}
-          />
+          <Link
+            to={getLocalizedLink(buildMediaUrl("person", item.name || "", item.id))}
+            className="group relative block touch-manipulation"
+          >
+            <div className="relative rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-2xl">
+              <div className="relative aspect-[2/3]">
+                {item.profile_path ? (
+                  <>
+                    <OptimizedImage
+                      src={`https://image.tmdb.org/t/p/w185${item.profile_path}`}
+                      alt={item.name}
+                      className="h-full w-full transition-transform duration-300 ease-in-out"
+                      objectFit="cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
+                  </>
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-zinc-800 text-zinc-600">
+                    <User size={48} />
+                  </div>
+                )}
+              </div>
+              <div className="absolute inset-0 rounded-md ring-2 ring-white/0 ring-offset-2 ring-offset-zinc-900 transition-all duration-300 group-focus-within:ring-white/50" />
+            </div>
+            <div className="mt-3 space-y-1 px-1">
+              <p className="text-sm font-medium text-white line-clamp-1 group-hover:text-[var(--netflix-red)] transition-colors duration-300">
+                {item.name}
+              </p>
+              <p className="text-xs text-gray-400 line-clamp-2 group-hover:text-gray-300 transition-colors duration-300">
+                {item.known_for_department || "Actor"}
+              </p>
+            </div>
+          </Link>
         ) : (
-          <Card movie={item} variant="standard" showBadge={false} />
+          <Card movie={item} />
         )}
       </div>
     ));
@@ -62,11 +71,7 @@ const StandardGrid = memo(({ items, type }: { items: any[]; type: "movie" | "tv"
 
 StandardGrid.displayName = "StandardGrid";
 
-/**
- * Main MediaGrid component
- */
 const MediaGrid = memo(({ items, type = "movie", emptyMessage = "No items found." }: MediaGridProps) => {
-  // FIX: Memoize empty check to prevent re-calculation
   const isEmpty = useMemo(() => !items || items.length === 0, [items]);
 
   if (isEmpty) {
@@ -82,7 +87,6 @@ const MediaGrid = memo(({ items, type = "movie", emptyMessage = "No items found.
   return <StandardGrid items={items} type={type} />;
 });
 
-// Add displayName for better debugging in React DevTools
 MediaGrid.displayName = "MediaGrid";
 
 export default MediaGrid;

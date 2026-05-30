@@ -53,8 +53,6 @@ const RecommendationsSection = memo(function RecommendationsSection({
                 <Card
                   key={m.id}
                   movie={m}
-                  variant="standard"
-                  showBadge={false}
                 />
               ))}
             </Slider>

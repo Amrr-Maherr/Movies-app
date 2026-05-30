@@ -6,7 +6,7 @@ import HelmetMeta from "@/components/shared/HelmetMeta";
 import { Play, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { generateSlug, formatSlugWithId } from "@/utils/slugify";
+import { buildMediaUrl } from "@/utils/url";
 import { getTitle } from "@/utils";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import Card from "@/components/shared/Card/Card";
@@ -34,9 +34,7 @@ const MyList = memo(function MyList() {
   ) => {
     e.stopPropagation();
     e.preventDefault();
-    const slug = generateSlug(title);
-    const slugWithId = formatSlugWithId(slug, itemId);
-    navigate(`/${currentLang}/${mediaType}/${slugWithId}`);
+    navigate(`/${currentLang}${buildMediaUrl(mediaType, title, itemId)}`);
   };
 
   const isTvShow = (item: (typeof myList)[0]): boolean => {
@@ -111,7 +109,7 @@ const MyList = memo(function MyList() {
 
                   return (
                     <div key={item.id} className="relative group">
-                      <Card movie={item} variant="standard" />
+                      <Card movie={item} />
 
                       {/* Remove button overlay */}
                       <button

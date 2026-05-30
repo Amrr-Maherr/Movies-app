@@ -37,5 +37,8 @@ export { extractWatchProviders } from "../features/movies/utils/extractWatchProv
 // Movie helpers
 export { getMatchScore, getAgeRating, getGenres, getTrailerEmbedUrl, getTrailerWatchUrl } from "./movieHelpers";
 
+// URL utilities (slug + media URL builder)
+export { generateSlug, buildMediaUrl } from "./url";
+
 // Hooks
 export { useDebounce } from "./useDebounce";

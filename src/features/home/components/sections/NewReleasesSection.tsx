@@ -26,7 +26,7 @@ const NewReleasesSection = memo(function NewReleasesSection({
           slidesPerViewMobile={1.5}
         >
           {items.map((movie) => (
-            <Card key={movie.id} movie={movie} variant="newRelease" />
+            <Card key={movie.id} movie={movie} />
           ))}
         </Slider>
       </div>

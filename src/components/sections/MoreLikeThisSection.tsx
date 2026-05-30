@@ -48,7 +48,7 @@ const MoreLikeThisSection = memo(function MoreLikeThisSection({
               hideNavigation={false}
             >
               {similarData.map((item) => (
-                <Card key={item.id} movie={item} variant="recommendation" />
+                <Card key={item.id} movie={item} />
               ))}
             </Slider>
           )}

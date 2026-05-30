@@ -30,7 +30,6 @@ const TopPicksSection = memo(function TopPicksSection({
             <Card
               key={movie.id}
               movie={movie}
-              variant="top10"
               rank={index + 1}
             />
           ))}

@@ -154,7 +154,6 @@ const CreditsSection = memo(function CreditsSection({
                         popularity: credit.popularity,
                         media_type: credit.media_type,
                       }}
-                      variant="compact"
                     />
                   ))}
                 </Slider>
@@ -207,7 +206,6 @@ const CreditsSection = memo(function CreditsSection({
                         popularity: credit.popularity,
                         media_type: credit.media_type,
                       }}
-                      variant="compact"
                     />
                   ))}
                 </Slider>

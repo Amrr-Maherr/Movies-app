@@ -70,7 +70,6 @@ const KnownForSection = memo(function KnownForSection({
                     popularity: credit.popularity,
                     media_type: credit.media_type,
                   }}
-                  variant="compact"
                 />
               ))}
             </Slider>

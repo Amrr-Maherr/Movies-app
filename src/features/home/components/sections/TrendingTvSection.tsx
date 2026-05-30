@@ -28,7 +28,7 @@ const TrendingTvSection = memo(function TrendingTvSection({
           hideNavigation={false}
         >
           {items.map((item) => (
-            <Card key={item.id} movie={item} variant="compact" mediaType="tv" />
+            <Card key={item.id} movie={item} mediaType="tv" />
           ))}
         </Slider>
       </div>
