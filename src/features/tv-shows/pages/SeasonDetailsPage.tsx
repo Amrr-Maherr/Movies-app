@@ -1,5 +1,5 @@
 import { memo, useMemo, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { PageSkeleton, SectionSkeleton } from "@/components/ui";
 import { ReactQueryErrorState } from "@/components/errors";
@@ -11,12 +11,14 @@ import {
   Clock,
   Star,
   ExternalLink,
+  Play,
 } from "lucide-react";
 import FetchTvSeasonDetails from "@/features/tv-shows/hooks/FetchTvSeasonDetails";
 import type { Episode, CastMember, CrewMember, Video, ImageFile } from "@/types";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { Card } from "@/components/shared/Card";
+import { buildMediaUrl } from "@/utils/url";
+import { getLocalizedLink } from "@/lib/utils/i18n";
 import PersonCard from "@/components/shared/MediaCard/PersonCard";
 import VideosSection from "@/components/sections/VideosSection";
 import ImagesGallery from "@/components/sections/ImagesGallery";
@@ -396,13 +398,71 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                 {episodesData.map((episode: Episode) => (
-                  <Card
+                  <Link
                     key={episode.id}
-                    variant="episode"
-                    episode={episode}
-                    tvShowId={Number(tvId)}
-                    seasonNumber={Number(seasonNumber)}
-                  />
+                    to={getLocalizedLink(buildMediaUrl("tv", episode.name || `Episode ${episode.episode_number}`, Number(tvId)) + `/season/${seasonNumber}/episode/${episode.episode_number}`)}
+                    className="block group"
+                  >
+                    <div className="relative">
+                      <div className="relative rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-2xl">
+                        <div className="relative aspect-video">
+                          {episode.still_path ? (
+                            <>
+                              <OptimizedImage
+                                src={`https://image.tmdb.org/t/p/w300${episode.still_path}`}
+                                alt={episode.name}
+                                className="h-full w-full transition-transform duration-300 ease-in-out"
+                                objectFit="cover"
+                              />
+                              <div className="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
+                            </>
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-zinc-800">
+                              <Play className="h-12 w-12 text-zinc-600" />
+                            </div>
+                          )}
+
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 opacity-0 transition-all duration-300 group-hover:opacity-100 shadow-xl">
+                              <Play className="h-5 w-5 fill-black text-black ml-0.5" />
+                            </div>
+                          </div>
+
+                          <div className="absolute top-2 left-2 rounded bg-black/80 px-2 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                            E{episode.episode_number}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-3 space-y-1 px-1">
+                        <h4 className="text-sm font-medium text-white line-clamp-1 group-hover:text-[var(--netflix-red)] transition-colors duration-300">
+                          {episode.name}
+                        </h4>
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <span>
+                            {episode.runtime
+                              ? `${Math.floor(episode.runtime / 60)}h ${episode.runtime % 60}m`
+                              : "N/A"}
+                          </span>
+                          <span>•</span>
+                          <span>
+                            {episode.air_date
+                              ? new Date(episode.air_date).toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "numeric",
+                                })
+                              : "TBA"}
+                          </span>
+                        </div>
+                        {episode.overview && (
+                          <p className="text-xs text-gray-400 line-clamp-2 group-hover:text-gray-300 transition-colors duration-300">
+                            {episode.overview}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </div>
