@@ -10,6 +10,7 @@ import LanguagesFilter, {
   SUPPORTED_LANGUAGES,
 } from "@/features/discover/components/LanguagesFilter";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
+import { ReactQueryErrorState } from "@/components/errors";
 import MediaGrid from "@/components/shared/MediaGrid";
 
 const BrowseByLanguages = memo(function BrowseByLanguages() {
@@ -80,17 +81,7 @@ const BrowseByLanguages = memo(function BrowseByLanguages() {
       </OptimizedSectionWrapper>
 
       {error ? (
-        <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
-          <p className="text-xl text-[var(--error)] font-medium mb-4">
-            {t('common:errors.somethingWentWrong')}
-          </p>
-          <button
-            onClick={handleRetry}
-            className="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-white/80 transition-colors"
-          >
-            {t('common:common.retry')}
-          </button>
-        </div>
+        <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />
       ) : (
         <>
           <OptimizedSectionWrapper

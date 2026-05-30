@@ -1,8 +1,8 @@
 import { memo, useMemo, lazy, Suspense, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
-import { extractIdFromSlug } from "@/utils/slugify";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
-import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
+import { PageSkeleton, SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchPersonDetails from "@/features/people/hooks/FetchPersonDetails";
 import FetchPersonCredits from "@/features/people/hooks/FetchPersonCredits";
@@ -20,8 +20,7 @@ const SocialLinksSection = lazy(() => import("@/features/people/components/secti
 const ImagesGallery = lazy(() => import("@/components/sections/ImagesGallery"));
 
 const PersonDetailsPage = memo(function PersonDetailsPage() {
-  const { slugWithId } = useParams<{ slugWithId: string }>();
-  const id = extractIdFromSlug(slugWithId);
+  const { id } = useParams<{ slug: string; id: string }>();
   const personId = Number(id);
 
   const [activeTab, setActiveTab] = useState<PersonTab>("overview");
@@ -82,14 +81,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
   if (isLoading) return <PageSkeleton />;
 
   if (error || !personData) {
-    return (
-      <Error
-        fullscreen
-        title="Failed to load person details"
-        message="We couldn't load the person information. Please try again."
-        onRetry={handleRetry}
-      />
-    );
+    return <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />;
   }
 
   return (

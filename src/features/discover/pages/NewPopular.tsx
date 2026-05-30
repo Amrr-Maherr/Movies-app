@@ -13,6 +13,8 @@ import type {
 } from "@/types";
 import Pagination from "@/components/shared/Pagination";
 
+import { ReactQueryErrorState } from "@/components/errors";
+
 // Hooks
 import useTrendingMoviesWeek from "@/features/home/hooks/FetchTrendingMoviesWeek";
 import useTrendingTvWeek from "@/features/home/hooks/FetchTrendingTvWeek";
@@ -136,17 +138,7 @@ const NewPopular = memo(function NewPopular() {
       </OptimizedSectionWrapper>
 
       {error ? (
-        <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
-          <p className="text-xl text-[var(--error)] font-medium mb-4">
-            {t('common:errors.somethingWentWrong')}
-          </p>
-          <button
-            onClick={handleRetry}
-            className="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-white/80 transition-colors"
-          >
-            {t('common:common.retry')}
-          </button>
-        </div>
+        <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />
       ) : (
         <OptimizedSectionWrapper
           data={true}

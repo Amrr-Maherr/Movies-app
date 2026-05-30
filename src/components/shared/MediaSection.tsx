@@ -2,7 +2,7 @@ import { memo, useMemo, useCallback, lazy, Suspense } from "react";
 import { SectionSkeleton } from "@/components/ui";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import Card from "@/components/shared/Card/Card";
-import { Error } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import type { HeroMedia } from "@/types";
 import { useTranslation } from "react-i18next";
 
@@ -36,11 +36,11 @@ const MediaSection = memo(function MediaSection({
     onRetry();
   }, [onRetry]);
 
-  if (error || media.length === 0) {
+  if (error) {
     return (
       <section className="py-8">
         <div className="container">
-          <Error retryButtonText={t("common.tryAgain")} onRetry={handleRetry} />
+          <ReactQueryErrorState error={error} retry={handleRetry} />
         </div>
       </section>
     );

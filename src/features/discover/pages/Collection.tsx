@@ -2,7 +2,8 @@ import { useParams } from "react-router-dom";
 import { memo, useMemo, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { useCollectionDetails } from "@/hooks/shared";
-import { SectionSkeleton, Error } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Film, Star } from "lucide-react";
 import type { HeroMedia } from "@/types";
@@ -64,13 +65,11 @@ const Collection = memo(function Collection() {
 
   if (collectionError || !collection) {
     return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <Error
-          message={t('common:errors.notFound')}
-          retryButtonText={t('common:common.back')}
-          onRetry={() => window.history.back()}
-        />
-      </div>
+      <ReactQueryErrorState
+        error={collectionError}
+        retry={() => window.history.back()}
+        fullscreen
+      />
     );
   }
 

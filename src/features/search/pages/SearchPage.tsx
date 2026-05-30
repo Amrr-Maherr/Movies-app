@@ -11,7 +11,8 @@ import {
   type PersonSearchResultItem,
 } from "@/features/search/hooks/FetchSearch";
 import { useDebounce } from "@/utils";
-import { SectionSkeleton, Error } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import Card from "@/components/shared/Card/Card";
 import type { HeroMedia } from "@/types";
@@ -191,11 +192,9 @@ export default function SearchPage() {
             <SectionSkeleton variant="grid" cardCount={12} />
           </div>
         ) : error ? (
-          <Error
-            fullscreen={false}
-            title={t('common:search.searchError')}
-            message={t('common:search.searchErrorMessage')}
-            onRetry={() => window.location.reload()}
+          <ReactQueryErrorState
+            error={error}
+            retry={() => window.location.reload()}
           />
         ) : debouncedQuery.length < 2 ? (
           <motion.div

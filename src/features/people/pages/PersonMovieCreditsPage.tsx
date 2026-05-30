@@ -1,8 +1,9 @@
 import { memo, useMemo, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { Film } from "lucide-react";
-import { extractIdFromSlug } from "@/utils/slugify";
-import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
+
+import { PageSkeleton, SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchPersonDetails from "@/features/people/hooks/FetchPersonDetails";
 import { usePersonMovieCredits } from "@/hooks/shared";
@@ -18,9 +19,8 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
  * Route: /person/:id/movies
  */
 const PersonMovieCreditsPage = memo(function PersonMovieCreditsPage() {
-  const { slugWithId } = useParams<{ slugWithId: string }>();
-  const personId = extractIdFromSlug(slugWithId);
-  const numericId = Number(personId);
+  const { id } = useParams<{ slug: string; id: string }>();
+  const numericId = Number(id);
 
   // Fetch person details for metadata
   const {
@@ -117,14 +117,7 @@ const PersonMovieCreditsPage = memo(function PersonMovieCreditsPage() {
   }
 
   if (error || !personData) {
-    return (
-      <Error
-        fullscreen
-        title="Failed to load movie credits"
-        message="We couldn't load the movie credits information. Please try again."
-        onRetry={handleRetry}
-      />
-    );
+    return <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />;
   }
 
   return (
@@ -193,7 +186,7 @@ const PersonMovieCreditsPage = memo(function PersonMovieCreditsPage() {
       </section>
 
       {/* Navigation Tabs */}
-      <DetailPageNav type="person" slugWithId={slugWithId || ""} />
+      <DetailPageNav type="person" />
 
       {/* Movies Grid */}
       <section className="bg-black py-8">

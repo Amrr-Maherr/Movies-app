@@ -2,7 +2,8 @@ import { memo, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Tv } from "lucide-react";
 import { useStreamingPlatforms } from "@/hooks/shared";
-import { SectionSkeleton, Error } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
@@ -29,13 +30,11 @@ const Platforms = memo(function Platforms() {
 
   if (error || !platforms || platforms.length === 0) {
     return (
-      <div className="min-h-screen bg-[var(--background-primary)] pt-20 flex items-center justify-center">
-        <Error
-          message={t('common:errors.somethingWentWrong')}
-          retryButtonText={t('common:discover.retry')}
-          onRetry={() => window.location.reload()}
-        />
-      </div>
+      <ReactQueryErrorState
+        error={error}
+        retry={() => window.location.reload()}
+        fullscreen
+      />
     );
   }
 

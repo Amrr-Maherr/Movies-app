@@ -1,6 +1,6 @@
 import { memo, useMemo, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { extractIdFromSlug } from "@/utils/slugify";
+
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import {
   Calendar,
@@ -9,7 +9,8 @@ import {
   Film,
   ExternalLink,
 } from "lucide-react";
-import { PageSkeleton, SectionSkeleton, Error, Badge } from "@/components/ui";
+import { PageSkeleton, SectionSkeleton, Badge } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { Separator } from "@/components/ui/separator";
 import FetchEpisodeDetails from "@/features/tv-shows/hooks/FetchEpisodeDetails";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
@@ -27,13 +28,12 @@ import type {
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
-  const { slugWithId, seasonNumber, episodeNumber } = useParams<{
-    slugWithId: string;
+  const { id: tvId, seasonNumber, episodeNumber } = useParams<{
+    slug: string;
+    id: string;
     seasonNumber: string;
     episodeNumber: string;
   }>();
-
-  const tvId = extractIdFromSlug(slugWithId);
 
   const {
     isLoading,
@@ -149,14 +149,7 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
   }
 
   if (error || !episode) {
-    return (
-      <Error
-        fullscreen
-        title="Failed to load episode details"
-        message="We couldn't load the episode information. Please try again."
-        onRetry={handleRetry}
-      />
-    );
+    return <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />;
   }
 
   return (

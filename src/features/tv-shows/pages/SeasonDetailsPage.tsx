@@ -1,7 +1,8 @@
 import { memo, useMemo, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import { extractIdFromSlug } from "@/utils/slugify";
-import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
+
+import { PageSkeleton, SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { Separator } from "@/components/ui/separator";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import {
@@ -22,12 +23,11 @@ import ImagesGallery from "@/components/sections/ImagesGallery";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/original";
 
 const SeasonDetailsPage = memo(function SeasonDetailsPage() {
-  const { slugWithId, seasonNumber } = useParams<{
-    slugWithId: string;
+  const { id: tvId, seasonNumber } = useParams<{
+    slug: string;
+    id: string;
     seasonNumber: string;
   }>();
-
-  const tvId = extractIdFromSlug(slugWithId);
 
   const {
     isLoading,
@@ -134,16 +134,7 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
   }
 
   if (error || !season) {
-    return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <Error
-          fullscreen
-          title="Failed to load season details"
-          message="We couldn't load the season information. Please try again."
-          onRetry={handleRetry}
-        />
-      </div>
-    );
+    return <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />;
   }
 
   return (
@@ -313,15 +304,12 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
               </p>
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3">
                 {castData.map((actor) => (
-                  <Card
+                  <PersonCard
                     key={actor.id}
-                    variant="person"
-                    person={{
-                      id: actor.id,
-                      name: actor.name,
-                      profileImage: actor.profile_path,
-                      role: actor.character || "Unknown role",
-                    }}
+                    id={actor.id}
+                    name={actor.name}
+                    profilePath={actor.profile_path}
+                    role={actor.character || "Unknown role"}
                   />
                 ))}
               </div>
@@ -359,15 +347,12 @@ const SeasonDetailsPage = memo(function SeasonDetailsPage() {
                     </h3>
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3">
                       {members.map((member) => (
-                        <Card
+                        <PersonCard
                           key={`${member.id}-${member.job}`}
-                          variant="person"
-                          person={{
-                            id: member.id,
-                            name: member.name,
-                            profileImage: member.profile_path,
-                            role: member.job || "Unknown",
-                          }}
+                          id={member.id}
+                          name={member.name}
+                          profilePath={member.profile_path}
+                          role={member.job || "Unknown"}
                         />
                       ))}
                     </div>

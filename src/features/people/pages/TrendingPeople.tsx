@@ -2,7 +2,8 @@ import { memo, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getTrendingPeopleDay, getTrendingPeopleWeek } from "@/services";
-import { SectionSkeleton, Error } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { Star, TrendingUp } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
@@ -63,13 +64,11 @@ const TrendingPeople = memo(function TrendingPeople() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <Error
-          message="Failed to load trending people"
-          retryButtonText="Try Again"
-          onRetry={() => window.location.reload()}
-        />
-      </div>
+      <ReactQueryErrorState
+        error={error}
+        retry={() => window.location.reload()}
+        fullscreen
+      />
     );
   }
 

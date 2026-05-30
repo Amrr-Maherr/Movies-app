@@ -1,5 +1,6 @@
 import { memo, useMemo, useCallback, lazy, Suspense, useEffect } from "react";
-import { Error as ErrorComponent, SectionSkeleton } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { useTranslation } from "react-i18next";
@@ -88,9 +89,7 @@ const Home = memo(function Home() {
   // Only show full page error if absolutely no critical data is available
   if (!trendingMoviesWeek && trendingWeekError) {
     return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <ErrorComponent retryButtonText={t('common.tryAgain')} onRetry={handleRetry} />
-      </div>
+      <ReactQueryErrorState error={trendingWeekError} retry={handleRetry} fullscreen />
     );
   }
   return (

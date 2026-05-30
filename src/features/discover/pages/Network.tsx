@@ -2,7 +2,8 @@ import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { useNetworkDetails, useNetworkTVSeries } from "@/hooks/shared";
-import { SectionSkeleton, Error } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Tv, MapPin, Globe, Building2 } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -43,13 +44,11 @@ const Network = memo(function Network() {
 
   if (networkError || !network) {
     return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <Error
-          message={t('common:errors.notFound')}
-          retryButtonText={t('common:common.back')}
-          onRetry={() => window.history.back()}
-        />
-      </div>
+      <ReactQueryErrorState
+        error={networkError}
+        retry={() => window.history.back()}
+        fullscreen
+      />
     );
   }
 
@@ -181,10 +180,10 @@ const Network = memo(function Network() {
         </h2>
 
         {showsError ? (
-          <Error
-            message={t('common:errors.somethingWentWrong')}
-            retryButtonText={t('common:discover.retry')}
-            onRetry={() => window.location.reload()}
+          <ReactQueryErrorState
+            error={showsError}
+            retry={() => window.location.reload()}
+            fullscreen
           />
         ) : (
           <OptimizedSectionWrapper

@@ -1,8 +1,9 @@
 import { memo, useMemo, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { Tv } from "lucide-react";
-import { extractIdFromSlug } from "@/utils/slugify";
-import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
+
+import { PageSkeleton, SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchPersonDetails from "@/features/people/hooks/FetchPersonDetails";
 import { usePersonTVCredits } from "@/hooks/shared";
@@ -18,9 +19,8 @@ import OptimizedImage from "@/components/ui/OptimizedImage";
  * Route: /person/:id/tv
  */
 const PersonTVCreditsPage = memo(function PersonTVCreditsPage() {
-  const { slugWithId } = useParams<{ slugWithId: string }>();
-  const personId = extractIdFromSlug(slugWithId);
-  const numericId = Number(personId);
+  const { id } = useParams<{ slug: string; id: string }>();
+  const numericId = Number(id);
 
   // Fetch person details for metadata
   const {
@@ -119,14 +119,7 @@ const PersonTVCreditsPage = memo(function PersonTVCreditsPage() {
   }
 
   if (error || !personData) {
-    return (
-      <Error
-        fullscreen
-        title="Failed to load TV credits"
-        message="We couldn't load the TV credits information. Please try again."
-        onRetry={handleRetry}
-      />
-    );
+    return <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />;
   }
 
   return (
@@ -195,7 +188,7 @@ const PersonTVCreditsPage = memo(function PersonTVCreditsPage() {
       </section>
 
       {/* Navigation Tabs */}
-      <DetailPageNav type="person" slugWithId={slugWithId || ""} />
+      <DetailPageNav type="person" />
 
       {/* TV Shows Grid */}
       <section className="bg-black py-8">

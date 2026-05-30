@@ -1,8 +1,8 @@
 import { memo, useMemo, lazy, Suspense, useCallback, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { extractIdFromSlug } from "@/utils/slugify";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
-import { SectionSkeleton, PageSkeleton, Error } from "@/components/ui";
+import { SectionSkeleton, PageSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchTvShowDetails from "@/features/tv-shows/hooks/FetchTvShowDetails";
 import DetailPageNav, { type MovieTab } from "@/components/shared/DetailPageNav";
@@ -36,8 +36,7 @@ const RecommendationsSection = lazy(() => import("@/components/sections/Recommen
 
 const TVShowDetailsPage = memo(function TVShowDetailsPage() {
   const { startTour } = useOnboarding();
-  const { slugWithId } = useParams<{ slugWithId: string }>();
-  const id = extractIdFromSlug(slugWithId);
+  const { id } = useParams<{ slug: string; id: string }>();
   const numericId = Number(id);
 
   const [activeTab, setActiveTab] = useState<MovieTab>("overview");
@@ -97,14 +96,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
   if (isLoading) return <PageSkeleton />;
 
   if (error || !data) {
-    return (
-      <Error
-        fullscreen
-        title="Failed to load TV show details"
-        message="We couldn't load the TV show information. Please try again."
-        onRetry={handleRetry}
-      />
-    );
+    return <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />;
   }
 
   return (

@@ -1,8 +1,8 @@
 import { memo, useMemo, lazy, Suspense, useCallback, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { extractIdFromSlug } from "@/utils/slugify";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
-import { PageSkeleton, Error, SectionSkeleton } from "@/components/ui";
+import { PageSkeleton, SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchMovieDetails from "@/features/movies/hooks/FetchMovieDetails";
 import DetailPageNav, { type MovieTab } from "@/components/shared/DetailPageNav";
@@ -34,8 +34,7 @@ const RecommendationsSection = lazy(() => import("@/components/sections/Recommen
 const MovieDetailsPage = memo(function MovieDetailsPage() {
   const { t } = useTranslation();
   const { startTour } = useOnboarding();
-  const { slugWithId } = useParams<{ slugWithId: string }>();
-  const id = extractIdFromSlug(slugWithId);
+  const { id } = useParams<{ slug: string; id: string }>();
   const numericId = Number(id);
 
   const [activeTab, setActiveTab] = useState<MovieTab>("overview");
@@ -91,14 +90,7 @@ const MovieDetailsPage = memo(function MovieDetailsPage() {
   if (isLoading) return <PageSkeleton />;
 
   if (error || !data) {
-    return (
-      <Error
-        fullscreen
-        title={t("errors.somethingWentWrong")}
-        message={t("errors.somethingWentWrong")}
-        onRetry={handleRetry}
-      />
-    );
+    return <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />;
   }
 
   return (

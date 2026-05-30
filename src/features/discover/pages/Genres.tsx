@@ -1,7 +1,8 @@
 import { memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useMovieGenres, useTvGenres } from "@/hooks/shared";
-import { SectionSkeleton, Error } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { Film, Tv } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
@@ -41,13 +42,11 @@ const Genres = memo(function Genres() {
 
   if (hasError) {
     return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <Error
-          message={t('common:discover.errorLoading')}
-          retryButtonText={t('common:discover.retry')}
-          onRetry={() => window.location.reload()}
-        />
-      </div>
+      <ReactQueryErrorState
+        error={hasError}
+        retry={() => window.location.reload()}
+        fullscreen
+      />
     );
   }
 

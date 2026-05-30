@@ -1,9 +1,10 @@
 import { memo, useMemo, useCallback, Suspense, lazy } from "react";
 import { useParams } from "react-router-dom";
 import { Image as ImageIcon } from "lucide-react";
-import { extractIdFromSlug } from "@/utils/slugify";
+
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
-import { PageSkeleton, SectionSkeleton, Error } from "@/components/ui";
+import { PageSkeleton, SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import FetchPersonDetails from "@/features/people/hooks/FetchPersonDetails";
 import { usePersonImages } from "@/hooks/shared";
@@ -19,9 +20,8 @@ const OptimizedImage = lazy(() => import("@/components/ui/OptimizedImage"));
  * Route: /person/:id/images
  */
 const PersonImagesPage = memo(function PersonImagesPage() {
-  const { slugWithId } = useParams<{ slugWithId: string }>();
-  const personId = extractIdFromSlug(slugWithId);
-  const numericId = Number(personId);
+  const { id } = useParams<{ slug: string; id: string }>();
+  const numericId = Number(id);
 
   // Fetch person details for metadata
   const {
@@ -58,14 +58,7 @@ const PersonImagesPage = memo(function PersonImagesPage() {
   }
 
   if (error || !personData) {
-    return (
-      <Error
-        fullscreen
-        title="Failed to load images"
-        message="We couldn't load the image gallery. Please try again."
-        onRetry={handleRetry}
-      />
-    );
+    return <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />;
   }
 
   return (
@@ -134,7 +127,7 @@ const PersonImagesPage = memo(function PersonImagesPage() {
       </section>
 
       {/* Navigation Tabs */}
-      <DetailPageNav type="person" slugWithId={slugWithId || ""} />
+      <DetailPageNav type="person" />
 
       {/* Images Gallery */}
       <OptimizedSectionWrapper

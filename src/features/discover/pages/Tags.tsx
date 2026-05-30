@@ -3,7 +3,8 @@ import React, { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import type { HeroMedia } from "@/types";
-import { SectionSkeleton, Error } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 
@@ -26,11 +27,10 @@ export default function Tags() {
 
   if (error) {
     return (
-      <Error
+      <ReactQueryErrorState
+        error={error}
+        retry={() => window.location.reload()}
         fullscreen
-        title={t('common:search.searchError')}
-        message={t('common:search.searchErrorMessage')}
-        onRetry={() => window.location.reload()}
       />
     );
   }

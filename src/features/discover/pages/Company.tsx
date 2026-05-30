@@ -2,7 +2,8 @@ import { useParams, Link } from "react-router-dom";
 import { memo, useMemo, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { useCompanyDetails, useCompanyMovies } from "@/hooks/shared";
-import { SectionSkeleton, Error } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { Film, MapPin, Globe, Building2 } from "lucide-react";
 import HelmetMeta from "@/components/shared/HelmetMeta";
@@ -45,13 +46,11 @@ const Company = memo(function Company() {
 
   if (companyError || !company) {
     return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <Error
-          message={t('common:errors.notFound')}
-          retryButtonText={t('common:common.back')}
-          onRetry={() => window.history.back()}
-        />
-      </div>
+      <ReactQueryErrorState
+        error={companyError}
+        retry={() => window.history.back()}
+        fullscreen
+      />
     );
   }
 
@@ -171,10 +170,10 @@ const Company = memo(function Company() {
         </h2>
 
         {moviesError ? (
-          <Error
-            message={t('common:errors.somethingWentWrong')}
-            retryButtonText={t('common:discover.retry')}
-            onRetry={() => window.location.reload()}
+          <ReactQueryErrorState
+            error={moviesError}
+            retry={() => window.location.reload()}
+            fullscreen
           />
         ) : (
           <OptimizedSectionWrapper

@@ -9,6 +9,8 @@ import type { TvShow, HeroMedia, PopularTvShowsResponse } from "@/types";
 import Pagination from "@/components/shared/Pagination";
 import { useOnboarding } from "@/features/onboarding/providers/OnboardingProvider";
 
+import { ReactQueryErrorState } from "@/components/errors";
+
 // Hooks
 import usePopularTvShows from "@/features/tv-shows/hooks/FetchPopularTvShows";
 import useTopRatedTvShows from "@/features/tv-shows/hooks/FetchTopRatedTvShows";
@@ -127,17 +129,7 @@ const TVShow = memo(function TVShow() {
       </OptimizedSectionWrapper>
 
       {error ? (
-        <div className="flex flex-col items-center justify-center py-20 px-4 text-center">
-          <p className="text-xl text-[var(--error)] font-medium mb-4">
-            Failed to load TV Shows. Please try again.
-          </p>
-          <button
-            onClick={handleRetry}
-            className="px-6 py-2 bg-white text-black font-semibold rounded hover:bg-white/80 transition-colors"
-          >
-            Retry
-          </button>
-        </div>
+        <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />
       ) : (
         <div className="container pb-20 media-grid">
             <OptimizedSectionWrapper

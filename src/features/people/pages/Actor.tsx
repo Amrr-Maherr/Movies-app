@@ -4,6 +4,7 @@ import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper"
 import { SectionSkeleton } from "@/components/ui";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import Pagination from "@/components/shared/Pagination";
+import { ReactQueryErrorState } from "@/components/errors";
 import usePopularPeople from "@/features/people/hooks/FetchPopularPeople";
 import { TrendingUp } from "lucide-react";
 import { getLocalizedLink } from "@/lib/utils/i18n";
@@ -57,18 +58,7 @@ const ActorsPage = memo(function ActorsPage() {
       </div>
 
       {error ? (
-        <div className="flex flex-col items-center justify-center py-24 px-4 text-center">
-          <p className="text-xl text-[var(--error)] font-semibold mb-6">
-            Something went wrong while fetching actors. Please check your
-            connection.
-          </p>
-          <button
-            onClick={handleRetry}
-            className="px-6 py-3 bg-[var(--brand-primary)] text-white rounded-md font-medium hover:bg-[var(--brand-primary)]/90 transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
+        <ReactQueryErrorState error={error} retry={handleRetry} fullscreen />
       ) : (
         <div className="">
           <OptimizedSectionWrapper

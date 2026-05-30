@@ -2,7 +2,8 @@ import { useParams } from "react-router-dom";
 import { memo, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMoviesByGenre, useMovieGenres } from "@/hooks/shared";
-import { SectionSkeleton, Error } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { Film } from "lucide-react";
 import Pagination from "@/components/shared/Pagination";
 import type { HeroMedia } from "@/types";
@@ -46,13 +47,11 @@ const GenreMovies = memo(function GenreMovies() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[var(--background-primary)] flex items-center justify-center">
-        <Error
-          message={t('common:errors.somethingWentWrong')}
-          retryButtonText={t('common:discover.retry')}
-          onRetry={() => window.location.reload()}
-        />
-      </div>
+      <ReactQueryErrorState
+        error={error}
+        retry={() => window.location.reload()}
+        fullscreen
+      />
     );
   }
 

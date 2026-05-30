@@ -2,7 +2,8 @@ import { memo, useMemo, useCallback, lazy, Suspense } from "react";
 import HeroSlide from "./HeroSlide";
 import { Autoplay } from "swiper/modules";
 import type { HeroMedia } from "@/types";
-import { Error, SectionSkeleton } from "@/components/ui";
+import { SectionSkeleton } from "@/components/ui";
+import { ReactQueryErrorState } from "@/components/errors";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import { useMovieModal } from "@/shared/contexts/MovieModalContext";
 
@@ -55,8 +56,8 @@ const HeroSection = memo(function HeroSection({
   if (isLoading || featuredMedia.length === 0) {
     return <SectionSkeleton variant="hero" />;
   }
-  if (error || featuredMedia.length == 0) {
-    return <Error retryButtonText="Try Again" onRetry={handleRetry} />;
+  if (error) {
+    return <ReactQueryErrorState error={error} retry={handleRetry} />;
   }
 
   return (
