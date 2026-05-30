@@ -59,7 +59,6 @@ export default function Tags() {
                 <Card
                   key={`${result.type}-${result.item.id}-${index}`}
                   movie={result.item as HeroMedia}
-                  variant="standard"
                 />
               ))}
             </div>

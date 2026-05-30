@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import FetchEpisodeDetails from "@/features/tv-shows/hooks/FetchEpisodeDetails";
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import OptimizedImage from "@/components/ui/OptimizedImage";
-import { Card } from "@/components/shared/Card";
+import PersonCard from "@/components/shared/MediaCard/PersonCard";
 import VideosSection from "@/components/sections/VideosSection";
 import ImagesGallery from "@/components/sections/ImagesGallery";
 import type { Video, ImageFile } from "@/types";
@@ -356,15 +356,12 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
               </p>
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3">
                 {cast.map((actor) => (
-                  <Card
+                  <PersonCard
                     key={actor.id}
-                    variant="person"
-                    person={{
-                      id: actor.id,
-                      name: actor.name,
-                      profileImage: actor.profile_path,
-                      role: actor.character || "Unknown role",
-                    }}
+                    id={actor.id}
+                    name={actor.name}
+                    profilePath={actor.profile_path}
+                    role={actor.character || "Unknown role"}
                   />
                 ))}
               </div>
@@ -402,15 +399,12 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
                     </h3>
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3">
                       {members.map((member) => (
-                        <Card
+                        <PersonCard
                           key={`${member.id}-${member.credit_id}`}
-                          variant="person"
-                          person={{
-                            id: member.id,
-                            name: member.name,
-                            profileImage: member.profile_path,
-                            role: member.job || "Unknown",
-                          }}
+                          id={member.id}
+                          name={member.name}
+                          profilePath={member.profile_path}
+                          role={member.job || "Unknown"}
                         />
                       ))}
                     </div>
@@ -445,15 +439,12 @@ const EpisodeDetailsPage = memo(function EpisodeDetailsPage() {
               </p>
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-3">
                 {stars.map((guest) => (
-                  <Card
+                  <PersonCard
                     key={guest.id}
-                    variant="person"
-                    person={{
-                      id: guest.id,
-                      name: guest.name,
-                      profileImage: guest.profile_path,
-                      role: guest.character || "Guest role",
-                    }}
+                    id={guest.id}
+                    name={guest.name}
+                    profilePath={guest.profile_path}
+                    role={guest.character || "Guest role"}
                   />
                 ))}
               </div>

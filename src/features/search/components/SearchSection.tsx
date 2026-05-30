@@ -1,13 +1,11 @@
 import { memo, type ReactNode } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ArrowRight, User } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Card from "@/components/shared/Card/Card";
-import OptimizedImage from "@/components/ui/OptimizedImage";
+import PersonCard from "@/components/shared/MediaCard/PersonCard";
 import type { HeroMedia } from "@/types";
-import { buildMediaUrl } from "@/utils/url";
-import { getLocalizedLink } from "@/lib/utils/i18n";
 
 // ── Section-specific configuration ─────────────────────────────
 
@@ -170,45 +168,14 @@ const SearchSection = memo(function SearchSection({
       <div className={`grid ${gridCols} gap-4`}>
         {visible.map(({ item }) => {
           if (type === "person") {
-            const personName = String(item.name);
-            const personImage = item.profile_path
-              ? `https://image.tmdb.org/t/p/w185${item.profile_path}`
-              : null;
             return (
               <div key={String(item.id)}>
-                <Link
-                  to={getLocalizedLink(buildMediaUrl("person", personName, Number(item.id)))}
-                  className="group relative block touch-manipulation"
-                >
-                  <div className="relative rounded-md bg-zinc-900 shadow-lg transition-all duration-300 ease-in-out group-hover:shadow-2xl">
-                    <div className="relative aspect-[2/3]">
-                      {personImage ? (
-                        <>
-                          <OptimizedImage
-                            src={personImage}
-                            alt={personName}
-                            className="h-full w-full transition-transform duration-300 ease-in-out"
-                            objectFit="cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100" />
-                        </>
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center bg-zinc-800 text-zinc-600">
-                          <User size={48} />
-                        </div>
-                      )}
-                    </div>
-                    <div className="absolute inset-0 rounded-md ring-2 ring-white/0 ring-offset-2 ring-offset-zinc-900 transition-all duration-300 group-focus-within:ring-white/50" />
-                  </div>
-                  <div className="mt-3 space-y-1 px-1">
-                    <p className="text-sm font-medium text-white line-clamp-1 group-hover:text-[var(--netflix-red)] transition-colors duration-300">
-                      {personName}
-                    </p>
-                    <p className="text-xs text-gray-400 line-clamp-2 group-hover:text-gray-300 transition-colors duration-300">
-                      {t('common:search.actor')}
-                    </p>
-                  </div>
-                </Link>
+                <PersonCard
+                  id={Number(item.id)}
+                  name={String(item.name)}
+                  profilePath={item.profile_path}
+                  role={t('common:search.actor')}
+                />
               </div>
             );
           }

@@ -74,7 +74,7 @@ const MediaSection = memo(function MediaSection({
               }}
             >
               {mediaData.map((item: HeroMedia) => (
-                <Card key={item.id} movie={item} variant="compact" />
+                <Card key={item.id} movie={item} />
               ))}
             </Slider>
           )}

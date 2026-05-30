@@ -183,7 +183,6 @@ const Collection = memo(function Collection() {
                 <Card
                   key={movie.id}
                   movie={movie as HeroMedia}
-                  variant="compact"
                 />
               ))}
             </div>

@@ -15,6 +15,7 @@ import { SectionSkeleton } from "@/components/ui";
 import { ReactQueryErrorState } from "@/components/errors";
 import HelmetMeta from "@/components/shared/HelmetMeta";
 import Card from "@/components/shared/Card/Card";
+import PersonCard from "@/components/shared/MediaCard/PersonCard";
 import type { HeroMedia } from "@/types";
 import NetflixLogo from "@/assets/logos/Netflix_Symbol_RGB.png";
 
@@ -275,7 +276,6 @@ export default function SearchPage() {
                         <Card
                           key={item.id}
                           movie={item as unknown as HeroMedia}
-                          variant="standard"
                         />
                       ))}
                     </div>
@@ -296,7 +296,6 @@ export default function SearchPage() {
                         <Card
                           key={item.id}
                           movie={item as unknown as HeroMedia}
-                          variant="standard"
                         />
                       ))}
                     </div>
@@ -314,15 +313,12 @@ export default function SearchPage() {
                     />
                     <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-4 md:gap-5">
                       {groupedResults.people.map(({ item }) => (
-                        <Card
+                        <PersonCard
                           key={item.id}
-                          person={{
-                            id: item.id,
-                            name: item.name,
-                            profileImage: item.profile_path || "",
-                            role: t('common:search.actor'),
-                          }}
-                          variant="person"
+                          id={item.id}
+                          name={item.name}
+                          profilePath={item.profile_path || ""}
+                          role={t('common:search.actor')}
                         />
                       ))}
                     </div>
@@ -341,15 +337,12 @@ export default function SearchPage() {
                   if (result.type === "person") {
                     const personResult = result as PersonSearchResultItem;
                     return (
-                      <Card
+                      <PersonCard
                         key={personResult.item.id}
-                        person={{
-                          id: personResult.item.id,
-                          name: personResult.item.name,
-                          profileImage: personResult.item.profile_path || "",
-                          role: t('common:search.actor'),
-                        }}
-                        variant="person"
+                        id={personResult.item.id}
+                        name={personResult.item.name}
+                        profilePath={personResult.item.profile_path || ""}
+                        role={t('common:search.actor')}
                       />
                     );
                   } else {
@@ -360,7 +353,6 @@ export default function SearchPage() {
                       <Card
                         key={(mediaResult.item as HeroMedia).id}
                         movie={mediaResult.item as unknown as HeroMedia}
-                        variant="standard"
                       />
                     );
                   }

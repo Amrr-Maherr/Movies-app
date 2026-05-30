@@ -143,7 +143,7 @@ const TVShowDetailsPage = memo(function TVShowDetailsPage() {
             height={500}
             title="Episodes"
           >
-            {(seasonsData) => <EpisodesSection seasons={seasonsData} tvShowId={data.id} />}
+            {(seasonsData) => <EpisodesSection seasons={seasonsData} tvShowId={data.id} tvShowName={data.name} />}
           </OptimizedSectionWrapper>
 
           <OptimizedSectionWrapper

@@ -4,14 +4,16 @@ import { Film, Calendar } from "lucide-react";
 import type { Season } from "@/types";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { getLocalizedLink } from "@/lib/utils/i18n";
+import { buildMediaUrl } from "@/utils/url";
 import { useTranslation } from "react-i18next";
 
 interface EpisodesSectionProps {
   seasons: Season[];
   tvShowId: number;
+  tvShowName?: string;
 }
 
-function SeasonCard({ season, tvShowId }: { season: Season; tvShowId: number }) {
+function SeasonCard({ season, tvShowId, tvShowName }: { season: Season; tvShowId: number; tvShowName?: string }) {
   const { t } = useTranslation();
   const imageUrl = season.poster_path
     ? `https://image.tmdb.org/t/p/w500${season.poster_path}`
@@ -22,7 +24,7 @@ function SeasonCard({ season, tvShowId }: { season: Season; tvShowId: number }) 
 
   return (
     <Link
-      to={getLocalizedLink(`/tv/${tvShowId}/season/${season.season_number}`)}
+      to={getLocalizedLink(buildMediaUrl("tv", tvShowName || "", tvShowId) + `/season/${season.season_number}`)}
       className="block group"
     >
       <div className="relative">
@@ -76,6 +78,7 @@ function SeasonCard({ season, tvShowId }: { season: Season; tvShowId: number }) 
 const EpisodesSection = memo(function EpisodesSection({
   seasons,
   tvShowId,
+  tvShowName,
 }: EpisodesSectionProps) {
   const sortedSeasons = useMemo(() => {
     return seasons
@@ -96,7 +99,7 @@ const EpisodesSection = memo(function EpisodesSection({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
           {sortedSeasons.map((season) => (
-            <SeasonCard key={season.id} season={season} tvShowId={tvShowId} />
+            <SeasonCard key={season.id} season={season} tvShowId={tvShowId} tvShowName={tvShowName} />
           ))}
         </div>
       </div>

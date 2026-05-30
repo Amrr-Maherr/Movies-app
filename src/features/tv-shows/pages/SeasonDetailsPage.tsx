@@ -17,6 +17,7 @@ import type { Episode, CastMember, CrewMember, Video, ImageFile } from "@/types"
 import { OptimizedSectionWrapper } from "@/components/optimized-section-wrapper";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { Card } from "@/components/shared/Card";
+import PersonCard from "@/components/shared/MediaCard/PersonCard";
 import VideosSection from "@/components/sections/VideosSection";
 import ImagesGallery from "@/components/sections/ImagesGallery";
 
