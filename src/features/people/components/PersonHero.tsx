@@ -1,79 +1,92 @@
 import { useMemo, memo } from "react";
-import type { PersonDetails } from "@/features/people/api/personService";
+import type { PersonDetails, CastCredit, CrewCredit } from "@/features/people/api/personService";
 import OptimizedImage from "@/components/ui/OptimizedImage";
 import { formatDate, calculateAge } from "@/utils";
+import ActorStats from "./ActorStats";
+import BiographyPreview from "./BiographyPreview";
+import ActorActions from "./ActorActions";
 
 interface PersonHeroProps {
   person: PersonDetails;
+  cast?: CastCredit[];
+  crew?: CrewCredit[];
 }
 
-const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
-// Memoized PersonHero component - avoids re-renders when parent updates
-const PersonHero = memo(function PersonHero({ person }: PersonHeroProps) {
-  // Memoized: Profile URL - avoids string concatenation on every render
+const PersonHero = memo(function PersonHero({
+  person,
+  cast = [],
+  crew = [],
+}: PersonHeroProps) {
   const profileUrl = useMemo(
     () =>
-      person.profile_path ? `${IMAGE_BASE_URL}${person.profile_path}` : null,
+      person.profile_path
+        ? `${IMAGE_BASE_URL}/h632${person.profile_path}`
+        : null,
     [person.profile_path],
   );
 
-  // Memoized: Formatted dates and age - avoids date calculations on every render
+  const bgUrl = useMemo(
+    () =>
+      person.profile_path
+        ? `${IMAGE_BASE_URL}/original${person.profile_path}`
+        : null,
+    [person.profile_path],
+  );
+
   const formattedBirthday = useMemo(
     () => formatDate(person.birthday),
     [person.birthday],
   );
-  const formattedDeathday = useMemo(
-    () => formatDate(person.deathday),
-    [person.deathday],
-  );
+
   const age = useMemo(
     () => calculateAge(person.birthday, person.deathday),
     [person.birthday, person.deathday],
   );
 
-  // Memoized: Also known as aliases (limit to 5)
-  const aliases = useMemo(
-    () => person.also_known_as?.slice(0, 5) || [],
-    [person.also_known_as],
-  );
-
   return (
-    <div className="relative w-full min-h-[100dvh] h-screen bg-gradient-to-b from-zinc-900 to-black">
-      {/* Background Blur Effect */}
-      {profileUrl && (
-        <>
-          <div className="absolute inset-0 bg-cover bg-center opacity-20 blur-3xl overflow-hidden">
+    <section className="relative w-full min-h-screen overflow-hidden bg-black">
+      {/* ── Background Layer ── */}
+      {bgUrl ? (
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 scale-110 blur-3xl opacity-30">
             <OptimizedImage
-              src={profileUrl}
-              alt={person.name}
-              className="w-full h-full scale-110"
+              src={bgUrl}
+              alt=""
+              className="w-full h-full"
               objectFit="cover"
               priority
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-zinc-900" />
-        </>
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 to-black/70" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_black_100%)] opacity-60" />
+        </div>
+      ) : (
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-black to-zinc-950" />
       )}
 
-      {/* Content Container */}
-      <div className="relative container mx-auto px-4 md:px-8 lg:px-16 py-12 md:py-16">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
-          {/* Profile Image */}
-          <div className="flex-shrink-0 mx-auto md:mx-0">
-            <div className="relative">
+      {/* ── Foreground Content ── */}
+      <div className="relative z-10 container mx-auto px-4 md:px-8 lg:px-16 min-h-screen flex items-center">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12 lg:gap-16 w-full py-20 md:py-24">
+          {/* ── Profile Image ── */}
+          <div className="flex-shrink-0">
+            <div className="group relative">
               {profileUrl ? (
-                <OptimizedImage
-                  src={profileUrl}
-                  alt={person.name}
-                  className="w-64 md:w-80 rounded-lg shadow-2xl border-2 border-white/20"
-                  objectFit="cover"
-                  priority
-                />
+                <div className="relative w-48 h-72 md:w-64 md:h-96 lg:w-72 lg:h-[28rem] overflow-hidden rounded-2xl ring-1 ring-white/10 shadow-2xl shadow-black/50 transition-all duration-500 ease-out group-hover:ring-white/20 group-hover:shadow-3xl group-hover:shadow-black/60 group-hover:scale-[1.02]">
+                  <OptimizedImage
+                    src={profileUrl}
+                    alt={person.name}
+                    className="w-full h-full"
+                    objectFit="cover"
+                    priority
+                  />
+                </div>
               ) : (
-                <div className="w-64 md:w-80 aspect-[2/3] bg-zinc-800 rounded-lg flex items-center justify-center border-2 border-white/10">
+                <div className="w-48 h-72 md:w-64 md:h-96 lg:w-72 lg:h-[28rem] bg-zinc-800 rounded-2xl flex items-center justify-center ring-1 ring-white/10">
                   <svg
-                    className="w-32 h-32 text-zinc-600"
+                    className="w-20 h-20 text-zinc-600"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -84,79 +97,55 @@ const PersonHero = memo(function PersonHero({ person }: PersonHeroProps) {
             </div>
           </div>
 
-          {/* Person Info */}
-          <div className="flex-1 space-y-6 text-center md:text-left">
+          {/* ── Main Information ── */}
+          <div className="flex-1 text-center md:text-left space-y-6 max-w-3xl">
             {/* Name */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-tight tracking-tight hero-title">
               {person.name}
             </h1>
 
-            {/* Known For Department */}
-            {person.known_for_department && (
-              <div className="inline-block bg-[var(--netflix-red)] text-white px-4 py-2 rounded-full font-semibold text-sm">
-                {person.known_for_department}
-              </div>
-            )}
-
-            {/* Meta Info */}
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-gray-300">
-              {/* Birthday */}
+            {/* Department + Meta */}
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-2">
+              {person.known_for_department && (
+                <span className="inline-flex items-center bg-[var(--netflix-red)] text-white text-[11px] font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full">
+                  {person.known_for_department}
+                </span>
+              )}
               {formattedBirthday && (
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-400">Born:</span>
-                  <span className="font-medium">{formattedBirthday}</span>
+                <span className="text-gray-400 text-sm">
+                  {formattedBirthday}
                   {age !== null && (
-                    <span className="text-gray-500">
-                      ({age}
-                      {person.deathday ? ` - ${age}` : ""} years)
-                    </span>
+                    <span className="text-gray-500 ml-1">({age} years)</span>
                   )}
-                </div>
+                </span>
               )}
-
-              {/* Deathday */}
-              {formattedDeathday && (
-                <>
-                  <span className="text-gray-500">•</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-400">Died:</span>
-                    <span className="font-medium">{formattedDeathday}</span>
-                  </div>
-                </>
-              )}
-
-              {/* Birthplace */}
               {person.place_of_birth && (
-                <>
-                  <span className="text-gray-500">•</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-400">From:</span>
-                    <span className="font-medium">{person.place_of_birth}</span>
-                  </div>
-                </>
+                <span className="text-gray-500 text-sm hidden sm:inline-flex items-center">
+                  <span className="mr-2 text-gray-600">•</span>
+                  {person.place_of_birth}
+                </span>
               )}
             </div>
 
-            {/* Also Known As */}
-            {aliases.length > 0 && (
-              <div className="space-y-2">
-                <span className="text-gray-400 text-sm">Also Known As:</span>
-                <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-                  {aliases.map((alias, index) => (
-                    <span
-                      key={index}
-                      className="text-sm text-gray-300 bg-zinc-800 px-3 py-1 rounded-full"
-                    >
-                      {alias}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
+            {/* Statistics */}
+            <ActorStats
+              birthday={person.birthday}
+              deathday={person.deathday}
+              popularity={person.popularity}
+              cast={cast}
+              crew={crew}
+              className="justify-center md:justify-start"
+            />
+
+            {/* Biography Preview */}
+            <BiographyPreview biography={person.biography} />
+
+            {/* Action Buttons */}
+            <ActorActions name={person.name} />
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 });
 

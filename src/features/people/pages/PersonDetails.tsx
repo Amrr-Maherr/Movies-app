@@ -110,7 +110,7 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
         height="100dvh"
         title="Hero"
       >
-        {(data) => <PersonHero person={data} />}
+        {(data) => <PersonHero person={data} cast={cast} crew={crew} />}
       </OptimizedSectionWrapper>
 
       {/* Tabs Nav */}
@@ -148,33 +148,17 @@ const PersonDetailsPage = memo(function PersonDetailsPage() {
             {(credits) => <KnownForSection cast={credits.cast} crew={credits.crew} />}
           </OptimizedSectionWrapper>
 
-          <OptimizedSectionWrapper
-            data={personData}
-            isLoading={isLoading}
-            fallback={<SectionSkeleton variant="list" cardCount={1} />}
-            height={400}
-            title="Biography"
-          >
-            {(data) => (
-              <BiographySection
-                biography={data.biography}
-                placeOfBirth={data.place_of_birth}
-                birthday={data.birthday}
-                deathday={data.deathday}
-                knownForDepartment={data.known_for_department}
-              />
-            )}
-          </OptimizedSectionWrapper>
-
-          <OptimizedSectionWrapper
-            data={cast.length > 0 || crew.length > 0 ? { cast, crew } : null}
-            isLoading={isLoading}
-            fallback={<SectionSkeleton variant="grid" cardCount={6} />}
-            height={600}
-            title="Credits"
-          >
-            {(credits) => <CreditsSection cast={credits.cast} crew={credits.crew} />}
-          </OptimizedSectionWrapper>
+          <div data-credits-section>
+            <OptimizedSectionWrapper
+              data={cast.length > 0 || crew.length > 0 ? { cast, crew } : null}
+              isLoading={isLoading}
+              fallback={<SectionSkeleton variant="grid" cardCount={6} />}
+              height={600}
+              title="Credits"
+            >
+              {(credits) => <CreditsSection cast={credits.cast} crew={credits.crew} />}
+            </OptimizedSectionWrapper>
+          </div>
         </>
       )}
 
